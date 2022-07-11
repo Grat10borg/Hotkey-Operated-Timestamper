@@ -1,0 +1,174 @@
+body {
+  font-family: "Comfortaa";
+  background-color: #dae0e9;
+  font-weight: bold;
+}
+
+.background {
+  background-color: #9cc8d4;
+}
+
+a {
+  color: #3d8391;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #7f9fa8;
+}
+
+h3 {
+  color: #3d8391;
+}
+
+h4 {
+  color: #3d8391;
+  font-weight: bold;
+}
+
+p {
+  color: #293a42;
+}
+
+textarea {
+  outline: #3d8391;
+  resize: none;
+  height: 12em !important;
+  width: 50em;
+}
+
+.form-floating > .form-control:focus,
+.form-floating > .form-control:not(:placeholder-shown) {
+  padding-top: 1%;
+}
+
+.form-floating > .form-control,
+.form-floating > .form-select {
+  height: 0%;
+  line-height: inherit;
+}
+
+.form-control {
+  padding-top: 0%;
+  height: 0%;
+}
+
+.form-control:focus {
+  border-color: #4da88b;
+  border-width: 3px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.button {
+  background-color: #3d8391;
+  color: #eef2ed;
+}
+
+.button:hover {
+  background-color: #509cac;
+  color: #eef2ed;
+}
+
+.Error {
+  color: #91403d;
+}
+
+.sidebar {
+  background-color: #c9d2dd;
+}
+
+.navlink {
+  display: block;
+  text-decoration: none;
+  color: #3d8391;
+}
+
+.navlink:hover {
+  color: #9cc8d4;
+}
+
+.navlink:visited {
+  color: #4d8e85;
+}
+
+.navlink:visited:hover {
+  color: #7ea188;
+}
+
+.CharaGreen {
+  color: #4da88b;
+}
+
+.CharaYellow {
+  color: #ec6434;
+}
+
+.CharaRed {
+  color: #91403d;
+}
+
+.TimestampClear {
+  background-color: #3d8391;
+  color: #eef2ed;
+}
+
+.TimestampClear:hover {
+  background-color: #91403d;
+  color: #ffecce;
+}
+
+.imgIcon {
+  width: 28px;
+  -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-pixelated;
+      image-rendering: pixelated;
+}
+
+.errorImg {
+  width: 100px;
+  -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-pixelated;
+      image-rendering: pixelated;
+}
+
+.ClipLink {
+  color: #91403d;
+}
+
+.ClipLink:hover {
+  color: #c68961;
+}
+
+.ClipLink:visited {
+  color: #673d91;
+}
+
+.ClipLink:visited:hover {
+  color: #ac50a1;
+}
+
+.authbutton {
+  background-color: #673d91;
+  color: #eef2ed;
+}
+
+.authbutton:hover {
+  background-color: #ac50a1;
+  color: #eef2ed;
+}
+
+.HighSubmit {
+  background-color: #3d8391;
+  color: #dae0e9;
+}
+
+.HighSubmit:hover {
+  background-color: #509cac;
+  color: #dae0e9;
+}
+/*# sourceMappingURL=style.css.map */
