@@ -295,7 +295,7 @@ function ClipSorter(Clips, game_id, viewCount) {
     textAreaDiv.innerHTML = "";
     for (let i = 0; i < sortcliped.length; i++) {
         let a = document.createElement("a");
-        a.text = ` ‣ Clip ${i + 1} - '${sortcliped[i]["title"]}' `;
+        a.text = ` ‣ Clip ${i + 1} - '${sortcliped[i]["title"]}' - : ${sortcliped[i]["duration"]} sec/s`;
         a.setAttribute("href", sortcliped[i]["url"]);
         a.setAttribute("class", "ClipLink");
         a.setAttribute("target", "_blank");
@@ -314,9 +314,9 @@ function ClipSorter(Clips, game_id, viewCount) {
             text = text + `• 0:00 ${sortcliped[i]["title"]}\n`;
         }
         else {
-            duration = duration + sortcliped[i]["duration"];
             text = text + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
         }
+        duration = duration + sortcliped[i]["duration"];
         if (clipCredit.indexOf(sortcliped[i]["creator_name"]) !== -1) {
             continue;
         }

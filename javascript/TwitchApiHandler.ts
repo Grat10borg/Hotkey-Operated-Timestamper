@@ -505,7 +505,7 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   for (let i = 0; i < sortcliped.length; i++) {
     //console.log(arrclips[i]["url"]);
     let a = document.createElement("a");
-    a.text = ` ‣ Clip ${i + 1} - '${sortcliped[i]["title"]}' `; // sets text
+    a.text = ` ‣ Clip ${i + 1} - '${sortcliped[i]["title"]}' - : ${sortcliped[i]["duration"]} sec/s`; // sets text
     a.setAttribute("href", sortcliped[i]["url"]); // sets anchor
     a.setAttribute("class", "ClipLink"); // uses cool styling
     a.setAttribute("target", "_blank"); // opens in new tab
@@ -525,10 +525,9 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     if (i == 0) {
       text = text + `• 0:00 ${sortcliped[i]["title"]}\n`; // makes start chapter for youtube description
     } else {
-      duration = duration + sortcliped[i]["duration"];
       text = text + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
     }
-
+    duration = duration + sortcliped[i]["duration"]; 
     if (clipCredit.indexOf(sortcliped[i]["creator_name"]) !== -1) {
       continue;
     } else {
