@@ -500,47 +500,61 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   DataDiv.appendChild(insertP);
 
   // Set in Links
+
   let textAreaDiv = document.querySelector("#Linksarea") as HTMLElement;
+  let Desc = document.querySelector("#myInput0") as HTMLInputElement;
+  let clipCredit = new Set(); // holds credit for clips
+  
+  let x = 0; duration = 0; let text = ""; // initialzes vars for getting duration
+  text = text + Desc1 + "\n\n"; // adds the description
   textAreaDiv.innerHTML = ""; // removes ALL previous links
   for (let i = 0; i < sortcliped.length; i++) {
-    //console.log(arrclips[i]["url"]);
-    let a = document.createElement("a");
-    a.text = ` ‣ Clip ${i + 1} - '${sortcliped[i]["title"]}' - : ${sortcliped[i]["duration"]} sec/s`; // sets text
-    a.setAttribute("href", sortcliped[i]["url"]); // sets anchor
-    a.setAttribute("class", "ClipLink"); // uses cool styling
-    a.setAttribute("target", "_blank"); // opens in new tab
-    textAreaDiv.append(a);
-  }
-  let accordLink = document.querySelector("#accordLink") as HTMLInputElement;
-  accordLink.disabled = false;
-  // Make Description for Would be Hightligt
 
-  let Desc = document.querySelector("#myInput0") as HTMLInputElement;
-  let text = ""; // yes this is reused
-  text = text + Desc1 + "\n\n"; // adds the description
-  duration = 0;
-  let clipCredit = Array();
-  let x = 0;
-  for (let i = 0; i < sortcliped.length; i++) {
+    // duration getter, + highlight description maker
     if (i == 0) {
       text = text + `• 0:00 ${sortcliped[i]["title"]}\n`; // makes start chapter for youtube description
     } else {
       text = text + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
     }
     duration = duration + sortcliped[i]["duration"]; 
-    if (clipCredit.indexOf(sortcliped[i]["creator_name"]) !== -1) {
-      continue;
-    } else {
-      clipCredit[x] = `${sortcliped[i]["creator_name"]}`; // maybe later make a counter for how many clips they made out of the highlight
-      x++;
+    clipCredit.add(sortcliped[i]["creator_name"]); 
+
+    // Link Area
+
+    // initializing
+    let rowdiv = document.createElement("div");
+    let a = document.createElement("a");
+    let p = document.createElement("p");
+
+    // set classes
+    rowdiv.classList.add("row", "m-2");
+    if(i % 2 == 0) { // adds a slightly darker background every Other link
+      rowdiv.classList.add("Linkbg");
     }
+    a.classList.add("col-8", "ClipLink"); // uses cool styling
+    a.setAttribute("target", "_blank"); // opens in new tab
+    a.setAttribute("href", sortcliped[i]["url"]); // sets anchor
+    p.classList.add("col-4", "text-center");
+
+    // set text
+    a.text = ` ‣ Clip ${i + 1} - '${sortcliped[i]["title"]}'`; // sets text
+    p.append(document.createTextNode(`${sortcliped[i]["duration"]} sec/s (${toTime(duration)}in all)`));
+
+    // append data
+    rowdiv.append(a);
+    rowdiv.append(p);
+    textAreaDiv.append(rowdiv);
   }
 
+  let accordLink = document.querySelector("#accordLink") as HTMLInputElement;
+  accordLink.disabled = false;
+  // Make Description for Would be Hightligt
+
   text = text + "Clips by:";
-  for (let i = 0; i < clipCredit.length; i++) {
-    // console.log(i, clipCredit.length);
-    text = text + ` ${clipCredit[i]},`;
-  }
+  clipCredit.forEach(element => { // note: clipcredit is a Set it only holds unique values
+    text = text + ` ${element},`;
+  });
+    
   text = text.slice(0, text.length - 1);
   text = text + "\n\n" + intro + "\n\n";
   text = text + socialLinks + "\n\n";

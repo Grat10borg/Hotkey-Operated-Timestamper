@@ -87,8 +87,13 @@ include "includes/settings.php";
                                 </button>
                             </h2>
                             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                <div id="Linksarea" class="accordion-body d-flex row">
-                                    <h4># Found Clip Links</h4>
+                                <div>
+                                    <div id="Linksarea" class="accordion-body d-flex row">
+                                        <!-- sets in links through javascript -->
+                                        <div class="col">
+                                            <p>testr</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

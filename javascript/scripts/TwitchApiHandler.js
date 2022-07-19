@@ -292,23 +292,13 @@ function ClipSorter(Clips, game_id, viewCount) {
     let DataDiv = document.querySelector("#DataDiv");
     DataDiv.appendChild(insertP);
     let textAreaDiv = document.querySelector("#Linksarea");
-    textAreaDiv.innerHTML = "";
-    for (let i = 0; i < sortcliped.length; i++) {
-        let a = document.createElement("a");
-        a.text = ` ‣ Clip ${i + 1} - '${sortcliped[i]["title"]}' - : ${sortcliped[i]["duration"]} sec/s`;
-        a.setAttribute("href", sortcliped[i]["url"]);
-        a.setAttribute("class", "ClipLink");
-        a.setAttribute("target", "_blank");
-        textAreaDiv.append(a);
-    }
-    let accordLink = document.querySelector("#accordLink");
-    accordLink.disabled = false;
     let Desc = document.querySelector("#myInput0");
+    let clipCredit = new Set();
+    let x = 0;
+    duration = 0;
     let text = "";
     text = text + Desc1 + "\n\n";
-    duration = 0;
-    let clipCredit = Array();
-    let x = 0;
+    textAreaDiv.innerHTML = "";
     for (let i = 0; i < sortcliped.length; i++) {
         if (i == 0) {
             text = text + `• 0:00 ${sortcliped[i]["title"]}\n`;
@@ -317,18 +307,30 @@ function ClipSorter(Clips, game_id, viewCount) {
             text = text + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
         }
         duration = duration + sortcliped[i]["duration"];
-        if (clipCredit.indexOf(sortcliped[i]["creator_name"]) !== -1) {
-            continue;
+        clipCredit.add(sortcliped[i]["creator_name"]);
+        let rowdiv = document.createElement("div");
+        let a = document.createElement("a");
+        let p = document.createElement("p");
+        rowdiv.classList.add("row", "m-2");
+        if (i % 2 == 0) {
+            rowdiv.classList.add("Linkbg");
         }
-        else {
-            clipCredit[x] = `${sortcliped[i]["creator_name"]}`;
-            x++;
-        }
+        a.classList.add("col-8", "ClipLink");
+        a.setAttribute("target", "_blank");
+        a.setAttribute("href", sortcliped[i]["url"]);
+        p.classList.add("col-4", "text-center");
+        a.text = ` ‣ Clip ${i + 1} - '${sortcliped[i]["title"]}'`;
+        p.append(document.createTextNode(`${sortcliped[i]["duration"]} sec/s (${toTime(duration)}in all)`));
+        rowdiv.append(a);
+        rowdiv.append(p);
+        textAreaDiv.append(rowdiv);
     }
+    let accordLink = document.querySelector("#accordLink");
+    accordLink.disabled = false;
     text = text + "Clips by:";
-    for (let i = 0; i < clipCredit.length; i++) {
-        text = text + ` ${clipCredit[i]},`;
-    }
+    clipCredit.forEach(element => {
+        text = text + ` ${element},`;
+    });
     text = text.slice(0, text.length - 1);
     text = text + "\n\n" + intro + "\n\n";
     text = text + socialLinks + "\n\n";
