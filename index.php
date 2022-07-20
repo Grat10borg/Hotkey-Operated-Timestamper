@@ -28,7 +28,7 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
             <div class="col-2 m-3 sidebar">
                 <?php include "includes/H.O.T_DescMaker/SidebarStreamDirect.php"; ?>
             </div>
-            <div class="col mx-5 px-5">
+            <div class="col">
                 <div class="row-10 m-3 mt-5 pt-5 justify-content-around">
                     <!-- contains the huge images in the middle of the screen plus the Data bar and the Options bar -->
                     <?php include "includes/H.O.T_DescMaker/HtmlTopDescriptionData.php"; ?>

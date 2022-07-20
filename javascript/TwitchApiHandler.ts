@@ -43,11 +43,12 @@ empty.textContent = "";
 // Make btn event for Clearing button, only makes an alert
 var Id: string;
 var form = document.querySelector("#HighlighForm") as any;
+var ErrorDiv = document.getElementById("ErrorDiv") as HTMLElement;
 form.addEventListener(
   "submit",
   function (event: any): void {
     event.preventDefault();
-
+   
     let date = new Date(form.date.value) as any; // changes to string later
     if (date == "Invalid Date") {
       date = new Date();
@@ -103,18 +104,10 @@ let ChannelSelect = document.querySelector("#SelectChannel") as any;
 ChannelSelect.addEventListener("change", function () {
   let value = ChannelSelect.options[ChannelSelect.selectedIndex].value;
   console.log("Searching for " + value); // en
-
+  ErrorDiv.innerHTML = ""; // clear errors
   validateToken(value); // this starts a daisy chain
 });
 
-//#endregion
-
-//#region GameSelect Eventhandler
-let GameSelect = document.querySelector("#SelectGame") as HTMLInputElement;
-GameSelect.addEventListener("change", function () {
-  // let submit = document.querySelector("#Submit") as HTMLInputElement;
-  // submit.disabled=false;
-});
 //#endregion
 
 // Twitch Api Handling
@@ -184,8 +177,9 @@ function validateToken(value) {
       console.log("unexpected Output");
     })
     .catch((err) => {
+      ErrorMsg("An Error Occured VALIDATING token data", err, "Error");
       console.log(err);
-      console.log("An Error Occured loading token data");
+      console.log("An Error Occured VALIDATING token data");
     });
 }
 
@@ -225,6 +219,11 @@ function fetchUser(
       }
     })
     .catch((err) => {
+      ErrorMsg(
+        "Could not fetch user Are you sure its spelt correctly?",
+        err,
+        "Error"
+      );
       console.log(err);
     });
 }
@@ -262,10 +261,8 @@ function GetChosenChannelGames(id: string) {
       GetGamesFromIds(GameIds);
     })
     .catch((err) => {
-      // if erorr, print it
+      ErrorMsg("Error Logging in try again", err, "Warning");
       console.log(err);
-      let Udata = document.getElementById("user_data") as HTMLElement;
-      Udata.textContent = "Error Logging in try again";
     });
 }
 
@@ -330,9 +327,12 @@ function GetGamesFromIds(Game_ids: any) {
     })
     .catch((err) => {
       // if erorr, print it
+      ErrorMsg(
+        "Failed to fetch game names from game ids, try again",
+        err,
+        "Warning"
+      );
       console.log(err);
-      let Udata = document.getElementById("user_data") as HTMLElement;
-      Udata.textContent = "Could not convert game ids into game names";
     });
 }
 
@@ -370,9 +370,12 @@ function GetUsersBroadcastId(
     })
     .catch((err) => {
       // if erorr, print it
+      ErrorMsg(
+        "could not get YOUR username, could not find logged in user's username",
+        err,
+        "Error"
+      );
       console.log(err);
-      let Udata = document.getElementById("user_data") as HTMLElement;
-      Udata.textContent = "Something went wrong";
     });
 }
 //#endregion
@@ -408,10 +411,15 @@ function FetchCallClip(
       ClipSorter(response, game_id, viewCount);
     })
     .catch((err) => {
-      // if erorr, print it
+      ErrorMsg(
+        "Failed in fetching Clips, did you remember to give a Date?",
+        err,
+        "Warning"
+      );
+
       console.log(err);
       let Udata = document.getElementById("user_data") as HTMLElement;
-      Udata.textContent = "Something went wrong";
+      Udata.textContent = "Failed getting clips";
     });
 }
 
@@ -487,7 +495,6 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   // Array sorted now
 
   // Set in Data
-
   let textNode = document.createTextNode(
     `‣ Found: ${sortcliped.length} Clips, Thats ${toTime(duration)} of content!`
   );
@@ -504,20 +511,21 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   let textAreaDiv = document.querySelector("#Linksarea") as HTMLElement;
   let Desc = document.querySelector("#myInput0") as HTMLInputElement;
   let clipCredit = new Set(); // holds credit for clips
-  
-  let x = 0; duration = 0; let text = ""; // initialzes vars for getting duration
+
+  let x = 0;
+  duration = 0;
+  let text = ""; // initialzes vars for getting duration
   text = text + Desc1 + "\n\n"; // adds the description
   textAreaDiv.innerHTML = ""; // removes ALL previous links
   for (let i = 0; i < sortcliped.length; i++) {
-
     // duration getter, + highlight description maker
     if (i == 0) {
       text = text + `• 0:00 ${sortcliped[i]["title"]}\n`; // makes start chapter for youtube description
     } else {
       text = text + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
     }
-    duration = duration + sortcliped[i]["duration"]; 
-    clipCredit.add(sortcliped[i]["creator_name"]); 
+    duration = duration + sortcliped[i]["duration"];
+    clipCredit.add(sortcliped[i]["creator_name"]);
 
     // Link Area
 
@@ -528,7 +536,8 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 
     // set classes
     rowdiv.classList.add("row", "m-2");
-    if(i % 2 == 0) { // adds a slightly darker background every Other link
+    if (i % 2 == 0) {
+      // adds a slightly darker background every Other link
       rowdiv.classList.add("Linkbg");
     }
     a.classList.add("col-8", "ClipLink"); // uses cool styling
@@ -538,7 +547,11 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 
     // set text
     a.text = ` ‣ Clip ${i + 1} - '${sortcliped[i]["title"]}'`; // sets text
-    p.append(document.createTextNode(`${sortcliped[i]["duration"]} sec/s (${toTime(duration)}in all)`));
+    p.append(
+      document.createTextNode(
+        `${sortcliped[i]["duration"]} sec/s (${toTime(duration)}in all)`
+      )
+    );
 
     // append data
     rowdiv.append(a);
@@ -551,10 +564,11 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   // Make Description for Would be Hightligt
 
   text = text + "Clips by:";
-  clipCredit.forEach(element => { // note: clipcredit is a Set it only holds unique values
+  clipCredit.forEach((element) => {
+    // note: clipcredit is a Set it only holds unique values
     text = text + ` ${element},`;
   });
-    
+
   text = text.slice(0, text.length - 1);
   text = text + "\n\n" + intro + "\n\n";
   text = text + socialLinks + "\n\n";
@@ -581,6 +595,16 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 }
 
 //#endregion
+function ErrorMsg(Msg: string, systemMsg: any, color: string) {
+  let H4 = document.createElement("h4");
+  let p = document.createElement("p");
+  H4.classList.add(`${color}`);
+  p.classList.add(`${color}`);
+  H4.innerHTML = Msg;
+  p.innerText = systemMsg;
+  ErrorDiv.append(H4);
+  ErrorDiv.append(p);
+}
 
 //#region toTime function, makes a timestamp that will work in the youtube description
 // converts the time into minutes and hours from seconds

@@ -14,10 +14,10 @@
                     ?>
                     <h4># Options</h4>
                     <form class="row" action="clear.php" method="get">
-                        <input class="m-2 Clear TimestampClear" type="submit" value="Clear Timestamps" />
+                        <input class="m-2 Clear btn TimestampClear" type="submit" value="Clear Timestamps" />
                     </form>
                     <div class="row">
-                        <button class="btn-danger col-3 m-2 authUpload">Connect Youtube!</button>
+                        <button class="btn-danger btn col-3 m-2 authUpload">Connect Youtube!</button>
                         <select disabled class="col my-1 SelectId" name="SelectId" id="selectId"></select>
                     </div>
                 </div>

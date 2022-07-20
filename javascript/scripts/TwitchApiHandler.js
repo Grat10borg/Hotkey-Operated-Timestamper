@@ -16,6 +16,7 @@ let empty = document.getElementById("access_token");
 empty.textContent = "";
 var Id;
 var form = document.querySelector("#HighlighForm");
+var ErrorDiv = document.getElementById("ErrorDiv");
 form.addEventListener("submit", function (event) {
     event.preventDefault();
     let date = new Date(form.date.value);
@@ -51,10 +52,8 @@ let ChannelSelect = document.querySelector("#SelectChannel");
 ChannelSelect.addEventListener("change", function () {
     let value = ChannelSelect.options[ChannelSelect.selectedIndex].value;
     console.log("Searching for " + value);
+    ErrorDiv.innerHTML = "";
     validateToken(value);
-});
-let GameSelect = document.querySelector("#SelectGame");
-GameSelect.addEventListener("change", function () {
 });
 if (document.location.hash && document.location.hash != "") {
     var parsedHash = new URLSearchParams(window.location.hash.slice(1));
@@ -102,8 +101,9 @@ function validateToken(value) {
         console.log("unexpected Output");
     })
         .catch((err) => {
+        ErrorMsg("An Error Occured VALIDATING token data", err, "Error");
         console.log(err);
-        console.log("An Error Occured loading token data");
+        console.log("An Error Occured VALIDATING token data");
     });
 }
 function fetchUser(submit, access_token, streamerName, date, endDate, game_id, viewCount) {
@@ -124,6 +124,7 @@ function fetchUser(submit, access_token, streamerName, date, endDate, game_id, v
         }
     })
         .catch((err) => {
+        ErrorMsg("Could not fetch user Are you sure its spelt correctly?", err, "Error");
         console.log(err);
     });
 }
@@ -146,9 +147,8 @@ function GetChosenChannelGames(id) {
         GetGamesFromIds(GameIds);
     })
         .catch((err) => {
+        ErrorMsg("Error Logging in try again", err, "Warning");
         console.log(err);
-        let Udata = document.getElementById("user_data");
-        Udata.textContent = "Error Logging in try again";
     });
 }
 function GetGamesFromIds(Game_ids) {
@@ -190,9 +190,8 @@ function GetGamesFromIds(Game_ids) {
         selectboxG.disabled = false;
     })
         .catch((err) => {
+        ErrorMsg("Failed to fetch game names from game ids, try again", err, "Warning");
         console.log(err);
-        let Udata = document.getElementById("user_data");
-        Udata.textContent = "Could not convert game ids into game names";
     });
 }
 function GetUsersBroadcastId(RFCdate, RFCDateEnd, game_id, viewCount) {
@@ -210,9 +209,8 @@ function GetUsersBroadcastId(RFCdate, RFCDateEnd, game_id, viewCount) {
         FetchCallClip(RFCdate, RFCDateEnd, arr["data"]["0"]["id"], game_id, viewCount);
     })
         .catch((err) => {
+        ErrorMsg("could not get YOUR username, could not find logged in user's username", err, "Error");
         console.log(err);
-        let Udata = document.getElementById("user_data");
-        Udata.textContent = "Something went wrong";
     });
 }
 function FetchCallClip(RFCdate, RFCDateEnd, Id, game_id, viewCount) {
@@ -229,9 +227,10 @@ function FetchCallClip(RFCdate, RFCDateEnd, Id, game_id, viewCount) {
         ClipSorter(response, game_id, viewCount);
     })
         .catch((err) => {
+        ErrorMsg("Failed in fetching Clips, did you remember to give a Date?", err, "Warning");
         console.log(err);
         let Udata = document.getElementById("user_data");
-        Udata.textContent = "Something went wrong";
+        Udata.textContent = "Failed getting clips";
     });
 }
 function ClipSorter(Clips, game_id, viewCount) {
@@ -328,7 +327,7 @@ function ClipSorter(Clips, game_id, viewCount) {
     let accordLink = document.querySelector("#accordLink");
     accordLink.disabled = false;
     text = text + "Clips by:";
-    clipCredit.forEach(element => {
+    clipCredit.forEach((element) => {
         text = text + ` ${element},`;
     });
     text = text.slice(0, text.length - 1);
@@ -350,6 +349,16 @@ function ClipSorter(Clips, game_id, viewCount) {
     }
     let accorddesc = document.querySelector("#accordDesc");
     accorddesc.disabled = false;
+}
+function ErrorMsg(Msg, systemMsg, color) {
+    let H4 = document.createElement("h4");
+    let p = document.createElement("p");
+    H4.classList.add(`${color}`);
+    p.classList.add(`${color}`);
+    H4.innerHTML = Msg;
+    p.innerText = systemMsg;
+    ErrorDiv.append(H4);
+    ErrorDiv.append(p);
 }
 function toTime(seconds) {
     let date = new Date();

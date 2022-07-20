@@ -26,6 +26,7 @@ include "includes/settings.php";
                             <!-- <option selected>Choose a Channel via Memory</option> -->
                             <?php
                             sort($History); // sorts channels alphabeticelly 
+                            echo "<option class='SelectOption' value='none'>Please Choose a Channel</option>";
                             foreach ($History as $Channels) {
                                 echo "<option class='SelectOption' value='$Channels'>$Channels</option>";
                             }
