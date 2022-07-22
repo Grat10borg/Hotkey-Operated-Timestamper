@@ -8,6 +8,14 @@ include "includes/H.O.T_DescMaker/NewMakerPlain.php"; // function: minuses times
 if (file_exists($Timestamp_path)) { // if there is a file at the end of the file path
     $arrayText = file($Timestamp_path); // retrive the
     if ($arrayText != array()) {
+        // Javascript
+        echo "<textarea hidden id='TimestampTxt'>"; // this is hidden from view
+        foreach($arrayText as $line) {
+            echo $line;
+        }
+        echo "</textarea>";
+
+        // Old Php method
         include "includes/H.O.T_DescMaker/NMLTimestampSort.php";
     } // sorts timestamps into record stamps and stream stamps, also removes empty timestamps
     else {
@@ -48,6 +56,7 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
     <script src="CSS+SCSS/bootstrap/js/bootstrap.js"></script>
     <script src="javascript/scripts/script.js"></script> <!-- General small stuff, like copy, select buttons -->
     <script src="https://apis.google.com/js/api.js"></script> <!-- Gets stuff for the Google api aka the youtube api -->
+    <script src="javascript/scripts/TimestampSort.js"></script>
     <script src="javascript/scripts/YoutubeApiHandler.js"></script>
     <!-- <script src="javascript/TwitchApiHandler.js"></script> -->
 </body>
