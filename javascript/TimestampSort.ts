@@ -7,9 +7,24 @@ var MultiDimStreamArr = Array();
 var MultiDimRecordArr = Array();
 var StreamDatesArr = Array(); // Holds data for when a stream was streamed
 var RecordDatesArr = Array(); // Holds data for when a Recording was recorded
-console.log(CutOuts(RawTxt)); // Sets in
+
+if(CutOuts(RawTxt) == 1) { // Runs CutOuts and if successful run next Method in line
+  console.log(1);
+  SetOps(MultiDimStreamArr, StreamDatesArr, MultiDimRecordArr, RecordDatesArr);
+}
+else {
+  console.log("Error Sorting Timestamps");
+}
 
 
+
+function SetOps(MultiDimStreamArr, StreamDatesArr, MultiDimRecordArr, RecordDatesArr) {
+  // Set in All the timestamps correctly
+  console.log(MultiDimStreamArr);
+  console.log(StreamDatesArr);
+  console.log(MultiDimRecordArr);
+  console.log(RecordDatesArr);
+}
 
 //#region CutOuts Function: Removes NonUsefull data from RawTxt Data
 // makes a Clean Version Timestamp version from the Raw txt

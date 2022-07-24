@@ -6,7 +6,19 @@ var MultiDimStreamArr = Array();
 var MultiDimRecordArr = Array();
 var StreamDatesArr = Array();
 var RecordDatesArr = Array();
-console.log(CutOuts(RawTxt));
+if (CutOuts(RawTxt) == 1) {
+    console.log(1);
+    SetOps(MultiDimStreamArr, StreamDatesArr, MultiDimRecordArr, RecordDatesArr);
+}
+else {
+    console.log("Error Sorting Timestamps");
+}
+function SetOps(MultiDimStreamArr, StreamDatesArr, MultiDimRecordArr, RecordDatesArr) {
+    console.log(MultiDimStreamArr);
+    console.log(StreamDatesArr);
+    console.log(MultiDimRecordArr);
+    console.log(RecordDatesArr);
+}
 function CutOuts(RawTxt) {
     let RawTxtArr = RawTxt.split("\n");
     let StreamArr = Array();
