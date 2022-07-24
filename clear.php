@@ -9,7 +9,6 @@
 </head>
 
 <body>
-
     <?php  
     include "includes/settings.php";
     echo "<body>";

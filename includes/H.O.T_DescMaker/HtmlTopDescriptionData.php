@@ -6,7 +6,7 @@
                     echo "<h4 class='-2 text-danger text-center fs-3'>Error `(*>﹏<*)′</h4>";
                     echo "<h5 class='m-3 text-danger text-center'>$error</h5>";
                 } ?>
-                <p>H.O.T is a Vod timestamper i designed to work along with the <a href="">Stream-Writer plugin for OBS.</a></p>
+                <p>H.O.T is a Vod timestamper i designed to work along with the <a target="blank" href="https://obsproject.com/forum/resources/infowriter.345/">Stream-Writer plugin for OBS.</a></p>
                 <p>it cuts down all the timestamps into the smallest amount of characters,</p>
                 <p class="mb-5">and formats it into your desciption!</p>
                 <div class="border-bottom border-secondary pb-5">
