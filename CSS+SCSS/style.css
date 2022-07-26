@@ -129,6 +129,12 @@ textarea {
   color: #ffecce;
 }
 
+.imgPixel {
+  -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: pixelated;
+}
+
 .imgIcon {
   width: 28px;
   -ms-interpolation-mode: nearest-neighbor;

@@ -7,26 +7,103 @@ var MultiDimStreamArr = Array();
 var MultiDimRecordArr = Array();
 var StreamDatesArr = Array(); // Holds data for when a stream was streamed
 var RecordDatesArr = Array(); // Holds data for when a Recording was recorded
+var DescArrS = new Array(); // holds all the Finished Stream descriptions
+var DescArrR = new Array(); // holds all the Finished Recording descriptions
 
-if(CutOuts(RawTxt) == 1) { // Runs CutOuts and if successful run next Method in line
+if (CutOuts(RawTxt) == 1) {
+  // Runs CutOuts and if successful run next Method in line
   console.log(1);
-  SetOps(MultiDimStreamArr, StreamDatesArr, MultiDimRecordArr, RecordDatesArr);
-}
-else {
+  if(SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
+    // Runs SetOps if sucessful run next Method in line
+    DomSet(); // Set in Data to Webpage
+    console.log(1);
+  }
+  else {
+    console.log("Error Creating Description");
+  }
+} else {
   console.log("Error Sorting Timestamps");
 }
 
-
-
-function SetOps(MultiDimStreamArr, StreamDatesArr, MultiDimRecordArr, RecordDatesArr) {
-  // Set in All the timestamps correctly
-  console.log(MultiDimStreamArr);
-  console.log(StreamDatesArr);
-  console.log(MultiDimRecordArr);
-  console.log(RecordDatesArr);
+function DomSet() {
+  let DescDiv = document.getElementById("DescriptionAreaDiv") as HTMLInputElement;
+  DescArrS.reverse(); // makes array be Newest First
+  DescArrR.reverse();
+  StreamDatesArr.reverse();
+  RecordDatesArr.reverse();
+  
+  for (let index = 0; index < DescArrS.length; index++) {
+    let Textarea = document.createElement("textarea");
+    Textarea.classList.add("m-1", "res", "form-control", "Textarea");
+    Textarea.innerHTML=DescArrS[index];
+    DescDiv.append(Textarea);
+  }
 }
 
-//#region CutOuts Function: Removes NonUsefull data from RawTxt Data
+//#region SetOps: Function Sorts the clean timestamps into a description
+// Makes: a Description from PHP Txts and clean timestamps
+// Input : Clean timestamps made by CutOuts()
+// Outputs: a Finished Description only missing Clip names 
+// returns 1 if sucessful and 0 if failed
+function SetOps(
+  MultiDimStreamArr: string[],
+  MultiDimRecordArr: string[],
+) {
+  // Set in All the timestamps correctly
+
+  // Getting More Txts from PHP and ./Texts
+  let res = document.getElementById("DescTxt") as HTMLInputElement;
+  let res1 = document.getElementById("IntroTxt") as HTMLInputElement;
+  let res2 = document.getElementById("SocialTxt") as HTMLInputElement;
+  let res3 = document.getElementById("CreditsTxt") as HTMLInputElement;
+
+  let DescTxt = res.innerHTML;
+  let IntroTxt = res1.innerHTML;
+  let SocialTxt = res2.innerHTML;
+  let CreditsTxt = res3.innerHTML; 
+  var Description = ""; // Finished Description Var
+
+  // Makes a Working Description
+  // If Not Null
+  if(MultiDimStreamArr.length > 0) { // if has Values
+    for (let index = 0; index < MultiDimStreamArr.length; index++) {
+      let resArray = MultiDimStreamArr[index];
+     
+      Description = DescTxt + "\n\n";
+      Description = Description + `Hotkey, Operated, Time-stamper (H.O.T) V.2.3 \n(Clips are Offset by -${Clipoffset})\n`
+      for (let i = 0; i < resArray.length; i++) {
+        let timestamp = resArray[i];
+        Description = Description + timestamp+"\n";
+      }
+      Description = Description +"\n"+ IntroTxt +"\n\n"+ SocialTxt +"\n\n" + CreditsTxt;
+      DescArrS.push(Description);
+      Description = "";
+    }
+    return 1;
+  }
+  else if(MultiDimRecordArr.length > 0) { // if has Values
+    for (let index = 0; index < MultiDimRecordArr.length; index++) {
+      let resArray = MultiDimRecordArr[index];
+     
+      Description = DescTxt + "\n\n";
+      for (let i = 0; i < resArray.length; i++) {
+        let timestamp = resArray[i];
+        Description = Description + timestamp+"\n";
+      }
+      Description = Description +"\n\n"+ IntroTxt +"\n\n"+ SocialTxt +"\n\n" + CreditsTxt;
+      DescArrR.push(Description);
+      Description = "";
+    }
+    return 1;
+  }
+  else { // error message
+    console.log("Both Stream and Recording Arrays returned Nothing.");
+    return 0;
+  }
+}
+//#endregion
+
+//#region CutOuts: Function Removes NonUsefull data from RawTxt Data
 // makes a Clean Version Timestamp version from the Raw txt
 // Input : A Timestamp Txt Made by the StreamReader Plugin for OBS:
 // Outputs: Sets Data in Multidim-Stream/RecordArr with a clean set of Timestamps -
@@ -39,6 +116,8 @@ function CutOuts(RawTxt: string) {
   var Catch = false as boolean;
   var LineScene = "" as String;
   let ClipNo = 0 as number;
+  let xs = 0;
+  let xr = 0;
   for (let index = 0; index < RawTxtArr.length; index++) {
     let Word = RawTxtArr[index]; // effectively a Foreach loop but without javascripts weird foreach loops
     if (Word.match(/EVENT:START.*/i)) {
@@ -56,18 +135,20 @@ function CutOuts(RawTxt: string) {
       // add what ever array into multidim array
       if (typeof StreamArr !== "undefined") {
         if (StreamArr.length != 0) {
-          StreamArr.unshift(StreamArr, "▸ 0:00 Start");
-          MultiDimStreamArr.push(StreamArr);
+          StreamArr.unshift("▸ 0:00 Start");
+          MultiDimStreamArr[xs]=StreamArr;
+          xs++;
         }
       }
       if (typeof RecordArr !== "undefined") {
         if (RecordArr.length != 0) {
-          RecordArr.unshift(RecordArr, "▸ 0:00 Start");
-          MultiDimRecordArr.push(RecordArr);
+          RecordArr.unshift("▸ 0:00 Start");
+          MultiDimRecordArr[xr] = RecordArr;
+          xr++;
         }
       }
-      StreamArr = Array(); // clear array for new rerun
-      RecordArr = Array(); // clear array for new rerun
+      StreamArr = []; // clear array for new rerun
+      RecordArr = []; // clear array for new rerun
       ClipNo = 0; // resets clip counter
       continue;
     }
@@ -139,7 +220,7 @@ function CutOuts(RawTxt: string) {
 }
 //#endregion
 
-//#region AddClipDelay Function Adds ClipDelay to 0:07:30 like timestamps
+//#region AddClipDelay: Function Adds ClipDelay to 0:07:30 like timestamps
 // Adds Clip Delay to a timestamp
 function AddClipDelay(timestamp: any, Clipoffset: number) {
   // input: 0:07:28 Stream Time Marker
@@ -187,7 +268,7 @@ function AddClipDelay(timestamp: any, Clipoffset: number) {
 }
 //#endregion
 
-//#region Shortens a Timestamp and removes non usefull infomation
+//#region to2Time: Function Shortens a Timestamp and removes non usefull infomation
 function to2Time(timestamp: string) {
   // input: 0:07:28 Stream Time Marker OR 0:07:28
   // outputs: 7:28 (a perfect format timestamp)

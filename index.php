@@ -1,4 +1,12 @@
 <?php
+function AddArrTextArea($Array, $id) {
+    echo "<textarea hidden id='$id'>"; // this is hidden from view
+    foreach($Array as $line) {
+        echo $line;
+    }
+    echo "</textarea>";
+}
+
 include "includes/html/HtmlDoc.php"; // makes the DoctypeHtml, also sets in version num in title 
 include "includes/settings.php"; // general vars things you can change is imported here, like the file root for the txt!
 include "includes/H.O.T_DescMaker/petscopcut.php"; // function: trims down timestamps so it fills less characters
@@ -9,12 +17,12 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
     $arrayText = file($Timestamp_path); // retrive the
     if ($arrayText != array()) {
         // Javascript
-        echo "<textarea hidden id='TimestampTxt'>"; // this is hidden from view
-        foreach($arrayText as $line) {
-            echo $line;
-        }
-        echo "</textarea>";
-
+        AddArrTextArea($arrayText, "TimestampTxt"); // Timestamp Txt javascript 
+        AddArrTextArea($begindesc, "DescTxt"); // Adds basic description
+        AddArrTextArea($intros, "IntroTxt");    // Import of intro txt
+        AddArrTextArea($socialLinks, "SocialTxt"); // social media txt 
+        AddArrTextArea($Credits, "CreditsTxt"); // credits for songs bg and such
+        
         // Old Php method
         include "includes/H.O.T_DescMaker/NMLTimestampSort.php";
     } // sorts timestamps into record stamps and stream stamps, also removes empty timestamps
@@ -35,6 +43,9 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
             <!-- Side bar -->
             <div class="col-2 m-3 sidebar">
                 <?php include "includes/H.O.T_DescMaker/SidebarStreamDirect.php"; ?>
+                <div class="d-flex justify-content-center">
+                <img class="imgPixel" src="img/NetscapeNavigatorBlinker.gif">
+                </div>
             </div>
             <div class="col">
                 <div class="row-10 m-3 mt-5 pt-5 justify-content-around">
@@ -44,11 +55,13 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
                         <div class="form-floating my-3">
                             <!-- printer of the Clip and descptions in the Textareas -->
                             <?php include "includes/H.O.T_DescMaker/HtmlTimestampInport.php"; ?>
+                            <div id="DescriptionAreaDiv">
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- content -->
         </div>
     </main>
     <!-- inporting of Javascript -->

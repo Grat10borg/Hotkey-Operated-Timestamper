@@ -6,18 +6,77 @@ var MultiDimStreamArr = Array();
 var MultiDimRecordArr = Array();
 var StreamDatesArr = Array();
 var RecordDatesArr = Array();
+var DescArrS = new Array();
+var DescArrR = new Array();
 if (CutOuts(RawTxt) == 1) {
     console.log(1);
-    SetOps(MultiDimStreamArr, StreamDatesArr, MultiDimRecordArr, RecordDatesArr);
+    if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
+        DomSet();
+        console.log(1);
+    }
+    else {
+        console.log("Error Creating Description");
+    }
 }
 else {
     console.log("Error Sorting Timestamps");
 }
-function SetOps(MultiDimStreamArr, StreamDatesArr, MultiDimRecordArr, RecordDatesArr) {
-    console.log(MultiDimStreamArr);
-    console.log(StreamDatesArr);
-    console.log(MultiDimRecordArr);
-    console.log(RecordDatesArr);
+function DomSet() {
+    let DescDiv = document.getElementById("DescriptionAreaDiv");
+    DescArrS.reverse();
+    DescArrR.reverse();
+    StreamDatesArr.reverse();
+    RecordDatesArr.reverse();
+    for (let index = 0; index < DescArrS.length; index++) {
+        let Textarea = document.createElement("textarea");
+        Textarea.classList.add("m-1", "res", "form-control", "Textarea");
+        Textarea.innerHTML = DescArrS[index];
+        DescDiv.append(Textarea);
+    }
+}
+function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
+    let res = document.getElementById("DescTxt");
+    let res1 = document.getElementById("IntroTxt");
+    let res2 = document.getElementById("SocialTxt");
+    let res3 = document.getElementById("CreditsTxt");
+    let DescTxt = res.innerHTML;
+    let IntroTxt = res1.innerHTML;
+    let SocialTxt = res2.innerHTML;
+    let CreditsTxt = res3.innerHTML;
+    var Description = "";
+    if (MultiDimStreamArr.length > 0) {
+        for (let index = 0; index < MultiDimStreamArr.length; index++) {
+            let resArray = MultiDimStreamArr[index];
+            Description = DescTxt + "\n\n";
+            Description = Description + `Hotkey, Operated, Time-stamper (H.O.T) V.2.3 \n(Clips are Offset by -${Clipoffset})\n`;
+            for (let i = 0; i < resArray.length; i++) {
+                let timestamp = resArray[i];
+                Description = Description + timestamp + "\n";
+            }
+            Description = Description + "\n" + IntroTxt + "\n\n" + SocialTxt + "\n\n" + CreditsTxt;
+            DescArrS.push(Description);
+            Description = "";
+        }
+        return 1;
+    }
+    else if (MultiDimRecordArr.length > 0) {
+        for (let index = 0; index < MultiDimRecordArr.length; index++) {
+            let resArray = MultiDimRecordArr[index];
+            Description = DescTxt + "\n\n";
+            for (let i = 0; i < resArray.length; i++) {
+                let timestamp = resArray[i];
+                Description = Description + timestamp + "\n";
+            }
+            Description = Description + "\n\n" + IntroTxt + "\n\n" + SocialTxt + "\n\n" + CreditsTxt;
+            DescArrR.push(Description);
+            Description = "";
+        }
+        return 1;
+    }
+    else {
+        console.log("Both Stream and Recording Arrays returned Nothing.");
+        return 0;
+    }
 }
 function CutOuts(RawTxt) {
     let RawTxtArr = RawTxt.split("\n");
@@ -26,6 +85,8 @@ function CutOuts(RawTxt) {
     var Catch = false;
     var LineScene = "";
     let ClipNo = 0;
+    let xs = 0;
+    let xr = 0;
     for (let index = 0; index < RawTxtArr.length; index++) {
         let Word = RawTxtArr[index];
         if (Word.match(/EVENT:START.*/i)) {
@@ -42,18 +103,20 @@ function CutOuts(RawTxt) {
         if (Word.match(/EVENT:STOP.*/i)) {
             if (typeof StreamArr !== "undefined") {
                 if (StreamArr.length != 0) {
-                    StreamArr.unshift(StreamArr, "▸ 0:00 Start");
-                    MultiDimStreamArr.push(StreamArr);
+                    StreamArr.unshift("▸ 0:00 Start");
+                    MultiDimStreamArr[xs] = StreamArr;
+                    xs++;
                 }
             }
             if (typeof RecordArr !== "undefined") {
                 if (RecordArr.length != 0) {
-                    RecordArr.unshift(RecordArr, "▸ 0:00 Start");
-                    MultiDimRecordArr.push(RecordArr);
+                    RecordArr.unshift("▸ 0:00 Start");
+                    MultiDimRecordArr[xr] = RecordArr;
+                    xr++;
                 }
             }
-            StreamArr = Array();
-            RecordArr = Array();
+            StreamArr = [];
+            RecordArr = [];
             ClipNo = 0;
             continue;
         }
