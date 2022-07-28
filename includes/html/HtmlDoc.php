@@ -1,4 +1,4 @@
-<?php $version = "2.3"; // changes the displayed version num all over the program ?>
+<?php $version = "1.0"; // changes the displayed version num all over the program ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

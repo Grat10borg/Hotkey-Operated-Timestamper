@@ -1,4 +1,4 @@
-let Clipoffset = 26;
+let Clipoffset = 26; // twitch default
 
 let TimestampTxt = document.getElementById("TimestampTxt") as HTMLInputElement;
 let RawTxt = TimestampTxt.innerHTML;
@@ -13,12 +13,11 @@ var DescArrR = new Array(); // holds all the Finished Recording descriptions
 if (CutOuts(RawTxt) == 1) {
   // Runs CutOuts and if successful run next Method in line
   console.log(1);
-  if(SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
+  if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
     // Runs SetOps if sucessful run next Method in line
     DomSet(); // Set in Data to Webpage
     console.log(1);
-  }
-  else {
+  } else {
     console.log("Error Creating Description");
   }
 } else {
@@ -26,29 +25,129 @@ if (CutOuts(RawTxt) == 1) {
 }
 
 function DomSet() {
-  let DescDiv = document.getElementById("DescriptionAreaDiv") as HTMLInputElement;
+  let DescDiv = document.getElementById(
+    "DescriptionAreaDiv"
+  ) as HTMLInputElement;
   DescArrS.reverse(); // makes array be Newest First
   DescArrR.reverse();
   StreamDatesArr.reverse();
   RecordDatesArr.reverse();
-  
-  for (let index = 0; index < DescArrS.length; index++) {
-    let Textarea = document.createElement("textarea");
-    Textarea.classList.add("m-1", "res", "form-control", "Textarea");
-    Textarea.innerHTML=DescArrS[index];
-    DescDiv.append(Textarea);
+
+  if (DescArrS.length > 0) {
+    for (let index = 0; index < DescArrS.length; index++) {
+      // Makes Vars for a bootstrap Accordion
+      // Acord Div
+      let AcordDiv = document.createElement("div");
+      AcordDiv.classList.add("accordion", "mt-4");
+
+      // Acord Item
+      let AcordItem = document.createElement("div");
+      AcordItem.classList.add("accordion-item");
+      // Acord Body
+      let AcordBody = document.createElement("div");
+      AcordBody.classList.add("accordion-body");
+      // H2
+      let h2 = document.createElement("h2");
+      h2.classList.add("accordion-header");
+
+      // Button for Acordion
+      let button = document.createElement("button");
+      button.classList.add("accordion-button", "btn", "collapsed");
+      button.setAttribute("type", "button");
+      button.setAttribute("data-bs-toggle", "collapse");
+      button.setAttribute("data-bs-target", `#collapse${index}`);
+      button.setAttribute("aria-expanded", "false");
+      button.setAttribute("aria-controls", `collapse${index}`);
+
+      // Collapse Div
+      let collapsedDiv = document.createElement("div");
+      collapsedDiv.classList.add("accordion-collapse", "collapse");
+      collapsedDiv.setAttribute("id", `collapse${index}`);
+      collapsedDiv.setAttribute("data-bs-parent", `#accordion${index}`);
+
+      let CharDiv = document.createElement("div");
+      CharDiv.classList.add("d-flex", "justify-content-between");
+      let PNo = document.createElement("p");
+      PNo.setAttribute("id", `CharCount${index}`)
+      PNo.innerHTML="Test";
+      let h4 = document.createElement("h4");
+      h4.innerHTML=`# Suggested Description`;
+      // Text Area for Description
+
+      let Textarea = document.createElement("textarea");
+      Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
+      Textarea.innerHTML = DescArrS[index];
+      Textarea.setAttribute("id", `myInput${index}`);
+      button.innerHTML = StreamDatesArr[index] + " - Stream";
+      // Select, Copy, Youtube Bar Vars
+
+      // Icons for BTNS
+      let TwitchIcon = document.createElement("img");
+      TwitchIcon.setAttribute("src", "img\\TwitchIconsmol.png");
+      TwitchIcon.classList.add("imgIcon");
+      let TwitchIcon2 = document.createElement("img");
+      TwitchIcon2.setAttribute("src", "img\\TwitchIconsmol.png");
+      TwitchIcon2.classList.add("imgIcon");
+      let YoutubeIcon = document.createElement("img");
+      YoutubeIcon.setAttribute("src", "img\\Youtube.png");
+      YoutubeIcon.classList.add("imgIcon");
+
+      // Buttons
+      let ButtonDiv = document.createElement("div");
+      let SelectBtn = document.createElement("button");
+      let CopyBtn = document.createElement("button");
+      let YoutubeBtn = document.createElement("button");
+      ButtonDiv.classList.add("my-3")
+      YoutubeBtn.innerHTML = "Update YT Vid";
+      CopyBtn.innerHTML = "Copy Text";
+      SelectBtn.innerHTML = "Select Text";
+      SelectBtn.classList.add("btn", "mx-1", "Select", "button");
+      CopyBtn.classList.add("btn", "mx-1", "Copy", "button");
+      YoutubeBtn.classList.add("btn", "mx-1", "Send" ,"button");
+      YoutubeBtn.setAttribute("id", "authbtn");
+      SelectBtn.setAttribute("value", `${index}`);
+      CopyBtn.setAttribute("value", `${index}`);
+      YoutubeBtn.setAttribute("value", `${index}`);
+
+      // Apending
+      h2.append(button);
+      AcordItem.append(h2);
+
+      //collapsedDiv.
+
+      // Over Text area Bar
+      CharDiv.append(h4);
+      CharDiv.append(PNo);
+      AcordBody.append(CharDiv);
+      // Textarea
+      AcordBody.append(Textarea);
+
+      // Button Bar
+      SelectBtn.append(TwitchIcon);
+      CopyBtn.append(TwitchIcon2);
+      YoutubeBtn.append(YoutubeIcon);
+      ButtonDiv.append(SelectBtn);
+      ButtonDiv.append(CopyBtn);
+      ButtonDiv.append(YoutubeBtn);
+      AcordBody.append(ButtonDiv);
+
+      // Final Appening
+      collapsedDiv.append(AcordBody);
+      AcordItem.append(collapsedDiv);
+      AcordDiv.append(AcordItem);
+      DescDiv.append(AcordDiv);
+    }
+  }
+  if (DescArrR.length > 0) {
   }
 }
 
 //#region SetOps: Function Sorts the clean timestamps into a description
 // Makes: a Description from PHP Txts and clean timestamps
 // Input : Clean timestamps made by CutOuts()
-// Outputs: a Finished Description only missing Clip names 
+// Outputs: a Finished Description only missing Clip names
 // returns 1 if sucessful and 0 if failed
-function SetOps(
-  MultiDimStreamArr: string[],
-  MultiDimRecordArr: string[],
-) {
+function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
   // Set in All the timestamps correctly
 
   // Getting More Txts from PHP and ./Texts
@@ -60,43 +159,60 @@ function SetOps(
   let DescTxt = res.innerHTML;
   let IntroTxt = res1.innerHTML;
   let SocialTxt = res2.innerHTML;
-  let CreditsTxt = res3.innerHTML; 
+  let CreditsTxt = res3.innerHTML;
   var Description = ""; // Finished Description Var
 
   // Makes a Working Description
   // If Not Null
-  if(MultiDimStreamArr.length > 0) { // if has Values
+  if (MultiDimStreamArr.length > 0) {
+    // if has Values
     for (let index = 0; index < MultiDimStreamArr.length; index++) {
       let resArray = MultiDimStreamArr[index];
-     
+
       Description = DescTxt + "\n\n";
-      Description = Description + `Hotkey, Operated, Time-stamper (H.O.T) V.2.3 \n(Clips are Offset by -${Clipoffset})\n`
+      Description =
+        Description +
+        `Hotkey, Operated, Time-stamper (H.O.T) V.2.3 \n(Clips are Offset by -${Clipoffset})\n`;
       for (let i = 0; i < resArray.length; i++) {
         let timestamp = resArray[i];
-        Description = Description + timestamp+"\n";
+        Description = Description + timestamp + "\n";
       }
-      Description = Description +"\n"+ IntroTxt +"\n\n"+ SocialTxt +"\n\n" + CreditsTxt;
+      Description =
+        Description +
+        "\n" +
+        IntroTxt +
+        "\n\n" +
+        SocialTxt +
+        "\n\n" +
+        CreditsTxt;
       DescArrS.push(Description);
       Description = "";
     }
     return 1;
-  }
-  else if(MultiDimRecordArr.length > 0) { // if has Values
+  } else if (MultiDimRecordArr.length > 0) {
+    // if has Values
     for (let index = 0; index < MultiDimRecordArr.length; index++) {
       let resArray = MultiDimRecordArr[index];
-     
+
       Description = DescTxt + "\n\n";
       for (let i = 0; i < resArray.length; i++) {
         let timestamp = resArray[i];
-        Description = Description + timestamp+"\n";
+        Description = Description + timestamp + "\n";
       }
-      Description = Description +"\n\n"+ IntroTxt +"\n\n"+ SocialTxt +"\n\n" + CreditsTxt;
+      Description =
+        Description +
+        "\n\n" +
+        IntroTxt +
+        "\n\n" +
+        SocialTxt +
+        "\n\n" +
+        CreditsTxt;
       DescArrR.push(Description);
       Description = "";
     }
     return 1;
-  }
-  else { // error message
+  } else {
+    // error message
     console.log("Both Stream and Recording Arrays returned Nothing.");
     return 0;
   }
@@ -136,7 +252,7 @@ function CutOuts(RawTxt: string) {
       if (typeof StreamArr !== "undefined") {
         if (StreamArr.length != 0) {
           StreamArr.unshift("▸ 0:00 Start");
-          MultiDimStreamArr[xs]=StreamArr;
+          MultiDimStreamArr[xs] = StreamArr;
           xs++;
         }
       }

@@ -80,7 +80,7 @@ include "includes/settings.php";
                         <p class="text-center" id="DataP">please run a query to get date here!! (. ❛ ᴗ ❛.)</p>
                     </div>
 
-                    <div class="accordion mt-4" id="accordionExample">
+                    <div class="accordion mt-4">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
                                 <button id="accordLink" disabled class="accordion-button btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">

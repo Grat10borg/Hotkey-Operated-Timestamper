@@ -84,7 +84,10 @@ function GetVideoIds() {
         }
         console.log(arrayIds);
         console.log(arrayVidname);
-    }, function (err) { console.error("Execute error", err); });
+    }, function (err) {
+        console.error("Execute error", err);
+        alert("You havent selected a video, or logged in");
+    });
 }
 function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname) {
     console.log(arrayVidname[SelectValue]);

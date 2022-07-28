@@ -112,7 +112,8 @@ function GetVideoIds() {
                 console.log(arrayIds);
                 console.log(arrayVidname);
             },
-            function(err:string) { console.error("Execute error", err); });
+            function(err:string) { console.error("Execute error", err);
+                                alert("You havent selected a video, or logged in") });
 }
 
 // Make sure the client is loaded and sign-in is complete before calling this method.

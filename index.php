@@ -1,7 +1,8 @@
 <?php
-function AddArrTextArea($Array, $id) {
+function AddArrTextArea($Array, $id)
+{
     echo "<textarea hidden id='$id'>"; // this is hidden from view
-    foreach($Array as $line) {
+    foreach ($Array as $line) {
         echo $line;
     }
     echo "</textarea>";
@@ -22,7 +23,7 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
         AddArrTextArea($intros, "IntroTxt");    // Import of intro txt
         AddArrTextArea($socialLinks, "SocialTxt"); // social media txt 
         AddArrTextArea($Credits, "CreditsTxt"); // credits for songs bg and such
-        
+
         // Old Php method
         include "includes/H.O.T_DescMaker/NMLTimestampSort.php";
     } // sorts timestamps into record stamps and stream stamps, also removes empty timestamps
@@ -37,14 +38,15 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
 <body>
     <main class="container background px-5">
         <div class="row">
-            <?php include "includes/html/Navbar.php"?> <!-- Top bar -->
+            <?php include "includes/html/Navbar.php" ?>
+            <!-- Top bar -->
         </div>
         <div class="row">
             <!-- Side bar -->
             <div class="col-2 m-3 sidebar">
                 <?php include "includes/H.O.T_DescMaker/SidebarStreamDirect.php"; ?>
                 <div class="d-flex justify-content-center">
-                <img class="imgPixel" src="img/NetscapeNavigatorBlinker.gif">
+                    <img class="imgPixel" src="img/NetscapeNavigatorBlinker.gif">
                 </div>
             </div>
             <div class="col">
@@ -52,11 +54,9 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
                     <!-- contains the huge images in the middle of the screen plus the Data bar and the Options bar -->
                     <?php include "includes/H.O.T_DescMaker/HtmlTopDescriptionData.php"; ?>
                     <div>
-                        <div class="form-floating my-3">
+                        <div class="form-floating my-3" id="DescriptionAreaDiv">
                             <!-- printer of the Clip and descptions in the Textareas -->
-                            <?php include "includes/H.O.T_DescMaker/HtmlTimestampInport.php"; ?>
-                            <div id="DescriptionAreaDiv">
-
+                            <?php // include "includes/H.O.T_DescMaker/HtmlTimestampInport.php"; ?>      
                             </div>
                         </div>
                     </div>
@@ -65,11 +65,10 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
         </div>
     </main>
     <!-- inporting of Javascript -->
-    <!-- <script>var exports = {};</script> life hack, some javascript versions run into problems with import, this fixes it -->
-    <script src="CSS+SCSS/bootstrap/js/bootstrap.js"></script>
-    <script src="javascript/scripts/script.js"></script> <!-- General small stuff, like copy, select buttons -->
     <script src="https://apis.google.com/js/api.js"></script> <!-- Gets stuff for the Google api aka the youtube api -->
+    <script src="CSS+SCSS/bootstrap/js/bootstrap.js"></script>
     <script src="javascript/scripts/TimestampSort.js"></script>
+    <script src="javascript/scripts/script.js"></script> <!-- General small stuff, like copy, select buttons -->
     <script src="javascript/scripts/YoutubeApiHandler.js"></script>
     <!-- <script src="javascript/TwitchApiHandler.js"></script> -->
 </body>
