@@ -10,8 +10,6 @@ function AddArrTextArea($Array, $id)
 
 include "includes/html/HtmlDoc.php"; // makes the DoctypeHtml, also sets in version num in title 
 include "includes/settings.php"; // general vars things you can change is imported here, like the file root for the txt!
-include "includes/H.O.T_DescMaker/petscopcut.php"; // function: trims down timestamps so it fills less characters
-include "includes/H.O.T_DescMaker/NewMakerPlain.php"; // function: minuses timestamps by a specified amount, normal = 26-30ish
 
 // actual sorting of timestamps here
 if (file_exists($Timestamp_path)) { // if there is a file at the end of the file path
@@ -25,7 +23,6 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
         AddArrTextArea($Credits, "CreditsTxt"); // credits for songs bg and such
 
         // Old Php method
-        include "includes/H.O.T_DescMaker/NMLTimestampSort.php";
     } // sorts timestamps into record stamps and stream stamps, also removes empty timestamps
     else {
         $error = "File Found. File was empty though.. file at $Timestamp_path did not have content";
