@@ -3,8 +3,8 @@ let Clipoffset = 26; // twitch default
 let TimestampTxt = document.getElementById("TimestampTxt") as HTMLInputElement;
 let RawTxt = TimestampTxt.innerHTML;
 
-var MultiDimStreamArr = Array();
-var MultiDimRecordArr = Array();
+var MultiDimStreamArr = Array(); // Holds Raw Data from txt
+var MultiDimRecordArr = Array(); // Holds Raw Data from txt
 var StreamDatesArr = Array(); // Holds data for when a stream was streamed
 var RecordDatesArr = Array(); // Holds data for when a Recording was recorded
 var DescArrS = new Array(); // holds all the Finished Stream descriptions
@@ -12,11 +12,9 @@ var DescArrR = new Array(); // holds all the Finished Recording descriptions
 
 if (CutOuts(RawTxt) == 1) {
   // Runs CutOuts and if successful run next Method in line
-  console.log(1);
   if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
     // Runs SetOps if sucessful run next Method in line
     DomSet(); // Set in Data to Webpage
-    console.log(1);
   } else {
     console.log("Error Creating Description");
   }
@@ -24,123 +22,79 @@ if (CutOuts(RawTxt) == 1) {
   console.log("Error Sorting Timestamps");
 }
 
+// Large Functions
+
+//#region DomSet: Sorts Arrays and Calls SetIns() also sorts data and makes Sidebar content on the webpage
+// makes: The sidebar content, 
+// Input: Nothing
+// Outputs: a Working side bar, also calls SetIns()
+// returns Nothing
 function DomSet() {
-  let DescDiv = document.getElementById(
-    "DescriptionAreaDiv"
-  ) as HTMLInputElement;
   DescArrS.reverse(); // makes array be Newest First
   DescArrR.reverse();
   StreamDatesArr.reverse();
   RecordDatesArr.reverse();
 
+  // Update Sidebar
+  let SidebarDiv = document.getElementById("SideBar") as HTMLElement;
+  let nav = document.createElement("nav");
+  let ul = document.createElement("ul");
+
+  nav.classList.add("navbar");
+  ul.classList.add("nav", "flex-column", "text-center");
+
   if (DescArrS.length > 0) {
+    let liSeparate = document.createElement("li");
+    let aSeprate = document.createElement("a");
+    liSeparate.classList.add("nav-item", "m-3");
+    aSeprate.classList.add("navlink", "me-4");
+    aSeprate.setAttribute("href", "#Stream");
+    aSeprate.innerHTML = "# Streams";
+    liSeparate.append(aSeprate);
+    ul.append(liSeparate);
     for (let index = 0; index < DescArrS.length; index++) {
-      // Makes Vars for a bootstrap Accordion
-      // Acord Div
-      let AcordDiv = document.createElement("div");
-      AcordDiv.classList.add("accordion", "mt-4");
-
-      // Acord Item
-      let AcordItem = document.createElement("div");
-      AcordItem.classList.add("accordion-item");
-      // Acord Body
-      let AcordBody = document.createElement("div");
-      AcordBody.classList.add("accordion-body");
-      // H2
-      let h2 = document.createElement("h2");
-      h2.classList.add("accordion-header");
-
-      // Button for Acordion
-      let button = document.createElement("button");
-      button.classList.add("accordion-button", "btn", "collapsed");
-      button.setAttribute("type", "button");
-      button.setAttribute("data-bs-toggle", "collapse");
-      button.setAttribute("data-bs-target", `#collapse${index}`);
-      button.setAttribute("aria-expanded", "false");
-      button.setAttribute("aria-controls", `collapse${index}`);
-
-      // Collapse Div
-      let collapsedDiv = document.createElement("div");
-      collapsedDiv.classList.add("accordion-collapse", "collapse");
-      collapsedDiv.setAttribute("id", `collapse${index}`);
-      collapsedDiv.setAttribute("data-bs-parent", `#accordion${index}`);
-
-      let CharDiv = document.createElement("div");
-      CharDiv.classList.add("d-flex", "justify-content-between");
-      let PNo = document.createElement("p");
-      PNo.setAttribute("id", `CharCount${index}`)
-      PNo.innerHTML="Test";
-      let h4 = document.createElement("h4");
-      h4.innerHTML=`# Suggested Description`;
-      // Text Area for Description
-
-      let Textarea = document.createElement("textarea");
-      Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
-      Textarea.innerHTML = DescArrS[index];
-      Textarea.setAttribute("id", `myInput${index}`);
-      button.innerHTML = StreamDatesArr[index] + " - Stream";
-      // Select, Copy, Youtube Bar Vars
-
-      // Icons for BTNS
-      let TwitchIcon = document.createElement("img");
-      TwitchIcon.setAttribute("src", "img\\TwitchIconsmol.png");
-      TwitchIcon.classList.add("imgIcon");
-      let TwitchIcon2 = document.createElement("img");
-      TwitchIcon2.setAttribute("src", "img\\TwitchIconsmol.png");
-      TwitchIcon2.classList.add("imgIcon");
-      let YoutubeIcon = document.createElement("img");
-      YoutubeIcon.setAttribute("src", "img\\Youtube.png");
-      YoutubeIcon.classList.add("imgIcon");
-
-      // Buttons
-      let ButtonDiv = document.createElement("div");
-      let SelectBtn = document.createElement("button");
-      let CopyBtn = document.createElement("button");
-      let YoutubeBtn = document.createElement("button");
-      ButtonDiv.classList.add("my-3")
-      YoutubeBtn.innerHTML = "Update YT Vid";
-      CopyBtn.innerHTML = "Copy Text";
-      SelectBtn.innerHTML = "Select Text";
-      SelectBtn.classList.add("btn", "mx-1", "Select", "button");
-      CopyBtn.classList.add("btn", "mx-1", "Copy", "button");
-      YoutubeBtn.classList.add("btn", "mx-1", "Send" ,"button");
-      YoutubeBtn.setAttribute("id", "authbtn");
-      SelectBtn.setAttribute("value", `${index}`);
-      CopyBtn.setAttribute("value", `${index}`);
-      YoutubeBtn.setAttribute("value", `${index}`);
-
-      // Apending
-      h2.append(button);
-      AcordItem.append(h2);
-
-      //collapsedDiv.
-
-      // Over Text area Bar
-      CharDiv.append(h4);
-      CharDiv.append(PNo);
-      AcordBody.append(CharDiv);
-      // Textarea
-      AcordBody.append(Textarea);
-
-      // Button Bar
-      SelectBtn.append(TwitchIcon);
-      CopyBtn.append(TwitchIcon2);
-      YoutubeBtn.append(YoutubeIcon);
-      ButtonDiv.append(SelectBtn);
-      ButtonDiv.append(CopyBtn);
-      ButtonDiv.append(YoutubeBtn);
-      AcordBody.append(ButtonDiv);
-
-      // Final Appening
-      collapsedDiv.append(AcordBody);
-      AcordItem.append(collapsedDiv);
-      AcordDiv.append(AcordItem);
-      DescDiv.append(AcordDiv);
+      let li = document.createElement("li");
+      li.classList.add("nav-item", "m-3");
+      let a = document.createElement("a");
+      a.innerHTML = `◍ Stream - ${index + 1}`;
+      a.setAttribute("href", `#Stream-${index}`);
+      a.classList.add("navlink", "text-center");
+      li.append(a);
+      ul.append(li);
     }
+
+    SetIns(DescArrS, StreamDatesArr, "Stream");
+  } else if (DescArrS.length < 0) {
+    console.log("No stream Timestamps found");
   }
   if (DescArrR.length > 0) {
+    let liSeparate = document.createElement("li");
+    let aSeprate = document.createElement("a");
+    liSeparate.classList.add("nav-item", "m-3");
+    aSeprate.classList.add("navlink", "me-4");
+    aSeprate.setAttribute("href", "#Record");
+    aSeprate.innerHTML = "# Recordings";
+    liSeparate.append(aSeprate);
+    ul.append(liSeparate);
+    for (let index = 0; index < DescArrR.length; index++) {
+      let li = document.createElement("li");
+      li.classList.add("nav-item", "m-3");
+      let a = document.createElement("a");
+      a.innerHTML = `▶ Record - ${index + 1}`;
+      a.setAttribute("href", `#Record-${index}`);
+      a.classList.add("navlink", "text-center");
+      li.append(a);
+      ul.append(li);
+    }
+    // recordings have not been tested yet may not work
+    SetIns(DescArrR, RecordDatesArr, "Record");
+  } else {
+    console.log("No recording Timestamps found");
   }
+  nav.append(ul);
+  SidebarDiv.append(nav);
 }
+//#endregion
 
 //#region SetOps: Function Sorts the clean timestamps into a description
 // Makes: a Description from PHP Txts and clean timestamps
@@ -335,6 +289,124 @@ function CutOuts(RawTxt: string) {
   }
 }
 //#endregion
+
+//#region Setins: Function Takes Arrays and Sets them into the Webpage does not sort.
+// makes: The Acordions for Streams or Recordings on the page by setting them in
+// Input: A sorted Timestamp array, Date Array, and a String with the name of the array content.
+// Outputs: Nothing, Void;
+// returns Nothing
+function SetIns(DescArr, DatesArr, string: string) {
+  var DescDiv = document.getElementById(
+    "DescriptionAreaDiv"
+  ) as HTMLInputElement;
+  for (let index = 0; index < DescArr.length; index++) {
+    // Makes Vars for a bootstrap Accordion
+    // Acord Div
+    let AcordDiv = document.createElement("div");
+    AcordDiv.classList.add("accordion", "mt-4");
+
+    // Acord Item
+    let AcordItem = document.createElement("div");
+    AcordItem.classList.add("accordion-item");
+    AcordItem.setAttribute("id", `${string}-${index}`);
+    // Acord Body
+    let AcordBody = document.createElement("div");
+    AcordBody.classList.add("accordion-body");
+    // H2
+    let h2 = document.createElement("h2");
+    h2.classList.add("accordion-header");
+
+    // Button for Acordion
+    let button = document.createElement("button");
+    button.classList.add("accordion-button", "btn", "collapsed");
+    button.setAttribute("type", "button");
+    button.setAttribute("data-bs-toggle", "collapse");
+    button.setAttribute("data-bs-target", `#collapse${index}`);
+    button.setAttribute("aria-expanded", "false");
+    button.setAttribute("aria-controls", `collapse${index}`);
+
+    // Collapse Div
+    let collapsedDiv = document.createElement("div");
+    collapsedDiv.classList.add("accordion-collapse", "collapse");
+    collapsedDiv.setAttribute("id", `collapse${index}`);
+    collapsedDiv.setAttribute("data-bs-parent", `#accordion${index}`);
+
+    let CharDiv = document.createElement("div");
+    CharDiv.classList.add("d-flex", "justify-content-between");
+    let PNo = document.createElement("p");
+    PNo.setAttribute("id", `CharCount${index}`);
+    PNo.innerHTML = "Test";
+    let h4 = document.createElement("h4");
+    h4.innerHTML = `# Suggested Description`;
+    // Text Area for Description
+
+    let Textarea = document.createElement("textarea");
+    Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
+    Textarea.innerHTML = DescArr[index];
+    Textarea.setAttribute("id", `myInput${index}`);
+    button.innerHTML = DatesArr[index] + ` - ${string}`;
+    // Select, Copy, Youtube Bar Vars
+
+    // Icons for BTNS
+    let TwitchIcon = document.createElement("img");
+    TwitchIcon.setAttribute("src", "img\\TwitchIconsmol.png");
+    TwitchIcon.classList.add("imgIcon");
+    let TwitchIcon2 = document.createElement("img");
+    TwitchIcon2.setAttribute("src", "img\\TwitchIconsmol.png");
+    TwitchIcon2.classList.add("imgIcon");
+    let YoutubeIcon = document.createElement("img");
+    YoutubeIcon.setAttribute("src", "img\\Youtube.png");
+    YoutubeIcon.classList.add("imgIcon");
+
+    // Buttons
+    let ButtonDiv = document.createElement("div");
+    let SelectBtn = document.createElement("button");
+    let CopyBtn = document.createElement("button");
+    let YoutubeBtn = document.createElement("button");
+    ButtonDiv.classList.add("my-3");
+    YoutubeBtn.innerHTML = "Update YT Vid";
+    CopyBtn.innerHTML = "Copy Text";
+    SelectBtn.innerHTML = "Select Text";
+    SelectBtn.classList.add("btn", "mx-1", "Select", "button");
+    CopyBtn.classList.add("btn", "mx-1", "Copy", "button");
+    YoutubeBtn.classList.add("btn", "mx-1", "Send", "button");
+    YoutubeBtn.setAttribute("id", "authbtn");
+    SelectBtn.setAttribute("value", `${index}`);
+    CopyBtn.setAttribute("value", `${index}`);
+    YoutubeBtn.setAttribute("value", `${index}`);
+
+    // Apending
+    h2.append(button);
+    AcordItem.append(h2);
+
+    //collapsedDiv.
+
+    // Over Text area Bar
+    CharDiv.append(h4);
+    CharDiv.append(PNo);
+    AcordBody.append(CharDiv);
+    // Textarea
+    AcordBody.append(Textarea);
+
+    // Button Bar
+    SelectBtn.append(TwitchIcon);
+    CopyBtn.append(TwitchIcon2);
+    YoutubeBtn.append(YoutubeIcon);
+    ButtonDiv.append(SelectBtn);
+    ButtonDiv.append(CopyBtn);
+    ButtonDiv.append(YoutubeBtn);
+    AcordBody.append(ButtonDiv);
+
+    // Final Appening
+    collapsedDiv.append(AcordBody);
+    AcordItem.append(collapsedDiv);
+    AcordDiv.append(AcordItem);
+    DescDiv.append(AcordDiv);
+  }
+}
+//#endregion
+
+// Small Functions
 
 //#region AddClipDelay: Function Adds ClipDelay to 0:07:30 like timestamps
 // Adds Clip Delay to a timestamp
