@@ -22,6 +22,12 @@ if (CutOuts(RawTxt) == 1) {
   console.log("Error Sorting Timestamps");
 }
 
+// Twitch handling
+
+
+// Event handlers
+
+
 // Large Functions
 
 //#region DomSet: Sorts Arrays and Calls SetIns() also sorts data and makes Sidebar content on the webpage
