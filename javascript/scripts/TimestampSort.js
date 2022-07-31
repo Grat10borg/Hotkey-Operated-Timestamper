@@ -2,6 +2,8 @@
 let Clipoffset = 26;
 let TimestampTxt = document.getElementById("TimestampTxt");
 let RawTxt = TimestampTxt.innerHTML;
+var TappAcess = "ncma1vkg5ebul64cxjo60vjv5ddomb";
+let client_id2 = "";
 var MultiDimStreamArr = Array();
 var MultiDimRecordArr = Array();
 var StreamDatesArr = Array();
@@ -18,6 +20,74 @@ if (CutOuts(RawTxt) == 1) {
 }
 else {
     console.log("Error Sorting Timestamps");
+}
+validateToken2(TappAcess);
+function validateToken2(TappAcess) {
+    fetch("https://id.twitch.tv/oauth2/validate", {
+        headers: {
+            Authorization: "Bearer " + TappAcess,
+        },
+    })
+        .then((resp) => resp.json())
+        .then((resp) => {
+        if (resp.status) {
+            if (resp.status == 401) {
+                console.log("This token is invalid" + resp.message);
+                return;
+            }
+            console.log(resp);
+            console.log("Unexpected output with a status");
+            return;
+        }
+        if (resp.client_id) {
+            client_id2 = resp.client_id;
+            if (resp.user_id) {
+                console.log("Token is type User Access");
+            }
+            else {
+                console.log("Token is type App Access");
+            }
+            fetchUserId(client_id2, TappAcess, "grat_grot10_berg");
+            return;
+        }
+        console.log(resp);
+        console.log("unexpected Output");
+    })
+        .catch((err) => {
+        ErrorMessage("An Error Occured VALIDATING token data", err);
+    });
+}
+function fetchUserId(client_id2, access_token, streamerName) {
+    fetch(`https://api.twitch.tv/helix/users?login=${streamerName}`, {
+        headers: {
+            "Client-ID": client_id2,
+            Authorization: "Bearer " + access_token,
+        },
+    })
+        .then((resp) => resp.json())
+        .then((resp) => {
+        console.log(resp);
+        fetchVods(resp.data[0].id);
+    })
+        .catch((err) => {
+        console.log("Could not fetch user Are you sure its spelt correctly?", err);
+        console.log(err);
+    });
+}
+function fetchVods(user_Id) {
+    fetch(`https://api.twitch.tv/helix/videos?user_id=${user_Id}`, {
+        headers: {
+            "Client-ID": client_id2,
+            Authorization: "Bearer " + TappAcess,
+        },
+    })
+        .then((resp) => resp.json())
+        .then((resp) => {
+        console.log(resp);
+    })
+        .catch((err) => {
+        console.log("An Error Occured VALIDATING token data", err);
+    });
 }
 function DomSet() {
     DescArrS.reverse();
@@ -369,4 +439,7 @@ function to2Time(timestamp) {
     else {
         return res[0];
     }
+}
+function ErrorMessage(string, Err) {
+    alert(string + +"'' " + Err + " ''");
 }

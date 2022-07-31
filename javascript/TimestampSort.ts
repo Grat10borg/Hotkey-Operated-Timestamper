@@ -3,6 +3,10 @@ let Clipoffset = 26; // twitch default
 let TimestampTxt = document.getElementById("TimestampTxt") as HTMLInputElement;
 let RawTxt = TimestampTxt.innerHTML;
 
+// Get these from Files in the furture
+var TappAcess = "ncma1vkg5ebul64cxjo60vjv5ddomb" as string;
+let client_id2 = "" as string;
+
 var MultiDimStreamArr = Array(); // Holds Raw Data from txt
 var MultiDimRecordArr = Array(); // Holds Raw Data from txt
 var StreamDatesArr = Array(); // Holds data for when a stream was streamed
@@ -23,6 +27,107 @@ if (CutOuts(RawTxt) == 1) {
 }
 
 // Twitch handling
+
+// calls functions getting data from recent Twitch VODs
+validateToken2(TappAcess);
+
+//#region validateToken2: Validates App Token and Calls fetchUserId()
+// makes: Nothing
+// Input: TappAcess: A Twitch App Access Token
+// Outputs: a Validated Token and Calls fetchUserId()
+function validateToken2(TappAcess) {
+  fetch("https://id.twitch.tv/oauth2/validate", {
+    headers: {
+      Authorization: "Bearer " + TappAcess,
+    },
+  })
+    .then((resp) => resp.json())
+    .then((resp) => {
+      if (resp.status) {
+        if (resp.status == 401) {
+          console.log("This token is invalid" + resp.message);
+          // document.getElementById('output').textContent = 'This token is invalid: ' + resp.message;
+          return;
+        }
+        console.log(resp);
+        console.log("Unexpected output with a status");
+        //document.getElementById('output').textContent = 'Unexpected output with a status?';
+        return;
+      }
+      if (resp.client_id) {
+        client_id2 = resp.client_id;
+
+        //console.log("Token is valid");
+        if (resp.user_id) {
+           console.log("Token is type User Access");
+        } else {
+           console.log("Token is type App Access");
+        }
+        fetchUserId(client_id2, TappAcess, "grat_grot10_berg");
+        return;
+      }
+      console.log(resp);
+      console.log("unexpected Output");
+    })
+    .catch((err) => {
+      ErrorMessage("An Error Occured VALIDATING token data", err);
+    });
+}
+//#endregion
+
+//#region fetchUserId: Fetches the User Id of a User from a TwitchUsername then calls fetchVods()
+// makes: Nothing
+// Input: ClientId, App Access Token, StreamerName
+// Outputs: Outputs the Id of a User and calls fetchVods()
+function fetchUserId(
+  client_id2 : string,
+  access_token: string,
+  streamerName: string
+): any {
+  fetch(`https://api.twitch.tv/helix/users?login=${streamerName}`, {
+    headers: {
+      "Client-ID": client_id2,
+      Authorization: "Bearer " + access_token,
+    },
+  })
+    .then((resp) => resp.json())
+    .then((resp) => {
+    console.log(resp);
+
+    fetchVods(resp.data[0].id);
+    })
+    .catch((err) => {
+      console.log(
+        "Could not fetch user Are you sure its spelt correctly?",
+        err,
+      );
+      console.log(err);
+    });
+}
+//#endregion
+
+//#region fetchVods: Gets the Vods from The streamers Recent Streams
+// Input: ClientId, App Access Token, UserId
+// Outputs: Outputs the Id of a User and calls fetchVods()
+function fetchVods(user_Id) {
+  fetch(`https://api.twitch.tv/helix/videos?user_id=${user_Id}`, {
+    headers: {
+      "Client-ID": client_id2,
+      Authorization: "Bearer " + TappAcess,
+    },
+  })
+    .then((resp) => resp.json())
+    .then((resp) => {
+     console.log(resp);
+
+      
+
+    })
+    .catch((err) => {
+      console.log("An Error Occured VALIDATING token data", err);
+    });
+}
+//#endregion
 
 
 // Event handlers
@@ -484,5 +589,12 @@ function to2Time(timestamp: string) {
   } else {
     return res[0]; // returns values like  8:07:28, 24:03:53. does not touch timestamp
   }
+}
+//#endregion
+
+//#region ErrorMessage() makes an alert from data
+// Error messages out an alert
+function ErrorMessage(string, Err) {
+  alert(string + +"'' " +Err+ " ''" );
 }
 //#endregion
