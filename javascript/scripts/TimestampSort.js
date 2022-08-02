@@ -12,7 +12,11 @@ var DescArrS = new Array();
 var DescArrR = new Array();
 if (CutOuts(RawTxt) == 1) {
     if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
-        DomSet();
+        if (DomSet() == 1) {
+            validateToken2(TappAcess);
+        }
+        else {
+        }
     }
     else {
         console.log("Error Creating Description");
@@ -21,7 +25,6 @@ if (CutOuts(RawTxt) == 1) {
 else {
     console.log("Error Sorting Timestamps");
 }
-validateToken2(TappAcess);
 function validateToken2(TappAcess) {
     fetch("https://id.twitch.tv/oauth2/validate", {
         headers: {
@@ -42,10 +45,8 @@ function validateToken2(TappAcess) {
         if (resp.client_id) {
             client_id2 = resp.client_id;
             if (resp.user_id) {
-                console.log("Token is type User Access");
             }
             else {
-                console.log("Token is type App Access");
             }
             fetchUserId(client_id2, TappAcess, "grat_grot10_berg");
             return;
@@ -66,7 +67,6 @@ function fetchUserId(client_id2, access_token, streamerName) {
     })
         .then((resp) => resp.json())
         .then((resp) => {
-        console.log(resp);
         fetchVods(resp.data[0].id);
     })
         .catch((err) => {
@@ -83,7 +83,20 @@ function fetchVods(user_Id) {
     })
         .then((resp) => resp.json())
         .then((resp) => {
-        console.log(resp);
+        var Streams = Array();
+        for (let index = 0; index < resp["data"].length; index++) {
+            if (resp["data"][index]["type"] != "highlight") {
+                Streams.push(resp["data"][index]);
+            }
+        }
+        console.log(Streams);
+        for (let index = 0; index < DescArrS.length; index++) {
+            let AcordBtn = document.getElementById(`AcordBtn-${index}`);
+            let res = AcordBtn.innerHTML.split(" ");
+            if (AreFromSameDay(`${res[0]} ${res[1]}`, Streams[index]["created_at"])) {
+                AcordBtn.innerHTML = `${AcordBtn.innerHTML} ${Streams[index]["title"]}`;
+            }
+        }
     })
         .catch((err) => {
         console.log("An Error Occured VALIDATING token data", err);
@@ -149,6 +162,7 @@ function DomSet() {
     }
     nav.append(ul);
     SidebarDiv.append(nav);
+    return 1;
 }
 function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
     let res = document.getElementById("DescTxt");
@@ -325,6 +339,7 @@ function SetIns(DescArr, DatesArr, string) {
         button.setAttribute("data-bs-target", `#collapse${index}`);
         button.setAttribute("aria-expanded", "false");
         button.setAttribute("aria-controls", `collapse${index}`);
+        button.setAttribute("id", `AcordBtn-${index}`);
         let collapsedDiv = document.createElement("div");
         collapsedDiv.classList.add("accordion-collapse", "collapse");
         collapsedDiv.setAttribute("id", `collapse${index}`);
@@ -382,6 +397,14 @@ function SetIns(DescArr, DatesArr, string) {
         AcordItem.append(collapsedDiv);
         AcordDiv.append(AcordItem);
         DescDiv.append(AcordDiv);
+    }
+}
+function AreFromSameDay(InfowriterDate, TwitchDate) {
+    if (InfowriterDate.slice(0, 9) == TwitchDate.slice(0, 9)) {
+        return 1;
+    }
+    else {
+        return 0;
     }
 }
 function AddClipDelay(timestamp, Clipoffset) {

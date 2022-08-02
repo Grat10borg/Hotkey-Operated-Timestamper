@@ -3,8 +3,10 @@ let Clipoffset = 26; // twitch default
 let TimestampTxt = document.getElementById("TimestampTxt") as HTMLInputElement;
 let RawTxt = TimestampTxt.innerHTML;
 
+
 // Get these from Files in the furture
 var TappAcess = "ncma1vkg5ebul64cxjo60vjv5ddomb" as string;
+
 let client_id2 = "" as string;
 
 var MultiDimStreamArr = Array(); // Holds Raw Data from txt
@@ -18,7 +20,14 @@ if (CutOuts(RawTxt) == 1) {
   // Runs CutOuts and if successful run next Method in line
   if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
     // Runs SetOps if sucessful run next Method in line
-    DomSet(); // Set in Data to Webpage
+    // Set in Data to Webpage
+    if(DomSet() == 1) {
+      // Domset needs to be ran before we call ValidateToken();
+      validateToken2(TappAcess);
+    }
+    else {
+
+    }
   } else {
     console.log("Error Creating Description");
   }
@@ -28,10 +37,8 @@ if (CutOuts(RawTxt) == 1) {
 
 // Twitch handling
 
-// calls functions getting data from recent Twitch VODs
-validateToken2(TappAcess);
-
 //#region validateToken2: Validates App Token and Calls fetchUserId()
+// calls functions getting data from recent Twitch VODs
 // makes: Nothing
 // Input: TappAcess: A Twitch App Access Token
 // Outputs: a Validated Token and Calls fetchUserId()
@@ -59,9 +66,9 @@ function validateToken2(TappAcess) {
 
         //console.log("Token is valid");
         if (resp.user_id) {
-           console.log("Token is type User Access");
+          // console.log("Token is type User Access");
         } else {
-           console.log("Token is type App Access");
+          // console.log("Token is type App Access");
         }
         fetchUserId(client_id2, TappAcess, "grat_grot10_berg");
         return;
@@ -92,8 +99,6 @@ function fetchUserId(
   })
     .then((resp) => resp.json())
     .then((resp) => {
-    console.log(resp);
-
     fetchVods(resp.data[0].id);
     })
     .catch((err) => {
@@ -108,7 +113,7 @@ function fetchUserId(
 
 //#region fetchVods: Gets the Vods from The streamers Recent Streams
 // Input: ClientId, App Access Token, UserId
-// Outputs: Outputs the Id of a User and calls fetchVods()
+// Outputs: places the titles of the previous stream titles on the acord buttons
 function fetchVods(user_Id) {
   fetch(`https://api.twitch.tv/helix/videos?user_id=${user_Id}`, {
     headers: {
@@ -118,10 +123,23 @@ function fetchVods(user_Id) {
   })
     .then((resp) => resp.json())
     .then((resp) => {
-     console.log(resp);
+     // Change Dom to have Stream Name too
+      var Streams=Array();
+      for (let index = 0; index < resp["data"].length; index++) {
+        if(resp["data"][index]["type"] != "highlight") {
+          Streams.push(resp["data"][index]); // adds non highlight to sorted array
+        }
+      }
+      console.log(Streams);
+      for (let index = 0; index < DescArrS.length; index++) {
+        let AcordBtn = document.getElementById(`AcordBtn-${index}`) as HTMLInputElement;
+        let res = AcordBtn.innerHTML.split(" ");
 
-      
-
+        if(AreFromSameDay(`${res[0]} ${res[1]}`, Streams[index]["created_at"])) {
+          AcordBtn.innerHTML=`${AcordBtn.innerHTML} ${Streams[index]["title"]}`; // prints the stream title on the buttons
+        }
+        // Else leaves the buttons as is     
+      }
     })
     .catch((err) => {
       console.log("An Error Occured VALIDATING token data", err);
@@ -204,6 +222,7 @@ function DomSet() {
   }
   nav.append(ul);
   SidebarDiv.append(nav);
+  return 1;
 }
 //#endregion
 
@@ -435,6 +454,7 @@ function SetIns(DescArr, DatesArr, string: string) {
     button.setAttribute("data-bs-target", `#collapse${index}`);
     button.setAttribute("aria-expanded", "false");
     button.setAttribute("aria-controls", `collapse${index}`);
+    button.setAttribute("id", `AcordBtn-${index}`);
 
     // Collapse Div
     let collapsedDiv = document.createElement("div");
@@ -518,6 +538,20 @@ function SetIns(DescArr, DatesArr, string: string) {
 //#endregion
 
 // Small Functions
+
+//#region AreFromSameDay() tests if dates are on the same Day
+// Just tests if the stream dates are on the same day, may not work if stream is started before Midnight
+function AreFromSameDay(InfowriterDate:String, TwitchDate:String) {
+  if(InfowriterDate.slice(0, 9) ==TwitchDate.slice(0, 9)) {
+    //console.log(InfowriterDate + "==" + TwitchDate);
+    return 1;
+  }
+  else {
+    //console.log(InfowriterDate + "!=" + TwitchDate);
+    return 0;
+  }
+}
+//#endregion
 
 //#region AddClipDelay: Function Adds ClipDelay to 0:07:30 like timestamps
 // Adds Clip Delay to a timestamp
