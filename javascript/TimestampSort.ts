@@ -418,7 +418,7 @@ function CutOuts(RawTxt: string) {
 }
 //#endregion
 
-//#region Setins: Function Takes Arrays and Sets them into the Webpage does not sort.
+//#region SetIns: Function Takes Arrays and Sets them into the Webpage does not sort.
 // makes: The Acordions for Streams or Recordings on the page by setting them in
 // Input: A sorted Timestamp array, Date Array, and a String with the name of the array content.
 // Outputs: Nothing, Void;
