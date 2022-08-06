@@ -3,10 +3,9 @@ let Clipoffset = 26; // twitch default
 let TimestampTxt = document.getElementById("TimestampTxt") as HTMLInputElement;
 let RawTxt = TimestampTxt.innerHTML;
 
-
 // Get these from Files in the furture
 var TappAcess = "ncma1vkg5ebul64cxjo60vjv5ddomb" as string;
-
+let StreamerName = "grat_grot10_berg" as string;
 let client_id2 = "" as string;
 
 var MultiDimStreamArr = Array(); // Holds Raw Data from txt
@@ -23,10 +22,10 @@ if (CutOuts(RawTxt) == 1) {
     // Set in Data to Webpage
     if(DomSet() == 1) {
       // Domset needs to be ran before we call ValidateToken();
-      validateToken2(TappAcess);
+      validateToken2(TappAcess, StreamerName); // sets the titles of the vods at its own time
     }
     else {
-
+      console.log("Failed Placing Things in the Websites");
     }
   } else {
     console.log("Error Creating Description");
@@ -42,7 +41,7 @@ if (CutOuts(RawTxt) == 1) {
 // makes: Nothing
 // Input: TappAcess: A Twitch App Access Token
 // Outputs: a Validated Token and Calls fetchUserId()
-function validateToken2(TappAcess) {
+function validateToken2(TappAcess, StreamerName) {
   fetch("https://id.twitch.tv/oauth2/validate", {
     headers: {
       Authorization: "Bearer " + TappAcess,
@@ -70,7 +69,7 @@ function validateToken2(TappAcess) {
         } else {
           // console.log("Token is type App Access");
         }
-        fetchUserId(client_id2, TappAcess, "grat_grot10_berg");
+        fetchUserId(client_id2, TappAcess, StreamerName);
         return;
       }
       console.log(resp);
@@ -138,7 +137,7 @@ function fetchVods(user_Id) {
         if(AreFromSameDay(`${res[0]} ${res[1]}`, Streams[index]["created_at"])) {
           AcordBtn.innerHTML=`${AcordBtn.innerHTML} ${Streams[index]["title"]}`; // prints the stream title on the buttons
         }
-        // Else leaves the buttons as is     
+        // Else: leaves the buttons as is
       }
     })
     .catch((err) => {
@@ -146,7 +145,6 @@ function fetchVods(user_Id) {
     });
 }
 //#endregion
-
 
 // Event handlers
 

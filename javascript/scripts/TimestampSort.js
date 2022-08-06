@@ -3,6 +3,7 @@ let Clipoffset = 26;
 let TimestampTxt = document.getElementById("TimestampTxt");
 let RawTxt = TimestampTxt.innerHTML;
 var TappAcess = "ncma1vkg5ebul64cxjo60vjv5ddomb";
+let StreamerName = "grat_grot10_berg";
 let client_id2 = "";
 var MultiDimStreamArr = Array();
 var MultiDimRecordArr = Array();
@@ -13,9 +14,10 @@ var DescArrR = new Array();
 if (CutOuts(RawTxt) == 1) {
     if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
         if (DomSet() == 1) {
-            validateToken2(TappAcess);
+            validateToken2(TappAcess, StreamerName);
         }
         else {
+            console.log("Failed Placing Things in the Websites");
         }
     }
     else {
@@ -25,7 +27,7 @@ if (CutOuts(RawTxt) == 1) {
 else {
     console.log("Error Sorting Timestamps");
 }
-function validateToken2(TappAcess) {
+function validateToken2(TappAcess, StreamerName) {
     fetch("https://id.twitch.tv/oauth2/validate", {
         headers: {
             Authorization: "Bearer " + TappAcess,
@@ -48,7 +50,7 @@ function validateToken2(TappAcess) {
             }
             else {
             }
-            fetchUserId(client_id2, TappAcess, "grat_grot10_berg");
+            fetchUserId(client_id2, TappAcess, StreamerName);
             return;
         }
         console.log(resp);
