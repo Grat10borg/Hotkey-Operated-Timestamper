@@ -1,6 +1,12 @@
 <?php
 include "includes/html/HtmlDoc.php";
 include "includes/settings.php";
+include "includes/ArrayMaker.php";
+
+AddArrTextArea($begindesc, "DescTxt"); // Adds basic description
+AddArrTextArea($intros, "IntroTxt");    // Import of intro txt
+AddArrTextArea($socialLinks, "SocialTxt"); // social media txt 
+AddArrTextArea($Credits, "CreditsTxt"); // credits for songs bg and such
 ?>
 
 <body>
@@ -55,18 +61,6 @@ include "includes/settings.php";
                     <div class="row m-2">
                         <input id="Submit" class="my-3 btn HighSubmit" type="submit" value="Make Request">
                     </div>
-
-
-                    <!-- <div class="row m-2 mt-5">
-                        <p>manual overide here at some point</p>
-                    </div>
-                    <div class="row m-2">
-                        <input class="form-control m-2 p-1" id="broadcastId" value="Under">
-                    </div>
-                    <div class="row m-2">
-                        <input class="form-control m-2 p-1" name="gameId" value="Construction">
-
-                    </div> -->
                 </form>
             </div>
             <div class="col">

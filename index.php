@@ -1,13 +1,6 @@
 <?php
-function AddArrTextArea($Array, $id)
-{
-    echo "<textarea hidden id='$id'>"; // this is hidden from view
-    foreach ($Array as $line) {
-        echo $line;
-    }
-    echo "</textarea>";
-}
 
+include "includes/ArrayMaker.php";
 include "includes/html/HtmlDoc.php"; // makes the DoctypeHtml, also sets in version num in title 
 include "includes/settings.php"; // general vars things you can change is imported here, like the file root for the txt!
 // actual sorting of timestamps here
