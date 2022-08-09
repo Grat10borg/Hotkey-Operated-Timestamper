@@ -2,10 +2,15 @@
 var TclientId = "uqiitin0qzty2b0xeet7bczpfouppc";
 var Tredirect = "http://localhost/Hotkey-Operated-Timestamper/Highlight.php";
 var TappAcess = "ncma1vkg5ebul64cxjo60vjv5ddomb";
-var Desc1 = "Catch the chaos in bullet-time! https://twitch.tv/grat_grot10_berg\n°•°•°•°•°•°•°•°•°•°•°•°•°•°•°•°•°•°•";
-var intro = "Introduction\nDamn Daniel damn back at it again with those (mostly) chill streams DANIEL DAMN 😳\nI play mostly short games, and draw and such including: pixelart, live2d, shake-art, minecraft skins, lowpoly || autistic";
-var socialLinks = "Socials\nTwic 📡 : https://twitch.tv/grat_grot10_berg \nTwit 🐦 : https://twitter.com/GratGrottenberg \nDisc 📀 : https://discord.gg/nVTZQT95uy";
-var Credits = "Music ♪ ♪ ♪ ♪ \nAll music used for now is made by: Emile Van Kreiken ♪ & Shane Mesa\nEmile's Bandcam: https://music.emilevankrieken.com/album/the-aether-ii-original-soundtrack\nShean's Link: https://smarturl.it/mother4\n\nThese Songs in a YT playlist:\nhttps://www.youtube.com/playlist?list=PLkH2vNUD5wMWjKwhSan0U-f6T-trpOirc";
+let res = document.getElementById("DescTxt");
+let res1 = document.getElementById("IntroTxt");
+let res2 = document.getElementById("SocialTxt");
+let res3 = document.getElementById("CreditsTxt");
+let Desc1 = res.innerHTML;
+let intro = res1.innerHTML;
+let socialLinks = res2.innerHTML;
+let Credits = res3.innerHTML;
+console.log(intro);
 let AuthA = document.getElementById("authorize_email");
 AuthA.setAttribute("href", "https://id.twitch.tv/oauth2/authorize?client_id=" +
     TclientId +

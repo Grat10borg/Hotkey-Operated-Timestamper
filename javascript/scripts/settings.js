@@ -1,11 +1,6 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TappAcess = exports.Tredirect = exports.TclientId = void 0;
 var YclientId = "738406360954-727ohtsje2p1se0vngbosd5oot1e601l.apps.googleusercontent.com";
 var YApiKey = "AIzaSyCq512yjXdQLtdUV3n7CzKIe78oDufRovU";
 var TclientId = 'uqiitin0qzty2b0xeet7bczpfouppc';
-exports.TclientId = TclientId;
 var TappAcess = 'ncma1vkg5ebul64cxjo60vjv5ddomb';
-exports.TappAcess = TappAcess;
 var Tredirect = 'http://localhost/Hotkey-Operated-Timestamper/Highlight.php';
-exports.Tredirect = Tredirect;

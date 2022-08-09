@@ -2,22 +2,18 @@
 var TclientId = "uqiitin0qzty2b0xeet7bczpfouppc"; // This is made in the: https://dev.twitch.tv/console/apps aswell as the redirect
 var Tredirect = "http://localhost/Hotkey-Operated-Timestamper/Highlight.php"; // also change redirect in the Twitch dev area: https://dev.twitch.tv/console/apps.. Remember twiches redirect and Yours need to Match
 var TappAcess = "ncma1vkg5ebul64cxjo60vjv5ddomb";
-var Desc1 =
-  "Catch the chaos in bullet-time! https://twitch.tv/grat_grot10_berg\n°•°•°•°•°•°•°•°•°•°•°•°•°•°•°•°•°•°•";
-var intro =
-  "Introduction\nDamn Daniel damn back at it again with those (mostly) chill streams DANIEL DAMN 😳\nI play mostly short games, and draw and such including: pixelart, live2d, shake-art, minecraft skins, lowpoly || autistic";
-var socialLinks =
-  "Socials\nTwic 📡 : https://twitch.tv/grat_grot10_berg \nTwit 🐦 : https://twitter.com/GratGrottenberg \nDisc 📀 : https://discord.gg/nVTZQT95uy";
-var Credits =
-  "Music ♪ ♪ ♪ ♪ \nAll music used for now is made by: Emile Van Kreiken ♪ & Shane Mesa\nEmile's Bandcam: https://music.emilevankrieken.com/album/the-aether-ii-original-soundtrack\nShean's Link: https://smarturl.it/mother4\n\nThese Songs in a YT playlist:\nhttps://www.youtube.com/playlist?list=PLkH2vNUD5wMWjKwhSan0U-f6T-trpOirc";
 
-// Fix this Import Export stuff at a later time.
+let res = document.getElementById("DescTxt") as HTMLInputElement;
+let res1 = document.getElementById("IntroTxt") as HTMLInputElement;
+let res2 = document.getElementById("SocialTxt") as HTMLInputElement;
+let res3 = document.getElementById("CreditsTxt") as HTMLInputElement;
 
-//import {TclientId, Tredirect} from "./settings";
-//import modules = require("./settings");
-//let ClientId = TclientId;
-//import TclientId = require('./settings');
-//#endregion
+let Desc1 = res.innerHTML;
+let intro = res1.innerHTML;
+let socialLinks = res2.innerHTML;
+let Credits = res3.innerHTML;
+
+console.log(intro);
 
 // Website Data Handling
 
@@ -48,7 +44,7 @@ form.addEventListener(
   "submit",
   function (event: any): void {
     event.preventDefault();
-   
+
     let date = new Date(form.date.value) as any; // changes to string later
     if (date == "Invalid Date") {
       date = new Date();
@@ -595,6 +591,8 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 }
 
 //#endregion
+
+//#region ErrorMsg() Makes an error message taking MSG, SystemMsg, Color of Warning
 function ErrorMsg(Msg: string, systemMsg: any, color: string) {
   let H4 = document.createElement("h4");
   let p = document.createElement("p");
@@ -605,6 +603,7 @@ function ErrorMsg(Msg: string, systemMsg: any, color: string) {
   ErrorDiv.append(H4);
   ErrorDiv.append(p);
 }
+//#endregion
 
 //#region toTime function, makes a timestamp that will work in the youtube description
 // converts the time into minutes and hours from seconds

@@ -24,7 +24,7 @@ if (CutOuts(RawTxt) == 1) {
       // Domset needs to be ran before we call ValidateToken();
       validateToken2(TappAcess, StreamerName); // sets the titles of the vods at its own time
     }
-    else {
+    else {  // Error logging
       console.log("Failed Placing Things in the Websites");
     }
   } else {
@@ -147,6 +147,7 @@ function fetchVods(user_Id) {
 //#endregion
 
 // Event handlers
+
 
 
 // Large Functions
