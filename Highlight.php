@@ -24,11 +24,8 @@ AddArrTextArea($Credits, "CreditsTxt"); // credits for songs bg and such
                 </div>
                 <form id="HighlighForm">
                     <div class="row m-2">
-                        <a class="btn authbutton mb-2" href="https://id.twitch.tv/oauth2/authorize?client_id=hozgh446gdilj5knsrsxxz8tahr3koz&amp;redirect_uri=https%3A%2F%2Fbarrycarlyon.github.io%2Ftwitch_misc%2Fauthentication%2Fimplicit_auth%2F&amp;response_type=token&amp;scope=user:read:email" id="authorize_email">Connect Twitch <img class="imgIcon" src="img/TwitchIconsmol.png"></a>
-                    </div>
-                    <div class="row m-2">
                         <label for="SelectGame" class="text-secondary">Channel</label>
-                        <select name="SelectChannel" id="SelectChannel" disabled class="form-select form-select-sm my-2" aria-label=".form-select-sm example">
+                        <select name="SelectChannel" id="SelectChannel" class="form-select form-select-sm my-2" aria-label=".form-select-sm example">
                             <!-- <option selected>Choose a Channel via Memory</option> -->
                             <?php
                             sort($History); // sorts channels alphabeticelly 
@@ -143,7 +140,7 @@ AddArrTextArea($Credits, "CreditsTxt"); // credits for songs bg and such
 <script src="javascript/scripts/script.js"></script>
 <script src="https://apis.google.com/js/api.js"></script>
 <script src="javascript/scripts/YoutubeApiHandler.js"></script>
-<script src="javascript/scripts/TwitchApiHandler.js"></script>
+<script src="javascript/scripts//HighlightCaller.js"></script>
 <script src="CSS+SCSS/bootstrap/js/bootstrap.js"></script>
 
 </html>

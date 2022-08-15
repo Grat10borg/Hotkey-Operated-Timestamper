@@ -17,22 +17,6 @@ console.log(intro);
 
 // Website Data Handling
 
-//#region AuthButton
-
-let AuthA = document.getElementById("authorize_email") as HTMLElement;
-AuthA.setAttribute(
-  "href",
-  "https://id.twitch.tv/oauth2/authorize?client_id=" +
-    TclientId +
-    "&redirect_uri=" +
-    encodeURIComponent(Tredirect) +
-    "&response_type=token&scope=user:read:email"
-);
-let empty = document.getElementById("access_token") as HTMLElement;
-empty.textContent = "";
-
-//#endregion
-
 //#region Submit button form
 
 // Getting Form Data
@@ -108,31 +92,6 @@ ChannelSelect.addEventListener("change", function () {
 
 // Twitch Api Handling
 
-//#region Twitch Auth and Logging in
-
-if (document.location.hash && document.location.hash != "") {
-  var parsedHash = new URLSearchParams(window.location.hash.slice(1));
-  if (parsedHash.get("access_token")) {
-    var Useraccess_token = parsedHash.get("access_token");
-
-    // unlock selectbox for querying when logged in
-    let selectbox = document.getElementById(
-      "SelectChannel"
-    ) as HTMLInputElement;
-    selectbox.disabled = false;
-    //console.log(`din Access Token fra Twitch er: ${access_token}`); // access tokens bliver ny lavet hver reload
-  }
-} else if (document.location.search && document.location.search != "") {
-  var parsedParams = new URLSearchParams(window.location.search);
-  if (parsedParams.get("error_description")) {
-    let p = document.getElementById("access_token") as HTMLElement;
-    p.textContent =
-      parsedParams.get("error") + " - " + parsedParams.get("error_description");
-  }
-}
-
-//#endregion
-
 //#region ValidateToken, Validates the TappAcess Token and then calls fetchUser()
 
 let client_id = "";
@@ -198,7 +157,7 @@ function fetchUser(
   fetch(`https://api.twitch.tv/helix/users?login=${streamerName}`, {
     headers: {
       "Client-ID": client_id,
-      Authorization: "Bearer " + access_token,
+      Authorization: "Bearer " + TappAcess,
     },
   })
     .then((resp) => resp.json())
@@ -240,7 +199,7 @@ function GetChosenChannelGames(id: string) {
       // from the inputted date it takes clips for 2 weeks forward unless said otherwise
       headers: {
         "Client-ID": TclientId, // client id is made Here: https://dev.twitch.tv/console/apps
-        Authorization: "Bearer " + Useraccess_token, // access token is made Through the Twitch CLI: https://dev.twitch.tv/docs/api#step-1-register-an-application
+        Authorization: "Bearer " + TappAcess, // access token is made Through the Twitch CLI: https://dev.twitch.tv/docs/api#step-1-register-an-application
       },
     }
   ) // after cURL then do this
@@ -287,7 +246,7 @@ function GetGamesFromIds(Game_ids: any) {
   fetch(`${httpcall}`, {
     headers: {
       "Client-ID": TclientId,
-      Authorization: "Bearer " + Useraccess_token,
+      Authorization: "Bearer " + TappAcess,
     },
   })
     .then((response) => response.json())
@@ -347,7 +306,7 @@ function GetUsersBroadcastId(
     // calls fetch to fetch users own id
     headers: {
       "Client-ID": TclientId, // client id is made Here: https://dev.twitch.tv/console/apps
-      Authorization: "Bearer " + Useraccess_token, // access token is made Through the Twitch CLI: https://dev.twitch.tv/docs/api#step-1-register-an-application
+      Authorization: "Bearer " + TappAcess, // access token is made Through the Twitch CLI: https://dev.twitch.tv/docs/api#step-1-register-an-application
     },
   }) // after cURL then do this
     .then((response) => response.json()) // UnJsons the response
@@ -394,7 +353,7 @@ function FetchCallClip(
       // from the inputted date it takes clips for 2 weeks forward unless said otherwise
       headers: {
         "Client-ID": TclientId, // client id is made Here: https://dev.twitch.tv/console/apps
-        Authorization: "Bearer " + Useraccess_token, // access token is made Through the Twitch CLI: https://dev.twitch.tv/docs/api#step-1-register-an-application
+        Authorization: "Bearer " + TappAcess, // access token is made Through the Twitch CLI: https://dev.twitch.tv/docs/api#step-1-register-an-application
       },
     }
   ) // after cURL then do this

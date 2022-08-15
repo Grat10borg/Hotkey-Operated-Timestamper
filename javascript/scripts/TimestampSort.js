@@ -60,6 +60,24 @@ function validateToken2(TappAcess, StreamerName) {
         ErrorMessage("An Error Occured VALIDATING token data", err);
     });
 }
+async function HttpCaller(HttpCall) {
+    const response = await fetch(`${HttpCall}`, {
+        headers: {
+            Authorization: "Bearer " + TappAcess,
+            "Client-ID": client_id2,
+        },
+    })
+        .then((response) => response.json())
+        .then((response) => {
+        console.log(response);
+        return response;
+    })
+        .catch((err) => {
+        console.log(err);
+        return 0;
+    });
+    return 0;
+}
 function fetchUserId(client_id2, access_token, streamerName) {
     fetch(`https://api.twitch.tv/helix/users?login=${streamerName}`, {
         headers: {

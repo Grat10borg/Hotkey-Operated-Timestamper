@@ -11,14 +11,6 @@ let intro = res1.innerHTML;
 let socialLinks = res2.innerHTML;
 let Credits = res3.innerHTML;
 console.log(intro);
-let AuthA = document.getElementById("authorize_email");
-AuthA.setAttribute("href", "https://id.twitch.tv/oauth2/authorize?client_id=" +
-    TclientId +
-    "&redirect_uri=" +
-    encodeURIComponent(Tredirect) +
-    "&response_type=token&scope=user:read:email");
-let empty = document.getElementById("access_token");
-empty.textContent = "";
 var Id;
 var form = document.querySelector("#HighlighForm");
 var ErrorDiv = document.getElementById("ErrorDiv");
@@ -60,22 +52,6 @@ ChannelSelect.addEventListener("change", function () {
     ErrorDiv.innerHTML = "";
     validateToken(value);
 });
-if (document.location.hash && document.location.hash != "") {
-    var parsedHash = new URLSearchParams(window.location.hash.slice(1));
-    if (parsedHash.get("access_token")) {
-        var Useraccess_token = parsedHash.get("access_token");
-        let selectbox = document.getElementById("SelectChannel");
-        selectbox.disabled = false;
-    }
-}
-else if (document.location.search && document.location.search != "") {
-    var parsedParams = new URLSearchParams(window.location.search);
-    if (parsedParams.get("error_description")) {
-        let p = document.getElementById("access_token");
-        p.textContent =
-            parsedParams.get("error") + " - " + parsedParams.get("error_description");
-    }
-}
 let client_id = "";
 function validateToken(value) {
     fetch("https://id.twitch.tv/oauth2/validate", {
@@ -115,7 +91,7 @@ function fetchUser(submit, access_token, streamerName, date, endDate, game_id, v
     fetch(`https://api.twitch.tv/helix/users?login=${streamerName}`, {
         headers: {
             "Client-ID": client_id,
-            Authorization: "Bearer " + access_token,
+            Authorization: "Bearer " + TappAcess,
         },
     })
         .then((resp) => resp.json())
@@ -140,7 +116,7 @@ function GetChosenChannelGames(id) {
     fetch(`https://api.twitch.tv/helix/clips?broadcaster_id=${id}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`, {
         headers: {
             "Client-ID": TclientId,
-            Authorization: "Bearer " + Useraccess_token,
+            Authorization: "Bearer " + TappAcess,
         },
     })
         .then((response) => response.json())
@@ -171,7 +147,7 @@ function GetGamesFromIds(Game_ids) {
     fetch(`${httpcall}`, {
         headers: {
             "Client-ID": TclientId,
-            Authorization: "Bearer " + Useraccess_token,
+            Authorization: "Bearer " + TappAcess,
         },
     })
         .then((response) => response.json())
@@ -203,7 +179,7 @@ function GetUsersBroadcastId(RFCdate, RFCDateEnd, game_id, viewCount) {
     fetch(`https://api.twitch.tv/helix/users`, {
         headers: {
             "Client-ID": TclientId,
-            Authorization: "Bearer " + Useraccess_token,
+            Authorization: "Bearer " + TappAcess,
         },
     })
         .then((response) => response.json())
@@ -222,7 +198,7 @@ function FetchCallClip(RFCdate, RFCDateEnd, Id, game_id, viewCount) {
     fetch(`https://api.twitch.tv/helix/clips?broadcaster_id=${Id}&first=100&started_at=${RFCdate}&ended_at=${RFCDateEnd}`, {
         headers: {
             "Client-ID": TclientId,
-            Authorization: "Bearer " + Useraccess_token,
+            Authorization: "Bearer " + TappAcess,
         },
     })
         .then((response) => response.json())

@@ -70,6 +70,8 @@ function validateToken2(TappAcess, StreamerName) {
           // console.log("Token is type App Access");
         }
         fetchUserId(client_id2, TappAcess, StreamerName);
+        //let StreamerId = HttpCaller(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
+        //console.log(StreamerId);
         return;
       }
       console.log(resp);
@@ -81,7 +83,33 @@ function validateToken2(TappAcess, StreamerName) {
 }
 //#endregion
 
-//#region fetchUserId: Fetches the User Id of a User from a TwitchUsername then calls fetchVods()
+//#region HttpCaller(HttpCall) multipurpose HttpCaller calls the Httpcall returns The Response if Success if not: 0
+// This makes most calls, intead of a lot of differnt functions this does them instead.
+// TO find out what is called look where its called as the HTTPCALL would need to be sent over.
+async function HttpCaller(HttpCall: string) {
+  const response = await fetch(`${HttpCall}`, {
+    headers: {
+      Authorization: "Bearer " + TappAcess,
+      "Client-ID": client_id2, // can also use Tclient_id. !! comment out Tclient if not being used !!
+    },
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      // Return Response on Success
+      console.log(response);
+      return response;
+    })
+    .catch((err) => {
+      // Print Error if any. And return 0
+      console.log(err);
+      return 0;
+    });
+  return 0;
+}
+//#endregion
+
+//#region 
+//fetchUserId: Fetches the User Id of a User from a TwitchUsername then calls fetchVods()
 // makes: Nothing
 // Input: ClientId, App Access Token, StreamerName
 // Outputs: Outputs the Id of a User and calls fetchVods()
@@ -394,9 +422,6 @@ function CutOuts(RawTxt: string) {
       }
     }
   }
-  //console.log(RawTxtArr); // RawTxt data in a Array
-  //console.log(MultiDimStreamArr);
-  //console.log(MultiDimRecordArr);
 
   // test if success
   if (
