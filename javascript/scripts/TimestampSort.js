@@ -2,7 +2,7 @@
 let Clipoffset = 26;
 let TimestampTxt = document.getElementById("TimestampTxt");
 let RawTxt = TimestampTxt.innerHTML;
-var TappAcess = "ncma1vkg5ebul64cxjo60vjv5ddomb";
+var TappAcess = "bzs6p3k7o39u8bv6y3hotdi1dszdlw";
 let StreamerName = "grat_grot10_berg";
 let client_id2 = "";
 var MultiDimStreamArr = Array();
@@ -14,7 +14,7 @@ var DescArrR = new Array();
 if (CutOuts(RawTxt) == 1) {
     if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
         if (DomSet() == 1) {
-            validateToken2(TappAcess, StreamerName);
+            validateToken(TappAcess);
         }
         else {
             console.log("Failed Placing Things in the Websites");
@@ -26,57 +26,6 @@ if (CutOuts(RawTxt) == 1) {
 }
 else {
     console.log("Error Sorting Timestamps");
-}
-function validateToken2(TappAcess, StreamerName) {
-    fetch("https://id.twitch.tv/oauth2/validate", {
-        headers: {
-            Authorization: "Bearer " + TappAcess,
-        },
-    })
-        .then((resp) => resp.json())
-        .then((resp) => {
-        if (resp.status) {
-            if (resp.status == 401) {
-                console.log("This token is invalid" + resp.message);
-                return;
-            }
-            console.log(resp);
-            console.log("Unexpected output with a status");
-            return;
-        }
-        if (resp.client_id) {
-            client_id2 = resp.client_id;
-            if (resp.user_id) {
-            }
-            else {
-            }
-            fetchUserId(client_id2, TappAcess, StreamerName);
-            return;
-        }
-        console.log(resp);
-        console.log("unexpected Output");
-    })
-        .catch((err) => {
-        ErrorMessage("An Error Occured VALIDATING token data", err);
-    });
-}
-async function HttpCaller(HttpCall) {
-    const response = await fetch(`${HttpCall}`, {
-        headers: {
-            Authorization: "Bearer " + TappAcess,
-            "Client-ID": client_id2,
-        },
-    })
-        .then((response) => response.json())
-        .then((response) => {
-        console.log(response);
-        return response;
-    })
-        .catch((err) => {
-        console.log(err);
-        return 0;
-    });
-    return 0;
 }
 function fetchUserId(client_id2, access_token, streamerName) {
     fetch(`https://api.twitch.tv/helix/users?login=${streamerName}`, {
@@ -485,4 +434,50 @@ function to2Time(timestamp) {
 }
 function ErrorMessage(string, Err) {
     alert(string + +"'' " + Err + " ''");
+}
+function validateToken() {
+    fetch("https://id.twitch.tv/oauth2/validate", {
+        headers: {
+            Authorization: "Bearer " + TappAcess,
+        },
+    })
+        .then((resp) => resp.json())
+        .then((resp) => {
+        if (resp.status) {
+            if (resp.status == 401) {
+                console.log("This token is invalid ... " + resp.message);
+                return 0;
+            }
+            console.log("Unexpected output with a status");
+            return 0;
+        }
+        if (resp.client_id) {
+            client_id2 = resp.client_id;
+            return 1;
+        }
+        console.log("unexpected Output");
+        return 0;
+    })
+        .catch((err) => {
+        console.log(err);
+        return 0;
+    });
+    return 1;
+}
+async function HttpCalling(HttpCall) {
+    const respon = await fetch(`${HttpCall}`, {
+        headers: {
+            Authorization: "Bearer " + TappAcess,
+            "Client-ID": client_id2,
+        },
+    })
+        .then((respon) => respon.json())
+        .then((respon) => {
+        return respon;
+    })
+        .catch((err) => {
+        console.log(err);
+        return err;
+    });
+    return respon;
 }

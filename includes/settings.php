@@ -4,7 +4,7 @@ $intros_p = "Texts\Intro.txt";
 $socialLinks_p = "Texts/SocialLinks.txt";
 $Credits_p = "Texts/Credits.txt";
 $History_p = "Texts\HistoryChannels.txt";
-$_SESSION['$Timestam'] = "Q:\Billeder_2\Art\Stream_Stuff(not named)\Timestamp\Timestamps.txt"; // makes for desc maker to work, and for it to be able to clear it again
+$_SESSION['$Timestam'] = "Texts\TimestampsTest.txt"; // makes for desc maker to work, and for it to be able to clear it again
 $Timestamp_path = $_SESSION['$Timestam']; // if timestamps exist is tested later
 $ClipOffset = 26; // cannot plus time, only minus do not try -20
 

@@ -4,7 +4,7 @@ let TimestampTxt = document.getElementById("TimestampTxt") as HTMLInputElement;
 let RawTxt = TimestampTxt.innerHTML;
 
 // Get these from Files in the furture
-var TappAcess = "ncma1vkg5ebul64cxjo60vjv5ddomb" as string;
+var TappAcess = "bzs6p3k7o39u8bv6y3hotdi1dszdlw" as string;
 let StreamerName = "grat_grot10_berg" as string;
 let client_id2 = "" as string;
 
@@ -22,7 +22,7 @@ if (CutOuts(RawTxt) == 1) {
     // Set in Data to Webpage
     if(DomSet() == 1) {
       // Domset needs to be ran before we call ValidateToken();
-      validateToken2(TappAcess, StreamerName); // sets the titles of the vods at its own time
+      validateToken(TappAcess); // sets the titles of the vods at its own time
     }
     else {  // Error logging
       console.log("Failed Placing Things in the Websites");
@@ -35,78 +35,6 @@ if (CutOuts(RawTxt) == 1) {
 }
 
 // Twitch handling
-
-//#region validateToken2: Validates App Token and Calls fetchUserId()
-// calls functions getting data from recent Twitch VODs
-// makes: Nothing
-// Input: TappAcess: A Twitch App Access Token
-// Outputs: a Validated Token and Calls fetchUserId()
-function validateToken2(TappAcess, StreamerName) {
-  fetch("https://id.twitch.tv/oauth2/validate", {
-    headers: {
-      Authorization: "Bearer " + TappAcess,
-    },
-  })
-    .then((resp) => resp.json())
-    .then((resp) => {
-      if (resp.status) {
-        if (resp.status == 401) {
-          console.log("This token is invalid" + resp.message);
-          // document.getElementById('output').textContent = 'This token is invalid: ' + resp.message;
-          return;
-        }
-        console.log(resp);
-        console.log("Unexpected output with a status");
-        //document.getElementById('output').textContent = 'Unexpected output with a status?';
-        return;
-      }
-      if (resp.client_id) {
-        client_id2 = resp.client_id;
-
-        //console.log("Token is valid");
-        if (resp.user_id) {
-          // console.log("Token is type User Access");
-        } else {
-          // console.log("Token is type App Access");
-        }
-        fetchUserId(client_id2, TappAcess, StreamerName);
-        //let StreamerId = HttpCaller(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
-        //console.log(StreamerId);
-        return;
-      }
-      console.log(resp);
-      console.log("unexpected Output");
-    })
-    .catch((err) => {
-      ErrorMessage("An Error Occured VALIDATING token data", err);
-    });
-}
-//#endregion
-
-//#region HttpCaller(HttpCall) multipurpose HttpCaller calls the Httpcall returns The Response if Success if not: 0
-// This makes most calls, intead of a lot of differnt functions this does them instead.
-// TO find out what is called look where its called as the HTTPCALL would need to be sent over.
-async function HttpCaller(HttpCall: string) {
-  const response = await fetch(`${HttpCall}`, {
-    headers: {
-      Authorization: "Bearer " + TappAcess,
-      "Client-ID": client_id2, // can also use Tclient_id. !! comment out Tclient if not being used !!
-    },
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      // Return Response on Success
-      console.log(response);
-      return response;
-    })
-    .catch((err) => {
-      // Print Error if any. And return 0
-      console.log(err);
-      return 0;
-    });
-  return 0;
-}
-//#endregion
 
 //#region 
 //fetchUserId: Fetches the User Id of a User from a TwitchUsername then calls fetchVods()
@@ -654,5 +582,66 @@ function to2Time(timestamp: string) {
 // Error messages out an alert
 function ErrorMessage(string, Err) {
   alert(string + +"'' " +Err+ " ''" );
+}
+//#endregion
+
+
+// needs a VALID Twitch App Auth Token
+//#region validateToken() Validates Token if sucessful returns 1 if not 0
+// Calls the Twitch api with Out App Acess Token and returns a ClientId and tells us if the App Acess Token is Valid or Not
+function validateToken(): number {
+  fetch("https://id.twitch.tv/oauth2/validate", {
+    headers: {
+      Authorization: "Bearer " + TappAcess,
+    },
+  })
+    .then((resp) => resp.json())
+    .then((resp) => {
+      if (resp.status) {
+        if (resp.status == 401) {
+          console.log("This token is invalid ... " + resp.message);
+          return 0;
+        }
+        console.log("Unexpected output with a status");
+        return 0;
+      }
+      if (resp.client_id) {
+        client_id2 = resp.client_id;
+        //console.log(Tclient_id);
+        return 1;
+      }
+      console.log("unexpected Output");
+      return 0;
+    })
+    .catch((err) => {
+      console.log(err);
+      return 0;
+    });
+  return 1;
+}
+//#endregion
+
+// needs ValidateToken() to be ran first
+//#region [async] HttpCaller(HttpCall) multipurpose HttpCaller calls the Httpcall returns The Response if Success if not: 0
+// This makes most calls, intead of a lot of differnt functions this does them instead.
+// TO find out what is called look where its called as the HTTPCALL would need to be sent over.
+async function HttpCalling(HttpCall: string) {
+  const respon = await fetch(`${HttpCall}`, {
+    headers: {
+      Authorization: "Bearer " + TappAcess,
+      "Client-ID": client_id2, // can also use Tclient_id. !! comment out Tclient if not being used !!
+    },
+  })
+    .then((respon) => respon.json())
+    .then((respon) => {
+      // Return Response on Success
+      return respon;
+    })
+    .catch((err) => {
+      // Print Error if any. And return 0
+      console.log(err);
+      return err;
+    });
+  return respon;
 }
 //#endregion
