@@ -11,10 +11,10 @@ var StreamDatesArr = Array();
 var RecordDatesArr = Array();
 var DescArrS = new Array();
 var DescArrR = new Array();
+validateToken(TappAcess);
 if (CutOuts(RawTxt) == 1) {
     if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
         if (DomSet() == 1) {
-            validateToken(TappAcess);
         }
         else {
             console.log("Failed Placing Things in the Websites");
@@ -435,7 +435,7 @@ function to2Time(timestamp) {
 function ErrorMessage(string, Err) {
     alert(string + +"'' " + Err + " ''");
 }
-function validateToken() {
+function validateToken(TappAcess) {
     fetch("https://id.twitch.tv/oauth2/validate", {
         headers: {
             Authorization: "Bearer " + TappAcess,

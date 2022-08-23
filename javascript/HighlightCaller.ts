@@ -85,7 +85,7 @@ ChannelSelect.addEventListener("change", function () {
   let value = ChannelSelect.options[ChannelSelect.selectedIndex].value;
   console.log("Searching for " + value); // en
   ErrorDiv.innerHTML = ""; // clear errors
-  validateToken(value); // this starts a daisy chain
+  validateToken2(value); // this starts a daisy chain
 });
 
 //#endregion
@@ -95,7 +95,7 @@ ChannelSelect.addEventListener("change", function () {
 //#region ValidateToken, Validates the TappAcess Token and then calls fetchUser()
 
 let client_id = "";
-function validateToken(value) {
+function validateToken2(value) {
   fetch("https://id.twitch.tv/oauth2/validate", {
     headers: {
       Authorization: "Bearer " + TappAcess,

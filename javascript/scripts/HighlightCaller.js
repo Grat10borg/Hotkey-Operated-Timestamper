@@ -50,10 +50,10 @@ ChannelSelect.addEventListener("change", function () {
     let value = ChannelSelect.options[ChannelSelect.selectedIndex].value;
     console.log("Searching for " + value);
     ErrorDiv.innerHTML = "";
-    validateToken(value);
+    validateToken2(value);
 });
 let client_id = "";
-function validateToken(value) {
+function validateToken2(value) {
     fetch("https://id.twitch.tv/oauth2/validate", {
         headers: {
             Authorization: "Bearer " + TappAcess,

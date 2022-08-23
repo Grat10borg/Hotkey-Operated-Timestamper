@@ -15,6 +15,7 @@ var RecordDatesArr = Array(); // Holds data for when a Recording was recorded
 var DescArrS = new Array(); // holds all the Finished Stream descriptions
 var DescArrR = new Array(); // holds all the Finished Recording descriptions
 
+validateToken(TappAcess);
 if (CutOuts(RawTxt) == 1) {
   // Runs CutOuts and if successful run next Method in line
   if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
@@ -22,7 +23,6 @@ if (CutOuts(RawTxt) == 1) {
     // Set in Data to Webpage
     if(DomSet() == 1) {
       // Domset needs to be ran before we call ValidateToken();
-      validateToken(TappAcess); // sets the titles of the vods at its own time
     }
     else {  // Error logging
       console.log("Failed Placing Things in the Websites");
@@ -589,7 +589,7 @@ function ErrorMessage(string, Err) {
 // needs a VALID Twitch App Auth Token
 //#region validateToken() Validates Token if sucessful returns 1 if not 0
 // Calls the Twitch api with Out App Acess Token and returns a ClientId and tells us if the App Acess Token is Valid or Not
-function validateToken(): number {
+function validateToken(TappAcess: string): number {
   fetch("https://id.twitch.tv/oauth2/validate", {
     headers: {
       Authorization: "Bearer " + TappAcess,
