@@ -12,7 +12,6 @@ var auth = document.querySelector('.authUpload') as HTMLInputElement;
 auth.addEventListener('click', function(event) {
     authAllowDescChange().then(loadClientChannel()).then(GetVideoIds); // calls Get video Ids to get vid ids
     // call to get channel name + profile picture
-    
 }, true);
 
 var Send = document.querySelectorAll('.Send') as NodeListOf<HTMLInputElement>;

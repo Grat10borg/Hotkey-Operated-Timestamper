@@ -26,7 +26,7 @@ validateToken();
 //#endregion
 
 //#region Basic Setup H.O.T NON Twitch API
- if (CutOuts(RawTxt) == 1) {
+if (CutOuts(RawTxt) == 1) {
   // Runs CutOuts and if successful run next Method in line
   if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
     // Runs SetOps if sucessful run next Method in line
@@ -52,18 +52,57 @@ validateToken();
 // Twitch Get Clip names Button.
 let TwitchClip = document.getElementById("TwitchClip") as HTMLInputElement;
 
-TwitchClip.addEventListener("click", async function(event: any){
-  if(TwitchConnected == true) {
-    let UserIdResp = await HttpCalling(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
-    console.log(UserIdResp);
-    let UserVods = await HttpCalling(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`);
+TwitchClip.addEventListener("click", async function (event: any) {
+  if (TwitchConnected == true) {
+    // Calling API to get ID of streamer with this name
+    let UserIdResp = await HttpCalling(
+      `https://api.twitch.tv/helix/users?login=${StreamerName}`
+    );
+    // Calling API to gather VODS from this user.
+    let UserVods = await HttpCalling(
+      `https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`
+    );
     console.log(UserVods);
-  }
-  else {
+    let TwitchStreamedDate = Array();
+    for (let index = 0; index < UserVods["data"].length; index++) {
+      if(UserVods["data"][index]["type"] == "highlight") {
+        continue; // skip highlights
+      }
+      else {
+        let Timestamps = UserVods["data"][index]["published_at"].split("T"); 
+        TwitchStreamedDate.push(Timestamps[0]);
+      }      
+    }
+
+    // Getting Timestamps from Acord buttons
+    let AcorBtns = document.getElementsByClassName("accordion-button");
+    let StreamedDate = Array();
+    for (let index = 0; index < AcorBtns.length; index++) {
+      let Timestamps = AcorBtns[index].innerHTML.split(" ");
+      StreamedDate.push(Timestamps[0]);
+    }
+    console.log(TwitchStreamedDate);
+    console.log(StreamedDate);
+
+    let Aproved_StreamTime = Array();
+    let StreamIndex = Array();
+    for (let i = 0; i < TwitchStreamedDate.length; i++) {
+      for (let index = 0; index < StreamedDate.length; index++) {
+        // if "2022-08-22" == "2022-08-22"
+          if(TwitchStreamedDate[i] == StreamedDate[index]) {
+            console.log(TwitchStreamedDate[i] + "==" + StreamedDate[index]);
+            Aproved_StreamTime.push(StreamedDate.indexOf(TwitchStreamedDate[i]));
+            StreamIndex.push(i);
+          }
+      }
+    }
+    console.log(Aproved_StreamTime); // Aprove array index
+    console.log(StreamIndex); // Http Api Array index
+  } else {
     validateToken();
     console.log("Token was not validated try again..");
   }
-})
+});
 
 // Large Functions
 

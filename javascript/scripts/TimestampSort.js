@@ -34,9 +34,39 @@ let TwitchClip = document.getElementById("TwitchClip");
 TwitchClip.addEventListener("click", async function (event) {
     if (TwitchConnected == true) {
         let UserIdResp = await HttpCalling(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
-        console.log(UserIdResp);
         let UserVods = await HttpCalling(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`);
         console.log(UserVods);
+        let TwitchStreamedDate = Array();
+        for (let index = 0; index < UserVods["data"].length; index++) {
+            if (UserVods["data"][index]["type"] == "highlight") {
+                continue;
+            }
+            else {
+                let Timestamps = UserVods["data"][index]["published_at"].split("T");
+                TwitchStreamedDate.push(Timestamps[0]);
+            }
+        }
+        let AcorBtns = document.getElementsByClassName("accordion-button");
+        let StreamedDate = Array();
+        for (let index = 0; index < AcorBtns.length; index++) {
+            let Timestamps = AcorBtns[index].innerHTML.split(" ");
+            StreamedDate.push(Timestamps[0]);
+        }
+        console.log(TwitchStreamedDate);
+        console.log(StreamedDate);
+        let Aproved_StreamTime = Array();
+        let StreamIndex = Array();
+        for (let i = 0; i < TwitchStreamedDate.length; i++) {
+            for (let index = 0; index < StreamedDate.length; index++) {
+                if (TwitchStreamedDate[i] == StreamedDate[index]) {
+                    console.log(TwitchStreamedDate[i] + "==" + StreamedDate[index]);
+                    Aproved_StreamTime.push(StreamedDate.indexOf(TwitchStreamedDate[i]));
+                    StreamIndex.push(i);
+                }
+            }
+        }
+        console.log(Aproved_StreamTime);
+        console.log(StreamIndex);
     }
     else {
         validateToken();
