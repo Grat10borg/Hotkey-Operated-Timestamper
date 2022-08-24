@@ -112,6 +112,16 @@ textarea {
   color: #91403d;
 }
 
+#TwitchClip {
+  background-color: mediumpurple;
+  color: #dae0e9;
+}
+
+#TwitchClip:hover {
+  background-color: darkviolet;
+  color: #dae0e9;
+}
+
 .TimestampClear {
   background-color: #3d8391;
   color: #eef2ed;

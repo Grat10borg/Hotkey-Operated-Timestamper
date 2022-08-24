@@ -2,16 +2,19 @@
 let Clipoffset = 26;
 let TimestampTxt = document.getElementById("TimestampTxt");
 let RawTxt = TimestampTxt.innerHTML;
-var TappAcess = "bzs6p3k7o39u8bv6y3hotdi1dszdlw";
+let HotV = "V-1.0";
+var AppAcessToken = "bzs6p3k7o39u8bv6y3hotdi1dszdlw";
+let client_id2 = 0;
+var AclientId = "";
 let StreamerName = "grat_grot10_berg";
-let client_id2 = "";
+var TwitchConnected = false;
 var MultiDimStreamArr = Array();
 var MultiDimRecordArr = Array();
 var StreamDatesArr = Array();
 var RecordDatesArr = Array();
 var DescArrS = new Array();
 var DescArrR = new Array();
-validateToken(TappAcess);
+validateToken();
 if (CutOuts(RawTxt) == 1) {
     if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
         if (DomSet() == 1) {
@@ -27,172 +30,19 @@ if (CutOuts(RawTxt) == 1) {
 else {
     console.log("Error Sorting Timestamps");
 }
-function fetchUserId(client_id2, access_token, streamerName) {
-    fetch(`https://api.twitch.tv/helix/users?login=${streamerName}`, {
-        headers: {
-            "Client-ID": client_id2,
-            Authorization: "Bearer " + access_token,
-        },
-    })
-        .then((resp) => resp.json())
-        .then((resp) => {
-        fetchVods(resp.data[0].id);
-    })
-        .catch((err) => {
-        console.log("Could not fetch user Are you sure its spelt correctly?", err);
-        console.log(err);
-    });
-}
-function fetchVods(user_Id) {
-    fetch(`https://api.twitch.tv/helix/videos?user_id=${user_Id}`, {
-        headers: {
-            "Client-ID": client_id2,
-            Authorization: "Bearer " + TappAcess,
-        },
-    })
-        .then((resp) => resp.json())
-        .then((resp) => {
-        var Streams = Array();
-        for (let index = 0; index < resp["data"].length; index++) {
-            if (resp["data"][index]["type"] != "highlight") {
-                Streams.push(resp["data"][index]);
-            }
-        }
-        console.log(Streams);
-        for (let index = 0; index < DescArrS.length; index++) {
-            let AcordBtn = document.getElementById(`AcordBtn-${index}`);
-            let res = AcordBtn.innerHTML.split(" ");
-            if (AreFromSameDay(`${res[0]} ${res[1]}`, Streams[index]["created_at"])) {
-                AcordBtn.innerHTML = `${AcordBtn.innerHTML} ${Streams[index]["title"]}`;
-            }
-        }
-    })
-        .catch((err) => {
-        console.log("An Error Occured VALIDATING token data", err);
-    });
-}
-function DomSet() {
-    DescArrS.reverse();
-    DescArrR.reverse();
-    StreamDatesArr.reverse();
-    RecordDatesArr.reverse();
-    let SidebarDiv = document.getElementById("SideBar");
-    let nav = document.createElement("nav");
-    let ul = document.createElement("ul");
-    nav.classList.add("navbar");
-    ul.classList.add("nav", "flex-column", "text-center");
-    if (DescArrS.length > 0) {
-        let liSeparate = document.createElement("li");
-        let aSeprate = document.createElement("a");
-        liSeparate.classList.add("nav-item", "m-3");
-        aSeprate.classList.add("navlink", "me-4");
-        aSeprate.setAttribute("href", "#Stream");
-        aSeprate.innerHTML = "# Streams";
-        liSeparate.append(aSeprate);
-        ul.append(liSeparate);
-        for (let index = 0; index < DescArrS.length; index++) {
-            let li = document.createElement("li");
-            li.classList.add("nav-item", "m-3");
-            let a = document.createElement("a");
-            a.innerHTML = `◍ Stream - ${index + 1}`;
-            a.setAttribute("href", `#Stream-${index}`);
-            a.classList.add("navlink", "text-center");
-            li.append(a);
-            ul.append(li);
-        }
-        SetIns(DescArrS, StreamDatesArr, "Stream");
-    }
-    else if (DescArrS.length < 0) {
-        console.log("No stream Timestamps found");
-    }
-    if (DescArrR.length > 0) {
-        let liSeparate = document.createElement("li");
-        let aSeprate = document.createElement("a");
-        liSeparate.classList.add("nav-item", "m-3");
-        aSeprate.classList.add("navlink", "me-4");
-        aSeprate.setAttribute("href", "#Record");
-        aSeprate.innerHTML = "# Recordings";
-        liSeparate.append(aSeprate);
-        ul.append(liSeparate);
-        for (let index = 0; index < DescArrR.length; index++) {
-            let li = document.createElement("li");
-            li.classList.add("nav-item", "m-3");
-            let a = document.createElement("a");
-            a.innerHTML = `▶ Record - ${index + 1}`;
-            a.setAttribute("href", `#Record-${index}`);
-            a.classList.add("navlink", "text-center");
-            li.append(a);
-            ul.append(li);
-        }
-        SetIns(DescArrR, RecordDatesArr, "Record");
+let TwitchClip = document.getElementById("TwitchClip");
+TwitchClip.addEventListener("click", async function (event) {
+    if (TwitchConnected == true) {
+        let UserIdResp = await HttpCalling(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
+        console.log(UserIdResp);
+        let UserVods = await HttpCalling(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`);
+        console.log(UserVods);
     }
     else {
-        console.log("No recording Timestamps found");
+        validateToken();
+        console.log("Token was not validated try again..");
     }
-    nav.append(ul);
-    SidebarDiv.append(nav);
-    return 1;
-}
-function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
-    let res = document.getElementById("DescTxt");
-    let res1 = document.getElementById("IntroTxt");
-    let res2 = document.getElementById("SocialTxt");
-    let res3 = document.getElementById("CreditsTxt");
-    let DescTxt = res.innerHTML;
-    let IntroTxt = res1.innerHTML;
-    let SocialTxt = res2.innerHTML;
-    let CreditsTxt = res3.innerHTML;
-    var Description = "";
-    if (MultiDimStreamArr.length > 0) {
-        for (let index = 0; index < MultiDimStreamArr.length; index++) {
-            let resArray = MultiDimStreamArr[index];
-            Description = DescTxt + "\n\n";
-            Description =
-                Description +
-                    `Hotkey, Operated, Time-stamper (H.O.T) V.2.3 \n(Clips are Offset by -${Clipoffset})\n`;
-            for (let i = 0; i < resArray.length; i++) {
-                let timestamp = resArray[i];
-                Description = Description + timestamp + "\n";
-            }
-            Description =
-                Description +
-                    "\n" +
-                    IntroTxt +
-                    "\n\n" +
-                    SocialTxt +
-                    "\n\n" +
-                    CreditsTxt;
-            DescArrS.push(Description);
-            Description = "";
-        }
-        return 1;
-    }
-    else if (MultiDimRecordArr.length > 0) {
-        for (let index = 0; index < MultiDimRecordArr.length; index++) {
-            let resArray = MultiDimRecordArr[index];
-            Description = DescTxt + "\n\n";
-            for (let i = 0; i < resArray.length; i++) {
-                let timestamp = resArray[i];
-                Description = Description + timestamp + "\n";
-            }
-            Description =
-                Description +
-                    "\n\n" +
-                    IntroTxt +
-                    "\n\n" +
-                    SocialTxt +
-                    "\n\n" +
-                    CreditsTxt;
-            DescArrR.push(Description);
-            Description = "";
-        }
-        return 1;
-    }
-    else {
-        console.log("Both Stream and Recording Arrays returned Nothing.");
-        return 0;
-    }
-}
+});
 function CutOuts(RawTxt) {
     let RawTxtArr = RawTxt.split("\n");
     let StreamArr = Array();
@@ -288,6 +138,128 @@ function CutOuts(RawTxt) {
     else {
         return 0;
     }
+}
+function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
+    let res = document.getElementById("DescTxt");
+    let res1 = document.getElementById("IntroTxt");
+    let res2 = document.getElementById("SocialTxt");
+    let res3 = document.getElementById("CreditsTxt");
+    let DescTxt = res.innerHTML;
+    let IntroTxt = res1.innerHTML;
+    let SocialTxt = res2.innerHTML;
+    let CreditsTxt = res3.innerHTML;
+    var Description = "";
+    if (MultiDimStreamArr.length > 0) {
+        for (let index = 0; index < MultiDimStreamArr.length; index++) {
+            let resArray = MultiDimStreamArr[index];
+            Description = DescTxt + "\n\n";
+            Description =
+                Description +
+                    `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${Clipoffset})\n`;
+            for (let i = 0; i < resArray.length; i++) {
+                let timestamp = resArray[i];
+                Description = Description + timestamp + "\n";
+            }
+            Description =
+                Description +
+                    "\n" +
+                    IntroTxt +
+                    "\n\n" +
+                    SocialTxt +
+                    "\n\n" +
+                    CreditsTxt;
+            DescArrS.push(Description);
+            Description = "";
+        }
+        return 1;
+    }
+    else if (MultiDimRecordArr.length > 0) {
+        for (let index = 0; index < MultiDimRecordArr.length; index++) {
+            let resArray = MultiDimRecordArr[index];
+            Description = DescTxt + "\n\n";
+            for (let i = 0; i < resArray.length; i++) {
+                let timestamp = resArray[i];
+                Description = Description + timestamp + "\n";
+            }
+            Description =
+                Description +
+                    "\n\n" +
+                    IntroTxt +
+                    "\n\n" +
+                    SocialTxt +
+                    "\n\n" +
+                    CreditsTxt;
+            DescArrR.push(Description);
+            Description = "";
+        }
+        return 1;
+    }
+    else {
+        console.log("Both Stream and Recording Arrays returned Nothing.");
+        return 0;
+    }
+}
+function DomSet() {
+    DescArrS.reverse();
+    DescArrR.reverse();
+    StreamDatesArr.reverse();
+    RecordDatesArr.reverse();
+    let SidebarDiv = document.getElementById("SideBar");
+    let nav = document.createElement("nav");
+    let ul = document.createElement("ul");
+    nav.classList.add("navbar");
+    ul.classList.add("nav", "flex-column", "text-center");
+    if (DescArrS.length > 0) {
+        let liSeparate = document.createElement("li");
+        let aSeprate = document.createElement("a");
+        liSeparate.classList.add("nav-item", "m-3");
+        aSeprate.classList.add("navlink", "me-4");
+        aSeprate.setAttribute("href", "#Stream");
+        aSeprate.innerHTML = "# Streams";
+        liSeparate.append(aSeprate);
+        ul.append(liSeparate);
+        for (let index = 0; index < DescArrS.length; index++) {
+            let li = document.createElement("li");
+            li.classList.add("nav-item", "m-3");
+            let a = document.createElement("a");
+            a.innerHTML = `◍ Stream - ${index + 1}`;
+            a.setAttribute("href", `#Stream-${index}`);
+            a.classList.add("navlink", "text-center");
+            li.append(a);
+            ul.append(li);
+        }
+        SetIns(DescArrS, StreamDatesArr, "Stream");
+    }
+    else if (DescArrS.length < 0) {
+        console.log("No stream Timestamps found");
+    }
+    if (DescArrR.length > 0) {
+        let liSeparate = document.createElement("li");
+        let aSeprate = document.createElement("a");
+        liSeparate.classList.add("nav-item", "m-3");
+        aSeprate.classList.add("navlink", "me-4");
+        aSeprate.setAttribute("href", "#Record");
+        aSeprate.innerHTML = "# Recordings";
+        liSeparate.append(aSeprate);
+        ul.append(liSeparate);
+        for (let index = 0; index < DescArrR.length; index++) {
+            let li = document.createElement("li");
+            li.classList.add("nav-item", "m-3");
+            let a = document.createElement("a");
+            a.innerHTML = `▶ Record - ${index + 1}`;
+            a.setAttribute("href", `#Record-${index}`);
+            a.classList.add("navlink", "text-center");
+            li.append(a);
+            ul.append(li);
+        }
+        SetIns(DescArrR, RecordDatesArr, "Record");
+    }
+    else {
+        console.log("No recording Timestamps found");
+    }
+    nav.append(ul);
+    SidebarDiv.append(nav);
+    return 1;
 }
 function SetIns(DescArr, DatesArr, string) {
     var DescDiv = document.getElementById("DescriptionAreaDiv");
@@ -435,10 +407,10 @@ function to2Time(timestamp) {
 function ErrorMessage(string, Err) {
     alert(string + +"'' " + Err + " ''");
 }
-function validateToken(TappAcess) {
-    fetch("https://id.twitch.tv/oauth2/validate", {
+async function validateToken() {
+    await fetch("https://id.twitch.tv/oauth2/validate", {
         headers: {
-            Authorization: "Bearer " + TappAcess,
+            Authorization: "Bearer " + AppAcessToken,
         },
     })
         .then((resp) => resp.json())
@@ -452,7 +424,9 @@ function validateToken(TappAcess) {
             return 0;
         }
         if (resp.client_id) {
-            client_id2 = resp.client_id;
+            AclientId = resp.client_id;
+            TwitchConnected = true;
+            console.log("Token Validated Sucessfully");
             return 1;
         }
         console.log("unexpected Output");
@@ -467,8 +441,8 @@ function validateToken(TappAcess) {
 async function HttpCalling(HttpCall) {
     const respon = await fetch(`${HttpCall}`, {
         headers: {
-            Authorization: "Bearer " + TappAcess,
-            "Client-ID": client_id2,
+            Authorization: "Bearer " + AppAcessToken,
+            "Client-ID": AclientId,
         },
     })
         .then((respon) => respon.json())

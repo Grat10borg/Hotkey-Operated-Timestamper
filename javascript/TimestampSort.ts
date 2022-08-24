@@ -2,11 +2,15 @@ let Clipoffset = 26; // twitch default
 
 let TimestampTxt = document.getElementById("TimestampTxt") as HTMLInputElement;
 let RawTxt = TimestampTxt.innerHTML;
+let HotV = "V-1.0"; // the version of H.o.t
 
 // Get these from Files in the furture
-var TappAcess = "bzs6p3k7o39u8bv6y3hotdi1dszdlw" as string;
+var AppAcessToken = "bzs6p3k7o39u8bv6y3hotdi1dszdlw" as string;
+let client_id2 = 0 as number;
+var AclientId = "" as string;
+
 let StreamerName = "grat_grot10_berg" as string;
-let client_id2 = "" as string;
+var TwitchConnected = false; // tells if the Twitch HTTP calls should be called or not.
 
 var MultiDimStreamArr = Array(); // Holds Raw Data from txt
 var MultiDimRecordArr = Array(); // Holds Raw Data from txt
@@ -15,16 +19,22 @@ var RecordDatesArr = Array(); // Holds data for when a Recording was recorded
 var DescArrS = new Array(); // holds all the Finished Stream descriptions
 var DescArrR = new Array(); // holds all the Finished Recording descriptions
 
-validateToken(TappAcess);
-if (CutOuts(RawTxt) == 1) {
+// Test functions / Master functions
+
+//#region Token Validation.
+validateToken();
+//#endregion
+
+//#region Basic Setup H.O.T NON Twitch API
+ if (CutOuts(RawTxt) == 1) {
   // Runs CutOuts and if successful run next Method in line
   if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
     // Runs SetOps if sucessful run next Method in line
     // Set in Data to Webpage
-    if(DomSet() == 1) {
+    if (DomSet() == 1) {
       // Domset needs to be ran before we call ValidateToken();
-    }
-    else {  // Error logging
+    } else {
+      // Error logging
       console.log("Failed Placing Things in the Websites");
     }
   } else {
@@ -33,230 +43,29 @@ if (CutOuts(RawTxt) == 1) {
 } else {
   console.log("Error Sorting Timestamps");
 }
+//#endregion
 
 // Twitch handling
 
-//#region 
-//fetchUserId: Fetches the User Id of a User from a TwitchUsername then calls fetchVods()
-// makes: Nothing
-// Input: ClientId, App Access Token, StreamerName
-// Outputs: Outputs the Id of a User and calls fetchVods()
-function fetchUserId(
-  client_id2 : string,
-  access_token: string,
-  streamerName: string
-): any {
-  fetch(`https://api.twitch.tv/helix/users?login=${streamerName}`, {
-    headers: {
-      "Client-ID": client_id2,
-      Authorization: "Bearer " + access_token,
-    },
-  })
-    .then((resp) => resp.json())
-    .then((resp) => {
-    fetchVods(resp.data[0].id);
-    })
-    .catch((err) => {
-      console.log(
-        "Could not fetch user Are you sure its spelt correctly?",
-        err,
-      );
-      console.log(err);
-    });
-}
-//#endregion
-
-//#region fetchVods: Gets the Vods from The streamers Recent Streams
-// Input: ClientId, App Access Token, UserId
-// Outputs: places the titles of the previous stream titles on the acord buttons
-function fetchVods(user_Id) {
-  fetch(`https://api.twitch.tv/helix/videos?user_id=${user_Id}`, {
-    headers: {
-      "Client-ID": client_id2,
-      Authorization: "Bearer " + TappAcess,
-    },
-  })
-    .then((resp) => resp.json())
-    .then((resp) => {
-     // Change Dom to have Stream Name too
-      var Streams=Array();
-      for (let index = 0; index < resp["data"].length; index++) {
-        if(resp["data"][index]["type"] != "highlight") {
-          Streams.push(resp["data"][index]); // adds non highlight to sorted array
-        }
-      }
-      console.log(Streams);
-      for (let index = 0; index < DescArrS.length; index++) {
-        let AcordBtn = document.getElementById(`AcordBtn-${index}`) as HTMLInputElement;
-        let res = AcordBtn.innerHTML.split(" ");
-
-        if(AreFromSameDay(`${res[0]} ${res[1]}`, Streams[index]["created_at"])) {
-          AcordBtn.innerHTML=`${AcordBtn.innerHTML} ${Streams[index]["title"]}`; // prints the stream title on the buttons
-        }
-        // Else: leaves the buttons as is
-      }
-    })
-    .catch((err) => {
-      console.log("An Error Occured VALIDATING token data", err);
-    });
-}
-//#endregion
-
 // Event handlers
 
+// Twitch Get Clip names Button.
+let TwitchClip = document.getElementById("TwitchClip") as HTMLInputElement;
 
+TwitchClip.addEventListener("click", async function(event: any){
+  if(TwitchConnected == true) {
+    let UserIdResp = await HttpCalling(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
+    console.log(UserIdResp);
+    let UserVods = await HttpCalling(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`);
+    console.log(UserVods);
+  }
+  else {
+    validateToken();
+    console.log("Token was not validated try again..");
+  }
+})
 
 // Large Functions
-
-//#region DomSet: Sorts Arrays and Calls SetIns() also sorts data and makes Sidebar content on the webpage
-// makes: The sidebar content, 
-// Input: Nothing
-// Outputs: a Working side bar, also calls SetIns()
-// returns Nothing
-function DomSet() {
-  DescArrS.reverse(); // makes array be Newest First
-  DescArrR.reverse();
-  StreamDatesArr.reverse();
-  RecordDatesArr.reverse();
-
-  // Update Sidebar
-  let SidebarDiv = document.getElementById("SideBar") as HTMLElement;
-  let nav = document.createElement("nav");
-  let ul = document.createElement("ul");
-
-  nav.classList.add("navbar");
-  ul.classList.add("nav", "flex-column", "text-center");
-
-  if (DescArrS.length > 0) {
-    let liSeparate = document.createElement("li");
-    let aSeprate = document.createElement("a");
-    liSeparate.classList.add("nav-item", "m-3");
-    aSeprate.classList.add("navlink", "me-4");
-    aSeprate.setAttribute("href", "#Stream");
-    aSeprate.innerHTML = "# Streams";
-    liSeparate.append(aSeprate);
-    ul.append(liSeparate);
-    for (let index = 0; index < DescArrS.length; index++) {
-      let li = document.createElement("li");
-      li.classList.add("nav-item", "m-3");
-      let a = document.createElement("a");
-      a.innerHTML = `◍ Stream - ${index + 1}`;
-      a.setAttribute("href", `#Stream-${index}`);
-      a.classList.add("navlink", "text-center");
-      li.append(a);
-      ul.append(li);
-    }
-
-    SetIns(DescArrS, StreamDatesArr, "Stream");
-  } else if (DescArrS.length < 0) {
-    console.log("No stream Timestamps found");
-  }
-  if (DescArrR.length > 0) {
-    let liSeparate = document.createElement("li");
-    let aSeprate = document.createElement("a");
-    liSeparate.classList.add("nav-item", "m-3");
-    aSeprate.classList.add("navlink", "me-4");
-    aSeprate.setAttribute("href", "#Record");
-    aSeprate.innerHTML = "# Recordings";
-    liSeparate.append(aSeprate);
-    ul.append(liSeparate);
-    for (let index = 0; index < DescArrR.length; index++) {
-      let li = document.createElement("li");
-      li.classList.add("nav-item", "m-3");
-      let a = document.createElement("a");
-      a.innerHTML = `▶ Record - ${index + 1}`;
-      a.setAttribute("href", `#Record-${index}`);
-      a.classList.add("navlink", "text-center");
-      li.append(a);
-      ul.append(li);
-    }
-    // recordings have not been tested yet may not work
-    SetIns(DescArrR, RecordDatesArr, "Record");
-  } else {
-    console.log("No recording Timestamps found");
-  }
-  nav.append(ul);
-  SidebarDiv.append(nav);
-  return 1;
-}
-//#endregion
-
-//#region SetOps: Function Sorts the clean timestamps into a description
-// Makes: a Description from PHP Txts and clean timestamps
-// Input : Clean timestamps made by CutOuts()
-// Outputs: a Finished Description only missing Clip names
-// returns 1 if sucessful and 0 if failed
-function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
-  // Set in All the timestamps correctly
-
-  // Getting More Txts from PHP and ./Texts
-  let res = document.getElementById("DescTxt") as HTMLInputElement;
-  let res1 = document.getElementById("IntroTxt") as HTMLInputElement;
-  let res2 = document.getElementById("SocialTxt") as HTMLInputElement;
-  let res3 = document.getElementById("CreditsTxt") as HTMLInputElement;
-
-  let DescTxt = res.innerHTML;
-  let IntroTxt = res1.innerHTML;
-  let SocialTxt = res2.innerHTML;
-  let CreditsTxt = res3.innerHTML;
-  var Description = ""; // Finished Description Var
-
-  // Makes a Working Description
-  // If Not Null
-  if (MultiDimStreamArr.length > 0) {
-    // if has Values
-    for (let index = 0; index < MultiDimStreamArr.length; index++) {
-      let resArray = MultiDimStreamArr[index];
-
-      Description = DescTxt + "\n\n";
-      Description =
-        Description +
-        `Hotkey, Operated, Time-stamper (H.O.T) V.2.3 \n(Clips are Offset by -${Clipoffset})\n`;
-      for (let i = 0; i < resArray.length; i++) {
-        let timestamp = resArray[i];
-        Description = Description + timestamp + "\n";
-      }
-      Description =
-        Description +
-        "\n" +
-        IntroTxt +
-        "\n\n" +
-        SocialTxt +
-        "\n\n" +
-        CreditsTxt;
-      DescArrS.push(Description);
-      Description = "";
-    }
-    return 1;
-  } else if (MultiDimRecordArr.length > 0) {
-    // if has Values
-    for (let index = 0; index < MultiDimRecordArr.length; index++) {
-      let resArray = MultiDimRecordArr[index];
-
-      Description = DescTxt + "\n\n";
-      for (let i = 0; i < resArray.length; i++) {
-        let timestamp = resArray[i];
-        Description = Description + timestamp + "\n";
-      }
-      Description =
-        Description +
-        "\n\n" +
-        IntroTxt +
-        "\n\n" +
-        SocialTxt +
-        "\n\n" +
-        CreditsTxt;
-      DescArrR.push(Description);
-      Description = "";
-    }
-    return 1;
-  } else {
-    // error message
-    console.log("Both Stream and Recording Arrays returned Nothing.");
-    return 0;
-  }
-}
-//#endregion
 
 //#region CutOuts: Function Removes NonUsefull data from RawTxt Data
 // makes a Clean Version Timestamp version from the Raw txt
@@ -268,11 +77,12 @@ function CutOuts(RawTxt: string) {
   let RawTxtArr = RawTxt.split("\n"); // splits them by Spaces : EVENT:START, RECORDING, @, etc...
   let StreamArr = Array();
   let RecordArr = Array();
-  var Catch = false as boolean;
+  var Catch = false as boolean; // catch is activated when nearing the end of the VOD/Stream. it tells it to stop/catch the varibles for now and place it in the arrays
   var LineScene = "" as String;
+  // maybe remove ClipNo later
   let ClipNo = 0 as number;
-  let xs = 0;
-  let xr = 0;
+  let xs = 0; // x Stream
+  let xr = 0; // x Recording
   for (let index = 0; index < RawTxtArr.length; index++) {
     let Word = RawTxtArr[index]; // effectively a Foreach loop but without javascripts weird foreach loops
     if (Word.match(/EVENT:START.*/i)) {
@@ -369,6 +179,157 @@ function CutOuts(RawTxt: string) {
   } else {
     return 0; // Error
   }
+}
+//#endregion
+
+//#region SetOps: Function Sorts the clean timestamps into a description
+// Makes: a Description from PHP Txts and clean timestamps
+// Input : Clean timestamps made by CutOuts()
+// Outputs: a Finished Description only missing Clip names
+// returns 1 if sucessful and 0 if failed
+function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
+  // Set in All the timestamps correctly
+
+  // Getting More Txts from PHP and ./Texts
+  let res = document.getElementById("DescTxt") as HTMLInputElement;
+  let res1 = document.getElementById("IntroTxt") as HTMLInputElement;
+  let res2 = document.getElementById("SocialTxt") as HTMLInputElement;
+  let res3 = document.getElementById("CreditsTxt") as HTMLInputElement;
+
+  let DescTxt = res.innerHTML;
+  let IntroTxt = res1.innerHTML;
+  let SocialTxt = res2.innerHTML;
+  let CreditsTxt = res3.innerHTML;
+  var Description = ""; // Finished Description Var
+
+  // Makes a Working Description
+  // If Not Null
+
+  if (MultiDimStreamArr.length > 0) {
+    // if has Values
+    for (let index = 0; index < MultiDimStreamArr.length; index++) {
+      let resArray = MultiDimStreamArr[index];
+
+      Description = DescTxt + "\n\n";
+      Description =
+        Description +
+        `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${Clipoffset})\n`;
+      for (let i = 0; i < resArray.length; i++) {
+        let timestamp = resArray[i];
+        Description = Description + timestamp + "\n";
+      }
+      Description =
+        Description +
+        "\n" +
+        IntroTxt +
+        "\n\n" +
+        SocialTxt +
+        "\n\n" +
+        CreditsTxt;
+      DescArrS.push(Description);
+      Description = "";
+    }
+    return 1;
+  } else if (MultiDimRecordArr.length > 0) {
+    // if has Values
+    for (let index = 0; index < MultiDimRecordArr.length; index++) {
+      let resArray = MultiDimRecordArr[index];
+
+      Description = DescTxt + "\n\n";
+      for (let i = 0; i < resArray.length; i++) {
+        let timestamp = resArray[i];
+        Description = Description + timestamp + "\n";
+      }
+      Description =
+        Description +
+        "\n\n" +
+        IntroTxt +
+        "\n\n" +
+        SocialTxt +
+        "\n\n" +
+        CreditsTxt;
+      DescArrR.push(Description);
+      Description = "";
+    }
+    return 1;
+  } else {
+    // error message
+    console.log("Both Stream and Recording Arrays returned Nothing.");
+    return 0;
+  }
+}
+//#endregion
+
+//#region DomSet: Sorts Arrays and Calls SetIns() also sorts data and makes Sidebar content on the webpage
+// makes: The sidebar content,
+// Input: Nothing
+// Outputs: a Working side bar, also calls SetIns()
+// returns Nothing
+function DomSet() {
+  DescArrS.reverse(); // makes array be Newest First
+  DescArrR.reverse();
+  StreamDatesArr.reverse();
+  RecordDatesArr.reverse();
+
+  // Update Sidebar
+  let SidebarDiv = document.getElementById("SideBar") as HTMLElement;
+  let nav = document.createElement("nav");
+  let ul = document.createElement("ul");
+
+  nav.classList.add("navbar");
+  ul.classList.add("nav", "flex-column", "text-center");
+
+  if (DescArrS.length > 0) {
+    let liSeparate = document.createElement("li");
+    let aSeprate = document.createElement("a");
+    liSeparate.classList.add("nav-item", "m-3");
+    aSeprate.classList.add("navlink", "me-4");
+    aSeprate.setAttribute("href", "#Stream");
+    aSeprate.innerHTML = "# Streams";
+    liSeparate.append(aSeprate);
+    ul.append(liSeparate);
+    for (let index = 0; index < DescArrS.length; index++) {
+      let li = document.createElement("li");
+      li.classList.add("nav-item", "m-3");
+      let a = document.createElement("a");
+      a.innerHTML = `◍ Stream - ${index + 1}`;
+      a.setAttribute("href", `#Stream-${index}`);
+      a.classList.add("navlink", "text-center");
+      li.append(a);
+      ul.append(li);
+    }
+
+    SetIns(DescArrS, StreamDatesArr, "Stream");
+  } else if (DescArrS.length < 0) {
+    console.log("No stream Timestamps found");
+  }
+  if (DescArrR.length > 0) {
+    let liSeparate = document.createElement("li");
+    let aSeprate = document.createElement("a");
+    liSeparate.classList.add("nav-item", "m-3");
+    aSeprate.classList.add("navlink", "me-4");
+    aSeprate.setAttribute("href", "#Record");
+    aSeprate.innerHTML = "# Recordings";
+    liSeparate.append(aSeprate);
+    ul.append(liSeparate);
+    for (let index = 0; index < DescArrR.length; index++) {
+      let li = document.createElement("li");
+      li.classList.add("nav-item", "m-3");
+      let a = document.createElement("a");
+      a.innerHTML = `▶ Record - ${index + 1}`;
+      a.setAttribute("href", `#Record-${index}`);
+      a.classList.add("navlink", "text-center");
+      li.append(a);
+      ul.append(li);
+    }
+    // recordings have not been tested yet may not work
+    SetIns(DescArrR, RecordDatesArr, "Record");
+  } else {
+    console.log("No recording Timestamps found");
+  }
+  nav.append(ul);
+  SidebarDiv.append(nav);
+  return 1;
 }
 //#endregion
 
@@ -493,12 +454,11 @@ function SetIns(DescArr, DatesArr, string: string) {
 
 //#region AreFromSameDay() tests if dates are on the same Day
 // Just tests if the stream dates are on the same day, may not work if stream is started before Midnight
-function AreFromSameDay(InfowriterDate:String, TwitchDate:String) {
-  if(InfowriterDate.slice(0, 9) ==TwitchDate.slice(0, 9)) {
+function AreFromSameDay(InfowriterDate: String, TwitchDate: String) {
+  if (InfowriterDate.slice(0, 9) == TwitchDate.slice(0, 9)) {
     //console.log(InfowriterDate + "==" + TwitchDate);
     return 1;
-  }
-  else {
+  } else {
     //console.log(InfowriterDate + "!=" + TwitchDate);
     return 0;
   }
@@ -581,18 +541,17 @@ function to2Time(timestamp: string) {
 //#region ErrorMessage() makes an alert from data
 // Error messages out an alert
 function ErrorMessage(string, Err) {
-  alert(string + +"'' " +Err+ " ''" );
+  alert(string + +"'' " + Err + " ''");
 }
 //#endregion
-
 
 // needs a VALID Twitch App Auth Token
 //#region validateToken() Validates Token if sucessful returns 1 if not 0
 // Calls the Twitch api with Out App Acess Token and returns a ClientId and tells us if the App Acess Token is Valid or Not
-function validateToken(TappAcess: string): number {
-  fetch("https://id.twitch.tv/oauth2/validate", {
+async function validateToken() {
+  await fetch("https://id.twitch.tv/oauth2/validate", {
     headers: {
-      Authorization: "Bearer " + TappAcess,
+      Authorization: "Bearer " + AppAcessToken,
     },
   })
     .then((resp) => resp.json())
@@ -606,8 +565,9 @@ function validateToken(TappAcess: string): number {
         return 0;
       }
       if (resp.client_id) {
-        client_id2 = resp.client_id;
-        //console.log(Tclient_id);
+        AclientId = resp.client_id;
+        TwitchConnected = true;
+        console.log("Token Validated Sucessfully");
         return 1;
       }
       console.log("unexpected Output");
@@ -628,8 +588,8 @@ function validateToken(TappAcess: string): number {
 async function HttpCalling(HttpCall: string) {
   const respon = await fetch(`${HttpCall}`, {
     headers: {
-      Authorization: "Bearer " + TappAcess,
-      "Client-ID": client_id2, // can also use Tclient_id. !! comment out Tclient if not being used !!
+      Authorization: "Bearer " + AppAcessToken,
+      "Client-ID": AclientId, // can also use Tclient_id. !! comment out Tclient if not being used !!
     },
   })
     .then((respon) => respon.json())

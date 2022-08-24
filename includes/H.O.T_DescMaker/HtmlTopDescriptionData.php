@@ -13,11 +13,15 @@
                     <?php include "includes\H.O.T_DescMaker\HtmlData.php" // imports the foreaches that tell data about the timestamps
                     ?>
                     <h4># Options</h4>
-                    <form class="row" action="clear.php" method="get">
-                        <input class="m-2 Clear btn TimestampClear" type="submit" value="Clear Timestamps" />
-                    </form>
+                    <div class="row">
+                    <button class="btn col-3 m-2" id="TwitchClip">Sync to Twitch</button>
+                    <p class="col" hidden id="TwitchMsg"></p>
+                    </div>
                     <div class="row">
                         <button class="btn-danger btn col-3 m-2 authUpload">Connect Youtube!</button>
                         <select disabled class="col my-1 SelectId" name="SelectId" id="selectId"></select>
                     </div>
+                    <form class="row" action="clear.php" method="get">
+                        <input class="m-2 col-3 Clear btn TimestampClear" type="submit" value="Clear Timestamps" />
+                    </form>
                 </div>
