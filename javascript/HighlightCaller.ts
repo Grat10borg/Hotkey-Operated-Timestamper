@@ -1,7 +1,7 @@
 //#region Import Export, doesnt work yet
 var TclientId = "uqiitin0qzty2b0xeet7bczpfouppc"; // This is made in the: https://dev.twitch.tv/console/apps aswell as the redirect
 var Tredirect = "http://localhost/Hotkey-Operated-Timestamper/Highlight.php"; // also change redirect in the Twitch dev area: https://dev.twitch.tv/console/apps.. Remember twiches redirect and Yours need to Match
-var TappAcess = "ncma1vkg5ebul64cxjo60vjv5ddomb";
+var TappAcess = "bzs6p3k7o39u8bv6y3hotdi1dszdlw";
 
 let res = document.getElementById("DescTxt") as HTMLInputElement;
 let res1 = document.getElementById("IntroTxt") as HTMLInputElement;

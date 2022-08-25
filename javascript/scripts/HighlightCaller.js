@@ -1,7 +1,7 @@
 "use strict";
 var TclientId = "uqiitin0qzty2b0xeet7bczpfouppc";
 var Tredirect = "http://localhost/Hotkey-Operated-Timestamper/Highlight.php";
-var TappAcess = "ncma1vkg5ebul64cxjo60vjv5ddomb";
+var TappAcess = "bzs6p3k7o39u8bv6y3hotdi1dszdlw";
 let res = document.getElementById("DescTxt");
 let res1 = document.getElementById("IntroTxt");
 let res2 = document.getElementById("SocialTxt");

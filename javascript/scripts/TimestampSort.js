@@ -37,12 +37,14 @@ TwitchClip.addEventListener("click", async function (event) {
         let UserVods = await HttpCalling(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`);
         console.log(UserVods);
         let TwitchStreamedDate = Array();
+        let FullDateTwitch = Array();
         for (let index = 0; index < UserVods["data"].length; index++) {
             if (UserVods["data"][index]["type"] == "highlight") {
                 continue;
             }
             else {
                 let Timestamps = UserVods["data"][index]["published_at"].split("T");
+                FullDateTwitch.push(UserVods["data"][index]["published_at"]);
                 TwitchStreamedDate.push(Timestamps[0]);
             }
         }
@@ -52,21 +54,46 @@ TwitchClip.addEventListener("click", async function (event) {
             let Timestamps = AcorBtns[index].innerHTML.split(" ");
             StreamedDate.push(Timestamps[0]);
         }
-        console.log(TwitchStreamedDate);
-        console.log(StreamedDate);
         let Aproved_StreamTime = Array();
         let StreamIndex = Array();
         for (let i = 0; i < TwitchStreamedDate.length; i++) {
             for (let index = 0; index < StreamedDate.length; index++) {
                 if (TwitchStreamedDate[i] == StreamedDate[index]) {
-                    console.log(TwitchStreamedDate[i] + "==" + StreamedDate[index]);
                     Aproved_StreamTime.push(StreamedDate.indexOf(TwitchStreamedDate[i]));
                     StreamIndex.push(i);
                 }
             }
         }
-        console.log(Aproved_StreamTime);
-        console.log(StreamIndex);
+        for (let index = 0; index < Aproved_StreamTime.length; index++) {
+            let AcordBtn = document.getElementById(`AcordBtn-${Aproved_StreamTime[index]}`);
+            AcordBtn.innerHTML = `${TwitchStreamedDate[index]} - ${UserVods["data"][StreamIndex[index]]["title"]}`;
+        }
+        let MultiClipsArr = Array();
+        let d = new Date();
+        let RFCdato = new Date();
+        RFCdato.setDate(RFCdato.getDate() - 35);
+        let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${UserIdResp["data"][0]["id"]}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
+        let resp = await HttpCalling(http2);
+        console.log(http2);
+        console.log(resp);
+        console.log(TwitchStreamedDate);
+        let MultiStreamClips = Array();
+        for (let index = 0; index < TwitchStreamedDate.length; index++) {
+            let DayDate = TwitchStreamedDate[index].split("T");
+            let Clips = Array();
+            for (let i = 0; i < resp["data"].length; i++) {
+                let TestDate = Array();
+                if (resp["data"][i]["creator_name"] == StreamerName) {
+                    let str = resp["data"][i]["created_at"];
+                    TestDate = str.split("T");
+                }
+                if (DayDate[0] == TestDate[0]) {
+                    Clips.push(resp["data"][i]);
+                }
+            }
+            MultiStreamClips.push(Clips);
+        }
+        console.log(MultiStreamClips);
     }
     else {
         validateToken();
@@ -370,14 +397,6 @@ function SetIns(DescArr, DatesArr, string) {
         DescDiv.append(AcordDiv);
     }
 }
-function AreFromSameDay(InfowriterDate, TwitchDate) {
-    if (InfowriterDate.slice(0, 9) == TwitchDate.slice(0, 9)) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
-}
 function AddClipDelay(timestamp, Clipoffset) {
     let res = timestamp.split(" ");
     let DigitA = res[0].split(":");
@@ -436,6 +455,10 @@ function to2Time(timestamp) {
 }
 function ErrorMessage(string, Err) {
     alert(string + +"'' " + Err + " ''");
+}
+function parseISOString(s) {
+    var b = s.split(/\D+/);
+    return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
 }
 async function validateToken() {
     await fetch("https://id.twitch.tv/oauth2/validate", {

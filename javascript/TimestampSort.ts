@@ -64,14 +64,15 @@ TwitchClip.addEventListener("click", async function (event: any) {
     );
     console.log(UserVods);
     let TwitchStreamedDate = Array();
+    let FullDateTwitch = Array();
     for (let index = 0; index < UserVods["data"].length; index++) {
-      if(UserVods["data"][index]["type"] == "highlight") {
+      if (UserVods["data"][index]["type"] == "highlight") {
         continue; // skip highlights
-      }
-      else {
-        let Timestamps = UserVods["data"][index]["published_at"].split("T"); 
+      } else {
+        let Timestamps = UserVods["data"][index]["published_at"].split("T");
+        FullDateTwitch.push(UserVods["data"][index]["published_at"]);
         TwitchStreamedDate.push(Timestamps[0]);
-      }      
+      }
     }
 
     // Getting Timestamps from Acord buttons
@@ -81,23 +82,61 @@ TwitchClip.addEventListener("click", async function (event: any) {
       let Timestamps = AcorBtns[index].innerHTML.split(" ");
       StreamedDate.push(Timestamps[0]);
     }
-    console.log(TwitchStreamedDate);
-    console.log(StreamedDate);
 
     let Aproved_StreamTime = Array();
     let StreamIndex = Array();
     for (let i = 0; i < TwitchStreamedDate.length; i++) {
       for (let index = 0; index < StreamedDate.length; index++) {
         // if "2022-08-22" == "2022-08-22"
-          if(TwitchStreamedDate[i] == StreamedDate[index]) {
-            console.log(TwitchStreamedDate[i] + "==" + StreamedDate[index]);
-            Aproved_StreamTime.push(StreamedDate.indexOf(TwitchStreamedDate[i]));
-            StreamIndex.push(i);
-          }
+        if (TwitchStreamedDate[i] == StreamedDate[index]) {
+          Aproved_StreamTime.push(StreamedDate.indexOf(TwitchStreamedDate[i]));
+          StreamIndex.push(i);
+        }
       }
     }
-    console.log(Aproved_StreamTime); // Aprove array index
-    console.log(StreamIndex); // Http Api Array index
+    for (let index = 0; index < Aproved_StreamTime.length; index++) {
+      // Adds titles to acord buttons for easy seeing stream timestamps.
+      let AcordBtn = document.getElementById(
+        `AcordBtn-${Aproved_StreamTime[index]}`
+      ) as HTMLElement;
+      AcordBtn.innerHTML = `${TwitchStreamedDate[index]} - ${
+        UserVods["data"][StreamIndex[index]]["title"]
+      }`;
+    }
+
+    // getting fitting clips.
+    let MultiClipsArr = Array();
+
+    let d = new Date();
+    let RFCdato = new Date();
+    RFCdato.setDate(RFCdato.getDate() - 35); // takes a month worth of clips
+    let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${
+      UserIdResp["data"][0]["id"]
+    }&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
+
+    let resp = await HttpCalling(http2);
+    console.log(http2);
+    console.log(resp);
+    console.log(TwitchStreamedDate);
+
+    let MultiStreamClips = Array();
+    for (let index = 0; index < TwitchStreamedDate.length; index++) {
+      let DayDate = TwitchStreamedDate[index].split("T");
+      let Clips = Array();
+      for (let i = 0; i < resp["data"].length; i++) {
+        let TestDate = Array();
+        if(resp["data"][i]["creator_name"] == StreamerName) {
+          let str = resp["data"][i]["created_at"];
+          TestDate = str.split("T");
+        }
+       if(DayDate[0] == TestDate[0]) {
+        Clips.push(resp["data"][i]);
+       }
+      }
+      MultiStreamClips.push(Clips);
+    }
+    console.log(MultiStreamClips);
+
   } else {
     validateToken();
     console.log("Token was not validated try again..");
@@ -491,19 +530,6 @@ function SetIns(DescArr, DatesArr, string: string) {
 
 // Small Functions
 
-//#region AreFromSameDay() tests if dates are on the same Day
-// Just tests if the stream dates are on the same day, may not work if stream is started before Midnight
-function AreFromSameDay(InfowriterDate: String, TwitchDate: String) {
-  if (InfowriterDate.slice(0, 9) == TwitchDate.slice(0, 9)) {
-    //console.log(InfowriterDate + "==" + TwitchDate);
-    return 1;
-  } else {
-    //console.log(InfowriterDate + "!=" + TwitchDate);
-    return 0;
-  }
-}
-//#endregion
-
 //#region AddClipDelay: Function Adds ClipDelay to 0:07:30 like timestamps
 // Adds Clip Delay to a timestamp
 function AddClipDelay(timestamp: any, Clipoffset: number) {
@@ -583,6 +609,11 @@ function ErrorMessage(string, Err) {
   alert(string + +"'' " + Err + " ''");
 }
 //#endregion
+
+function parseISOString(s) {
+  var b = s.split(/\D+/);
+  return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
+}
 
 // needs a VALID Twitch App Auth Token
 //#region validateToken() Validates Token if sucessful returns 1 if not 0
