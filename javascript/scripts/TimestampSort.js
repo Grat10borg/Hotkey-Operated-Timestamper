@@ -76,7 +76,6 @@ TwitchClip.addEventListener("click", async function (event) {
         let resp = await HttpCalling(http2);
         console.log(http2);
         console.log(resp);
-        console.log(TwitchStreamedDate);
         let MultiStreamClips = Array();
         for (let index = 0; index < TwitchStreamedDate.length; index++) {
             let DayDate = TwitchStreamedDate[index].split("T");
@@ -93,7 +92,19 @@ TwitchClip.addEventListener("click", async function (event) {
             }
             MultiStreamClips.push(Clips);
         }
+        console.log(FullDateTwitch);
+        let StreamDateTimer = Array();
+        for (let index = 0; index < FullDateTwitch.length; index++) {
+            StreamDateTimer.push(parseISOString(FullDateTwitch[index]));
+        }
+        let ArrAcordDesc = Array();
+        for (let index = 0; index < Aproved_StreamTime.length; index++) {
+            let Desc = document.getElementById(`myInput${Aproved_StreamTime[index]}`);
+            ArrAcordDesc.push(Desc.innerHTML);
+        }
+        console.log(StreamDateTimer);
         console.log(MultiStreamClips);
+        console.log(ArrAcordDesc);
     }
     else {
         validateToken();
