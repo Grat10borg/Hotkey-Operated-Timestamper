@@ -62,13 +62,13 @@ TwitchClip.addEventListener("click", async function (event: any) {
     let UserVods = await HttpCalling(
       `https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`
     );
-    console.log(UserVods);
     let TwitchStreamedDate = Array();
     let FullDateTwitch = Array();
     for (let index = 0; index < UserVods["data"].length; index++) {
       if (UserVods["data"][index]["type"] == "highlight") {
         continue; // skip highlights
       } else {
+        // places the Date "2022-08-22" in a array
         let Timestamps = UserVods["data"][index]["published_at"].split("T");
         FullDateTwitch.push(UserVods["data"][index]["published_at"]);
         TwitchStreamedDate.push(Timestamps[0]);
@@ -77,81 +77,97 @@ TwitchClip.addEventListener("click", async function (event: any) {
 
     // Getting Timestamps from Acord buttons
     let AcorBtns = document.getElementsByClassName("accordion-button");
-    let StreamedDate = Array();
+    let StreamedDate = Array(); // date a stream took place local ver
     for (let index = 0; index < AcorBtns.length; index++) {
       let Timestamps = AcorBtns[index].innerHTML.split(" ");
       StreamedDate.push(Timestamps[0]);
     }
 
-    let Aproved_StreamTime = Array();
-    let StreamIndex = Array();
+    let Aproved_StreamTime = Array(); 
+    let StreamIndex = Array(); // holds the Aproved index for TwitchStreamedDate
     for (let i = 0; i < TwitchStreamedDate.length; i++) {
       for (let index = 0; index < StreamedDate.length; index++) {
         // if "2022-08-22" == "2022-08-22"
         if (TwitchStreamedDate[i] == StreamedDate[index]) {
+          console.log(TwitchStreamedDate[i] + " == " + StreamedDate[index]);
           Aproved_StreamTime.push(StreamedDate.indexOf(TwitchStreamedDate[i]));
+          console.log(TwitchStreamedDate);
           StreamIndex.push(i);
         }
       }
     }
-    for (let index = 0; index < Aproved_StreamTime.length; index++) {
-      // Adds titles to acord buttons for easy seeing stream timestamps.
+    // Adds titles to acord buttons for easy seeing stream timestamps.
+    // Also removes some of the less useful date data like hours minutes, seconds replaces it with the title of the stream instead.
+    for (let index = 0; index < Aproved_StreamTime.length; index++) {   
       let AcordBtn = document.getElementById(
         `AcordBtn-${Aproved_StreamTime[index]}`
       ) as HTMLElement;
-      AcordBtn.innerHTML = `${TwitchStreamedDate[index]} - ${
-        UserVods["data"][StreamIndex[index]]["title"]
-      }`;
+      AcordBtn.innerHTML = `${
+        TwitchStreamedDate[StreamIndex[index]]
+      } - ${UserVods["data"][StreamIndex[index]]["title"]}`;
     }
+    
 
-    // getting fitting clips.
-    let MultiClipsArr = Array();
-
+    // Getting clips from 35 days ago to today.
     let d = new Date();
     let RFCdato = new Date();
     RFCdato.setDate(RFCdato.getDate() - 35); // takes a month worth of clips
     let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${
       UserIdResp["data"][0]["id"]
     }&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
-
     let resp = await HttpCalling(http2);
-    console.log(http2);
-    console.log(resp);
-
+    
     let MultiStreamClips = Array();
+    //#region Getting and sorting clips into arrays sorted by Stream dates
     for (let index = 0; index < TwitchStreamedDate.length; index++) {
       let DayDate = TwitchStreamedDate[index].split("T");
       let Clips = Array();
       for (let i = 0; i < resp["data"].length; i++) {
         let TestDate = Array();
-        if(resp["data"][i]["creator_name"] == StreamerName) {
+        if (resp["data"][i]["creator_name"] == StreamerName) {
           let str = resp["data"][i]["created_at"];
           TestDate = str.split("T");
         }
-       if(DayDate[0] == TestDate[0]) {
-        Clips.push(resp["data"][i]);
-       }
+        if (DayDate[0] == TestDate[0]) {
+          Clips.push(resp["data"][i]);
+        }
       }
-      MultiStreamClips.push(Clips); 
+      MultiStreamClips.push(Clips);
     }
-    console.log(FullDateTwitch);
+    // Later make this align to closest clip by using Date time
+    // unUsed for now, getting a datetime of the streams, so we can make a precice alignment of clip times.
     let StreamDateTimer = Array();
     for (let index = 0; index < FullDateTwitch.length; index++) {
       StreamDateTimer.push(parseISOString(FullDateTwitch[index]));
     }
-    let ArrAcordDesc = Array();
-    for (let index = 0; index < Aproved_StreamTime.length; index++) {
-      let Desc = document.getElementById(`myInput${Aproved_StreamTime[index]}`) as HTMLInputElement;
-
-      //let TimestampsArr 
-      // Regex replace(/regex/i, "substr");
-      ArrAcordDesc.push(Desc.innerHTML);
+    //#endregion
+   
+    for (let index = 0; index < TwitchStreamedDate.length; index++) {
+      let Desc = document.getElementById(`myInput${index}`) as HTMLInputElement;
+      // Skip timestamps if local timestamps does not contain copy of the stream searched for.
+      if (Desc.innerHTML.search(TwitchStreamedDate[StreamIndex[index]]) != -1) {
+        console.log(
+          "did not find: " + TwitchStreamedDate[StreamIndex[index]] + " in acord button"
+        );
+        index++;
+        continue; 
+      }
+      // Later make this align to closest clip by using Date time
+      for (let i = 0; i < MultiStreamClips[StreamIndex[index]].length; i++) {
+       // console.log(`[ClipNo${i}]`, MultiStreamClips[StreamIndex[index]][i]["title"]);
+        Desc.innerHTML = Desc.innerHTML.replace(
+          `[ClipNo${i}]`,
+          MultiStreamClips[StreamIndex[index]][i]["title"]
+        );
+      }
     }
 
-    console.log(StreamDateTimer);
-    console.log(MultiStreamClips);
-    console.log(ArrAcordDesc);
+    //console.log(Aproved_StreamTime);
+    //console.log(TwitchStreamedDate);
+    //console.log(StreamDateTimer);
+    //console.log(MultiStreamClips);
   } else {
+    // if token was not validated when you clicked, it'll try to validate, then you can click again and it Should work*
     validateToken();
     console.log("Token was not validated try again..");
   }

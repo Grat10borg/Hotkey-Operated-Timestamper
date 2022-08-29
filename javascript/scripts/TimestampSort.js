@@ -35,7 +35,6 @@ TwitchClip.addEventListener("click", async function (event) {
     if (TwitchConnected == true) {
         let UserIdResp = await HttpCalling(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
         let UserVods = await HttpCalling(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`);
-        console.log(UserVods);
         let TwitchStreamedDate = Array();
         let FullDateTwitch = Array();
         for (let index = 0; index < UserVods["data"].length; index++) {
@@ -59,23 +58,22 @@ TwitchClip.addEventListener("click", async function (event) {
         for (let i = 0; i < TwitchStreamedDate.length; i++) {
             for (let index = 0; index < StreamedDate.length; index++) {
                 if (TwitchStreamedDate[i] == StreamedDate[index]) {
+                    console.log(TwitchStreamedDate[i] + " == " + StreamedDate[index]);
                     Aproved_StreamTime.push(StreamedDate.indexOf(TwitchStreamedDate[i]));
+                    console.log(TwitchStreamedDate);
                     StreamIndex.push(i);
                 }
             }
         }
         for (let index = 0; index < Aproved_StreamTime.length; index++) {
             let AcordBtn = document.getElementById(`AcordBtn-${Aproved_StreamTime[index]}`);
-            AcordBtn.innerHTML = `${TwitchStreamedDate[index]} - ${UserVods["data"][StreamIndex[index]]["title"]}`;
+            AcordBtn.innerHTML = `${TwitchStreamedDate[StreamIndex[index]]} - ${UserVods["data"][StreamIndex[index]]["title"]}`;
         }
-        let MultiClipsArr = Array();
         let d = new Date();
         let RFCdato = new Date();
         RFCdato.setDate(RFCdato.getDate() - 35);
         let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${UserIdResp["data"][0]["id"]}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
         let resp = await HttpCalling(http2);
-        console.log(http2);
-        console.log(resp);
         let MultiStreamClips = Array();
         for (let index = 0; index < TwitchStreamedDate.length; index++) {
             let DayDate = TwitchStreamedDate[index].split("T");
@@ -92,19 +90,21 @@ TwitchClip.addEventListener("click", async function (event) {
             }
             MultiStreamClips.push(Clips);
         }
-        console.log(FullDateTwitch);
         let StreamDateTimer = Array();
         for (let index = 0; index < FullDateTwitch.length; index++) {
             StreamDateTimer.push(parseISOString(FullDateTwitch[index]));
         }
-        let ArrAcordDesc = Array();
-        for (let index = 0; index < Aproved_StreamTime.length; index++) {
-            let Desc = document.getElementById(`myInput${Aproved_StreamTime[index]}`);
-            ArrAcordDesc.push(Desc.innerHTML);
+        for (let index = 0; index < TwitchStreamedDate.length; index++) {
+            let Desc = document.getElementById(`myInput${index}`);
+            if (Desc.innerHTML.search(TwitchStreamedDate[StreamIndex[index]]) != -1) {
+                console.log("did not find: " + TwitchStreamedDate[StreamIndex[index]] + " in acord button");
+                index++;
+                continue;
+            }
+            for (let i = 0; i < MultiStreamClips[StreamIndex[index]].length; i++) {
+                Desc.innerHTML = Desc.innerHTML.replace(`[ClipNo${i}]`, MultiStreamClips[StreamIndex[index]][i]["title"]);
+            }
         }
-        console.log(StreamDateTimer);
-        console.log(MultiStreamClips);
-        console.log(ArrAcordDesc);
     }
     else {
         validateToken();
