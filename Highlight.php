@@ -24,7 +24,7 @@ AddArrTextArea($Credits, "CreditsTxt"); // credits for songs bg and such
                 </div>
                 <form id="HighlighForm">
                     <div class="row m-2">
-                        <label for="SelectGame" class="text-secondary">Channel</label>
+                        <label for="SelectGame" class="">Channel</label>
                         <select name="SelectChannel" id="SelectChannel" class="form-select form-select-sm my-2" aria-label=".form-select-sm example">
                             <!-- <option selected>Choose a Channel via Memory</option> -->
                             <?php
@@ -37,22 +37,22 @@ AddArrTextArea($Credits, "CreditsTxt"); // credits for songs bg and such
                         </select>
                     </div>
                     <div class="row m-2">
-                        <label for="SelectGame" class="text-secondary">Catagory</label>
+                        <label for="SelectGame" class="">Catagory</label>
                         <select name="SelectGame" id="SelectGame" disabled class="form-select form-select-sm my-2" aria-label=".form-select-sm example">
                             <option selected>Choose a Catagory</option>
                             <!-- Data inputted from typescript when user has selected a channel -->
                         </select>
                     </div>
                     <div class="row m-2">
-                        <label for="date" class="text-secondary my-2">Your start date</label>
+                        <label for="date" class="my-2">Your start date</label>
                         <input type="date" name="date">
                     </div>
                     <div class="row m-2">
-                        <label class="text-secondary my-2" for="endDate">your end date (default: today)</label>
+                        <label class="my-2" for="endDate">your end date (default: today)</label>
                         <input type="date" name="endDate" value="<?php echo date("o-m-d") ?>">
                     </div>
                     <div class="row m-2">
-                        <label for="viewcount" class="text-secondary my-2">minimal viewcount</label>
+                        <label for="viewcount" class="my-2">minimal viewcount</label>
                         <input type="text" name="viewcount">
                     </div>
                     <div class="row m-2">
@@ -64,7 +64,13 @@ AddArrTextArea($Credits, "CreditsTxt"); // credits for songs bg and such
                 <div class="row-* m-3 mt-5 pt-5 justify-content-around">
                     <!-- content -->
                     <!-- contains the huge images in the middle of the screen plus the Data bar and the Options bar -->
-                    <?php include "includes/H.O.T_HighLighter/LogoVersion.php" ?>
+                    <div class="justify-content-center d-flex m-3">
+                        <img src="img/TwitchIcon.png" alt="H.O.T Twitch Icon">
+                    </div>
+                    <h3 class="text-center">Highlight Oriented Timestamper <?php echo $version; ?></h3>
+                    <div id="ErrorDiv"></div>
+                    <p>Highlight Oriented Timestamper was made to help me with collecton and sorting of clips</p>
+                    <p class="mb-5">it connects to your Twitch acount and collects and sorts clips, then outputs a description for you!</p>
                     <h4># Data!</h4>
                     <div id="DataDiv">
                         <!-- Data is set in when the Api is called  -->

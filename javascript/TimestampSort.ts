@@ -50,6 +50,8 @@ if (CutOuts(RawTxt) == 1) {
 // Event handlers
 
 // Twitch Get Clip names Button.
+
+//#region TwitchClip gets twitch clips for your description when clicked
 let TwitchClip = document.getElementById("TwitchClip") as HTMLInputElement;
 
 TwitchClip.addEventListener("click", async function (event: any) {
@@ -172,6 +174,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
     console.log("Token was not validated try again..");
   }
 });
+//#endregion
 
 // Large Functions
 
@@ -384,25 +387,25 @@ function DomSet() {
   let nav = document.createElement("nav");
   let ul = document.createElement("ul");
 
-  nav.classList.add("navbar");
-  ul.classList.add("nav", "flex-column", "text-center");
+  //nav.classList.add("navbar");
+  //ul.classList.add("nav", "flex-column", "text-center");
 
   if (DescArrS.length > 0) {
     let liSeparate = document.createElement("li");
     let aSeprate = document.createElement("a");
-    liSeparate.classList.add("nav-item", "m-3");
-    aSeprate.classList.add("navlink", "me-4");
+    aSeprate.classList.add("nav-link", "text-center");
     aSeprate.setAttribute("href", "#Stream");
     aSeprate.innerHTML = "# Streams";
+    liSeparate.classList.add("RecordStreamli", "rounded");
     liSeparate.append(aSeprate);
     ul.append(liSeparate);
     for (let index = 0; index < DescArrS.length; index++) {
       let li = document.createElement("li");
-      li.classList.add("nav-item", "m-3");
       let a = document.createElement("a");
-      a.innerHTML = `◍ Stream - ${index + 1}`;
+      a.innerHTML = `> - Stream - ${index + 1}`;
       a.setAttribute("href", `#Stream-${index}`);
-      a.classList.add("navlink", "text-center");
+      a.classList.add("nav-link", "text-center");
+      li.classList.add("rounded");
       li.append(a);
       ul.append(li);
     }
@@ -414,19 +417,18 @@ function DomSet() {
   if (DescArrR.length > 0) {
     let liSeparate = document.createElement("li");
     let aSeprate = document.createElement("a");
-    liSeparate.classList.add("nav-item", "m-3");
-    aSeprate.classList.add("navlink", "me-4");
+    aSeprate.classList.add("nav-link", "text-center");
     aSeprate.setAttribute("href", "#Record");
     aSeprate.innerHTML = "# Recordings";
+    liSeparate.classList.add("RecordStreamli");
     liSeparate.append(aSeprate);
     ul.append(liSeparate);
     for (let index = 0; index < DescArrR.length; index++) {
       let li = document.createElement("li");
-      li.classList.add("nav-item", "m-3");
       let a = document.createElement("a");
-      a.innerHTML = `▶ Record - ${index + 1}`;
+      a.innerHTML = `> - Record - ${index + 1}`;
       a.setAttribute("href", `#Record-${index}`);
-      a.classList.add("navlink", "text-center");
+      a.classList.add("nav-link", "text-center");
       li.append(a);
       ul.append(li);
     }

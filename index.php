@@ -22,33 +22,28 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
 ?>
 
 <body>
-    <main class="container background px-5">
+    <main class="container background">
         <div class="row">
             <?php include "includes/html/Navbar.php" ?>
             <!-- Top bar -->
         </div>
         <div class="row">
             <!-- Side bar -->
-            <div class="col-2 m-3 sidebar" id="SideBar">
-                <?php // include "includes/H.O.T_DescMaker/SidebarStreamDirect.php"; 
-                ?>
-            </div>
-            <div class="col">
+            <div class="col-2 ms-3 mt-3 sidebar rounded" id="SideBar"></div>
+            <div class="col mt-3 maindatabar">
                 <div class="row-10 m-3 mt-5 pt-5 justify-content-around">
                     <!-- contains the huge images in the middle of the screen plus the Data bar and the Options bar -->
                     <?php include "includes/H.O.T_DescMaker/HtmlTopDescriptionData.php"; ?>
-                    <div>
-                        <div class="form-floating my-3 border-bottom border-secondary pb-5" id="DescriptionAreaDiv">
-                            <!-- printer of the Clip and descptions in the Textareas -->
-                            <?php // include "includes/H.O.T_DescMaker/HtmlTimestampInport.php"; 
-                            ?>
-                        </div>
-                    </div>
-
                 </div>
 
             </div>
-
+            <div>
+                <div class="form-floating my-3 border-bottom border-secondary pb-5" id="DescriptionAreaDiv">
+                    <!-- printer of the Clip and descptions in the Textareas -->
+                    <?php // include "includes/H.O.T_DescMaker/HtmlTimestampInport.php"; 
+                    ?>
+                </div>
+            </div>
         </div>
         </div>
         <div class="results" style="width: 200px;background-color: #fff;color: #000;display: block;padding: 10px;border: 1px solid;margin: 0 auto;font-family: 'times';font-size: '15pt';">
