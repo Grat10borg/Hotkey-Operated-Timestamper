@@ -11,20 +11,17 @@ AddArrTextArea($Credits, "CreditsTxt"); // credits for songs bg and such
 
 <body>
     <div id="access_token"></div> <!-- data is inputted then removed, not best practice -->
-    <main class="container background px-5">
+    <main class="container background">
         <div class="row">
             <!-- Top bar -->
             <?php include "includes/html/Navbar.php" ?>
         </div>
         <div class="row">
             <!-- Side bar -->
-            <div class="col-3 m-3 sidebar">
-                <div class="row m-3">
-                    <h5 class="Error text-center" id="user_data"></h5> <!-- Error print -->
-                </div>
+            <div class="col-3 ms-3 mt-3 rounded-top sidebar">
                 <form id="HighlighForm">
-                    <div class="row m-2">
-                        <label for="SelectGame" class="">Channel</label>
+                    <div class="row p-2 m-2 mt-3 rounded">
+                        <label for="SelectGame">Channel</label>
                         <select name="SelectChannel" id="SelectChannel" class="form-select form-select-sm my-2" aria-label=".form-select-sm example">
                             <!-- <option selected>Choose a Channel via Memory</option> -->
                             <?php
@@ -36,41 +33,49 @@ AddArrTextArea($Credits, "CreditsTxt"); // credits for songs bg and such
                             ?>
                         </select>
                     </div>
-                    <div class="row m-2">
+                    <div class="row p-2 m-2 mt-3 rounded">
                         <label for="SelectGame" class="">Catagory</label>
                         <select name="SelectGame" id="SelectGame" disabled class="form-select form-select-sm my-2" aria-label=".form-select-sm example">
                             <option selected>Choose a Catagory</option>
                             <!-- Data inputted from typescript when user has selected a channel -->
                         </select>
                     </div>
-                    <div class="row m-2">
+                    <div class="row p-2 m-2 mt-3 rounded">
                         <label for="date" class="my-2">Your start date</label>
-                        <input type="date" name="date">
+                        <input type="date" name="date" class="form-control form-control-sm">
                     </div>
-                    <div class="row m-2">
-                        <label class="my-2" for="endDate">your end date (default: today)</label>
-                        <input type="date" name="endDate" value="<?php echo date("o-m-d") ?>">
+                    <div class="row p-2 m-2 mt-3 rounded">
+                        <label class="m-2" for="endDate">your end date (def: today)</label>
+                        <input type="date" class="form-control form-control-sm" aria-label=".form-control-sm example" name="endDate" value="<?php echo date("o-m-d") ?>">
                     </div>
-                    <div class="row m-2">
+                    <div class="row p-2 m-2 mt-3 rounded">
                         <label for="viewcount" class="my-2">minimal viewcount</label>
-                        <input type="text" name="viewcount">
+                        <input class="form-control form-control-sm" type="text" name="viewcount">
                     </div>
-                    <div class="row m-2">
+                    <div class="row p-2 m-2 mt-3 rounded">
                         <input id="Submit" class="my-3 btn HighSubmit" type="submit" value="Make Request">
                     </div>
                 </form>
+                <div class="row">
+                    <h5 class="Error text-center m-1 mt-3" id="user_data"></h5> <!-- Error print -->
+                </div>
             </div>
             <div class="col">
                 <div class="row-* m-3 mt-5 pt-5 justify-content-around">
                     <!-- content -->
                     <!-- contains the huge images in the middle of the screen plus the Data bar and the Options bar -->
                     <div class="justify-content-center d-flex m-3">
-                        <img src="img/TwitchIcon.png" alt="H.O.T Twitch Icon">
+                        <img class="imgHOTLogo" src="img/H.O.T Mascot Wink.png">
                     </div>
+                    <div class="justify-content-center d-flex">
+                    <div>
                     <h3 class="text-center">Highlight Oriented Timestamper <?php echo $version; ?></h3>
                     <div id="ErrorDiv"></div>
-                    <p>Highlight Oriented Timestamper was made to help me with collecton and sorting of clips</p>
-                    <p class="mb-5">it connects to your Twitch acount and collects and sorts clips, then outputs a description for you!</p>
+                    <p>Highlight Oriented Timestamper was made to help me with collecton and sorting of clips!
+                    <p class="mb-5">it'll Query the clips that fit your parameters and make a description for a YT vid!</p>
+                   
+                    </div>
+                    </div>
                     <h4># Data!</h4>
                     <div id="DataDiv">
                         <!-- Data is set in when the Api is called  -->
@@ -135,18 +140,13 @@ AddArrTextArea($Credits, "CreditsTxt"); // credits for songs bg and such
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
-
         </div>
     </main>
-</body>
-<script src="javascript/scripts/script.js"></script>
 <script src="https://apis.google.com/js/api.js"></script>
-<script src="javascript/scripts/YoutubeApiHandler.js"></script>
+<script src="javascript/scripts/script+Youtube.js"></script>
 <script src="javascript/scripts//HighlightCaller.js"></script>
 <script src="CSS+SCSS/bootstrap/js/bootstrap.js"></script>
-
+</body>
 </html>

@@ -91,9 +91,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
       for (let index = 0; index < StreamedDate.length; index++) {
         // if "2022-08-22" == "2022-08-22"
         if (TwitchStreamedDate[i] == StreamedDate[index]) {
-          console.log(TwitchStreamedDate[i] + " == " + StreamedDate[index]);
           Aproved_StreamTime.push(StreamedDate.indexOf(TwitchStreamedDate[i]));
-          console.log(TwitchStreamedDate);
           StreamIndex.push(i);
         }
       }
@@ -117,7 +115,6 @@ TwitchClip.addEventListener("click", async function (event: any) {
       UserIdResp["data"][0]["id"]
     }&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
     let resp = await HttpCalling(http2);
-    console.log(resp);
 
     let MultiUnsortedClips = Array();
     //#region Getting and sorting clips into arrays sorted by Stream dates
@@ -138,7 +135,6 @@ TwitchClip.addEventListener("click", async function (event: any) {
       // Sort clips after Date Newest to Oldest.
       MultiUnsortedClips.push(Clips);
     }
-    console.log(MultiUnsortedClips);
 
     let ClipsDateArr = Array();
     let MultiStreamClips = Array();
@@ -146,9 +142,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
       let Clips = Array();
       for (let i = 0; i < MultiUnsortedClips[index].length; i++) {
         Clips.push(parseISOString(MultiUnsortedClips[index][i]["created_at"]));
-        //console.log(parseISOString(MultiUnsortedClips[index][i]["created_at"]));
       }
-      //MultiStreamClips.push(Clips);
       // Sorting to correct dates
       Clips.sort(function (a, b) {
         return a - b;
@@ -158,17 +152,11 @@ TwitchClip.addEventListener("click", async function (event: any) {
 
     let TempSortedClips = Array();
     for (let x = 0; x < MultiUnsortedClips.length; x++) { // multi dim array = 11, 5
-      console.log(MultiUnsortedClips[x]);
       let UnsortedClipArr = MultiUnsortedClips[x];
       for (let q = 0; q < ClipsDateArr[x].length; q++) {
       for (let y = 0; y < UnsortedClipArr.length; y++) { // 11 elements in one array
-        console.log(parseISOString(UnsortedClipArr[y]["created_at"]));  
-
-        
-          console.log(ClipsDateArr[x][q]);
           let Date = parseISOString(UnsortedClipArr[y]["created_at"].toString()); // Clip Unsorted Dates
         if (ClipsDateArr[x][q].toString() == Date.toString()) {
-          console.log(ClipsDateArr[x][q].toString() + "==" + Date.toString());
           TempSortedClips.push(MultiUnsortedClips[x][y]);
          }
         }
@@ -190,11 +178,6 @@ TwitchClip.addEventListener("click", async function (event: any) {
       let Desc = document.getElementById(`myInput${index}`) as HTMLInputElement;
       // Skip timestamps if local timestamps does not contain copy of the stream searched for.
       if (Desc.innerHTML.search(TwitchStreamedDate[StreamIndex[index]]) != -1) {
-        console.log(
-          "did not find: " +
-            TwitchStreamedDate[StreamIndex[index]] +
-            " in acord button"
-        );
         index++;
         continue;
       }
@@ -545,17 +528,6 @@ function SetIns(DescArr, DatesArr, string: string) {
     button.innerHTML = DatesArr[index] + ` - ${string}`;
     // Select, Copy, Youtube Bar Vars
 
-    // Icons for BTNS
-    let TwitchIcon = document.createElement("img");
-    TwitchIcon.setAttribute("src", "img\\TwitchIconsmol.png");
-    TwitchIcon.classList.add("imgIcon");
-    let TwitchIcon2 = document.createElement("img");
-    TwitchIcon2.setAttribute("src", "img\\TwitchIconsmol.png");
-    TwitchIcon2.classList.add("imgIcon");
-    let YoutubeIcon = document.createElement("img");
-    YoutubeIcon.setAttribute("src", "img\\Youtube.png");
-    YoutubeIcon.classList.add("imgIcon");
-
     // Buttons
     let ButtonDiv = document.createElement("div");
     let SelectBtn = document.createElement("button");
@@ -587,9 +559,6 @@ function SetIns(DescArr, DatesArr, string: string) {
     AcordBody.append(Textarea);
 
     // Button Bar
-    SelectBtn.append(TwitchIcon);
-    CopyBtn.append(TwitchIcon2);
-    YoutubeBtn.append(YoutubeIcon);
     ButtonDiv.append(SelectBtn);
     ButtonDiv.append(CopyBtn);
     ButtonDiv.append(YoutubeBtn);

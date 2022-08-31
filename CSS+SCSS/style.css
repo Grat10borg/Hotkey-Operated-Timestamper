@@ -141,6 +141,10 @@ textarea {
   background-color: #909edd;
 }
 
+.imgHOTLogo {
+  max-width: 250px;
+}
+
 .CharaGreen {
   color: #8cff9b;
 }
@@ -199,6 +203,14 @@ textarea {
       image-rendering: pixelated;
 }
 
+#HighlighForm div {
+  background-color: #6b74b2;
+}
+
+#HighlighForm div:nth-child(odd) {
+  background-color: #7d85ba;
+}
+
 .ClipLink {
   color: #91403d;
 }
@@ -219,23 +231,13 @@ textarea {
   background-color: #dae0e9;
 }
 
-.authbutton {
-  background-color: #673d91;
-  color: #eef2ed;
-}
-
-.authbutton:hover {
-  background-color: #ac50a1;
-  color: #eef2ed;
-}
-
 .HighSubmit {
-  background-color: #3d8391;
-  color: #dae0e9;
+  background-color: #27d3cb;
+  color: #f0f0f0;
 }
 
 .HighSubmit:hover {
-  background-color: #509cac;
-  color: #dae0e9;
+  background-color: #00aaa5;
+  color: #f0f0f0;
 }
 /*# sourceMappingURL=style.css.map */
