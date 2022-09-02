@@ -85,30 +85,27 @@ TwitchClip.addEventListener("click", async function (event: any) {
       StreamedDate.push(Timestamps[0]);
     }
 
-    let Aproved_StreamTime = Array(); 
+    let Aproved_StreamTime = Array();
     let StreamIndex = Array(); // holds the Aproved index for TwitchStreamedDate
     for (let i = 0; i < TwitchStreamedDate.length; i++) {
       for (let index = 0; index < StreamedDate.length; index++) {
         // if "2022-08-22" == "2022-08-22"
         if (TwitchStreamedDate[i] == StreamedDate[index]) {
-          console.log(TwitchStreamedDate[i] + " == " + StreamedDate[index]);
           Aproved_StreamTime.push(StreamedDate.indexOf(TwitchStreamedDate[i]));
-          console.log(TwitchStreamedDate);
           StreamIndex.push(i);
         }
       }
     }
     // Adds titles to acord buttons for easy seeing stream timestamps.
     // Also removes some of the less useful date data like hours minutes, seconds replaces it with the title of the stream instead.
-    for (let index = 0; index < Aproved_StreamTime.length; index++) {   
+    for (let index = 0; index < Aproved_StreamTime.length; index++) {
       let AcordBtn = document.getElementById(
         `AcordBtn-${Aproved_StreamTime[index]}`
       ) as HTMLElement;
-      AcordBtn.innerHTML = `${
-        TwitchStreamedDate[StreamIndex[index]]
-      } - ${UserVods["data"][StreamIndex[index]]["title"]}`;
+      AcordBtn.innerHTML = `${TwitchStreamedDate[StreamIndex[index]]} - ${
+        UserVods["data"][StreamIndex[index]]["title"]
+      }`;
     }
-    
 
     // Getting clips from 35 days ago to today.
     let d = new Date();
@@ -118,8 +115,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
       UserIdResp["data"][0]["id"]
     }&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
     let resp = await HttpCalling(http2);
-    
-    let MultiStreamClips = Array();
+
+    let MultiUnsortedClips = Array();
     //#region Getting and sorting clips into arrays sorted by Stream dates
     for (let index = 0; index < TwitchStreamedDate.length; index++) {
       let DayDate = TwitchStreamedDate[index].split("T");
@@ -134,8 +131,41 @@ TwitchClip.addEventListener("click", async function (event: any) {
           Clips.push(resp["data"][i]);
         }
       }
-      MultiStreamClips.push(Clips);
+
+      // Sort clips after Date Newest to Oldest.
+      MultiUnsortedClips.push(Clips);
     }
+
+    let ClipsDateArr = Array();
+    let MultiStreamClips = Array();
+    for (let index = 0; index < MultiUnsortedClips.length; index++) {
+      let Clips = Array();
+      for (let i = 0; i < MultiUnsortedClips[index].length; i++) {
+        Clips.push(parseISOString(MultiUnsortedClips[index][i]["created_at"]));
+      }
+      // Sorting to correct dates
+      Clips.sort(function (a, b) {
+        return a - b;
+      });
+      ClipsDateArr.push(Clips);
+    }
+
+    let TempSortedClips = Array();
+    for (let x = 0; x < MultiUnsortedClips.length; x++) { // multi dim array = 11, 5
+      let UnsortedClipArr = MultiUnsortedClips[x];
+      for (let q = 0; q < ClipsDateArr[x].length; q++) {
+      for (let y = 0; y < UnsortedClipArr.length; y++) { // 11 elements in one array
+          let Date = parseISOString(UnsortedClipArr[y]["created_at"].toString()); // Clip Unsorted Dates
+        if (ClipsDateArr[x][q].toString() == Date.toString()) {
+          TempSortedClips.push(MultiUnsortedClips[x][y]);
+         }
+        }
+      }
+      MultiStreamClips.push(TempSortedClips);
+      TempSortedClips = Array(); // reset
+    }
+
+    console.log(MultiStreamClips);
     // Later make this align to closest clip by using Date time
     // unUsed for now, getting a datetime of the streams, so we can make a precice alignment of clip times.
     let StreamDateTimer = Array();
@@ -143,20 +173,17 @@ TwitchClip.addEventListener("click", async function (event: any) {
       StreamDateTimer.push(parseISOString(FullDateTwitch[index]));
     }
     //#endregion
-   
+
     for (let index = 0; index < TwitchStreamedDate.length; index++) {
       let Desc = document.getElementById(`myInput${index}`) as HTMLInputElement;
       // Skip timestamps if local timestamps does not contain copy of the stream searched for.
       if (Desc.innerHTML.search(TwitchStreamedDate[StreamIndex[index]]) != -1) {
-        console.log(
-          "did not find: " + TwitchStreamedDate[StreamIndex[index]] + " in acord button"
-        );
         index++;
-        continue; 
+        continue;
       }
       // Later make this align to closest clip by using Date time
       for (let i = 0; i < MultiStreamClips[StreamIndex[index]].length; i++) {
-       // console.log(`[ClipNo${i}]`, MultiStreamClips[StreamIndex[index]][i]["title"]);
+        // console.log(`[ClipNo${i}]`, MultiStreamClips[StreamIndex[index]][i]["title"]);
         Desc.innerHTML = Desc.innerHTML.replace(
           `[ClipNo${i}]`,
           MultiStreamClips[StreamIndex[index]][i]["title"]
@@ -501,17 +528,6 @@ function SetIns(DescArr, DatesArr, string: string) {
     button.innerHTML = DatesArr[index] + ` - ${string}`;
     // Select, Copy, Youtube Bar Vars
 
-    // Icons for BTNS
-    let TwitchIcon = document.createElement("img");
-    TwitchIcon.setAttribute("src", "img\\TwitchIconsmol.png");
-    TwitchIcon.classList.add("imgIcon");
-    let TwitchIcon2 = document.createElement("img");
-    TwitchIcon2.setAttribute("src", "img\\TwitchIconsmol.png");
-    TwitchIcon2.classList.add("imgIcon");
-    let YoutubeIcon = document.createElement("img");
-    YoutubeIcon.setAttribute("src", "img\\Youtube.png");
-    YoutubeIcon.classList.add("imgIcon");
-
     // Buttons
     let ButtonDiv = document.createElement("div");
     let SelectBtn = document.createElement("button");
@@ -543,9 +559,6 @@ function SetIns(DescArr, DatesArr, string: string) {
     AcordBody.append(Textarea);
 
     // Button Bar
-    SelectBtn.append(TwitchIcon);
-    CopyBtn.append(TwitchIcon2);
-    YoutubeBtn.append(YoutubeIcon);
     ButtonDiv.append(SelectBtn);
     ButtonDiv.append(CopyBtn);
     ButtonDiv.append(YoutubeBtn);

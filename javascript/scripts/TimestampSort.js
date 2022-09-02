@@ -58,9 +58,7 @@ TwitchClip.addEventListener("click", async function (event) {
         for (let i = 0; i < TwitchStreamedDate.length; i++) {
             for (let index = 0; index < StreamedDate.length; index++) {
                 if (TwitchStreamedDate[i] == StreamedDate[index]) {
-                    console.log(TwitchStreamedDate[i] + " == " + StreamedDate[index]);
                     Aproved_StreamTime.push(StreamedDate.indexOf(TwitchStreamedDate[i]));
-                    console.log(TwitchStreamedDate);
                     StreamIndex.push(i);
                 }
             }
@@ -74,7 +72,7 @@ TwitchClip.addEventListener("click", async function (event) {
         RFCdato.setDate(RFCdato.getDate() - 35);
         let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${UserIdResp["data"][0]["id"]}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
         let resp = await HttpCalling(http2);
-        let MultiStreamClips = Array();
+        let MultiUnsortedClips = Array();
         for (let index = 0; index < TwitchStreamedDate.length; index++) {
             let DayDate = TwitchStreamedDate[index].split("T");
             let Clips = Array();
@@ -88,8 +86,35 @@ TwitchClip.addEventListener("click", async function (event) {
                     Clips.push(resp["data"][i]);
                 }
             }
-            MultiStreamClips.push(Clips);
+            MultiUnsortedClips.push(Clips);
         }
+        let ClipsDateArr = Array();
+        let MultiStreamClips = Array();
+        for (let index = 0; index < MultiUnsortedClips.length; index++) {
+            let Clips = Array();
+            for (let i = 0; i < MultiUnsortedClips[index].length; i++) {
+                Clips.push(parseISOString(MultiUnsortedClips[index][i]["created_at"]));
+            }
+            Clips.sort(function (a, b) {
+                return a - b;
+            });
+            ClipsDateArr.push(Clips);
+        }
+        let TempSortedClips = Array();
+        for (let x = 0; x < MultiUnsortedClips.length; x++) {
+            let UnsortedClipArr = MultiUnsortedClips[x];
+            for (let q = 0; q < ClipsDateArr[x].length; q++) {
+                for (let y = 0; y < UnsortedClipArr.length; y++) {
+                    let Date = parseISOString(UnsortedClipArr[y]["created_at"].toString());
+                    if (ClipsDateArr[x][q].toString() == Date.toString()) {
+                        TempSortedClips.push(MultiUnsortedClips[x][y]);
+                    }
+                }
+            }
+            MultiStreamClips.push(TempSortedClips);
+            TempSortedClips = Array();
+        }
+        console.log(MultiStreamClips);
         let StreamDateTimer = Array();
         for (let index = 0; index < FullDateTwitch.length; index++) {
             StreamDateTimer.push(parseISOString(FullDateTwitch[index]));
@@ -97,7 +122,6 @@ TwitchClip.addEventListener("click", async function (event) {
         for (let index = 0; index < TwitchStreamedDate.length; index++) {
             let Desc = document.getElementById(`myInput${index}`);
             if (Desc.innerHTML.search(TwitchStreamedDate[StreamIndex[index]]) != -1) {
-                console.log("did not find: " + TwitchStreamedDate[StreamIndex[index]] + " in acord button");
                 index++;
                 continue;
             }
@@ -362,15 +386,6 @@ function SetIns(DescArr, DatesArr, string) {
         Textarea.innerHTML = DescArr[index];
         Textarea.setAttribute("id", `myInput${index}`);
         button.innerHTML = DatesArr[index] + ` - ${string}`;
-        let TwitchIcon = document.createElement("img");
-        TwitchIcon.setAttribute("src", "img\\TwitchIconsmol.png");
-        TwitchIcon.classList.add("imgIcon");
-        let TwitchIcon2 = document.createElement("img");
-        TwitchIcon2.setAttribute("src", "img\\TwitchIconsmol.png");
-        TwitchIcon2.classList.add("imgIcon");
-        let YoutubeIcon = document.createElement("img");
-        YoutubeIcon.setAttribute("src", "img\\Youtube.png");
-        YoutubeIcon.classList.add("imgIcon");
         let ButtonDiv = document.createElement("div");
         let SelectBtn = document.createElement("button");
         let CopyBtn = document.createElement("button");
@@ -392,9 +407,6 @@ function SetIns(DescArr, DatesArr, string) {
         CharDiv.append(PNo);
         AcordBody.append(CharDiv);
         AcordBody.append(Textarea);
-        SelectBtn.append(TwitchIcon);
-        CopyBtn.append(TwitchIcon2);
-        YoutubeBtn.append(YoutubeIcon);
         ButtonDiv.append(SelectBtn);
         ButtonDiv.append(CopyBtn);
         ButtonDiv.append(YoutubeBtn);

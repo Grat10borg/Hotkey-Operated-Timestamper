@@ -1,14 +1,18 @@
                 <div class="m-3 d-flex justify-content-center">
-                    <img src="img\TwitchIcon.png" alt="">
+                    <img class="imgHOTLogo" src="img/H.O.T Mascot.png" alt="">
                 </div>
                 <h3 class="text-center">Hotkey, Operated, Timestamper <?php echo $version; ?></h3>
                 <?php if (isset($error)) {
                     echo "<h4 class='-2 text-danger text-center fs-3'>Error `(*>﹏<*)′</h4>";
                     echo "<h5 class='m-3 text-danger text-center'>$error</h5>";
                 } ?>
+                <div class="justify-content-center d-flex">
+                <div>
                 <p>H.O.T is a Vod timestamper i designed to work along with the <a target="blank" href="https://obsproject.com/forum/resources/infowriter.345/">Stream-Writer plugin for OBS.</a></p>
                 <p>it cuts down all the timestamps into the smallest amount of characters,</p>
                 <p class="mb-5">and formats it into your desciption!</p>
+                </div>
+                </div>             
                 <div class="container row border-bottom border-secondary pb-5">
                     <div class="col me-4">
                         <h4 class="text-center"># Options</h4>
