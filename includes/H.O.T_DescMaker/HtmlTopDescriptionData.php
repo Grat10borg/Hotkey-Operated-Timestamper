@@ -17,7 +17,7 @@
                     <div class="col me-4">
                         <h4 class="text-center"># Options</h4>
                         <div class="row">
-                            <button class="btn py-2 my-2" id="TwitchClip">Sync to Twitch</button>
+                            <button class="btn py-2 my-2" id="TwitchClip">Use Twitch Clip-stamps instead</button>
                             <p class="col" hidden id="TwitchMsg"></p>
                         </div>
                         <div class="row">

@@ -114,19 +114,101 @@ TwitchClip.addEventListener("click", async function (event) {
             MultiStreamClips.push(TempSortedClips);
             TempSortedClips = Array();
         }
-        console.log(MultiStreamClips);
-        let StreamDateTimer = Array();
-        for (let index = 0; index < FullDateTwitch.length; index++) {
-            StreamDateTimer.push(parseISOString(FullDateTwitch[index]));
-        }
         for (let index = 0; index < TwitchStreamedDate.length; index++) {
             let Desc = document.getElementById(`myInput${index}`);
-            if (Desc.innerHTML.search(TwitchStreamedDate[StreamIndex[index]]) != -1) {
-                index++;
+            let res = document.getElementById("DescTxt");
+            let res1 = document.getElementById("IntroTxt");
+            let res2 = document.getElementById("SocialTxt");
+            let res3 = document.getElementById("CreditsTxt");
+            let DescTxt = res.innerHTML;
+            let IntroTxt = res1.innerHTML;
+            let SocialTxt = res2.innerHTML;
+            let CreditsTxt = res3.innerHTML;
+            var NewDesc = "";
+            if (Desc == null) {
                 continue;
             }
+            if (Desc.innerHTML.search(TwitchStreamedDate[StreamIndex[index]]) != -1) {
+                continue;
+            }
+            console.log(TwitchStreamedDate[StreamIndex[index]]);
+            console.log(MultiStreamClips[StreamIndex[index]]);
+            let TimestampTwitch = Array();
+            let LocalSceneShift = Array();
+            let TimeTwitch = Array();
+            let LocalSceneTime = Array();
+            for (let V = 0; V < MultiDimStreamArr[index].length; V++) {
+                let res = MultiDimStreamArr[V];
+                if (res != undefined) {
+                    for (let i = 0; i < res.length; i++) {
+                        let Timestamp = res[i];
+                        if (Timestamp.match(/▸.*/i)) {
+                            LocalSceneShift.push(Timestamp);
+                            let R = Timestamp.split(" ");
+                            LocalSceneTime.push(R[1]);
+                        }
+                    }
+                }
+            }
             for (let i = 0; i < MultiStreamClips[StreamIndex[index]].length; i++) {
-                Desc.innerHTML = Desc.innerHTML.replace(`[ClipNo${i}]`, MultiStreamClips[StreamIndex[index]][i]["title"]);
+                TimestampTwitch.push("• " +
+                    SectoTimestamp(MultiStreamClips[StreamIndex[index]][i]["vod_offset"]) +
+                    " " +
+                    MultiStreamClips[StreamIndex[index]][i]["title"]);
+                TimeTwitch.push(SectoTimestamp(MultiStreamClips[StreamIndex[index]][i]["vod_offset"]));
+            }
+            let TimestampArr = Array();
+            let TimeArr = Array();
+            TimestampArr = LocalSceneShift.concat(TimestampTwitch);
+            TimeArr = LocalSceneTime.concat(TimeTwitch);
+            let SortTime = Array();
+            for (let q = 0; q < TimestampArr.length; q++) {
+                SortTime.push(TimestampToDate(TimeArr[q]));
+            }
+            SortTime.sort();
+            let Timestamps = Array();
+            for (let t = 0; t < SortTime.length; t++) {
+                let T = SortTime[t].toString().split(" ");
+                let TestHour = T[4].split(":");
+                let Timestamp;
+                if (TestHour[0][0] == "0") {
+                    Timestamp = to2Time(T[4].substring(1));
+                }
+                else {
+                    Timestamp = to2Time(T[4]);
+                }
+                Timestamps.push(Timestamp);
+            }
+            let CompleteTimestampArr = Array();
+            for (let Pie = 0; Pie < Timestamps.length; Pie++) {
+                let Reg = new RegExp(Timestamps[Pie] + ".*");
+                for (let u = 0; u < TimeArr.length; u++) {
+                    if (TimeArr[u].match(Reg)) {
+                        CompleteTimestampArr.push(TimestampArr[u]);
+                    }
+                }
+            }
+            if (CompleteTimestampArr.length > 0) {
+                for (let index = 0; index < CompleteTimestampArr.length; index++) {
+                    let resArray = CompleteTimestampArr;
+                    NewDesc = DescTxt + "\n\n";
+                    NewDesc =
+                        NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+                    for (let i = 0; i < resArray.length; i++) {
+                        let timestamp = resArray[i];
+                        NewDesc = NewDesc + timestamp + "\n";
+                    }
+                    NewDesc =
+                        NewDesc +
+                            "\n" +
+                            IntroTxt +
+                            "\n\n" +
+                            SocialTxt +
+                            "\n\n" +
+                            CreditsTxt;
+                    Desc.innerHTML = NewDesc;
+                    NewDesc = "";
+                }
             }
         }
     }
@@ -473,11 +555,57 @@ function to2Time(timestamp) {
         return res[0];
     }
 }
+function SectoTimestamp(seconds) {
+    let date = new Date();
+    date.setHours(0, 0, 0);
+    date.setSeconds(seconds);
+    let dateText = date.toString();
+    dateText = dateText.substring(16, 25);
+    let DigitA = dateText.split(":");
+    if (DigitA[0] == "00") {
+        if (DigitA[1].match(/0\d/i)) {
+            if (DigitA[1].match(/00/i)) {
+                DigitA[1] = DigitA[1].replace("00", "0");
+                return DigitA[1] + ":" + DigitA[2];
+            }
+            DigitA[1] = DigitA[1].replace("0", "");
+            return DigitA[1] + ":" + DigitA[2];
+        }
+        else {
+            return DigitA[1] + ":" + DigitA[2];
+        }
+    }
+    else {
+        if (DigitA[0][0] == "0") {
+            return DigitA[0][1] + ":" + DigitA[1] + ":" + DigitA[2];
+        }
+        else {
+            return dateText;
+        }
+    }
+}
+function TimestampToDate(timestamp) {
+    let T = Array();
+    T = timestamp.split(":");
+    let date = new Date();
+    date.setHours(0, 0, 0);
+    if (T.length == 3) {
+        date.setHours(T[0]);
+        date.setMinutes(T[1]);
+        date.setSeconds(T[2]);
+        return date;
+    }
+    else {
+        date.setMinutes(T[0]);
+        date.setSeconds(T[1]);
+        return date;
+    }
+}
 function ErrorMessage(string, Err) {
     alert(string + +"'' " + Err + " ''");
 }
-function parseISOString(s) {
-    var b = s.split(/\D+/);
+function parseISOString(Isostring) {
+    var b = Isostring.split(/\D+/);
     return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
 }
 async function validateToken() {

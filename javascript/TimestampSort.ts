@@ -49,8 +49,6 @@ if (CutOuts(RawTxt) == 1) {
 
 // Event handlers
 
-// Twitch Get Clip names Button.
-
 //#region TwitchClip gets twitch clips for your description when clicked
 let TwitchClip = document.getElementById("TwitchClip") as HTMLInputElement;
 
@@ -66,6 +64,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
     );
     let TwitchStreamedDate = Array();
     let FullDateTwitch = Array();
+
+    //#region VOD Sorting 
     for (let index = 0; index < UserVods["data"].length; index++) {
       if (UserVods["data"][index]["type"] == "highlight") {
         continue; // skip highlights
@@ -76,7 +76,9 @@ TwitchClip.addEventListener("click", async function (event: any) {
         TwitchStreamedDate.push(Timestamps[0]);
       }
     }
+    //#endregion
 
+    //#region Getting Timestamp from Acord buttons
     // Getting Timestamps from Acord buttons
     let AcorBtns = document.getElementsByClassName("accordion-button");
     let StreamedDate = Array(); // date a stream took place local ver
@@ -84,7 +86,9 @@ TwitchClip.addEventListener("click", async function (event: any) {
       let Timestamps = AcorBtns[index].innerHTML.split(" ");
       StreamedDate.push(Timestamps[0]);
     }
+    //#endregion
 
+    //#region StreamDate Aprover 
     let Aproved_StreamTime = Array();
     let StreamIndex = Array(); // holds the Aproved index for TwitchStreamedDate
     for (let i = 0; i < TwitchStreamedDate.length; i++) {
@@ -96,6 +100,9 @@ TwitchClip.addEventListener("click", async function (event: any) {
         }
       }
     }
+    //#endregion
+
+    //#region Acord Title Placer 
     // Adds titles to acord buttons for easy seeing stream timestamps.
     // Also removes some of the less useful date data like hours minutes, seconds replaces it with the title of the stream instead.
     for (let index = 0; index < Aproved_StreamTime.length; index++) {
@@ -106,8 +113,10 @@ TwitchClip.addEventListener("click", async function (event: any) {
         UserVods["data"][StreamIndex[index]]["title"]
       }`;
     }
+//#endregion
 
     // Getting clips from 35 days ago to today.
+    //#region Setting up 
     let d = new Date();
     let RFCdato = new Date();
     RFCdato.setDate(RFCdato.getDate() - 35); // takes a month worth of clips
@@ -115,7 +124,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
       UserIdResp["data"][0]["id"]
     }&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
     let resp = await HttpCalling(http2);
-
+    //#endregion
     let MultiUnsortedClips = Array();
     //#region Getting and sorting clips into arrays sorted by Stream dates
     for (let index = 0; index < TwitchStreamedDate.length; index++) {
@@ -135,7 +144,9 @@ TwitchClip.addEventListener("click", async function (event: any) {
       // Sort clips after Date Newest to Oldest.
       MultiUnsortedClips.push(Clips);
     }
+    //#endregion
 
+    //#region Clip Sorter
     let ClipsDateArr = Array();
     let MultiStreamClips = Array();
     for (let index = 0; index < MultiUnsortedClips.length; index++) {
@@ -149,52 +160,171 @@ TwitchClip.addEventListener("click", async function (event: any) {
       });
       ClipsDateArr.push(Clips);
     }
+    //#endregion
 
+    //#region Make Multidim sorted array
     let TempSortedClips = Array();
-    for (let x = 0; x < MultiUnsortedClips.length; x++) { // multi dim array = 11, 5
+    for (let x = 0; x < MultiUnsortedClips.length; x++) {
+      // multi dim array = 11, 5
       let UnsortedClipArr = MultiUnsortedClips[x];
       for (let q = 0; q < ClipsDateArr[x].length; q++) {
-      for (let y = 0; y < UnsortedClipArr.length; y++) { // 11 elements in one array
-          let Date = parseISOString(UnsortedClipArr[y]["created_at"].toString()); // Clip Unsorted Dates
-        if (ClipsDateArr[x][q].toString() == Date.toString()) {
-          TempSortedClips.push(MultiUnsortedClips[x][y]);
-         }
+        for (let y = 0; y < UnsortedClipArr.length; y++) {
+          // 11 elements in one array
+          let Date = parseISOString(
+            UnsortedClipArr[y]["created_at"].toString()
+          ); // Clip Unsorted Dates
+          if (ClipsDateArr[x][q].toString() == Date.toString()) {
+            TempSortedClips.push(MultiUnsortedClips[x][y]);
+          }
         }
       }
       MultiStreamClips.push(TempSortedClips);
       TempSortedClips = Array(); // reset
     }
-
-    console.log(MultiStreamClips);
-    // Later make this align to closest clip by using Date time
-    // unUsed for now, getting a datetime of the streams, so we can make a precice alignment of clip times.
-    let StreamDateTimer = Array();
-    for (let index = 0; index < FullDateTwitch.length; index++) {
-      StreamDateTimer.push(parseISOString(FullDateTwitch[index]));
-    }
     //#endregion
 
+    //#region Foreaching, Sorting and placing in ALL timestamps from Twitch
     for (let index = 0; index < TwitchStreamedDate.length; index++) {
+      // TextArea
       let Desc = document.getElementById(`myInput${index}`) as HTMLInputElement;
-      // Skip timestamps if local timestamps does not contain copy of the stream searched for.
-      if (Desc.innerHTML.search(TwitchStreamedDate[StreamIndex[index]]) != -1) {
-        index++;
-        continue;
+
+      // TXT
+      let res = document.getElementById("DescTxt") as HTMLInputElement;
+      let res1 = document.getElementById("IntroTxt") as HTMLInputElement;
+      let res2 = document.getElementById("SocialTxt") as HTMLInputElement;
+      let res3 = document.getElementById("CreditsTxt") as HTMLInputElement;
+
+      let DescTxt = res.innerHTML;
+      let IntroTxt = res1.innerHTML;
+      let SocialTxt = res2.innerHTML;
+      let CreditsTxt = res3.innerHTML;
+      var NewDesc = ""; // Finished Description Var
+
+      // Handling of BAD data
+      if (Desc == null) {
+        continue; // skip non existing descriptions, if you dont have a full copy of local timestamps.
       }
-      // Later make this align to closest clip by using Date time
+      if (Desc.innerHTML.search(TwitchStreamedDate[StreamIndex[index]]) != -1) {
+        continue; // Skip timestamps if local timestamps does not contain copy of the stream searched for.
+      }
+      console.log(TwitchStreamedDate[StreamIndex[index]]);
+      console.log(MultiStreamClips[StreamIndex[index]]);
+
+      let TimestampTwitch = Array();
+      let LocalSceneShift = Array();
+      let TimeTwitch = Array();
+      let LocalSceneTime = Array();
+
+      // get Clip Offset but should also get Start Creative or Scene shift timestamps.
+      //#region Getting Local Scene Shift timestamps
+      // get Local Timestamps for scenes
+      for (let V = 0; V < MultiDimStreamArr[index].length; V++) {
+        let res = MultiDimStreamArr[V];
+        if (res != undefined) {
+          // for some reason turns op undefinded sometimes, isnt a BIIG problem so just a HOTfix but fix this later somehow
+          for (let i = 0; i < res.length; i++) {
+            let Timestamp = res[i]; // String with timestamp
+            if (Timestamp.match(/▸.*/i)) {
+              LocalSceneShift.push(Timestamp);
+              let R = Timestamp.split(" ");
+              LocalSceneTime.push(R[1]);
+            }
+          }
+        }
+      }
+      //#endregion
+
+      //#region Creating timestamps with titles in a single string
+      // sets in Clip timestamp.
       for (let i = 0; i < MultiStreamClips[StreamIndex[index]].length; i++) {
-        // console.log(`[ClipNo${i}]`, MultiStreamClips[StreamIndex[index]][i]["title"]);
-        Desc.innerHTML = Desc.innerHTML.replace(
-          `[ClipNo${i}]`,
-          MultiStreamClips[StreamIndex[index]][i]["title"]
+        // gives a timestamp close to LOCAL timestamp from Twitch API.
+        TimestampTwitch.push(
+          "• " +
+            SectoTimestamp(
+              MultiStreamClips[StreamIndex[index]][i]["vod_offset"]
+            ) +
+            " " +
+            MultiStreamClips[StreamIndex[index]][i]["title"]
+        );
+        TimeTwitch.push(
+          SectoTimestamp(MultiStreamClips[StreamIndex[index]][i]["vod_offset"])
         );
       }
-    }
+      //#endregion
 
-    //console.log(Aproved_StreamTime);
-    //console.log(TwitchStreamedDate);
-    //console.log(StreamDateTimer);
-    //console.log(MultiStreamClips);
+      // set timestamp arrays into one big one that we have to sort.
+      let TimestampArr = Array();
+      let TimeArr = Array();
+      TimestampArr = LocalSceneShift.concat(TimestampTwitch);
+      TimeArr = LocalSceneTime.concat(TimeTwitch);
+
+      // sort timestamps into correct sorting
+      // fun fact the indexes are named: Q,T,Pie,u because thats what u are :)
+      //#region Making Timestamps into Dates and sorting them.
+      let SortTime = Array();
+      for (let q = 0; q < TimestampArr.length; q++) {
+        SortTime.push(TimestampToDate(TimeArr[q]));
+      }
+      SortTime.sort();
+      //#endregion
+      let Timestamps = Array();
+      //#region Sorted Dates get turned into timestamps again.
+      for (let t = 0; t < SortTime.length; t++) {
+        let T = SortTime[t].toString().split(" ");
+        let TestHour = T[4].split(":");
+        let Timestamp;
+        if (TestHour[0][0] == "0") {
+          Timestamp = to2Time(T[4].substring(1)); // skips >0<0:20:40 of the timestamp
+        } else {
+          // keeps extra hour placement for 24 hour timestamps.
+          Timestamp = to2Time(T[4]);
+        }
+        Timestamps.push(Timestamp);
+      }
+      //#endregion
+      let CompleteTimestampArr = Array();
+      //#region finding the correct indexs for titles and completing the sorting
+      // for each til we find the correct index
+      for (let Pie = 0; Pie < Timestamps.length; Pie++) {
+        let Reg = new RegExp(Timestamps[Pie] + ".*");
+        for (let u = 0; u < TimeArr.length; u++) {
+          if (TimeArr[u].match(Reg)) {
+            CompleteTimestampArr.push(TimestampArr[u]);
+          }
+        }
+      }
+      //#endregion
+
+      //#region Making the new description and placing it into the correct Text area
+      // Makes a Working Description
+      // If Not Null
+      if (CompleteTimestampArr.length > 0) {
+        // if has Values
+        for (let index = 0; index < CompleteTimestampArr.length; index++) {
+          let resArray = CompleteTimestampArr;
+
+          NewDesc = DescTxt + "\n\n";
+          NewDesc =
+            NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+          for (let i = 0; i < resArray.length; i++) {
+            let timestamp = resArray[i];
+            NewDesc = NewDesc + timestamp + "\n";
+          }
+          NewDesc =
+            NewDesc +
+            "\n" +
+            IntroTxt +
+            "\n\n" +
+            SocialTxt +
+            "\n\n" +
+            CreditsTxt;
+          Desc.innerHTML = NewDesc;
+          NewDesc = "";
+        }
+      }
+      //#endregion
+    }
+    //#endregion
   } else {
     // if token was not validated when you clicked, it'll try to validate, then you can click again and it Should work*
     validateToken();
@@ -574,6 +704,7 @@ function SetIns(DescArr, DatesArr, string: string) {
 //#endregion
 
 // Small Functions
+//#region V Small Functions V 
 
 //#region AddClipDelay: Function Adds ClipDelay to 0:07:30 like timestamps
 // Adds Clip Delay to a timestamp
@@ -648,6 +779,60 @@ function to2Time(timestamp: string) {
 }
 //#endregion
 
+//#region SectoTimestamp function, makes a timestamp that will work in the youtube description
+// converts the time into minutes and hours from seconds
+function SectoTimestamp(seconds: any) {
+  let date = new Date(); // find out why it prints timestamps like "12:12:26" remove the 12 // Fixed
+  date.setHours(0, 0, 0); // sets date to 00:00:00
+  date.setSeconds(seconds); // adds secounds making it into a timestamp
+  let dateText = date.toString(); // cuts timestamp out // effectively the same that gets printed when you do console.log(date);
+  dateText = dateText.substring(16, 25);
+  let DigitA = dateText.split(":"); // *8*, *07*, *28*
+  if (DigitA[0] == "00") {
+    // 8:07:28
+    if (DigitA[1].match(/0\d/i)) {
+      // 20:00
+      if (DigitA[1].match(/00/i)) {
+        DigitA[1] = DigitA[1].replace("00", "0");
+        return DigitA[1] + ":" + DigitA[2]; // 20:00
+      }
+      DigitA[1] = DigitA[1].replace("0", "");
+      return DigitA[1] + ":" + DigitA[2]; // 20:00
+    } else {
+      return DigitA[1] + ":" + DigitA[2];
+    }
+  } else {
+    if (DigitA[0][0] == "0") {
+      // removes stuff like 08:07:28
+      return DigitA[0][1] + ":" + DigitA[1] + ":" + DigitA[2];
+    } else {
+      return dateText; // returns values like  8:07:28, 24:03:53. does not touch timestamp
+    }
+  }
+}
+//#endregion
+
+//#region
+function TimestampToDate(timestamp: string) {
+  //1:09:24
+  let T = Array();
+  T = timestamp.split(":");
+  let date = new Date();
+  date.setHours(0, 0, 0);
+  if (T.length == 3) {
+    date.setHours(T[0]);
+    date.setMinutes(T[1]);
+    date.setSeconds(T[2]);
+    return date;
+  } else {
+    date.setMinutes(T[0]);
+    date.setSeconds(T[1]);
+    return date;
+  }
+}
+
+//#endregion
+
 //#region ErrorMessage() makes an alert from data
 // Error messages out an alert
 function ErrorMessage(string, Err) {
@@ -655,10 +840,12 @@ function ErrorMessage(string, Err) {
 }
 //#endregion
 
-function parseISOString(s) {
-  var b = s.split(/\D+/);
+//#region parseISOString(Isostring) turns an iso String of a date into a Date object.
+function parseISOString(Isostring) {
+  var b = Isostring.split(/\D+/);
   return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
 }
+//#endregion
 
 // needs a VALID Twitch App Auth Token
 //#region validateToken() Validates Token if sucessful returns 1 if not 0
@@ -719,4 +906,5 @@ async function HttpCalling(HttpCall: string) {
     });
   return respon;
 }
+//#endregion
 //#endregion
