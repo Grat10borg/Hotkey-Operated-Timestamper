@@ -139,16 +139,19 @@ TwitchClip.addEventListener("click", async function (event) {
             let LocalSceneTime = Array();
             for (let V = 0; V < MultiDimStreamArr[index].length; V++) {
                 let res = MultiDimStreamArr[V];
-                if (res != undefined) {
-                    for (let i = 0; i < res.length; i++) {
-                        let Timestamp = res[i];
-                        if (Timestamp.match(/▸.*/i)) {
-                            LocalSceneShift.push(Timestamp);
-                            let R = Timestamp.split(" ");
-                            LocalSceneTime.push(R[1]);
-                        }
+                console.log(res);
+                for (let i = 0; i < res.length; i++) {
+                    let Timestamp = res[i];
+                    console.log(Timestamp);
+                    if (Timestamp.match(/▸.*/i)) {
+                        LocalSceneShift.push(Timestamp);
+                        let R = Timestamp.split(" ");
+                        LocalSceneTime.push(R[1]);
                     }
                 }
+                console.log(LocalSceneShift);
+                LocalSceneShift = Array();
+                LocalSceneTime = Array();
             }
             for (let i = 0; i < MultiStreamClips[StreamIndex[index]].length; i++) {
                 TimestampTwitch.push("• " +
@@ -173,11 +176,12 @@ TwitchClip.addEventListener("click", async function (event) {
                 let Timestamp;
                 if (TestHour[0][0] == "0") {
                     Timestamp = to2Time(T[4].substring(1));
+                    Timestamps.push(Timestamp);
                 }
                 else {
                     Timestamp = to2Time(T[4]);
+                    Timestamps.push(Timestamp);
                 }
-                Timestamps.push(Timestamp);
             }
             let CompleteTimestampArr = Array();
             for (let Pie = 0; Pie < Timestamps.length; Pie++) {
@@ -185,9 +189,12 @@ TwitchClip.addEventListener("click", async function (event) {
                 for (let u = 0; u < TimeArr.length; u++) {
                     if (TimeArr[u].match(Reg)) {
                         CompleteTimestampArr.push(TimestampArr[u]);
+                        break;
                     }
                 }
             }
+            console.log(Timestamps);
+            console.log(CompleteTimestampArr);
             if (CompleteTimestampArr.length > 0) {
                 for (let index = 0; index < CompleteTimestampArr.length; index++) {
                     let resArray = CompleteTimestampArr;

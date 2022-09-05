@@ -65,7 +65,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
     let TwitchStreamedDate = Array();
     let FullDateTwitch = Array();
 
-    //#region VOD Sorting 
+    //#region VOD Sorting
     for (let index = 0; index < UserVods["data"].length; index++) {
       if (UserVods["data"][index]["type"] == "highlight") {
         continue; // skip highlights
@@ -88,7 +88,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
     }
     //#endregion
 
-    //#region StreamDate Aprover 
+    //#region StreamDate Aprover
     let Aproved_StreamTime = Array();
     let StreamIndex = Array(); // holds the Aproved index for TwitchStreamedDate
     for (let i = 0; i < TwitchStreamedDate.length; i++) {
@@ -102,7 +102,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
     }
     //#endregion
 
-    //#region Acord Title Placer 
+    //#region Acord Title Placer
     // Adds titles to acord buttons for easy seeing stream timestamps.
     // Also removes some of the less useful date data like hours minutes, seconds replaces it with the title of the stream instead.
     for (let index = 0; index < Aproved_StreamTime.length; index++) {
@@ -113,10 +113,10 @@ TwitchClip.addEventListener("click", async function (event: any) {
         UserVods["data"][StreamIndex[index]]["title"]
       }`;
     }
-//#endregion
+    //#endregion
 
     // Getting clips from 35 days ago to today.
-    //#region Setting up 
+    //#region Setting up
     let d = new Date();
     let RFCdato = new Date();
     RFCdato.setDate(RFCdato.getDate() - 35); // takes a month worth of clips
@@ -214,24 +214,29 @@ TwitchClip.addEventListener("click", async function (event: any) {
       let LocalSceneShift = Array();
       let TimeTwitch = Array();
       let LocalSceneTime = Array();
-
+      
       // get Clip Offset but should also get Start Creative or Scene shift timestamps.
       //#region Getting Local Scene Shift timestamps
       // get Local Timestamps for scenes
+
       for (let V = 0; V < MultiDimStreamArr[index].length; V++) {
         let res = MultiDimStreamArr[V];
-        if (res != undefined) {
-          // for some reason turns op undefinded sometimes, isnt a BIIG problem so just a HOTfix but fix this later somehow
-          for (let i = 0; i < res.length; i++) {
-            let Timestamp = res[i]; // String with timestamp
-            if (Timestamp.match(/▸.*/i)) {
-              LocalSceneShift.push(Timestamp);
-              let R = Timestamp.split(" ");
-              LocalSceneTime.push(R[1]);
-            }
+        console.log(res);
+        // for some reason turns op undefinded sometimes, isnt a BIIG problem so just a HOTfix but fix this later somehow
+        for (let i = 0; i < res.length; i++) {
+          let Timestamp = res[i]; // String with timestamp
+          console.log(Timestamp);
+          if (Timestamp.match(/▸.*/i)) {
+            LocalSceneShift.push(Timestamp);
+            let R = Timestamp.split(" ");
+            LocalSceneTime.push(R[1]);
           }
         }
+        console.log(LocalSceneShift);
+        LocalSceneShift = Array();
+        LocalSceneTime = Array();
       }
+
       //#endregion
 
       //#region Creating timestamps with titles in a single string
@@ -265,6 +270,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
       for (let q = 0; q < TimestampArr.length; q++) {
         SortTime.push(TimestampToDate(TimeArr[q]));
       }
+
       SortTime.sort();
       //#endregion
       let Timestamps = Array();
@@ -275,11 +281,12 @@ TwitchClip.addEventListener("click", async function (event: any) {
         let Timestamp;
         if (TestHour[0][0] == "0") {
           Timestamp = to2Time(T[4].substring(1)); // skips >0<0:20:40 of the timestamp
+          Timestamps.push(Timestamp);
         } else {
           // keeps extra hour placement for 24 hour timestamps.
           Timestamp = to2Time(T[4]);
+          Timestamps.push(Timestamp);
         }
-        Timestamps.push(Timestamp);
       }
       //#endregion
       let CompleteTimestampArr = Array();
@@ -290,11 +297,14 @@ TwitchClip.addEventListener("click", async function (event: any) {
         for (let u = 0; u < TimeArr.length; u++) {
           if (TimeArr[u].match(Reg)) {
             CompleteTimestampArr.push(TimestampArr[u]);
+            break;
           }
         }
       }
       //#endregion
 
+      console.log(Timestamps);
+      console.log(CompleteTimestampArr);
       //#region Making the new description and placing it into the correct Text area
       // Makes a Working Description
       // If Not Null
@@ -704,7 +714,7 @@ function SetIns(DescArr, DatesArr, string: string) {
 //#endregion
 
 // Small Functions
-//#region V Small Functions V 
+//#region V Small Functions V
 
 //#region AddClipDelay: Function Adds ClipDelay to 0:07:30 like timestamps
 // Adds Clip Delay to a timestamp
