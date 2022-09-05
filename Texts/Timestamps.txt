@@ -1,19 +1,676 @@
-EVENT:START STREAM @ 2022-08-30 19:31:32
+EVENT:START STREAM @ 2022-07-24 19:01:27
 0:00:00 Record Time Marker (not recording)
 0:00:00 Stream Time Marker
 
-EVENT:SCENE CHANGED TO Creative @ 2022-08-30 19:34:16
+EVENT:SCENE CHANGED TO Creative @ 2022-07-24 19:03:31
 0:00:00 Record Time Marker (not recording)
-0:02:44 Stream Time Marker
+0:02:04 Stream Time Marker
 
-HOTKEY:Timestamp placed here @ 2022-08-30 19:35:09
+HOTKEY:Timestamp placed here
 0:00:00 Record Time Marker (not recording)
-0:03:37 Stream Time Marker
+1:29:50 Stream Time Marker
 
-EVENT:SCENE CHANGED TO Outro @ 2022-08-30 20:40:56
+EVENT:SCENE CHANGED TO Outro @ 2022-07-24 20:45:48
 0:00:00 Record Time Marker (not recording)
-1:09:24 Stream Time Marker
+1:44:21 Stream Time Marker
 
-EVENT:STOP STREAM @ 2022-08-30 20:41:57 Stream Time Marker Reset to 0
+EVENT:STOP STREAM @ 2022-07-24 20:46:42 Stream Time Marker Reset to 0
 0:00:00 Record Time Marker (not recording)
 0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2022-07-25 18:59:11
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-07-25 19:02:18
+0:00:00 Record Time Marker (not recording)
+0:03:07 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+0:18:25 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+0:39:05 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+1:01:36 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+1:03:32 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+1:19:48 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+1:32:58 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+1:43:24 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+2:00:37 Stream Time Marker
+
+EVENT:SCENE CHANGED TO BRB @ 2022-07-25 21:06:09
+0:00:00 Record Time Marker (not recording)
+2:06:58 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-07-25 21:10:34
+0:00:00 Record Time Marker (not recording)
+2:11:23 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+2:39:50 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+3:02:05 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+3:07:56 Stream Time Marker
+
+EVENT:SCENE CHANGED TO BRB @ 2022-07-25 23:57:34
+0:00:00 Record Time Marker (not recording)
+4:58:23 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2022-07-25 23:57:35
+0:00:00 Record Time Marker (not recording)
+4:58:24 Stream Time Marker
+
+EVENT:STOP STREAM @ 2022-07-25 23:58:38 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START RECORDING @ 2022-07-28 12:26:29
+0:00:00 Record Time Marker
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:STOP RECORDING @ 2022-07-28 12:27:03 Record Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2022-07-28 19:58:06
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-07-28 20:01:18
+0:00:00 Record Time Marker (not recording)
+0:03:12 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+0:06:52 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+0:37:01 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Creative @ 2022-07-28 20:40:20
+0:00:00 Record Time Marker (not recording)
+0:42:14 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+1:17:31 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-07-28 21:16:57
+0:00:00 Record Time Marker (not recording)
+1:18:51 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+1:40:27 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+1:46:24 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+1:56:29 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+2:17:24 Stream Time Marker
+
+EVENT:SCENE CHANGED TO BRB @ 2022-07-28 22:21:03
+0:00:00 Record Time Marker (not recording)
+2:22:57 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-07-28 22:25:24
+0:00:00 Record Time Marker (not recording)
+2:27:18 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+3:05:33 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+3:30:13 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+3:51:25 Stream Time Marker
+
+HOTKEY:Timestamp placed here
+0:00:00 Record Time Marker (not recording)
+4:25:23 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2022-07-29 00:55:07
+0:00:00 Record Time Marker (not recording)
+4:57:01 Stream Time Marker
+
+EVENT:STOP STREAM @ 2022-07-29 00:56:59 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START RECORDING @ 2022-07-29 10:27:59
+0:00:00 Record Time Marker
+0:00:00 Stream Time Marker (not streaming)
+
+HOTKEY:Timestamp placed here @ 2022-07-29 10:28:03
+0:00:04 Record Time Marker
+0:00:00 Stream Time Marker (not streaming)
+
+HOTKEY:Timestamp placed here @ 2022-07-29 10:28:11
+0:00:12 Record Time Marker
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:SCENE CHANGED TO Creative @ 2022-07-29 10:28:16
+0:00:17 Record Time Marker
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:SCENE CHANGED TO Intro @ 2022-07-29 10:28:20
+0:00:21 Record Time Marker
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:STOP RECORDING @ 2022-07-29 10:28:21 Record Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START RECORDING @ 2022-07-29 10:54:14
+0:00:00 Record Time Marker
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:STOP RECORDING @ 2022-07-29 12:14:30 Record Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:SCENE CHANGED TO Intro @ 2075-02-23 20:10:15
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START RECORDING @ 2022-07-29 20:06:46
+0:00:00 Record Time Marker
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:STOP RECORDING @ 2022-07-29 20:06:56 Record Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START RECORDING @ 2022-07-29 20:07:10
+0:00:00 Record Time Marker
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:STOP RECORDING @ 2022-07-29 20:07:20 Record Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:SCENE CHANGED TO Intro @ 2075-02-24 13:14:41
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2022-07-30 18:57:21
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Creative @ 2022-07-30 19:01:04
+0:00:00 Record Time Marker (not recording)
+0:03:43 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-07-30 19:15:20
+0:00:00 Record Time Marker (not recording)
+0:17:59 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-07-30 19:51:24
+0:00:00 Record Time Marker (not recording)
+0:54:03 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-07-30 21:35:15
+0:00:00 Record Time Marker (not recording)
+2:37:54 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-07-30 21:50:04
+0:00:00 Record Time Marker (not recording)
+2:52:43 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-07-30 22:03:40
+0:00:00 Record Time Marker (not recording)
+3:06:19 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-07-30 22:27:04
+0:00:00 Record Time Marker (not recording)
+3:29:43 Stream Time Marker
+
+EVENT:SCENE CHANGED TO BRB @ 2022-07-30 22:59:29
+0:00:00 Record Time Marker (not recording)
+4:02:08 Stream Time Marker
+
+EVENT:STOP STREAM @ 2022-07-30 23:01:17 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2022-08-01 18:59:22
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-08-01 19:01:55
+0:00:00 Record Time Marker (not recording)
+0:02:33 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2022-08-01 20:11:46
+0:00:00 Record Time Marker (not recording)
+1:12:24 Stream Time Marker
+
+EVENT:STOP STREAM @ 2022-08-01 20:12:48 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START RECORDING @ 2022-08-02 22:58:26
+0:00:00 Record Time Marker
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:STOP RECORDING @ 2022-08-02 22:58:37 Record Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2022-08-03 19:00:31
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Creative @ 2022-08-03 19:03:16
+0:00:00 Record Time Marker (not recording)
+0:02:45 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-03 19:08:43
+0:00:00 Record Time Marker (not recording)
+0:08:12 Stream Time Marker
+
+EVENT:SCENE CHANGED TO BRB @ 2022-08-03 21:00:29
+0:00:00 Record Time Marker (not recording)
+1:59:58 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2022-08-03 21:00:56
+0:00:00 Record Time Marker (not recording)
+2:00:25 Stream Time Marker
+
+EVENT:STOP STREAM @ 2022-08-03 21:01:08 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2022-08-05 19:01:01
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-08-05 19:03:08
+0:00:00 Record Time Marker (not recording)
+0:02:07 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-05 19:20:26
+0:00:00 Record Time Marker (not recording)
+0:19:25 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-05 19:55:00
+0:00:00 Record Time Marker (not recording)
+0:53:59 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-05 19:57:16
+0:00:00 Record Time Marker (not recording)
+0:56:15 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-05 19:57:20
+0:00:00 Record Time Marker (not recording)
+0:56:19 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Creative @ 2022-08-05 20:50:16
+0:00:00 Record Time Marker (not recording)
+1:49:15 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-08-05 20:53:17
+0:00:00 Record Time Marker (not recording)
+1:52:16 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-05 21:23:05
+0:00:00 Record Time Marker (not recording)
+2:22:04 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-05 21:42:13
+0:00:00 Record Time Marker (not recording)
+2:41:12 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-05 21:46:04
+0:00:00 Record Time Marker (not recording)
+2:45:03 Stream Time Marker
+
+EVENT:SCENE CHANGED TO BRB @ 2022-08-05 22:08:49
+0:00:00 Record Time Marker (not recording)
+3:07:48 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-08-05 22:15:11
+0:00:00 Record Time Marker (not recording)
+3:14:10 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-05 22:25:19
+0:00:00 Record Time Marker (not recording)
+3:24:18 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-05 22:43:05
+0:00:00 Record Time Marker (not recording)
+3:42:04 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-05 23:21:16
+0:00:00 Record Time Marker (not recording)
+4:20:15 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2022-08-06 00:57:45
+0:00:00 Record Time Marker (not recording)
+5:56:44 Stream Time Marker
+
+EVENT:STOP STREAM @ 2022-08-06 00:58:50 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2022-08-06 19:01:37
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Creative @ 2022-08-06 19:04:20
+0:00:00 Record Time Marker (not recording)
+0:02:43 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2022-08-06 20:22:47
+0:00:00 Record Time Marker (not recording)
+1:21:10 Stream Time Marker
+
+EVENT:STOP STREAM @ 2022-08-06 20:23:38 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2022-08-09 19:30:37
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-08-09 19:32:57
+0:00:00 Record Time Marker (not recording)
+0:02:20 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-09 20:09:04
+0:00:00 Record Time Marker (not recording)
+0:38:27 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-09 20:09:10
+0:00:00 Record Time Marker (not recording)
+0:38:33 Stream Time Marker
+
+EVENT:SCENE CHANGED TO BRB @ 2022-08-09 21:43:55
+0:00:00 Record Time Marker (not recording)
+2:13:18 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-08-09 21:47:09
+0:00:00 Record Time Marker (not recording)
+2:16:32 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2022-08-09 23:12:26
+0:00:00 Record Time Marker (not recording)
+3:41:49 Stream Time Marker
+
+EVENT:STOP STREAM @ 2022-08-09 23:13:11 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2022-08-12 19:30:17
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-08-12 19:33:18
+0:00:00 Record Time Marker (not recording)
+0:03:01 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-12 20:50:48
+0:00:00 Record Time Marker (not recording)
+1:20:31 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-12 23:01:15
+0:00:00 Record Time Marker (not recording)
+3:30:58 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-12 23:49:39
+0:00:00 Record Time Marker (not recording)
+4:19:22 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-13 00:12:34
+0:00:00 Record Time Marker (not recording)
+4:42:17 Stream Time Marker
+
+EVENT:SCENE CHANGED TO BRB @ 2022-08-13 00:21:08
+0:00:00 Record Time Marker (not recording)
+4:50:51 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2022-08-13 00:21:08
+0:00:00 Record Time Marker (not recording)
+4:50:51 Stream Time Marker
+
+EVENT:STOP STREAM @ 2022-08-13 00:22:07 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2022-08-14 19:29:41
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-08-14 19:32:18
+0:00:00 Record Time Marker (not recording)
+0:02:37 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-14 19:53:30
+0:00:00 Record Time Marker (not recording)
+0:23:49 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-14 20:11:20
+0:00:00 Record Time Marker (not recording)
+0:41:39 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-14 20:11:25
+0:00:00 Record Time Marker (not recording)
+0:41:44 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-14 21:07:30
+0:00:00 Record Time Marker (not recording)
+1:37:49 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2022-08-14 21:21:54
+0:00:00 Record Time Marker (not recording)
+1:52:13 Stream Time Marker
+
+EVENT:STOP STREAM @ 2022-08-14 21:23:49 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START RECORDING @ 2022-08-17 16:41:02
+0:00:00 Record Time Marker
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:STOP RECORDING @ 2022-08-17 16:41:34 Record Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2022-08-18 19:31:35
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Creative @ 2022-08-18 19:34:03
+0:00:00 Record Time Marker (not recording)
+0:02:28 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-18 20:59:26
+0:00:00 Record Time Marker (not recording)
+1:27:51 Stream Time Marker
+
+EVENT:SCENE CHANGED TO BRB @ 2022-08-18 21:54:20
+0:00:00 Record Time Marker (not recording)
+2:22:45 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2022-08-18 21:54:20
+0:00:00 Record Time Marker (not recording)
+2:22:45 Stream Time Marker
+
+EVENT:STOP STREAM @ 2022-08-18 21:55:20 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START RECORDING @ 2022-08-21 17:16:05
+0:00:00 Record Time Marker
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:STOP RECORDING @ 2022-08-21 17:16:15 Record Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START RECORDING @ 2022-08-21 17:16:38
+0:00:00 Record Time Marker
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:STOP RECORDING @ 2022-08-21 17:17:08 Record Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2022-08-22 19:30:26
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Creative @ 2022-08-22 19:32:33
+0:00:00 Record Time Marker (not recording)
+0:02:07 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-22 21:14:23
+0:00:00 Record Time Marker (not recording)
+1:43:57 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-08-22 21:14:44
+0:00:00 Record Time Marker (not recording)
+1:44:18 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-22 21:15:51
+0:00:00 Record Time Marker (not recording)
+1:45:25 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-22 21:22:12
+0:00:00 Record Time Marker (not recording)
+1:51:46 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-22 21:32:42
+0:00:00 Record Time Marker (not recording)
+2:02:16 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-22 21:38:28
+0:00:00 Record Time Marker (not recording)
+2:08:02 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-22 21:39:16
+0:00:00 Record Time Marker (not recording)
+2:08:50 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-22 21:43:30
+0:00:00 Record Time Marker (not recording)
+2:13:04 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-22 21:45:00
+0:00:00 Record Time Marker (not recording)
+2:14:34 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-22 21:56:59
+0:00:00 Record Time Marker (not recording)
+2:26:33 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-22 22:01:31
+0:00:00 Record Time Marker (not recording)
+2:31:05 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-22 22:18:00
+0:00:00 Record Time Marker (not recording)
+2:47:34 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2022-08-22 22:23:54
+0:00:00 Record Time Marker (not recording)
+2:53:28 Stream Time Marker
+
+EVENT:STOP STREAM @ 2022-08-22 22:24:30 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2022-08-26 19:29:28
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-08-26 19:31:41
+0:00:00 Record Time Marker (not recording)
+0:02:13 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Creative @ 2022-08-26 19:32:22
+0:00:00 Record Time Marker (not recording)
+0:02:54 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-08-26 19:33:10
+0:00:00 Record Time Marker (not recording)
+0:03:42 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Creative @ 2022-08-26 19:41:54
+0:00:00 Record Time Marker (not recording)
+0:12:26 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2022-08-26 19:43:24
+0:00:00 Record Time Marker (not recording)
+0:13:56 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-26 19:56:23
+0:00:00 Record Time Marker (not recording)
+0:26:56 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-26 20:08:03
+0:00:00 Record Time Marker (not recording)
+0:38:35 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-26 20:08:08
+0:00:00 Record Time Marker (not recording)
+0:38:40 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-26 20:21:55
+0:00:00 Record Time Marker (not recording)
+0:52:27 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-26 20:33:10
+0:00:00 Record Time Marker (not recording)
+1:03:42 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2022-08-26 20:39:43
+0:00:00 Record Time Marker (not recording)
+1:10:15 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2022-08-26 20:50:07
+0:00:00 Record Time Marker (not recording)
+1:20:39 Stream Time Marker
+
+EVENT:STOP STREAM @ 2022-08-26 20:51:07 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
