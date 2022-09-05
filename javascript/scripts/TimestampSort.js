@@ -137,6 +137,8 @@ TwitchClip.addEventListener("click", async function (event) {
             let LocalSceneShift = Array();
             let TimeTwitch = Array();
             let LocalSceneTime = Array();
+            let LocalSceneShifttemp = Array();
+            let LocalSceneTimetemp = Array();
             for (let V = 0; V < MultiDimStreamArr[index].length; V++) {
                 let res = MultiDimStreamArr[V];
                 console.log(res);
@@ -150,6 +152,8 @@ TwitchClip.addEventListener("click", async function (event) {
                     }
                 }
                 console.log(LocalSceneShift);
+                LocalSceneShifttemp = LocalSceneShift;
+                LocalSceneTimetemp = LocalSceneTime;
                 LocalSceneShift = Array();
                 LocalSceneTime = Array();
             }
@@ -162,8 +166,8 @@ TwitchClip.addEventListener("click", async function (event) {
             }
             let TimestampArr = Array();
             let TimeArr = Array();
-            TimestampArr = LocalSceneShift.concat(TimestampTwitch);
-            TimeArr = LocalSceneTime.concat(TimeTwitch);
+            TimestampArr = LocalSceneShifttemp.concat(TimestampTwitch);
+            TimeArr = LocalSceneTimetemp.concat(TimeTwitch);
             let SortTime = Array();
             for (let q = 0; q < TimestampArr.length; q++) {
                 SortTime.push(TimestampToDate(TimeArr[q]));
@@ -195,6 +199,7 @@ TwitchClip.addEventListener("click", async function (event) {
             }
             console.log(Timestamps);
             console.log(CompleteTimestampArr);
+            console.log(LocalSceneShift);
             if (CompleteTimestampArr.length > 0) {
                 for (let index = 0; index < CompleteTimestampArr.length; index++) {
                     let resArray = CompleteTimestampArr;

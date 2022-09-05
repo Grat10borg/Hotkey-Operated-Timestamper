@@ -218,7 +218,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
       // get Clip Offset but should also get Start Creative or Scene shift timestamps.
       //#region Getting Local Scene Shift timestamps
       // get Local Timestamps for scenes
-
+      let LocalSceneShifttemp = Array();
+      let LocalSceneTimetemp = Array();
       for (let V = 0; V < MultiDimStreamArr[index].length; V++) {
         let res = MultiDimStreamArr[V];
         console.log(res);
@@ -233,6 +234,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
           }
         }
         console.log(LocalSceneShift);
+        LocalSceneShifttemp = LocalSceneShift;
+        LocalSceneTimetemp =LocalSceneTime;
         LocalSceneShift = Array();
         LocalSceneTime = Array();
       }
@@ -260,8 +263,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
       // set timestamp arrays into one big one that we have to sort.
       let TimestampArr = Array();
       let TimeArr = Array();
-      TimestampArr = LocalSceneShift.concat(TimestampTwitch);
-      TimeArr = LocalSceneTime.concat(TimeTwitch);
+      TimestampArr = LocalSceneShifttemp.concat(TimestampTwitch);
+      TimeArr = LocalSceneTimetemp.concat(TimeTwitch);
 
       // sort timestamps into correct sorting
       // fun fact the indexes are named: Q,T,Pie,u because thats what u are :)
@@ -305,6 +308,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
 
       console.log(Timestamps);
       console.log(CompleteTimestampArr);
+      console.log(LocalSceneShift);
       //#region Making the new description and placing it into the correct Text area
       // Makes a Working Description
       // If Not Null
