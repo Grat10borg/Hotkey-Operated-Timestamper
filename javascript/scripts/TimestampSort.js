@@ -4,7 +4,6 @@ let TimestampTxt = document.getElementById("TimestampTxt");
 let RawTxt = TimestampTxt.innerHTML;
 let HotV = "V-1.0";
 var AppAcessToken = "bzs6p3k7o39u8bv6y3hotdi1dszdlw";
-let client_id2 = 0;
 var AclientId = "";
 let StreamerName = "grat_grot10_berg";
 var TwitchConnected = false;

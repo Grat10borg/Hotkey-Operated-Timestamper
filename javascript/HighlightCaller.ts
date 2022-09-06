@@ -36,9 +36,7 @@ form.addEventListener(
       // sets default value if none is given
       viewCount = 1;
     }
-
-    //let Id = form.SelectChannel.options[form.SelectChannel.selectedIndex].value;
-
+    
     // Tests if start date is an aproved date, else print error
     try {
       date = date.toISOString();

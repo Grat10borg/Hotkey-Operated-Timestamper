@@ -1,0 +1,6 @@
+[TwitchApiKey] "Apikeyhere",
+[StreamerUserName] "grat_grot10_berg",
+[YoutubeClientID] "YTClientIDhere",
+[YoutubeApiKey] "YTAPIKeyhere",
+[ClipOffset] "26",
+[TimestampPath] "text/timestamps.txt",

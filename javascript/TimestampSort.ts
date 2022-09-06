@@ -6,7 +6,6 @@ let HotV = "V-1.0"; // the version of H.o.t
 
 // Get these from Files in the furture
 var AppAcessToken = "bzs6p3k7o39u8bv6y3hotdi1dszdlw" as string;
-let client_id2 = 0 as number;
 var AclientId = "" as string;
 
 let StreamerName = "grat_grot10_berg" as string;
@@ -18,8 +17,6 @@ var StreamDatesArr = Array(); // Holds data for when a stream was streamed
 var RecordDatesArr = Array(); // Holds data for when a Recording was recorded
 var DescArrS = new Array(); // holds all the Finished Stream descriptions
 var DescArrR = new Array(); // holds all the Finished Recording descriptions
-
-// Test functions / Master functions
 
 //#region Token Validation.
 validateToken();
@@ -792,7 +789,7 @@ function SectoTimestamp(seconds: any) {
 }
 //#endregion
 
-//#region
+//#region TimestampToDate(Timestamp String) converts a 1:09:24 timestamp into a date time
 function TimestampToDate(timestamp: string) {
   //1:09:24
   let T = Array();
