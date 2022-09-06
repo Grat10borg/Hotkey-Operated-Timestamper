@@ -31,10 +31,12 @@
                         <div class="col me-4">
                             <h4 class="text-center"># Data!</h4>
                             <p id="Stats">Found Number Streams, and Number Recordings</p>
+                            <p id="AccessTokenTime"></p>
                             <form class="row" action="clear.php" method="get">
                                 <p>• currently getting timestamps from: <?php echo $Timestamp_path ?></p>
                                 <input class="py-2 Clear btn TimestampClear" type="submit" value="Clear Timestamps?" />
                             </form>
+                           
                         </div>
                     </div>
 

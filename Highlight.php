@@ -3,10 +3,8 @@ include "includes/html/HtmlDoc.php";
 include "includes/settings.php";
 include "includes/ArrayMaker.php";
 
-AddArrTextArea($begindesc, "DescTxt"); // Adds basic description
-AddArrTextArea($intros, "IntroTxt");    // Import of intro txt
-AddArrTextArea($socialLinks, "SocialTxt"); // social media txt 
-AddArrTextArea($Credits, "CreditsTxt"); // credits for songs bg and such
+AddArrTextArea($BeforeDesc, "BeforeDesc"); // Text placed before any timestamps
+AddArrTextArea($AfterDesc, "AfterDesc"); // Text placed after any timestamps.
 ?>
 
 <body>

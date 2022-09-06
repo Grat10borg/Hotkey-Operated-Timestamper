@@ -116,14 +116,6 @@ TwitchClip.addEventListener("click", async function (event) {
         }
         for (let index = 0; index < TwitchStreamedDate.length; index++) {
             let Desc = document.getElementById(`myInput${index}`);
-            let res = document.getElementById("DescTxt");
-            let res1 = document.getElementById("IntroTxt");
-            let res2 = document.getElementById("SocialTxt");
-            let res3 = document.getElementById("CreditsTxt");
-            let DescTxt = res.innerHTML;
-            let IntroTxt = res1.innerHTML;
-            let SocialTxt = res2.innerHTML;
-            let CreditsTxt = res3.innerHTML;
             var NewDesc = "";
             if (Desc == null) {
                 continue;
@@ -141,17 +133,17 @@ TwitchClip.addEventListener("click", async function (event) {
             let LocalSceneTimetemp = Array();
             for (let V = 0; V < MultiDimStreamArr[index].length; V++) {
                 let res = MultiDimStreamArr[V];
-                console.log(res);
+                if (res == undefined) {
+                    continue;
+                }
                 for (let i = 0; i < res.length; i++) {
                     let Timestamp = res[i];
-                    console.log(Timestamp);
                     if (Timestamp.match(/▸.*/i)) {
                         LocalSceneShift.push(Timestamp);
                         let R = Timestamp.split(" ");
                         LocalSceneTime.push(R[1]);
                     }
                 }
-                console.log(LocalSceneShift);
                 LocalSceneShifttemp = LocalSceneShift;
                 LocalSceneTimetemp = LocalSceneTime;
                 LocalSceneShift = Array();
@@ -197,27 +189,21 @@ TwitchClip.addEventListener("click", async function (event) {
                     }
                 }
             }
-            console.log(Timestamps);
-            console.log(CompleteTimestampArr);
-            console.log(LocalSceneShift);
             if (CompleteTimestampArr.length > 0) {
                 for (let index = 0; index < CompleteTimestampArr.length; index++) {
+                    let res = document.getElementById("BeforeDesc");
+                    let res1 = document.getElementById("AfterDesc");
+                    let BeforeDesc = res.innerHTML;
+                    let AfterDesc = res1.innerHTML;
                     let resArray = CompleteTimestampArr;
-                    NewDesc = DescTxt + "\n\n";
+                    NewDesc = BeforeDesc + "\n\n";
                     NewDesc =
                         NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
                     for (let i = 0; i < resArray.length; i++) {
                         let timestamp = resArray[i];
                         NewDesc = NewDesc + timestamp + "\n";
                     }
-                    NewDesc =
-                        NewDesc +
-                            "\n" +
-                            IntroTxt +
-                            "\n\n" +
-                            SocialTxt +
-                            "\n\n" +
-                            CreditsTxt;
+                    NewDesc = NewDesc + "\n" + AfterDesc;
                     Desc.innerHTML = NewDesc;
                     NewDesc = "";
                 }
@@ -326,19 +312,15 @@ function CutOuts(RawTxt) {
     }
 }
 function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
-    let res = document.getElementById("DescTxt");
-    let res1 = document.getElementById("IntroTxt");
-    let res2 = document.getElementById("SocialTxt");
-    let res3 = document.getElementById("CreditsTxt");
-    let DescTxt = res.innerHTML;
-    let IntroTxt = res1.innerHTML;
-    let SocialTxt = res2.innerHTML;
-    let CreditsTxt = res3.innerHTML;
+    let res = document.getElementById("BeforeDesc");
+    let res1 = document.getElementById("AfterDesc");
+    let BeforeDesc = res.innerHTML;
+    let AfterDesc = res1.innerHTML;
     var Description = "";
     if (MultiDimStreamArr.length > 0) {
         for (let index = 0; index < MultiDimStreamArr.length; index++) {
             let resArray = MultiDimStreamArr[index];
-            Description = DescTxt + "\n\n";
+            Description = BeforeDesc + "\n\n";
             Description =
                 Description +
                     `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${Clipoffset})\n`;
@@ -346,14 +328,7 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
                 let timestamp = resArray[i];
                 Description = Description + timestamp + "\n";
             }
-            Description =
-                Description +
-                    "\n" +
-                    IntroTxt +
-                    "\n\n" +
-                    SocialTxt +
-                    "\n\n" +
-                    CreditsTxt;
+            Description = Description + "\n" + AfterDesc;
             DescArrS.push(Description);
             Description = "";
         }
@@ -362,19 +337,12 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
     else if (MultiDimRecordArr.length > 0) {
         for (let index = 0; index < MultiDimRecordArr.length; index++) {
             let resArray = MultiDimRecordArr[index];
-            Description = DescTxt + "\n\n";
+            Description = BeforeDesc + "\n\n";
             for (let i = 0; i < resArray.length; i++) {
                 let timestamp = resArray[i];
                 Description = Description + timestamp + "\n";
             }
-            Description =
-                Description +
-                    "\n\n" +
-                    IntroTxt +
-                    "\n\n" +
-                    SocialTxt +
-                    "\n\n" +
-                    CreditsTxt;
+            Description = Description + "\n" + AfterDesc;
             DescArrR.push(Description);
             Description = "";
         }
@@ -640,6 +608,11 @@ async function validateToken() {
             AclientId = resp.client_id;
             TwitchConnected = true;
             console.log("Token Validated Sucessfully");
+            console.log(resp);
+            let date = new Date();
+            date.setSeconds(resp.expires_in);
+            let p = document.getElementById("AccessTokenTime");
+            p.innerHTML = `• Your Token will Expire on: \n ${date.toString()}`;
             return 1;
         }
         console.log("unexpected Output");

@@ -3,17 +3,11 @@ var TclientId = "uqiitin0qzty2b0xeet7bczpfouppc"; // This is made in the: https:
 var Tredirect = "http://localhost/Hotkey-Operated-Timestamper/Highlight.php"; // also change redirect in the Twitch dev area: https://dev.twitch.tv/console/apps.. Remember twiches redirect and Yours need to Match
 var TappAcess = "bzs6p3k7o39u8bv6y3hotdi1dszdlw";
 
-let res = document.getElementById("DescTxt") as HTMLInputElement;
-let res1 = document.getElementById("IntroTxt") as HTMLInputElement;
-let res2 = document.getElementById("SocialTxt") as HTMLInputElement;
-let res3 = document.getElementById("CreditsTxt") as HTMLInputElement;
+let res = document.getElementById("BeforeDesc") as HTMLInputElement;
+let res1 = document.getElementById("AfterDesc") as HTMLInputElement;
 
-let Desc1 = res.innerHTML;
-let intro = res1.innerHTML;
-let socialLinks = res2.innerHTML;
-let Credits = res3.innerHTML;
-
-console.log(intro);
+let BeforeDesc = res.innerHTML;
+let AfterDesc = res1.innerHTML;
 
 // Website Data Handling
 
@@ -470,7 +464,7 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   let x = 0;
   duration = 0;
   let text = ""; // initialzes vars for getting duration
-  text = text + Desc1 + "\n\n"; // adds the description
+  text = text + BeforeDesc + "\n\n"; // adds the description
   textAreaDiv.innerHTML = ""; // removes ALL previous links
   for (let i = 0; i < sortcliped.length; i++) {
     // duration getter, + highlight description maker
@@ -525,9 +519,7 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   });
 
   text = text.slice(0, text.length - 1);
-  text = text + "\n\n" + intro + "\n\n";
-  text = text + socialLinks + "\n\n";
-  text = text + Credits;
+  text = text + "\n\n" + AfterDesc;
   Desc.textContent = text;
 
   // Update text counter on set in

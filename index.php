@@ -1,5 +1,4 @@
 <?php
-
 include "includes/ArrayMaker.php";
 include "includes/html/HtmlDoc.php"; // makes the DoctypeHtml, also sets in version num in title 
 include "includes/settings.php"; // general vars things you can change is imported here, like the file root for the txt!
@@ -9,10 +8,8 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
     if ($arrayText != array()) {
         // Javascript
         AddArrTextArea($arrayText, "TimestampTxt"); // Timestamp Txt javascript 
-        AddArrTextArea($begindesc, "DescTxt"); // Adds basic description
-        AddArrTextArea($intros, "IntroTxt");    // Import of intro txt
-        AddArrTextArea($socialLinks, "SocialTxt"); // social media txt 
-        AddArrTextArea($Credits, "CreditsTxt"); // credits for songs bg and such
+        AddArrTextArea($BeforeDesc, "BeforeDesc"); // Text placed before any timestamps
+        AddArrTextArea($AfterDesc, "AfterDesc"); // Text placed after any timestamps.
     } else {
         $error = "File Found. File was empty though.. file at $Timestamp_path did not have content";
     }

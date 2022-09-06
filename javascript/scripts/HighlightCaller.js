@@ -2,15 +2,10 @@
 var TclientId = "uqiitin0qzty2b0xeet7bczpfouppc";
 var Tredirect = "http://localhost/Hotkey-Operated-Timestamper/Highlight.php";
 var TappAcess = "bzs6p3k7o39u8bv6y3hotdi1dszdlw";
-let res = document.getElementById("DescTxt");
-let res1 = document.getElementById("IntroTxt");
-let res2 = document.getElementById("SocialTxt");
-let res3 = document.getElementById("CreditsTxt");
-let Desc1 = res.innerHTML;
-let intro = res1.innerHTML;
-let socialLinks = res2.innerHTML;
-let Credits = res3.innerHTML;
-console.log(intro);
+let res = document.getElementById("BeforeDesc");
+let res1 = document.getElementById("AfterDesc");
+let BeforeDesc = res.innerHTML;
+let AfterDesc = res1.innerHTML;
 var Id;
 var form = document.querySelector("#HighlighForm");
 var ErrorDiv = document.getElementById("ErrorDiv");
@@ -277,7 +272,7 @@ function ClipSorter(Clips, game_id, viewCount) {
     let x = 0;
     duration = 0;
     let text = "";
-    text = text + Desc1 + "\n\n";
+    text = text + BeforeDesc + "\n\n";
     textAreaDiv.innerHTML = "";
     for (let i = 0; i < sortcliped.length; i++) {
         if (i == 0) {
@@ -312,9 +307,7 @@ function ClipSorter(Clips, game_id, viewCount) {
         text = text + ` ${element},`;
     });
     text = text.slice(0, text.length - 1);
-    text = text + "\n\n" + intro + "\n\n";
-    text = text + socialLinks + "\n\n";
-    text = text + Credits;
+    text = text + "\n\n" + AfterDesc;
     Desc.textContent = text;
     let Charcount = text.length;
     let p = document.querySelector(`#CharCount0`);

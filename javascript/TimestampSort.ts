@@ -187,17 +187,6 @@ TwitchClip.addEventListener("click", async function (event: any) {
     for (let index = 0; index < TwitchStreamedDate.length; index++) {
       // TextArea
       let Desc = document.getElementById(`myInput${index}`) as HTMLInputElement;
-
-      // TXT
-      let res = document.getElementById("DescTxt") as HTMLInputElement;
-      let res1 = document.getElementById("IntroTxt") as HTMLInputElement;
-      let res2 = document.getElementById("SocialTxt") as HTMLInputElement;
-      let res3 = document.getElementById("CreditsTxt") as HTMLInputElement;
-
-      let DescTxt = res.innerHTML;
-      let IntroTxt = res1.innerHTML;
-      let SocialTxt = res2.innerHTML;
-      let CreditsTxt = res3.innerHTML;
       var NewDesc = ""; // Finished Description Var
 
       // Handling of BAD data
@@ -214,7 +203,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
       let LocalSceneShift = Array();
       let TimeTwitch = Array();
       let LocalSceneTime = Array();
-      
+
       // get Clip Offset but should also get Start Creative or Scene shift timestamps.
       //#region Getting Local Scene Shift timestamps
       // get Local Timestamps for scenes
@@ -222,20 +211,20 @@ TwitchClip.addEventListener("click", async function (event: any) {
       let LocalSceneTimetemp = Array();
       for (let V = 0; V < MultiDimStreamArr[index].length; V++) {
         let res = MultiDimStreamArr[V];
-        console.log(res);
-        // for some reason turns op undefinded sometimes, isnt a BIIG problem so just a HOTfix but fix this later somehow
+        if (res == undefined) {
+          // for some reason keeps running into indexes it doesnt have? this fixes it but MAyyyy be not the best fix
+          continue;
+        }
         for (let i = 0; i < res.length; i++) {
           let Timestamp = res[i]; // String with timestamp
-          console.log(Timestamp);
           if (Timestamp.match(/▸.*/i)) {
             LocalSceneShift.push(Timestamp);
             let R = Timestamp.split(" ");
             LocalSceneTime.push(R[1]);
           }
         }
-        console.log(LocalSceneShift);
         LocalSceneShifttemp = LocalSceneShift;
-        LocalSceneTimetemp =LocalSceneTime;
+        LocalSceneTimetemp = LocalSceneTime;
         LocalSceneShift = Array();
         LocalSceneTime = Array();
       }
@@ -306,32 +295,27 @@ TwitchClip.addEventListener("click", async function (event: any) {
       }
       //#endregion
 
-      console.log(Timestamps);
-      console.log(CompleteTimestampArr);
-      console.log(LocalSceneShift);
       //#region Making the new description and placing it into the correct Text area
       // Makes a Working Description
       // If Not Null
       if (CompleteTimestampArr.length > 0) {
         // if has Values
         for (let index = 0; index < CompleteTimestampArr.length; index++) {
+          let res = document.getElementById("BeforeDesc") as HTMLInputElement;
+          let res1 = document.getElementById("AfterDesc") as HTMLInputElement;
+
+          let BeforeDesc = res.innerHTML;
+          let AfterDesc = res1.innerHTML;
           let resArray = CompleteTimestampArr;
 
-          NewDesc = DescTxt + "\n\n";
+          NewDesc = BeforeDesc + "\n\n";
           NewDesc =
             NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
           for (let i = 0; i < resArray.length; i++) {
             let timestamp = resArray[i];
             NewDesc = NewDesc + timestamp + "\n";
           }
-          NewDesc =
-            NewDesc +
-            "\n" +
-            IntroTxt +
-            "\n\n" +
-            SocialTxt +
-            "\n\n" +
-            CreditsTxt;
+          NewDesc = NewDesc + "\n" + AfterDesc;
           Desc.innerHTML = NewDesc;
           NewDesc = "";
         }
@@ -473,15 +457,11 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
   // Set in All the timestamps correctly
 
   // Getting More Txts from PHP and ./Texts
-  let res = document.getElementById("DescTxt") as HTMLInputElement;
-  let res1 = document.getElementById("IntroTxt") as HTMLInputElement;
-  let res2 = document.getElementById("SocialTxt") as HTMLInputElement;
-  let res3 = document.getElementById("CreditsTxt") as HTMLInputElement;
+  let res = document.getElementById("BeforeDesc") as HTMLInputElement;
+  let res1 = document.getElementById("AfterDesc") as HTMLInputElement;
 
-  let DescTxt = res.innerHTML;
-  let IntroTxt = res1.innerHTML;
-  let SocialTxt = res2.innerHTML;
-  let CreditsTxt = res3.innerHTML;
+  let BeforeDesc = res.innerHTML;
+  let AfterDesc = res1.innerHTML;
   var Description = ""; // Finished Description Var
 
   // Makes a Working Description
@@ -492,7 +472,7 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
     for (let index = 0; index < MultiDimStreamArr.length; index++) {
       let resArray = MultiDimStreamArr[index];
 
-      Description = DescTxt + "\n\n";
+      Description = BeforeDesc + "\n\n";
       Description =
         Description +
         `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${Clipoffset})\n`;
@@ -500,14 +480,7 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
         let timestamp = resArray[i];
         Description = Description + timestamp + "\n";
       }
-      Description =
-        Description +
-        "\n" +
-        IntroTxt +
-        "\n\n" +
-        SocialTxt +
-        "\n\n" +
-        CreditsTxt;
+      Description = Description + "\n" + AfterDesc;
       DescArrS.push(Description);
       Description = "";
     }
@@ -517,19 +490,12 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
     for (let index = 0; index < MultiDimRecordArr.length; index++) {
       let resArray = MultiDimRecordArr[index];
 
-      Description = DescTxt + "\n\n";
+      Description = BeforeDesc + "\n\n";
       for (let i = 0; i < resArray.length; i++) {
         let timestamp = resArray[i];
         Description = Description + timestamp + "\n";
       }
-      Description =
-        Description +
-        "\n\n" +
-        IntroTxt +
-        "\n\n" +
-        SocialTxt +
-        "\n\n" +
-        CreditsTxt;
+      Description = Description + "\n" + AfterDesc;
       DescArrR.push(Description);
       Description = "";
     }
@@ -884,6 +850,11 @@ async function validateToken() {
         AclientId = resp.client_id;
         TwitchConnected = true;
         console.log("Token Validated Sucessfully");
+        console.log(resp);
+        let date = new Date();
+        date.setSeconds(resp.expires_in);
+        let p = document.getElementById("AccessTokenTime") as HTMLElement;
+        p.innerHTML =`• Your Token will Expire on: \n ${date.toString()}`;
         return 1;
       }
       console.log("unexpected Output");
