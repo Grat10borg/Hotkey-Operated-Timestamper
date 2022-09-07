@@ -148,8 +148,8 @@ AddP($YTAPIKey, "YTKey");
         </div>
     </main>
     <script src="https://apis.google.com/js/api.js"></script>
-    <script src="javascript/scripts/script+Youtube.js"></script>
-    <script src="javascript/scripts//HighlightCaller.js"></script>
+    <script src="javascript/script+Youtube.js"></script>
+    <script src="javascript/HighlightCaller.js"></script>
     <script src="CSS+SCSS/bootstrap/js/bootstrap.js"></script>
 </body>
 

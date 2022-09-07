@@ -50,8 +50,8 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
     <!-- inporting of Javascript -->
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="CSS+SCSS/bootstrap/js/bootstrap.js"></script>
-    <script src="javascript/scripts/TimestampSort.js"></script>
-    <script src="javascript/scripts/script+Youtube.js"></script>
+    <script src="javascript/TimestampSort.js"></script>
+    <script src="javascript/script+Youtube.js"></script>
 </body>
 
 </html>
