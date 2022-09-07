@@ -1,20 +1,22 @@
 "use strict";
-var TclientId = "uqiitin0qzty2b0xeet7bczpfouppc";
-var Tredirect = "http://localhost/Hotkey-Operated-Timestamper/Highlight.php";
-var TappAcess = "bzs6p3k7o39u8bv6y3hotdi1dszdlw";
-let res = document.getElementById("BeforeDesc");
-let res1 = document.getElementById("AfterDesc");
-let BeforeDesc = res.innerHTML;
-let AfterDesc = res1.innerHTML;
+let PBeforeDesc = document.getElementById("BeforeDesc");
+let PAfterDesc = document.getElementById("AfterDesc");
+let PTKey = document.getElementById("TwitchKey");
+let BeforeDesc = PBeforeDesc.innerHTML;
+let AfterDesc = PAfterDesc.innerHTML;
+var TappAcess = PTKey.innerHTML;
+let UserId = "";
+let client_id = "";
+validateTToken();
 var Id;
 var form = document.querySelector("#HighlighForm");
 var ErrorDiv = document.getElementById("ErrorDiv");
-form.addEventListener("submit", function (event) {
+form.addEventListener("submit", async function (event) {
     event.preventDefault();
-    let date = new Date(form.date.value);
-    if (date == "Invalid Date") {
-        date = new Date();
-        date.setDate(date.getDate() - 90);
+    let Startdate = new Date(form.date.value);
+    if (Startdate == "Invalid Date") {
+        Startdate = new Date();
+        Startdate.setDate(Startdate.getDate() - 90);
         console.log("start date was not given, getting clips from 90 days ago");
     }
     let endDate = new Date(form.endDate.value);
@@ -24,7 +26,7 @@ form.addEventListener("submit", function (event) {
         viewCount = 1;
     }
     try {
-        date = date.toISOString();
+        Startdate = Startdate.toISOString();
     }
     catch (error) {
         console.log("The Set Date Value was Not allowed");
@@ -38,99 +40,28 @@ form.addEventListener("submit", function (event) {
     else {
         endDate = endDate.toISOString();
     }
-    fetchUser(true, TappAcess, form.SelectChannel.options[form.SelectChannel.selectedIndex].value, date, endDate, game_id, viewCount);
+    let ClipResp = await HttpCaller(`https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${Startdate}&ended_at=${endDate}`);
+    console.log(ClipResp);
+    ClipSorter(ClipResp, game_id, viewCount);
 }, true);
 let ChannelSelect = document.querySelector("#SelectChannel");
-ChannelSelect.addEventListener("change", function () {
-    let value = ChannelSelect.options[ChannelSelect.selectedIndex].value;
-    console.log("Searching for " + value);
+ChannelSelect.addEventListener("change", async function () {
+    let StreamerName = ChannelSelect.options[ChannelSelect.selectedIndex].value;
+    console.log("Searching for " + StreamerName);
     ErrorDiv.innerHTML = "";
-    validateToken2(value);
-});
-let client_id = "";
-function validateToken2(value) {
-    fetch("https://id.twitch.tv/oauth2/validate", {
-        headers: {
-            Authorization: "Bearer " + TappAcess,
-        },
-    })
-        .then((resp) => resp.json())
-        .then((resp) => {
-        if (resp.status) {
-            if (resp.status == 401) {
-                console.log("This token is invalid" + resp.message);
-                return;
-            }
-            console.log("Unexpected output with a status");
-            return;
-        }
-        if (resp.client_id) {
-            client_id = resp.client_id;
-            if (resp.user_id) {
-                fetchUser(false, TappAcess, value, "", "", "", 0);
-            }
-            else {
-                fetchUser(false, TappAcess, value, "", "", "", 0);
-            }
-            return;
-        }
-        console.log("unexpected Output");
-    })
-        .catch((err) => {
-        ErrorMsg("An Error Occured VALIDATING token data", err, "Error");
-        console.log(err);
-        console.log("An Error Occured VALIDATING token data");
-    });
-}
-function fetchUser(submit, access_token, streamerName, date, endDate, game_id, viewCount) {
-    fetch(`https://api.twitch.tv/helix/users?login=${streamerName}`, {
-        headers: {
-            "Client-ID": client_id,
-            Authorization: "Bearer " + TappAcess,
-        },
-    })
-        .then((resp) => resp.json())
-        .then((resp) => {
-        if (submit == true) {
-            Id = resp["data"][0]["id"];
-            FetchCallClip(date, endDate, Id, game_id, viewCount);
-        }
-        else {
-            GetChosenChannelGames(resp["data"][0]["id"]);
-        }
-    })
-        .catch((err) => {
-        ErrorMsg("Could not fetch user Are you sure its spelt correctly?", err, "Error");
-        console.log(err);
-    });
-}
-function GetChosenChannelGames(id) {
+    let UserResp = await HttpCaller(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
+    UserId = UserResp["data"][0]["id"];
     let d = new Date();
     let RFCdato = new Date();
     RFCdato.setDate(RFCdato.getDate() - 90);
-    fetch(`https://api.twitch.tv/helix/clips?broadcaster_id=${id}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`, {
-        headers: {
-            "Client-ID": TclientId,
-            Authorization: "Bearer " + TappAcess,
-        },
-    })
-        .then((response) => response.json())
-        .then((response) => {
-        var GameIds = new Set();
-        for (let index = 0; index < response["data"].length; index++) {
-            GameIds.add(response["data"][index]["game_id"]);
-        }
-        GetGamesFromIds(GameIds);
-    })
-        .catch((err) => {
-        ErrorMsg("Error Logging in try again", err, "Warning");
-        console.log(err);
-    });
-}
-function GetGamesFromIds(Game_ids) {
+    let GameResp = await HttpCaller(`https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`);
+    var GameIds = new Set();
+    for (let index = 0; index < GameResp["data"].length; index++) {
+        GameIds.add(GameResp["data"][index]["game_id"]);
+    }
     let httpcall = "https://api.twitch.tv/helix/games?";
     let index = 0;
-    Game_ids.forEach((Gameid) => {
+    GameIds.forEach((Gameid) => {
         if (index == 0) {
             httpcall = httpcall + "id=" + Gameid;
         }
@@ -139,76 +70,25 @@ function GetGamesFromIds(Game_ids) {
         }
         index++;
     });
-    fetch(`${httpcall}`, {
-        headers: {
-            "Client-ID": TclientId,
-            Authorization: "Bearer " + TappAcess,
-        },
-    })
-        .then((response) => response.json())
-        .then((response) => {
-        let selectboxG = document.getElementById("SelectGame");
-        while (selectboxG.firstChild) {
-            selectboxG.firstChild.remove();
-        }
-        for (let index = 0; index < response["data"].length; index++) {
-            let gameid = response["data"][index]["id"];
-            let gamename = response["data"][index]["name"];
-            let optionsG = document.createElement("option");
-            optionsG.setAttribute("value", gameid);
-            optionsG.append(document.createTextNode(gamename));
-            selectboxG.appendChild(optionsG);
-        }
-        let optionNone = document.createElement("option");
-        optionNone.setAttribute("value", "None");
-        optionNone.append(document.createTextNode("Any Game Id"));
-        selectboxG.appendChild(optionNone);
-        selectboxG.disabled = false;
-    })
-        .catch((err) => {
-        ErrorMsg("Failed to fetch game names from game ids, try again", err, "Warning");
-        console.log(err);
-    });
-}
-function GetUsersBroadcastId(RFCdate, RFCDateEnd, game_id, viewCount) {
-    fetch(`https://api.twitch.tv/helix/users`, {
-        headers: {
-            "Client-ID": TclientId,
-            Authorization: "Bearer " + TappAcess,
-        },
-    })
-        .then((response) => response.json())
-        .then((response) => {
-        console.log("Api Kald Fuldgjort");
-        console.log(response);
-        var arr = response;
-        FetchCallClip(RFCdate, RFCDateEnd, arr["data"]["0"]["id"], game_id, viewCount);
-    })
-        .catch((err) => {
-        ErrorMsg("could not get YOUR username, could not find logged in user's username", err, "Error");
-        console.log(err);
-    });
-}
-function FetchCallClip(RFCdate, RFCDateEnd, Id, game_id, viewCount) {
-    fetch(`https://api.twitch.tv/helix/clips?broadcaster_id=${Id}&first=100&started_at=${RFCdate}&ended_at=${RFCDateEnd}`, {
-        headers: {
-            "Client-ID": TclientId,
-            Authorization: "Bearer " + TappAcess,
-        },
-    })
-        .then((response) => response.json())
-        .then((response) => {
-        let Udata = document.getElementById("user_data");
-        Udata.textContent = "Success";
-        ClipSorter(response, game_id, viewCount);
-    })
-        .catch((err) => {
-        ErrorMsg("Failed in fetching Clips, did you remember to give a Date?", err, "Warning");
-        console.log(err);
-        let Udata = document.getElementById("user_data");
-        Udata.textContent = "Failed getting clips";
-    });
-}
+    let SelectGameResp = await HttpCaller(httpcall);
+    let selectboxG = document.getElementById("SelectGame");
+    while (selectboxG.firstChild) {
+        selectboxG.firstChild.remove();
+    }
+    for (let index = 0; index < SelectGameResp["data"].length; index++) {
+        let gameid = SelectGameResp["data"][index]["id"];
+        let gamename = SelectGameResp["data"][index]["name"];
+        let optionsG = document.createElement("option");
+        optionsG.setAttribute("value", gameid);
+        optionsG.append(document.createTextNode(gamename));
+        selectboxG.appendChild(optionsG);
+    }
+    let optionNone = document.createElement("option");
+    optionNone.setAttribute("value", "None");
+    optionNone.append(document.createTextNode("Any Game Id"));
+    selectboxG.appendChild(optionNone);
+    selectboxG.disabled = false;
+});
 function ClipSorter(Clips, game_id, viewCount) {
     var arrclips = Array();
     let duration = 0;
@@ -300,8 +180,6 @@ function ClipSorter(Clips, game_id, viewCount) {
         rowdiv.append(p);
         textAreaDiv.append(rowdiv);
     }
-    let accordLink = document.querySelector("#accordLink");
-    accordLink.disabled = false;
     text = text + "Clips by:";
     clipCredit.forEach((element) => {
         text = text + ` ${element},`;
@@ -323,16 +201,55 @@ function ClipSorter(Clips, game_id, viewCount) {
     }
     let accorddesc = document.querySelector("#accordDesc");
     accorddesc.disabled = false;
+    let accordLink = document.querySelector("#accordLink");
+    accordLink.disabled = false;
 }
-function ErrorMsg(Msg, systemMsg, color) {
-    let H4 = document.createElement("h4");
-    let p = document.createElement("p");
-    H4.classList.add(`${color}`);
-    p.classList.add(`${color}`);
-    H4.innerHTML = Msg;
-    p.innerText = systemMsg;
-    ErrorDiv.append(H4);
-    ErrorDiv.append(p);
+async function validateTToken() {
+    fetch("https://id.twitch.tv/oauth2/validate", {
+        headers: {
+            Authorization: "Bearer " + TappAcess,
+        },
+    })
+        .then((resp) => resp.json())
+        .then(async (resp) => {
+        if (resp.status) {
+            if (resp.status == 401) {
+                console.log("This token is invalid" + resp.message);
+                return 0;
+            }
+            console.log("Unexpected output with a status");
+            return 0;
+        }
+        if (resp.client_id) {
+            client_id = resp.client_id;
+            console.log("Validated Token");
+            return 1;
+        }
+        console.log("unexpected Output");
+    })
+        .catch((err) => {
+        ErrorMsg("An Error Occured VALIDATING token data", err, "Error");
+        console.log(err);
+        console.log("An Error Occured VALIDATING token data");
+        return 0;
+    });
+}
+async function HttpCaller(HttpCall) {
+    const respon = await fetch(`${HttpCall}`, {
+        headers: {
+            Authorization: "Bearer " + TappAcess,
+            "Client-ID": client_id,
+        },
+    })
+        .then((respon) => respon.json())
+        .then((respon) => {
+        return respon;
+    })
+        .catch((err) => {
+        console.log(err);
+        return err;
+    });
+    return respon;
 }
 function toTime(seconds) {
     let date = new Date();
@@ -363,4 +280,14 @@ function toTime(seconds) {
         dateText = arrayD[0] + ":" + arrayD[1] + ":" + arrayD[2];
     }
     return dateText;
+}
+function ErrorMsg(Msg, systemMsg, color) {
+    let H4 = document.createElement("h4");
+    let p = document.createElement("p");
+    H4.classList.add(`${color}`);
+    p.classList.add(`${color}`);
+    H4.innerHTML = Msg;
+    p.innerText = systemMsg;
+    ErrorDiv.append(H4);
+    ErrorDiv.append(p);
 }

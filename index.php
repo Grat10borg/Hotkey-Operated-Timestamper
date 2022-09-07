@@ -10,6 +10,13 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
         AddArrTextArea($arrayText, "TimestampTxt"); // Timestamp Txt javascript 
         AddArrTextArea($BeforeDesc, "BeforeDesc"); // Text placed before any timestamps
         AddArrTextArea($AfterDesc, "AfterDesc"); // Text placed after any timestamps.
+
+        // Api keys, Settings 
+        AddP($TwitchApiKey, "TwitchKey");
+        AddP($StreamerLogin, "TwitchLogin");
+        AddP($YTClientID, "YTClient");
+        AddP($YTAPIKey, "YTKey");
+        AddP($ClipsOffset, "ClipOffset");
     } else {
         $error = "File Found. File was empty though.. file at $Timestamp_path did not have content";
     }

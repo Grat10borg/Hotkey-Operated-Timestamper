@@ -108,15 +108,16 @@ for (let i = 0; i < StartTextarea.length; i++) {
 
 function CalcChars(event) : any {
     let string = event.target.value;
-   // console.log(string.length);
     return string.length;
 }
 
 
 // YOUTUBE API HANDLING 
-
-var YclientId = "738406360954-727ohtsje2p1se0vngbosd5oot1e601l.apps.googleusercontent.com";
-var YApiKey = "AIzaSyCq512yjXdQLtdUV3n7CzKIe78oDufRovU";
+// gets ID from settings file embeded by PHP
+let Pkey = document.getElementById("YTKey") as HTMLElement;
+let PClient = document.getElementById("YTClient") as HTMLElement;
+var YclientId = PClient.innerHTML;
+var YApiKey = Pkey.innerHTML;
 
 var arrayIds = Array();
 var arrayVidname = Array();
@@ -177,7 +178,6 @@ function GetVideoIds() {
         })
         .then(function(response: any) {
                 // Handle the results here (response.result has the parsed body).
-                console.log("Response", response);
                 var arrayR = response; // response is an array!! but for some reason it doesnt let me dig into it like a normal array
                 for (let index: any = 0; index < arrayR.result.items.length; index++) {
                     arrayIds[index] = arrayR["result"]["items"][`${index}`]["id"]["videoId"];
@@ -191,11 +191,6 @@ function GetVideoIds() {
                     let selectid = document.getElementById('selectId') as HTMLOptionElement;
                     selectid.disabled = false;
                 }
-
-                // console.log(option);
-                // console.log(Selectbox);
-                console.log(arrayIds);
-                console.log(arrayVidname);
             },
             function(err:string) { console.error("Execute error", err);
                                 alert("You havent selected a video, or logged in") });
@@ -228,8 +223,4 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname) {
 
 gapi.load("client:auth2", function() {
     gapi.auth2.init({ client_id: YclientId });
-});
-
-gapi.load("client:auth2", function () {
-    gapi.auth2.init({ client_id: "738406360954-727ohtsje2p1se0vngbosd5oot1e601l.apps.googleusercontent.com" });
 });

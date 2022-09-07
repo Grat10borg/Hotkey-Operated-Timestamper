@@ -6,4 +6,8 @@ function AddArrTextArea($Array, $id)
         echo $line;
     }
     echo "</textarea>";
-}?>
+}
+function AddP($Text, $id) {
+echo "<p hidden id='$id'>$Text</p>";
+}
+?>

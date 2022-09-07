@@ -68,8 +68,10 @@ function CalcChars(event) {
     let string = event.target.value;
     return string.length;
 }
-var YclientId = "738406360954-727ohtsje2p1se0vngbosd5oot1e601l.apps.googleusercontent.com";
-var YApiKey = "AIzaSyCq512yjXdQLtdUV3n7CzKIe78oDufRovU";
+let Pkey = document.getElementById("YTKey");
+let PClient = document.getElementById("YTClient");
+var YclientId = PClient.innerHTML;
+var YApiKey = Pkey.innerHTML;
 var arrayIds = Array();
 var arrayVidname = Array();
 var optionValue = 0;
@@ -113,7 +115,6 @@ function GetVideoIds() {
         ]
     })
         .then(function (response) {
-        console.log("Response", response);
         var arrayR = response;
         for (let index = 0; index < arrayR.result.items.length; index++) {
             arrayIds[index] = arrayR["result"]["items"][`${index}`]["id"]["videoId"];
@@ -126,8 +127,6 @@ function GetVideoIds() {
             let selectid = document.getElementById('selectId');
             selectid.disabled = false;
         }
-        console.log(arrayIds);
-        console.log(arrayVidname);
     }, function (err) {
         console.error("Execute error", err);
         alert("You havent selected a video, or logged in");
@@ -154,7 +153,4 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname) {
 }
 gapi.load("client:auth2", function () {
     gapi.auth2.init({ client_id: YclientId });
-});
-gapi.load("client:auth2", function () {
-    gapi.auth2.init({ client_id: "738406360954-727ohtsje2p1se0vngbosd5oot1e601l.apps.googleusercontent.com" });
 });

@@ -1,14 +1,20 @@
-let Clipoffset = 26; // twitch default
-
-let TimestampTxt = document.getElementById("TimestampTxt") as HTMLInputElement;
-let RawTxt = TimestampTxt.innerHTML;
+// Misc
 let HotV = "V-1.0"; // the version of H.o.t
 
 // Get these from Files in the furture
-var AppAcessToken = "bzs6p3k7o39u8bv6y3hotdi1dszdlw" as string;
-var AclientId = "" as string;
+let TimestampTxt = document.getElementById("TimestampTxt") as HTMLInputElement;
+let PKey = document.getElementById("TwitchKey") as HTMLElement;
+let PClip = document.getElementById("ClipOffset") as HTMLElement;
+let PLogin = document.getElementById("TwitchLogin") as HTMLElement;
 
-let StreamerName = "grat_grot10_berg" as string;
+// Settings
+let RawTxt = TimestampTxt.innerHTML;
+var AppAcessToken = PKey.innerHTML as string;
+let Clipoffset = parseInt(PClip.innerHTML); // twitch default
+let StreamerName = PLogin.innerHTML as string;
+
+// Asigned later 
+var AclientId = "" as string;
 var TwitchConnected = false; // tells if the Twitch HTTP calls should be called or not.
 
 var MultiDimStreamArr = Array(); // Holds Raw Data from txt
@@ -46,6 +52,7 @@ if (CutOuts(RawTxt) == 1) {
 
 // Event handlers
 
+// Twitch Clip Needs A Big Clean up.
 //#region TwitchClip gets twitch clips for your description when clicked
 let TwitchClip = document.getElementById("TwitchClip") as HTMLInputElement;
 

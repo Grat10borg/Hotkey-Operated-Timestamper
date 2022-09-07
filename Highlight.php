@@ -5,6 +5,11 @@ include "includes/ArrayMaker.php";
 
 AddArrTextArea($BeforeDesc, "BeforeDesc"); // Text placed before any timestamps
 AddArrTextArea($AfterDesc, "AfterDesc"); // Text placed after any timestamps.
+
+// Api keys, Settings 
+AddP($TwitchApiKey, "TwitchKey");
+AddP($YTClientID, "YTClient");
+AddP($YTAPIKey, "YTKey");
 ?>
 
 <body>
@@ -66,13 +71,13 @@ AddArrTextArea($AfterDesc, "AfterDesc"); // Text placed after any timestamps.
                         <img class="imgHOTLogo" src="img/H.O.T Mascot Wink.png">
                     </div>
                     <div class="justify-content-center d-flex">
-                    <div>
-                    <h3 class="text-center">Highlight Oriented Timestamper <?php echo $version; ?></h3>
-                    <div id="ErrorDiv"></div>
-                    <p>Highlight Oriented Timestamper was made to help me with collecton and sorting of clips!
-                    <p class="mb-5">it'll Query the clips that fit your parameters and make a description for a YT vid!</p>
-                   
-                    </div>
+                        <div>
+                            <h3 class="text-center">Highlight Oriented Timestamper <?php echo $version; ?></h3>
+                            <div id="ErrorDiv"></div>
+                            <p>Highlight Oriented Timestamper was made to help me with collecton and sorting of clips!
+                            <p class="mb-5">it'll Query the clips that fit your parameters and make a description for a YT vid!</p>
+
+                        </div>
                     </div>
                     <h4># Data!</h4>
                     <div id="DataDiv">
@@ -113,13 +118,13 @@ AddArrTextArea($AfterDesc, "AfterDesc"); // Text placed after any timestamps.
                                     <!-- H.O.T makes a description for the highlight vid here -->
                                     <textarea class="d-flex Textarea form-control" id="myInput0"></textarea>
                                     <div class="d-flex justify-content-left my-3">
-                                        <button class='btn button mx-1 Select' value='0'>Select text <img src='img\TwitchIconsmol.png' class='imgIcon'></button>
-                                        <button class='btn button mx-1 Copy' value='0'>Copy text<img src='img\TwitchIconsmol.png' class='imgIcon'></button>
+                                        <button class='btn button mx-1 Select' value='0'>Select text</button>
+                                        <button class='btn button mx-1 Copy' value='0'>Copy text</button>
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <button class="btn button m-2 authUpload">Connect Youtube!</button>
                                         <select disabled class="col-5 my-1 SelectId" name="SelectId" id="selectId"></select>
-                                        <button class='btn button mx-1 Send' value='0' id='authbtn'>Update YT Vid <img src='img\Youtube.png' class='imgIcon'></button>
+                                        <button class='btn button mx-1 Send' value='0' id='authbtn'>Update YT Vid</button>
                                     </div>
                                     <!-- Add copy paste and youtube button -->
                                 </div>
@@ -142,9 +147,10 @@ AddArrTextArea($AfterDesc, "AfterDesc"); // Text placed after any timestamps.
             </div>
         </div>
     </main>
-<script src="https://apis.google.com/js/api.js"></script>
-<script src="javascript/scripts/script+Youtube.js"></script>
-<script src="javascript/scripts//HighlightCaller.js"></script>
-<script src="CSS+SCSS/bootstrap/js/bootstrap.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="javascript/scripts/script+Youtube.js"></script>
+    <script src="javascript/scripts//HighlightCaller.js"></script>
+    <script src="CSS+SCSS/bootstrap/js/bootstrap.js"></script>
 </body>
+
 </html>
