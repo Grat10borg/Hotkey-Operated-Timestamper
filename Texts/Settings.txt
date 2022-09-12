@@ -3,5 +3,5 @@ Remember the qoutes! if you plan on doing this hacker style. also dont remove th
 [StreamerUserName] "grat_grot10_berg",
 [YoutubeClientID] "738406360954-727ohtsje2p1se0vngbosd5oot1e601l.apps.googleusercontent.com",
 [YoutubeApiKey] "AIzaSyCq512yjXdQLtdUV3n7CzKIe78oDufRovU",
-[ClipOffset] "26",
+[ClipOffset] "27",
 [TimestampPath] "Texts\Timestamps.txt",

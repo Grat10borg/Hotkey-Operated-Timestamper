@@ -1,7 +1,0 @@
-Remember the qoutes! if you plan on doing this hacker style. also dont remove this text
-[TwitchApiKey] "A2ewdas",
-[StreamerUserName] "Login",
-[YoutubeClientID] "YTCLient",
-[YoutubeApiKey] "YTApikey",
-[ClipOffset] "26",
-[TimestampPath] "Texts/Timestmaps.",
