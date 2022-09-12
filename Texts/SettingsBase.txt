@@ -1,7 +1,7 @@
 Remember the qoutes! if you plan on doing this hacker style. also dont remove this text
-[TwitchApiKey] "",
-[StreamerUserName] "",
-[YoutubeClientID] "",
-[YoutubeApiKey] "",
-[ClipOffset] "26",
-[TimestampPath] "Texts\Timestamps.txt",
+[TwitchApiKey] "<TwitchAppAccessToken>",
+[StreamerUserName] "<StreamerLogin>",
+[YoutubeClientID] "<YoutubeClientID-EndsWithapps.googleusercontent.com>",
+[YoutubeApiKey] "<YoutubeApiKey>",
+[ClipOffset] "<NumberOfSecondsforOffset>",
+[TimestampPath] "FilepathToInfowriterTXT",
