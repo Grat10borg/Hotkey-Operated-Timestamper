@@ -20,9 +20,11 @@ include "includes/html/HtmlDoc.php";
         </div>
         <div class="m-5 p-5 mt-0">
             <h3>Settings</h3>
+            <p class="m-2 pt-4">Note: Stuff like the text before or after timestamps can be edited in "Hotkey-Operated-Timestamper\Texts\" AfterTimestamps.txt or BeforeTimestamps.txt</p>
+            <p class="m-2 pt-4 pb-4">Note2: The sugested channels used for the Higlighter can also be edited in the Texts Folder!</p>
             <form class="container" id="Settingform" action="Settings.php" method="POST">
                 <div class="row m-3">
-                    <p id="TwitchKeyP">Your Twictch APP AccessToken</p>
+                    <p id="TwitchKeyP">Your Twitch APP AccessToken</p>
                     <?php
                     if (isset($TwitchApiKey)) {
                         echo "<input value='$TwitchApiKey' class='form-control p-3' placeholder='Something like: bss6p3k7o39u8bv6y3hotdi1dszdlw' name='TwitchKey' type='text' id='TwitchKeyIn'/>";

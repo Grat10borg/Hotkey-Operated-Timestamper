@@ -39,7 +39,6 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
                     <!-- contains the huge images in the middle of the screen plus the Data bar and the Options bar -->
                     <?php include "includes/H.O.T_DescMaker/HtmlTopDescriptionData.php"; ?>
                 </div>
-
             </div>
             <div>
                 <!-- printer of the Clip and descptions in the Textareas -->

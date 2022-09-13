@@ -89,7 +89,6 @@ AddP($YTAPIKey, "YTKey");
                     <!-- Data is set in when the Api is called  -->
                     <p class="text-center" id="DataP">please run a query to get date here!! (. ❛ ᴗ ❛.)</p>
                 </div>
-
                 <div class="accordion mt-4">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">

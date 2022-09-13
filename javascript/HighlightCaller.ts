@@ -343,10 +343,9 @@ for (let i = 0; i < ClipBtns.length; i++) {
 //#endregion
 
 
-//#region IframeBuilder(IframeId: string) // accepts both video_id and login_name
+//#region IframeClipBuilder(IframeId: string) // Accepts Any Link to A Twitch Clip
 // ran when you click submit. sets an Iframe on the website
 function IframClipBuilder(ClipLink: string) {
-  // if ID is a channel: login_name or a video Id: id
   let divPlayer = document.getElementById("IframePlayerLater") as HTMLElement; 
   let menuDiv = document.getElementById("MenuLogoDiv") as HTMLElement; 
   let slug = ClipLink.split("/");
