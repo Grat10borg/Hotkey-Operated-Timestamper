@@ -3,7 +3,6 @@ include "includes/ArrayMaker.php";
 include "includes/settings.php";
 include "includes/html/HtmlDoc.php";
 ?>
-
 <body>
     <main class="container background">
         <div class="row">

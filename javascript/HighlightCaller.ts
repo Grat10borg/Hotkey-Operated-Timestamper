@@ -252,21 +252,27 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 
     // initializing
     let rowdiv = document.createElement("div");
+    let button = document.createElement("button");
     let a = document.createElement("a");
     let p = document.createElement("p");
 
     // set classes
-    rowdiv.classList.add("row", "m-2");
+    rowdiv.classList.add("row", "m-2", "ps-0");
     if (i % 2 == 0) {
       // adds a slightly darker background every Other link
       rowdiv.classList.add("Linkbg");
     }
-    a.classList.add("col-8", "ClipLink"); // uses cool styling
+    button.classList.add("col-3", "p-1", "btn", "HighSubmit", "ClipBtn");
+    button.setAttribute("value", `Btn-${i}`);
+    button.setAttribute("href", "#IframePlayerLater");
+    a.classList.add("col-6", "ClipLink"); // uses cool styling
+    a.setAttribute("id", `Clip-${i}`);
     a.setAttribute("target", "_blank"); // opens in new tab
     a.setAttribute("href", sortcliped[i]["url"]); // sets anchor
-    p.classList.add("col-4", "text-center");
+    p.classList.add("col-3", "text-center");
 
     // set text
+    button.textContent="Play Clip →";
     a.text = ` ‣ Clip ${i + 1} - '${sortcliped[i]["title"]}'`; // sets text
     p.append(
       document.createTextNode(
@@ -275,10 +281,28 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     );
 
     // append data
+    rowdiv.append(button);
     rowdiv.append(a);
     rowdiv.append(p);
     textAreaDiv.append(rowdiv);
   }
+ // Add event handler for watching clips with button clicks
+let ClipBtns = document.querySelectorAll(".ClipBtn");
+for (let i = 0; i < ClipBtns.length; i++) {
+  ClipBtns[i].addEventListener(
+        "click",
+        function(event: any) {
+          console.log(event.target.value);
+          let Id = event.target.value.split("-");
+          console.log(Id);
+          let Link = document.getElementById(`Clip-${Id[1]}`) as HTMLAnchorElement;
+          console.log(Link);
+          IframClipBuilder(Link.href);
+        },
+        true
+    );
+}
+
 //#endregion
   
   //#region Description Making
@@ -316,7 +340,28 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   let accordLink = document.querySelector("#accordLink") as HTMLInputElement;
   accordLink.disabled = false;
 }
+//#endregion
 
+
+//#region IframeBuilder(IframeId: string) // accepts both video_id and login_name
+// ran when you click submit. sets an Iframe on the website
+function IframClipBuilder(ClipLink: string) {
+  // if ID is a channel: login_name or a video Id: id
+  let divPlayer = document.getElementById("IframePlayerLater") as HTMLElement; 
+  let menuDiv = document.getElementById("MenuLogoDiv") as HTMLElement; 
+  let slug = ClipLink.split("/");
+  let Iframe = document.createElement("iframe");
+  Iframe.setAttribute("src", `https://clips.twitch.tv/embed?clip=${slug[3]}&parent=localhost&autoplay=true&muted=true`);
+  Iframe.setAttribute("frameborder", "0");
+  Iframe.setAttribute("allowfullscreen", "true");
+  Iframe.setAttribute("scrolling", "no");
+  Iframe.setAttribute("height", "378");
+  Iframe.setAttribute("width", "620");
+  menuDiv.innerHTML="";// remove logo
+  divPlayer.innerHTML=""; // or old clip
+  divPlayer.append(Iframe);
+  divPlayer.scrollIntoView(); // move view upto player
+}
 //#endregion
 
 // Small functions

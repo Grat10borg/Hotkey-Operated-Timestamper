@@ -19,6 +19,8 @@ var DescArrR = new Array();
 validateToken();
 if (CutOuts(RawTxt) == 1) {
     if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
+        let statsP = document.getElementById("Stats");
+        statsP.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
         if (DomSet() == 1) {
         }
         else {
@@ -611,10 +613,8 @@ async function validateToken() {
             TwitchConnected = true;
             console.log("Token Validated Sucessfully");
             console.log(resp);
-            let date = new Date();
-            date.setSeconds(resp.expires_in);
             let p = document.getElementById("AccessTokenTime");
-            p.innerHTML = `• Your Token will Expire on: \n ${date.toString()}`;
+            p.innerHTML = `• Your Token will Expire in: \n ${resp.expires_in} seconds.`;
             return 1;
         }
         console.log("unexpected Output");

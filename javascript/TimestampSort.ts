@@ -34,6 +34,8 @@ if (CutOuts(RawTxt) == 1) {
   if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
     // Runs SetOps if sucessful run next Method in line
     // Set in Data to Webpage
+    let statsP = document.getElementById("Stats") as HTMLElement;
+    statsP.innerHTML=`• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
     if (DomSet() == 1) {
       // Domset needs to be ran before we call ValidateToken();
     } else {
@@ -284,6 +286,14 @@ TwitchClip.addEventListener("click", async function (event: any) {
           Timestamps.push(Timestamp);
         }
       }
+      // Add Clip Delay later, something Like this 
+      // console.log(Timestamps);
+      // for (let y = 0; y < Timestamps.length; y++) {
+      //   let Timestamp = Timestamps[y];
+      //   Timestamps[y] = AddClipDelay(Timestamp, Clipoffset);
+      // }
+      // console.log(Timestamps);
+
       //#endregion
       let CompleteTimestampArr = Array();
       //#region finding the correct indexs for titles and completing the sorting
@@ -855,10 +865,8 @@ async function validateToken() {
         TwitchConnected = true;
         console.log("Token Validated Sucessfully");
         console.log(resp);
-        let date = new Date();
-        date.setSeconds(resp.expires_in);
         let p = document.getElementById("AccessTokenTime") as HTMLElement;
-        p.innerHTML =`• Your Token will Expire on: \n ${date.toString()}`;
+        p.innerHTML =`• Your Token will Expire in: \n ${resp.expires_in} seconds.`;
         return 1;
       }
       console.log("unexpected Output");

@@ -164,21 +164,39 @@ function ClipSorter(Clips, game_id, viewCount) {
         duration = duration + sortcliped[i]["duration"];
         clipCredit.add(sortcliped[i]["creator_name"]);
         let rowdiv = document.createElement("div");
+        let button = document.createElement("button");
         let a = document.createElement("a");
         let p = document.createElement("p");
-        rowdiv.classList.add("row", "m-2");
+        rowdiv.classList.add("row", "m-2", "ps-0");
         if (i % 2 == 0) {
             rowdiv.classList.add("Linkbg");
         }
-        a.classList.add("col-8", "ClipLink");
+        button.classList.add("col-3", "p-1", "btn", "HighSubmit", "ClipBtn");
+        button.setAttribute("value", `Btn-${i}`);
+        button.setAttribute("href", "#IframePlayerLater");
+        a.classList.add("col-6", "ClipLink");
+        a.setAttribute("id", `Clip-${i}`);
         a.setAttribute("target", "_blank");
         a.setAttribute("href", sortcliped[i]["url"]);
-        p.classList.add("col-4", "text-center");
+        p.classList.add("col-3", "text-center");
+        button.textContent = "Play Clip →";
         a.text = ` ‣ Clip ${i + 1} - '${sortcliped[i]["title"]}'`;
         p.append(document.createTextNode(`${sortcliped[i]["duration"]} sec/s (${toTime(duration)}in all)`));
+        rowdiv.append(button);
         rowdiv.append(a);
         rowdiv.append(p);
         textAreaDiv.append(rowdiv);
+    }
+    let ClipBtns = document.querySelectorAll(".ClipBtn");
+    for (let i = 0; i < ClipBtns.length; i++) {
+        ClipBtns[i].addEventListener("click", function (event) {
+            console.log(event.target.value);
+            let Id = event.target.value.split("-");
+            console.log(Id);
+            let Link = document.getElementById(`Clip-${Id[1]}`);
+            console.log(Link);
+            IframClipBuilder(Link.href);
+        }, true);
     }
     text = text + "Clips by:";
     clipCredit.forEach((element) => {
@@ -203,6 +221,22 @@ function ClipSorter(Clips, game_id, viewCount) {
     accorddesc.disabled = false;
     let accordLink = document.querySelector("#accordLink");
     accordLink.disabled = false;
+}
+function IframClipBuilder(ClipLink) {
+    let divPlayer = document.getElementById("IframePlayerLater");
+    let menuDiv = document.getElementById("MenuLogoDiv");
+    let slug = ClipLink.split("/");
+    let Iframe = document.createElement("iframe");
+    Iframe.setAttribute("src", `https://clips.twitch.tv/embed?clip=${slug[3]}&parent=localhost&autoplay=true&muted=true`);
+    Iframe.setAttribute("frameborder", "0");
+    Iframe.setAttribute("allowfullscreen", "true");
+    Iframe.setAttribute("scrolling", "no");
+    Iframe.setAttribute("height", "378");
+    Iframe.setAttribute("width", "620");
+    menuDiv.innerHTML = "";
+    divPlayer.innerHTML = "";
+    divPlayer.append(Iframe);
+    divPlayer.scrollIntoView();
 }
 async function validateTToken() {
     fetch("https://id.twitch.tv/oauth2/validate", {

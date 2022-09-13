@@ -1,8 +1,6 @@
 var ApiValid: boolean;
 let Errors = false;
 
-
-
 let ClipOffset = document.getElementById("ClipOffsetIn") as HTMLInputElement;
 ClipOffset.addEventListener("keyup", function(event) {
     if (isFinite(parseInt(ClipOffset.value)) == false) {
