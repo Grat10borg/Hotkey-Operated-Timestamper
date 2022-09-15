@@ -50,3 +50,18 @@ EVENT:STOP STREAM @ 2022-09-04 21:03:23 Stream Time Marker Reset to 0
 0:00:00 Record Time Marker (not recording)
 0:00:00 Stream Time Marker (not streaming)
 
+EVENT:START RECORDING @ 2022-09-14 13:16:22
+0:00:00 Record Time Marker
+
+EVENT:SCENE CHANGED TO Scene 2 @ 2022-09-14 13:16:25
+0:00:03 Record Time Marker
+
+EVENT:SCENE CHANGED TO Scene @ 2022-09-14 13:16:30
+0:00:08 Record Time Marker
+
+EVENT:SCENE CHANGED TO Scene 3 @ 2022-09-14 13:16:30
+0:00:08 Record Time Marker
+
+EVENT:STOP RECORDING @ 2022-09-14 13:16:33 Record Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+
