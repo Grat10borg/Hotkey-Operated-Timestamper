@@ -12,3 +12,5 @@ The H.O.T Highlighter
 Under develepment H.O.T has only been tested and worked on Using Xampp
 
 For H.O.T to work you'll need: TwitchAppAccessToken, TwitchLoginName, YoutubeApikey & ClientId. and The InfoWriter Plugin for OBS
+
+For a setup guide please look to the [H.O.T Wiki](https://github.com/Grat10borg/Hotkey-Operated-Timestamper/wiki)
