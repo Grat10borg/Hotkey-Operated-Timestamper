@@ -3,6 +3,8 @@ let Pkey = document.getElementById("YTKey");
 let PClient = document.getElementById("YTClient");
 var YclientId = PClient.innerHTML;
 var YApiKey = Pkey.innerHTML;
+const YTClientId = "738406360954-a9r9s4jod084g8ac8gec1vv0p9b419di.apps.googleusercontent.com";
+const YTApiKey = "AIzaSyDzEOPkYaAI9twOMhemk_1P12FbtPHBFbI";
 var arrayIds = Array();
 var arrayVidname = Array();
 var optionValue = 0;
@@ -83,7 +85,7 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname) {
     }, function (err) { console.error("Execute error", err); });
 }
 gapi.load("client:auth2", function () {
-    gapi.auth2.init({ client_id: YclientId });
+    gapi.auth2.init({ client_id: YclientId, plugin_name: "Hotkey Operated Timestamper" });
 });
 var Copy = document.querySelectorAll(".Copy");
 for (let i = 0; i < Copy.length; i++) {

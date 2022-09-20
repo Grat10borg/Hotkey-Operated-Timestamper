@@ -23,14 +23,6 @@ TwitchKey.addEventListener("keyup", async function(event) {
     }
 })
 
-// let SettingForm = document.getElementById("Settingform") as HTMLElement;
-// SettingForm.addEventListener("submit", async function (event) {
-//   event.preventDefault();
-//   if(Errors==false) {
-//     window.location.assign("Settings.php");
-//   }
-// });
-
 async function TestApikey(Key: string) {
   console.log(Key);
   await fetch("https://id.twitch.tv/oauth2/validate", {

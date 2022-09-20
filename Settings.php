@@ -69,36 +69,30 @@ include "includes/html/HtmlDoc.php";
                         <div class="accordion-body">
                             <form class="container" id="TextForm" action="Settings.php" method="POST">
                                 <div class="row m-3">
-                                        <p id="">Before Timestamps (TopText)</p>
-                                        <textarea name="BeforeDesc" class="d-flex Textarea form-control"><?php
-                                                                                                            if (isset($BeforeDesc)) {
-                                                                                                                foreach ($BeforeDesc as $string) {
-                                                                                                                    echo $string;
-                                                                                                                }
-                                                                                                            }
-                                                                                                            ?>
-                                    </textarea>
-                                        <p class="mt-3">After Timestamps (TopText)</p>
-                                        <textarea name="AfterDesc" class="d-flex Textarea form-control"><?php
-                                                                                                        if (isset($AfterDesc)) {
-                                                                                                            foreach ($AfterDesc as $string) {
+                                    <p id="">Before Timestamps (TopText)</p>
+                                    <textarea name="BeforeDesc" class="d-flex Textarea form-control"><?php
+                                                                                                        if (isset($BeforeDesc)) {
+                                                                                                            foreach ($BeforeDesc as $string) {
                                                                                                                 echo $string;
                                                                                                             }
+                                                                                                        } ?></textarea>
+                                    <p class="mt-3">After Timestamps (TopText)</p>
+                                    <textarea name="AfterDesc" class="d-flex Textarea form-control"><?php
+                                                                                                    if (isset($AfterDesc)) {
+                                                                                                        foreach ($AfterDesc as $string) {
+                                                                                                            echo $string;
                                                                                                         }
-                                                                                                        ?>
-                                    </textarea>
+                                                                                                    } ?></textarea>
 
-                                        <p class="mt-3">Highlighter History Channels (separate with <kbd>Enter</kbd>)</p>
-                                        <textarea name="History" class="d-flex Textarea form-control"><?php
-                                                                                                        if (isset($History)) {
-                                                                                                            foreach ($History as $string) {
-                                                                                                                echo $string;
-                                                                                                            }
+                                    <p class="mt-3">Highlighter History Channels (separate with <kbd>Enter</kbd>)</p>
+                                    <textarea name="History" class="d-flex Textarea form-control"><?php
+                                                                                                    if (isset($History)) {
+                                                                                                        foreach ($History as $string) {
+                                                                                                            echo $string;
                                                                                                         }
-                                                                                                        ?>
-                                    </textarea>
-                                        
-                                   
+                                                                                                    } ?></textarea>
+
+
 
                                 </div>
                                 <input class="mx-3 HighSubmit btn" type="submit" name="submit" value="Save Data">
