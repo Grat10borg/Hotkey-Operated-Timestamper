@@ -10,6 +10,7 @@ AddArrTextArea($AfterDesc, "AfterDesc"); // Text placed after any timestamps.
 AddP($TwitchApiKey, "TwitchKey");
 AddP($YTClientID, "YTClient");
 AddP($YTAPIKey, "YTKey");
+AddP($PluginName, "YTPluginName");
 ?>
 
 <body>

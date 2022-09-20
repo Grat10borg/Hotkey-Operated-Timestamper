@@ -15,6 +15,7 @@ if(file_exists("Texts\Settings.txt")) {
     $YTAPIKey = $Settings[7];
     $ClipsOffset = $Settings[9]; // if fail defaults back to -26, only used for local timestamps as of writing
     $Timestamp_path = $Settings[11];
+    $PluginName = $Settings[13];
 }
 else {
     $error = "Fatal ERROR could not find Settings.txt at Texts\Settings.txt";

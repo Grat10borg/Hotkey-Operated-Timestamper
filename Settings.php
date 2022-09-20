@@ -38,13 +38,14 @@ include "includes/html/HtmlDoc.php";
             } else {
                 echo "<h2 class='m-5'>No Description Data to Process </h2>";
             }
-            if (isset($_POST['TwitchKey']) && isset($_POST['StreamerUserName']) && isset($_POST['YoutubeClientID']) && isset($_POST['YoutubeApiKey']) && isset($_POST['ClipOffset']) && isset($_POST['TimestampPath'])) {
+            if (isset($_POST['TwitchKey']) && isset($_POST['StreamerUserName']) && isset($_POST['YoutubeClientID']) && isset($_POST['YoutubeApiKey']) && isset($_POST['ClipOffset']) && isset($_POST['TimestampPath']) && isset($_POST["PluginName"])) {
                 $data = "Remember the qoutes! if you plan on doing this hacker style. also dont remove this text" . "\n" . '[TwitchApiKey] "' .  $_POST['TwitchKey'] . '",' . "\n" .
                     '[StreamerUserName] "' . $_POST['StreamerUserName'] . '",' . "\n" .
                     '[YoutubeClientID] "' . $_POST['YoutubeClientID'] . '",' . "\n" .
                     '[YoutubeApiKey] "' . $_POST['YoutubeApiKey'] . '",' . "\n" .
                     '[ClipOffset] "' . $_POST['ClipOffset'] . '",' . "\n" .
-                    '[TimestampPath] "' . $_POST['TimestampPath'] . '",' . "\n";
+                    '[TimestampPath] "' . $_POST['TimestampPath'] . '",' . "\n" .
+                    '[PluginName] "' . $_POST['PluginName'] . '",' . "\n";
                 file_put_contents("Texts/Settings.txt", ""); // Clear TXT First
                 $ret = file_put_contents("Texts/Settings.txt", $data, LOCK_EX); // Add New Text
                 if ($ret === false) {
@@ -151,6 +152,16 @@ include "includes/html/HtmlDoc.php";
                                     ?>
                                 </div>
                                 <div class="row m-3">
+                                    <p>Your Google Cloud Console Name</p>
+                                    <?php
+                                    if (isset($PluginName)) {
+                                        echo "<input value='$PluginName' class='form-control p-3' placeholder='Hotkey Operated Timestamper' name='PluginName' type='text' id='YTPluginIn'/>";
+                                    } else {
+                                        echo "<input class='form-control p-3' placeholder='Hotkey Operated Timestamper' name='PluginName' type='text' id='YTPluginIn'/>";
+                                    }
+                                    ?>
+                                </div>
+                                <div class="row m-3">
                                     <p id="ClipOffsetP">Your ClipOffset</p>
                                     <?php
                                     if (isset($ClipsOffset)) {
@@ -159,7 +170,6 @@ include "includes/html/HtmlDoc.php";
                                         echo "<input class='form-control p-3' placeholder='26' name='ClipOffset' type='text' id='ClipOffsetIn' />";
                                     }
                                     ?>
-
                                 </div>
                                 <div class="row m-3">
                                     <p>Your Timestamp.txt file path</p>
@@ -171,6 +181,7 @@ include "includes/html/HtmlDoc.php";
                                     }
                                     ?>
                                 </div>
+                                
                                 <input class="mx-3 HighSubmit btn" type="submit" name="submit" value="Save Data">
                             </form>
                         </div>

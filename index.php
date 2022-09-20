@@ -16,6 +16,7 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
         AddP($StreamerLogin, "TwitchLogin");
         AddP($YTClientID, "YTClient");
         AddP($YTAPIKey, "YTKey");
+        AddP($PluginName, "YTPluginName");
         AddP($ClipsOffset, "ClipOffset");
     } else {
         $error = "File Found. File was empty though.. file at $Timestamp_path did not have content";

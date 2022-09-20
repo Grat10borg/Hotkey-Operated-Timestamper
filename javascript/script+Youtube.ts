@@ -1,11 +1,10 @@
 // gets ID from settings file embeded by PHP
 let Pkey = document.getElementById("YTKey") as HTMLElement;
 let PClient = document.getElementById("YTClient") as HTMLElement;
+let PPluginName = document.getElementById("YTPluginName") as HTMLElement;
 var YclientId = PClient.innerHTML;
 var YApiKey = Pkey.innerHTML;
-const YTClientId = "738406360954-a9r9s4jod084g8ac8gec1vv0p9b419di.apps.googleusercontent.com";
-const YTApiKey = "AIzaSyDzEOPkYaAI9twOMhemk_1P12FbtPHBFbI";
-
+let YTPluginName = PPluginName.innerHTML;
 
 var arrayIds = Array();
 var arrayVidname = Array();
@@ -125,7 +124,7 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname) {
 
 //#region GapiLoad with our YTClient ID
 gapi.load("client:auth2", function() {
-    gapi.auth2.init({client_id: YclientId, plugin_name: "Hotkey Operated Timestamper"});
+    gapi.auth2.init({client_id: YclientId, plugin_name: YTPluginName});
   });
 //#endregion
 
