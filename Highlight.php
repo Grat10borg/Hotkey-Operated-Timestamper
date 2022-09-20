@@ -5,6 +5,7 @@ include "includes/ArrayMaker.php";
 
 AddArrTextArea($BeforeDesc, "BeforeDesc"); // Text placed before any timestamps
 AddArrTextArea($AfterDesc, "AfterDesc"); // Text placed after any timestamps.
+AddArrTextArea($Tag, "Tags");
 
 // Api keys, Settings 
 AddP($TwitchApiKey, "TwitchKey");

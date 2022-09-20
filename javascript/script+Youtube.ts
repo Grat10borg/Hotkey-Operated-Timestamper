@@ -2,10 +2,11 @@
 let Pkey = document.getElementById("YTKey") as HTMLElement;
 let PClient = document.getElementById("YTClient") as HTMLElement;
 let PPluginName = document.getElementById("YTPluginName") as HTMLElement;
+let TextATags = document.getElementById("Tags") as HTMLElement;
 var YclientId = PClient.innerHTML;
 var YApiKey = Pkey.innerHTML;
 let YTPluginName = PPluginName.innerHTML;
-
+let Tags = TextATags.innerHTML.split("\n");
 var arrayIds = Array();
 var arrayVidname = Array();
 var optionValue = 0;
@@ -99,6 +100,18 @@ function GetVideoIds() {
 // Make sure the client is loaded and sign-in is complete before calling this method.
 function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname) {
     console.log(arrayVidname[SelectValue]);
+
+    let Title = "";
+    if(true) {
+    Title = arrayVidname[SelectValue] + " " + "#Vtuber #VtuberEn";
+    }
+    else {
+    Title = arrayVidname[SelectValue];
+    }
+    if(Tags.length < 0) {
+        // if no tags are precent
+        Tags.push("VOD");
+    }
     return gapi.client.youtube.videos.update({
             "part": [
                 "snippet"
@@ -106,9 +119,10 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname) {
             "resource": { // Body basiclly?
                 "id": `${arrayIds[SelectValue]}`, // video id
                 "snippet": {
-                    "title": `${arrayVidname[SelectValue]}`, // Title for update on video, Manditory
+                    "title": `${Title}`, // Title for update on video, Manditory
                     "description": `${selectText}`, // New description with new timestamps! Manditory
-                    "categoryId": "22" // not sure what this does. Note: removing it causes problems
+                    "categoryId": "22", // not sure what this does. Note: removing it causes problems
+                    "tags": Tags
                 }
             }
         })

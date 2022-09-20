@@ -2,9 +2,11 @@
 let Pkey = document.getElementById("YTKey");
 let PClient = document.getElementById("YTClient");
 let PPluginName = document.getElementById("YTPluginName");
+let TextATags = document.getElementById("Tags");
 var YclientId = PClient.innerHTML;
 var YApiKey = Pkey.innerHTML;
 let YTPluginName = PPluginName.innerHTML;
+let Tags = TextATags.innerHTML.split("\n");
 var arrayIds = Array();
 var arrayVidname = Array();
 var optionValue = 0;
@@ -67,6 +69,16 @@ function GetVideoIds() {
 }
 function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname) {
     console.log(arrayVidname[SelectValue]);
+    let Title = "";
+    if (true) {
+        Title = arrayVidname[SelectValue] + " " + "#Vtuber #VtuberEn";
+    }
+    else {
+        Title = arrayVidname[SelectValue];
+    }
+    if (Tags.length < 0) {
+        Tags.push("VOD");
+    }
     return gapi.client.youtube.videos.update({
         "part": [
             "snippet"
@@ -74,9 +86,10 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname) {
         "resource": {
             "id": `${arrayIds[SelectValue]}`,
             "snippet": {
-                "title": `${arrayVidname[SelectValue]}`,
+                "title": `${Title}`,
                 "description": `${selectText}`,
-                "categoryId": "22"
+                "categoryId": "22",
+                "tags": Tags
             }
         }
     })

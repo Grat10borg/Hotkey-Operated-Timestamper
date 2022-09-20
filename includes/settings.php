@@ -2,6 +2,7 @@
 $BeforeDesc_p = "Texts\BeforeTimestamps.txt";
 $AfterDesc_p = "Texts\AfterTimestamps.txt";
 $History_p = "Texts\HistoryChannels.txt";
+$Tag_p = "Texts\Tags.txt";
 
 // reads file as a string instead of an array
 if(file_exists("Texts\Settings.txt")) {
@@ -16,6 +17,7 @@ if(file_exists("Texts\Settings.txt")) {
     $ClipsOffset = $Settings[9]; // if fail defaults back to -26, only used for local timestamps as of writing
     $Timestamp_path = $Settings[11];
     $PluginName = $Settings[13];
+    $Hashtags = $Settings[15];
 }
 else {
     $error = "Fatal ERROR could not find Settings.txt at Texts\Settings.txt";
@@ -37,4 +39,9 @@ if (file_exists($History_p)) {
     $History = file($History_p);
 } else {
     $error = "File Not Found.. file at $History_p was not found";
+}
+if (file_exists($Tag_p)) {
+    $Tag = file($Tag_p);
+} else {
+    $error = "File Not Found.. file at $Tag_p was not found";
 }

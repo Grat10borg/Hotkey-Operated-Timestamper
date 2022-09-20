@@ -10,7 +10,7 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
         AddArrTextArea($arrayText, "TimestampTxt"); // Timestamp Txt javascript 
         AddArrTextArea($BeforeDesc, "BeforeDesc"); // Text placed before any timestamps
         AddArrTextArea($AfterDesc, "AfterDesc"); // Text placed after any timestamps.
-
+        AddArrTextArea($Tag, "Tags");
         // Api keys, Settings 
         AddP($TwitchApiKey, "TwitchKey");
         AddP($StreamerLogin, "TwitchLogin");

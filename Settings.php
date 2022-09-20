@@ -27,10 +27,12 @@ include "includes/html/HtmlDoc.php";
                 file_put_contents("Texts\BeforeTimestamps.txt", ""); // Clear TXT First
                 file_put_contents("Texts\AfterTimestamps.txt", ""); // Clear TXT First
                 file_put_contents("Texts\HistoryChannels.txt", ""); // Clear TXT First
+                file_put_contents("Texts\Tags.txt", "");
                 $ret = file_put_contents("Texts\BeforeTimestamps.txt", $_POST["BeforeDesc"], LOCK_EX); // Add New Text
                 $ret2 = file_put_contents("Texts\AfterTimestamps.txt", $_POST["AfterDesc"], LOCK_EX); // Add New Text
                 $ret3 = file_put_contents("Texts\HistoryChannels.txt", $_POST["History"], LOCK_EX); // Add New Text
-                if ($ret === false && $ret2 === false && $ret3 === false) {
+                $ret4 = file_put_contents("Texts\Tags.txt", $_POST["Tags"], LOCK_EX); // Add New Text
+                if ($ret === false && $ret2 === false && $ret3 === false && $ret4 === false) {
                     die("Error writing Description Texts");
                 } else {
                     echo "<h2 class='m-5'>Success Making New Description Texts! </h2>";
@@ -45,7 +47,8 @@ include "includes/html/HtmlDoc.php";
                     '[YoutubeApiKey] "' . $_POST['YoutubeApiKey'] . '",' . "\n" .
                     '[ClipOffset] "' . $_POST['ClipOffset'] . '",' . "\n" .
                     '[TimestampPath] "' . $_POST['TimestampPath'] . '",' . "\n" .
-                    '[PluginName] "' . $_POST['PluginName'] . '",' . "\n";
+                    '[PluginName] "' . $_POST['PluginName'] . '",' . "\n" .
+                    '[Hashtags] "' . $_POST['Hashtags'] . '",' . "\n";
                 file_put_contents("Texts/Settings.txt", ""); // Clear TXT First
                 $ret = file_put_contents("Texts/Settings.txt", $data, LOCK_EX); // Add New Text
                 if ($ret === false) {
@@ -54,7 +57,6 @@ include "includes/html/HtmlDoc.php";
                     echo "<h2 class='m-5'>Success Making New Settings! </h2>";
                 }
             } else {
-                // bit aggrasive naming huh PHP?
                 echo "<h2 class='m-5'>No Settings.txt Data to Process </h2>";
             }
             ?>
@@ -92,8 +94,13 @@ include "includes/html/HtmlDoc.php";
                                                                                                             echo $string;
                                                                                                         }
                                                                                                     } ?></textarea>
-
-
+                                    <p class="mt-3">Description Tags (separate with <kbd>Enter</kbd>)</p>
+                                    <textarea name="Tags" class="d-flex Textarea form-control"><?php
+                                                                                                    if (isset($History)) {
+                                                                                                        foreach ($Tag as $string) {
+                                                                                                            echo $string;
+                                                                                                        }
+                                                                                                    } ?></textarea>
 
                                 </div>
                                 <input class="mx-3 HighSubmit btn" type="submit" name="submit" value="Save Data">
@@ -152,7 +159,7 @@ include "includes/html/HtmlDoc.php";
                                     ?>
                                 </div>
                                 <div class="row m-3">
-                                    <p>Your Google Cloud Console Name</p>
+                                    <p>Your Google Cloud Console Project Name</p>
                                     <?php
                                     if (isset($PluginName)) {
                                         echo "<input value='$PluginName' class='form-control p-3' placeholder='Hotkey Operated Timestamper' name='PluginName' type='text' id='YTPluginIn'/>";
@@ -181,7 +188,16 @@ include "includes/html/HtmlDoc.php";
                                     }
                                     ?>
                                 </div>
-                                
+                                <div class="row m-3">
+                                    <p>Your Hashtags/Text after Vod Title</p>
+                                    <?php
+                                    if (isset($Hashtags)) {
+                                        echo "<input value='$Hashtags' class='form-control p-3' placeholder='VOD' name='Hashtags' type='text' id='HashtagsIn'/>";
+                                    } else {
+                                        echo "<input class='form-control p-3' placeholder='VOD' name='Hashtags' type='text' id='HashtagsIn'/>";
+                                    }
+                                    ?>
+                                </div>
                                 <input class="mx-3 HighSubmit btn" type="submit" name="submit" value="Save Data">
                             </form>
                         </div>
