@@ -3,10 +3,12 @@ let Pkey = document.getElementById("YTKey");
 let PClient = document.getElementById("YTClient");
 let PPluginName = document.getElementById("YTPluginName");
 let TextATags = document.getElementById("Tags");
+let HashTagsP = document.getElementById("Hashtags");
 var YclientId = PClient.innerHTML;
 var YApiKey = Pkey.innerHTML;
 let YTPluginName = PPluginName.innerHTML;
 let Tags = TextATags.innerHTML.split("\n");
+let HashTags = HashTagsP.innerHTML;
 var arrayIds = Array();
 var arrayVidname = Array();
 var optionValue = 0;
@@ -70,8 +72,8 @@ function GetVideoIds() {
 function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname) {
     console.log(arrayVidname[SelectValue]);
     let Title = "";
-    if (true) {
-        Title = arrayVidname[SelectValue] + " " + "#Vtuber #VtuberEn";
+    if (HashTags != "") {
+        Title = arrayVidname[SelectValue] + " " + HashTags;
     }
     else {
         Title = arrayVidname[SelectValue];

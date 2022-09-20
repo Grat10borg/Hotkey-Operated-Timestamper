@@ -3,10 +3,13 @@ let Pkey = document.getElementById("YTKey") as HTMLElement;
 let PClient = document.getElementById("YTClient") as HTMLElement;
 let PPluginName = document.getElementById("YTPluginName") as HTMLElement;
 let TextATags = document.getElementById("Tags") as HTMLElement;
+let HashTagsP = document.getElementById("Hashtags") as HTMLElement;
+
 var YclientId = PClient.innerHTML;
 var YApiKey = Pkey.innerHTML;
 let YTPluginName = PPluginName.innerHTML;
 let Tags = TextATags.innerHTML.split("\n");
+let HashTags = HashTagsP.innerHTML;
 var arrayIds = Array();
 var arrayVidname = Array();
 var optionValue = 0;
@@ -102,8 +105,8 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname) {
     console.log(arrayVidname[SelectValue]);
 
     let Title = "";
-    if(true) {
-    Title = arrayVidname[SelectValue] + " " + "#Vtuber #VtuberEn";
+    if(HashTags != "") {
+    Title = arrayVidname[SelectValue] + " " + HashTags;
     }
     else {
     Title = arrayVidname[SelectValue];
@@ -122,7 +125,7 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname) {
                     "title": `${Title}`, // Title for update on video, Manditory
                     "description": `${selectText}`, // New description with new timestamps! Manditory
                     "categoryId": "22", // not sure what this does. Note: removing it causes problems
-                    "tags": Tags
+                    "tags": Tags // adds users tags onto the video.
                 }
             }
         })

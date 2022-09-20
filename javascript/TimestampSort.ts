@@ -13,7 +13,7 @@ var AppAcessToken = PKey.innerHTML as string;
 let Clipoffset = parseInt(PClip.innerHTML); // twitch default
 let StreamerName = PLogin.innerHTML as string;
 
-// Asigned later 
+// Asigned later
 var AclientId = "" as string;
 var TwitchConnected = false; // tells if the Twitch HTTP calls should be called or not.
 
@@ -35,7 +35,7 @@ if (CutOuts(RawTxt) == 1) {
     // Runs SetOps if sucessful run next Method in line
     // Set in Data to Webpage
     let statsP = document.getElementById("Stats") as HTMLElement;
-    statsP.innerHTML=`• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
+    statsP.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
     if (DomSet() == 1) {
       // Domset needs to be ran before we call ValidateToken();
     } else {
@@ -255,6 +255,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
       }
       //#endregion
 
+      console.log(LocalSceneTimetemp);
       // set timestamp arrays into one big one that we have to sort.
       let TimestampArr = Array();
       let TimeArr = Array();
@@ -286,14 +287,6 @@ TwitchClip.addEventListener("click", async function (event: any) {
           Timestamps.push(Timestamp);
         }
       }
-      // Add Clip Delay later, something Like this 
-      // console.log(Timestamps);
-      // for (let y = 0; y < Timestamps.length; y++) {
-      //   let Timestamp = Timestamps[y];
-      //   Timestamps[y] = AddClipDelay(Timestamp, Clipoffset);
-      // }
-      // console.log(Timestamps);
-
       //#endregion
       let CompleteTimestampArr = Array();
       //#region finding the correct indexs for titles and completing the sorting
@@ -440,7 +433,6 @@ function CutOuts(RawTxt: string) {
       }
     }
   }
-
   // test if success
   if (
     typeof MultiDimStreamArr != "undefined" &&
@@ -476,12 +468,12 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
 
   let BeforeDesc = res.innerHTML;
   let AfterDesc = res1.innerHTML;
+  let success = false;
   var Description = ""; // Finished Description Var
 
   // Makes a Working Description
   // If Not Null
-
-  if (MultiDimStreamArr.length > 0) {
+  if (MultiDimStreamArr.length > -1) {
     // if has Values
     for (let index = 0; index < MultiDimStreamArr.length; index++) {
       let resArray = MultiDimStreamArr[index];
@@ -498,13 +490,17 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
       DescArrS.push(Description);
       Description = "";
     }
-    return 1;
-  } else if (MultiDimRecordArr.length > 0) {
+    success = true;
+    
+  }
+  if (MultiDimRecordArr.length > -1) {
     // if has Values
     for (let index = 0; index < MultiDimRecordArr.length; index++) {
       let resArray = MultiDimRecordArr[index];
 
       Description = BeforeDesc + "\n\n";
+      Description = Description +
+        `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
       for (let i = 0; i < resArray.length; i++) {
         let timestamp = resArray[i];
         Description = Description + timestamp + "\n";
@@ -513,8 +509,10 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
       DescArrR.push(Description);
       Description = "";
     }
-    return 1;
-  } else {
+    success = true;
+  } 
+  if (success == true) {return 1;}
+  else {
     // error message
     console.log("Both Stream and Recording Arrays returned Nothing.");
     return 0;
@@ -538,9 +536,6 @@ function DomSet() {
   let nav = document.createElement("nav");
   let ul = document.createElement("ul");
 
-  //nav.classList.add("navbar");
-  //ul.classList.add("nav", "flex-column", "text-center");
-
   if (DescArrS.length > 0) {
     let liSeparate = document.createElement("li");
     let aSeprate = document.createElement("a");
@@ -561,7 +556,7 @@ function DomSet() {
       ul.append(li);
     }
 
-    SetIns(DescArrS, StreamDatesArr, "Stream");
+    SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo");
   } else if (DescArrS.length < 0) {
     console.log("No stream Timestamps found");
   }
@@ -584,7 +579,7 @@ function DomSet() {
       ul.append(li);
     }
     // recordings have not been tested yet may not work
-    SetIns(DescArrR, RecordDatesArr, "Record");
+    SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo");
   } else {
     console.log("No recording Timestamps found");
   }
@@ -599,7 +594,7 @@ function DomSet() {
 // Input: A sorted Timestamp array, Date Array, and a String with the name of the array content.
 // Outputs: Nothing, Void;
 // returns Nothing
-function SetIns(DescArr, DatesArr, string: string) {
+function SetIns(DescArr, DatesArr, string: string, IDname: string) {
   var DescDiv = document.getElementById(
     "DescriptionAreaDiv"
   ) as HTMLInputElement;
@@ -625,15 +620,15 @@ function SetIns(DescArr, DatesArr, string: string) {
     button.classList.add("accordion-button", "btn", "collapsed");
     button.setAttribute("type", "button");
     button.setAttribute("data-bs-toggle", "collapse");
-    button.setAttribute("data-bs-target", `#collapse${index}`);
+    button.setAttribute("data-bs-target", `#${IDname+index}`);
     button.setAttribute("aria-expanded", "false");
-    button.setAttribute("aria-controls", `collapse${index}`);
+    button.setAttribute("aria-controls", `${IDname+index}`);
     button.setAttribute("id", `AcordBtn-${index}`);
 
     // Collapse Div
     let collapsedDiv = document.createElement("div");
     collapsedDiv.classList.add("accordion-collapse", "collapse");
-    collapsedDiv.setAttribute("id", `collapse${index}`);
+    collapsedDiv.setAttribute("id", `${IDname+index}`);
     collapsedDiv.setAttribute("data-bs-parent", `#accordion${index}`);
 
     let CharDiv = document.createElement("div");
@@ -866,7 +861,7 @@ async function validateToken() {
         console.log("Token Validated Sucessfully");
         console.log(resp);
         let p = document.getElementById("AccessTokenTime") as HTMLElement;
-        p.innerHTML =`• Your Token will Expire in: \n ${resp.expires_in} seconds.`;
+        p.innerHTML = `• Your Token will Expire in: \n ${resp.expires_in} seconds.`;
         return 1;
       }
       console.log("unexpected Output");

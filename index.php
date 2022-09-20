@@ -18,6 +18,7 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
         AddP($YTAPIKey, "YTKey");
         AddP($PluginName, "YTPluginName");
         AddP($ClipsOffset, "ClipOffset");
+        AddP($Hashtags, "Hashtags");
     } else {
         $error = "File Found. File was empty though.. file at $Timestamp_path did not have content";
     }

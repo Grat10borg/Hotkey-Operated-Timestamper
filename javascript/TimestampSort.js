@@ -160,6 +160,7 @@ TwitchClip.addEventListener("click", async function (event) {
                     MultiStreamClips[StreamIndex[index]][i]["title"]);
                 TimeTwitch.push(SectoTimestamp(MultiStreamClips[StreamIndex[index]][i]["vod_offset"]));
             }
+            console.log(LocalSceneTimetemp);
             let TimestampArr = Array();
             let TimeArr = Array();
             TimestampArr = LocalSceneShifttemp.concat(TimestampTwitch);
@@ -320,8 +321,9 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
     let res1 = document.getElementById("AfterDesc");
     let BeforeDesc = res.innerHTML;
     let AfterDesc = res1.innerHTML;
+    let success = false;
     var Description = "";
-    if (MultiDimStreamArr.length > 0) {
+    if (MultiDimStreamArr.length > -1) {
         for (let index = 0; index < MultiDimStreamArr.length; index++) {
             let resArray = MultiDimStreamArr[index];
             Description = BeforeDesc + "\n\n";
@@ -336,12 +338,14 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
             DescArrS.push(Description);
             Description = "";
         }
-        return 1;
+        success = true;
     }
-    else if (MultiDimRecordArr.length > 0) {
+    if (MultiDimRecordArr.length > -1) {
         for (let index = 0; index < MultiDimRecordArr.length; index++) {
             let resArray = MultiDimRecordArr[index];
             Description = BeforeDesc + "\n\n";
+            Description = Description +
+                `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
             for (let i = 0; i < resArray.length; i++) {
                 let timestamp = resArray[i];
                 Description = Description + timestamp + "\n";
@@ -350,6 +354,9 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
             DescArrR.push(Description);
             Description = "";
         }
+        success = true;
+    }
+    if (success == true) {
         return 1;
     }
     else {
@@ -384,7 +391,7 @@ function DomSet() {
             li.append(a);
             ul.append(li);
         }
-        SetIns(DescArrS, StreamDatesArr, "Stream");
+        SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo");
     }
     else if (DescArrS.length < 0) {
         console.log("No stream Timestamps found");
@@ -407,7 +414,7 @@ function DomSet() {
             li.append(a);
             ul.append(li);
         }
-        SetIns(DescArrR, RecordDatesArr, "Record");
+        SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo");
     }
     else {
         console.log("No recording Timestamps found");
@@ -416,7 +423,7 @@ function DomSet() {
     SidebarDiv.append(nav);
     return 1;
 }
-function SetIns(DescArr, DatesArr, string) {
+function SetIns(DescArr, DatesArr, string, IDname) {
     var DescDiv = document.getElementById("DescriptionAreaDiv");
     for (let index = 0; index < DescArr.length; index++) {
         let AcordDiv = document.createElement("div");
@@ -432,13 +439,13 @@ function SetIns(DescArr, DatesArr, string) {
         button.classList.add("accordion-button", "btn", "collapsed");
         button.setAttribute("type", "button");
         button.setAttribute("data-bs-toggle", "collapse");
-        button.setAttribute("data-bs-target", `#collapse${index}`);
+        button.setAttribute("data-bs-target", `#${IDname + index}`);
         button.setAttribute("aria-expanded", "false");
-        button.setAttribute("aria-controls", `collapse${index}`);
+        button.setAttribute("aria-controls", `${IDname + index}`);
         button.setAttribute("id", `AcordBtn-${index}`);
         let collapsedDiv = document.createElement("div");
         collapsedDiv.classList.add("accordion-collapse", "collapse");
-        collapsedDiv.setAttribute("id", `collapse${index}`);
+        collapsedDiv.setAttribute("id", `${IDname + index}`);
         collapsedDiv.setAttribute("data-bs-parent", `#accordion${index}`);
         let CharDiv = document.createElement("div");
         CharDiv.classList.add("d-flex", "justify-content-between");

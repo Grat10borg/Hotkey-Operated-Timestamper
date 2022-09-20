@@ -12,6 +12,7 @@ AddP($TwitchApiKey, "TwitchKey");
 AddP($YTClientID, "YTClient");
 AddP($YTAPIKey, "YTKey");
 AddP($PluginName, "YTPluginName");
+AddP($Hashtags, "Hashtags");
 ?>
 
 <body>
