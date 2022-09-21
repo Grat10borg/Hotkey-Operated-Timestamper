@@ -13,6 +13,7 @@ if (file_exists($Timestamp_path)) { // if there is a file at the end of the file
         AddArrTextArea($Tag, "Tags");
         AddArrTextArea($LocalAfterDesc, "LocalAfterDesc");
         AddArrTextArea($LocalBeforeDesc, "LocalBeforeDesc");
+
         // Api keys, Settings 
         AddP($TwitchApiKey, "TwitchKey");
         AddP($StreamerLogin, "TwitchLogin");
