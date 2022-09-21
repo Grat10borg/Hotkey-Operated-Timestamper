@@ -6,12 +6,13 @@ let TimestampTxt = document.getElementById("TimestampTxt") as HTMLInputElement;
 let PKey = document.getElementById("TwitchKey") as HTMLElement;
 let PClip = document.getElementById("ClipOffset") as HTMLElement;
 let PLogin = document.getElementById("TwitchLogin") as HTMLElement;
-
+let Plocal = document.getElementById("Local") as HTMLElement;
 // Settings
 let RawTxt = TimestampTxt.innerHTML;
 var AppAcessToken = PKey.innerHTML as string;
 let Clipoffset = parseInt(PClip.innerHTML); // twitch default
 let StreamerName = PLogin.innerHTML as string;
+var SettingsLocal = Plocal.innerHTML as string;
 
 // Asigned later
 var AclientId = "" as string;
@@ -22,7 +23,9 @@ var MultiDimRecordArr = Array(); // Holds Raw Data from txt
 var StreamDatesArr = Array(); // Holds data for when a stream was streamed
 var RecordDatesArr = Array(); // Holds data for when a Recording was recorded
 var DescArrS = new Array(); // holds all the Finished Stream descriptions
+var LocalDescArrS = new Array();
 var DescArrR = new Array(); // holds all the Finished Recording descriptions
+var LocalDescArrR = new Array();
 
 //#region Token Validation.
 validateToken();
@@ -62,11 +65,13 @@ TwitchClip.addEventListener("click", async function (event: any) {
   if (TwitchConnected == true) {
     // Calling API to get ID of streamer with this name
     let UserIdResp = await HttpCalling(
-      `https://api.twitch.tv/helix/users?login=${StreamerName}`
+      `https://api.twitch.tv/helix/users?login=${StreamerName}`,
+      false
     );
     // Calling API to gather VODS from this user.
     let UserVods = await HttpCalling(
-      `https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`
+      `https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`,
+      false
     );
     let TwitchStreamedDate = Array();
     let FullDateTwitch = Array();
@@ -129,7 +134,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
     let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${
       UserIdResp["data"][0]["id"]
     }&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
-    let resp = await HttpCalling(http2);
+    let resp = await HttpCalling(http2, true);
     //#endregion
     let MultiUnsortedClips = Array();
     //#region Getting and sorting clips into arrays sorted by Stream dates
@@ -465,11 +470,16 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
   // Getting More Txts from PHP and ./Texts
   let res = document.getElementById("BeforeDesc") as HTMLInputElement;
   let res1 = document.getElementById("AfterDesc") as HTMLInputElement;
+  let res2 = document.getElementById("LocalBeforeDesc") as HTMLInputElement;
+  let res3 = document.getElementById("LocalAfterDesc") as HTMLInputElement;
 
   let BeforeDesc = res.innerHTML;
   let AfterDesc = res1.innerHTML;
+  let LocalBeforeDesc = res2.innerHTML;
+  let LocalAfterDesc = res3.innerHTML;
   let success = false;
   var Description = ""; // Finished Description Var
+  var LocalDescript = ""; // finished description in another language
 
   // Makes a Working Description
   // If Not Null
@@ -477,6 +487,20 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
     // if has Values
     for (let index = 0; index < MultiDimStreamArr.length; index++) {
       let resArray = MultiDimStreamArr[index];
+
+      if (SettingsLocal != "") {
+        LocalDescript = LocalBeforeDesc + "\n\n";
+        LocalDescript =
+        LocalDescript +
+          `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${Clipoffset})\n`;
+        for (let i = 0; i < resArray.length; i++) {
+          let timestamp = resArray[i];
+          LocalDescript = LocalDescript + timestamp + "\n";
+        }
+        LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
+        LocalDescArrS.push(LocalDescript);
+        LocalDescript = "";
+      }
 
       Description = BeforeDesc + "\n\n";
       Description =
@@ -491,16 +515,28 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
       Description = "";
     }
     success = true;
-    
   }
   if (MultiDimRecordArr.length > -1) {
     // if has Values
     for (let index = 0; index < MultiDimRecordArr.length; index++) {
       let resArray = MultiDimRecordArr[index];
 
+      if(SettingsLocal != "") {
+        LocalDescript = LocalBeforeDesc + "\n\n";
+        LocalDescript =
+        LocalDescript + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+      for (let i = 0; i < resArray.length; i++) {
+        let timestamp = resArray[i];
+        LocalDescript = LocalDescript + timestamp + "\n";
+      }
+      LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
+      LocalDescArrR.push(LocalDescript);
+      LocalDescript = "";
+      }
+
       Description = BeforeDesc + "\n\n";
-      Description = Description +
-        `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+      Description =
+        Description + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
       for (let i = 0; i < resArray.length; i++) {
         let timestamp = resArray[i];
         Description = Description + timestamp + "\n";
@@ -510,9 +546,10 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
       Description = "";
     }
     success = true;
-  } 
-  if (success == true) {return 1;}
-  else {
+  }
+  if (success == true) {
+    return 1;
+  } else {
     // error message
     console.log("Both Stream and Recording Arrays returned Nothing.");
     return 0;
@@ -525,12 +562,12 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
 // Input: Nothing
 // Outputs: a Working side bar, also calls SetIns()
 // returns Nothing
+
 function DomSet() {
   DescArrS.reverse(); // makes array be Newest First
   DescArrR.reverse();
   StreamDatesArr.reverse();
   RecordDatesArr.reverse();
-
   // Update Sidebar
   let SidebarDiv = document.getElementById("SideBar") as HTMLElement;
   let nav = document.createElement("nav");
@@ -556,7 +593,7 @@ function DomSet() {
       ul.append(li);
     }
 
-    SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo");
+    SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo", LocalDescArrS);
   } else if (DescArrS.length < 0) {
     console.log("No stream Timestamps found");
   }
@@ -579,7 +616,7 @@ function DomSet() {
       ul.append(li);
     }
     // recordings have not been tested yet may not work
-    SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo");
+    SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo", LocalDescArrR);
   } else {
     console.log("No recording Timestamps found");
   }
@@ -594,7 +631,8 @@ function DomSet() {
 // Input: A sorted Timestamp array, Date Array, and a String with the name of the array content.
 // Outputs: Nothing, Void;
 // returns Nothing
-function SetIns(DescArr, DatesArr, string: string, IDname: string) {
+
+function SetIns(DescArr: Array<string>, DatesArr: Array<string>, string: string, IDname: string, LocalArr: Array<string>) {
   var DescDiv = document.getElementById(
     "DescriptionAreaDiv"
   ) as HTMLInputElement;
@@ -620,15 +658,15 @@ function SetIns(DescArr, DatesArr, string: string, IDname: string) {
     button.classList.add("accordion-button", "btn", "collapsed");
     button.setAttribute("type", "button");
     button.setAttribute("data-bs-toggle", "collapse");
-    button.setAttribute("data-bs-target", `#${IDname+index}`);
+    button.setAttribute("data-bs-target", `#${IDname + index}`);
     button.setAttribute("aria-expanded", "false");
-    button.setAttribute("aria-controls", `${IDname+index}`);
+    button.setAttribute("aria-controls", `${IDname + index}`);
     button.setAttribute("id", `AcordBtn-${index}`);
 
     // Collapse Div
     let collapsedDiv = document.createElement("div");
     collapsedDiv.classList.add("accordion-collapse", "collapse");
-    collapsedDiv.setAttribute("id", `${IDname+index}`);
+    collapsedDiv.setAttribute("id", `${IDname + index}`);
     collapsedDiv.setAttribute("data-bs-parent", `#accordion${index}`);
 
     let CharDiv = document.createElement("div");
@@ -639,6 +677,13 @@ function SetIns(DescArr, DatesArr, string: string, IDname: string) {
     let h4 = document.createElement("h4");
     h4.innerHTML = `# Suggested Description`;
     // Text Area for Description
+
+    let LocalTextarea = document.createElement("textarea");
+    if(SettingsLocal != "") {
+      LocalTextarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
+      LocalTextarea.innerHTML = LocalArr[index];
+      LocalTextarea.setAttribute("id", `myLocalInput${index}`);
+    }
 
     let Textarea = document.createElement("textarea");
     Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
@@ -676,6 +721,20 @@ function SetIns(DescArr, DatesArr, string: string, IDname: string) {
     AcordBody.append(CharDiv);
     // Textarea
     AcordBody.append(Textarea);
+    if(SettingsLocal != "") {
+      let p = document.createElement("p");
+      p.innerHTML="localized to: ("+SettingsLocal+") Description";
+      p.setAttribute("class", "my-2")
+      let input = document.createElement("input");
+      input.classList.add("form-control", "p-3", "my-2");
+      input.setAttribute("id", `LocaleTitle-${index}`);
+      input.setAttribute("placeholder", `title in locale language`);
+      LocalTextarea.setAttribute("id", `LocaleDesc-${index}`);
+
+      AcordBody.append(p);
+      AcordBody.append(input);
+      AcordBody.append(LocalTextarea);
+    }
 
     // Button Bar
     ButtonDiv.append(SelectBtn);
@@ -875,11 +934,10 @@ async function validateToken() {
 }
 //#endregion
 
-// needs ValidateToken() to be ran first
 //#region [async] HttpCaller(HttpCall) multipurpose HttpCaller calls the Httpcall returns The Response if Success if not: 0
 // This makes most calls, intead of a lot of differnt functions this does them instead.
 // TO find out what is called look where its called as the HTTPCALL would need to be sent over.
-async function HttpCalling(HttpCall: string) {
+async function HttpCalling(HttpCall: string, Pagnate: boolean) {
   const respon = await fetch(`${HttpCall}`, {
     headers: {
       Authorization: "Bearer " + AppAcessToken,
@@ -888,6 +946,7 @@ async function HttpCalling(HttpCall: string) {
   })
     .then((respon) => respon.json())
     .then((respon) => {
+      console.log(respon);
       // Return Response on Success
       return respon;
     })

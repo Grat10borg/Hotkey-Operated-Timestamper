@@ -4,64 +4,77 @@ let PClient = document.getElementById("YTClient");
 let PPluginName = document.getElementById("YTPluginName");
 let TextATags = document.getElementById("Tags");
 let HashTagsP = document.getElementById("Hashtags");
+let LocalziedYT = document.getElementById("Local");
 var YclientId = PClient.innerHTML;
 var YApiKey = Pkey.innerHTML;
 let YTPluginName = PPluginName.innerHTML;
 let Tags = TextATags.innerHTML.split("\n");
 let HashTags = HashTagsP.innerHTML;
+let localization = LocalziedYT.innerHTML;
+let localizationDesc = "";
+let localizationTitle = "";
 var arrayIds = Array();
 var arrayVidname = Array();
 var optionValue = 0;
 var gapi;
-var auth = document.querySelector('.authUpload');
-auth.addEventListener('click', function (event) {
+var auth = document.querySelector(".authUpload");
+auth.addEventListener("click", function (event) {
     authAllowDescChange().then(loadClientChannel()).then(GetVideoIds);
 }, true);
-var Send = document.querySelectorAll('.Send');
+var Send = document.querySelectorAll(".Send");
 for (let i = 0; i < Send.length; i++) {
-    Send[i].addEventListener('click', function (event) {
+    Send[i].addEventListener("click", function (event) {
         console.log(event.target.value);
         var num = event.target.value;
         var selectText = document.getElementById(`myInput${num}`);
         selectText.select();
         selectText.setSelectionRange(0, 99999);
-        var select = document.querySelector('.SelectId');
-        GitPushDescription(selectText.value, select.value, arrayIds, arrayVidname);
+        var select = document.querySelector(".SelectId");
+        GitPushDescription(selectText.value, select.value, arrayIds, arrayVidname, event.target.value);
     }, true);
 }
 function authAllowDescChange() {
-    return gapi.auth2.getAuthInstance()
+    return gapi.auth2
+        .getAuthInstance()
         .signIn({ scope: "https://www.googleapis.com/auth/youtube.force-ssl" })
-        .then(function () { console.log("Sign-in successful"); }, function (err) { console.error("Error signing in", err); });
+        .then(function () {
+        console.log("Sign-in successful");
+    }, function (err) {
+        console.error("Error signing in", err);
+    });
 }
 function loadClientChannel() {
     gapi.client.setApiKey(YApiKey);
-    return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
-        .then(function () { console.log("GAPI client loaded for API"); }, function (err) { console.error("Error loading GAPI client for API", err); });
+    return gapi.client
+        .load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
+        .then(function () {
+        console.log("GAPI client loaded for API");
+    }, function (err) {
+        console.error("Error loading GAPI client for API", err);
+    });
 }
 function GetVideoIds() {
-    return gapi.client.youtube.search.list({
-        "part": [
-            "snippet"
-        ],
-        "forMine": true,
-        "maxResults": 10,
-        "order": "date",
-        "type": [
-            "video"
-        ]
+    return gapi.client.youtube.search
+        .list({
+        part: ["snippet"],
+        forMine: true,
+        maxResults: 10,
+        order: "date",
+        type: ["video"],
     })
         .then(function (response) {
         var arrayR = response;
         for (let index = 0; index < arrayR.result.items.length; index++) {
-            arrayIds[index] = arrayR["result"]["items"][`${index}`]["id"]["videoId"];
-            arrayVidname[index] = arrayR["result"]["items"][`${index}`]["snippet"]["title"];
+            arrayIds[index] =
+                arrayR["result"]["items"][`${index}`]["id"]["videoId"];
+            arrayVidname[index] =
+                arrayR["result"]["items"][`${index}`]["snippet"]["title"];
             let option = document.createElement("option");
             option.appendChild(document.createTextNode(`${arrayVidname[index]}`));
             option.setAttribute("value", index);
-            let Selectbox = document.querySelector('.SelectId');
+            let Selectbox = document.querySelector(".SelectId");
             Selectbox.appendChild(option);
-            let selectid = document.getElementById('selectId');
+            let selectid = document.getElementById("selectId");
             selectid.disabled = false;
         }
     }, function (err) {
@@ -69,8 +82,9 @@ function GetVideoIds() {
         alert("You havent selected a video, or logged in");
     });
 }
-function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname) {
+function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname, target) {
     console.log(arrayVidname[SelectValue]);
+    console.log(SelectValue);
     let Title = "";
     if (HashTags != "") {
         Title = arrayVidname[SelectValue] + " " + HashTags;
@@ -81,23 +95,66 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname) {
     if (Tags.length < 0) {
         Tags.push("VOD");
     }
-    return gapi.client.youtube.videos.update({
-        "part": [
-            "snippet"
-        ],
-        "resource": {
-            "id": `${arrayIds[SelectValue]}`,
-            "snippet": {
-                "title": `${Title}`,
-                "description": `${selectText}`,
-                "categoryId": "22",
-                "tags": Tags
-            }
+    if (localization != "") {
+        let res = document.getElementById(`LocaleDesc-${target}`);
+        let res2 = document.getElementById(`LocaleTitle-${target}`);
+        let LocalDesc = res.innerHTML;
+        let LocalTitle = res2.value;
+        console.log(LocalTitle);
+        if (LocalTitle == "") {
+            alert("you have to write a title for the localized version! (U.U )...zzz");
         }
-    })
-        .then(function (response) {
-        console.log("Response", response);
-    }, function (err) { console.error("Execute error", err); });
+        else {
+            return gapi.client.youtube.videos
+                .update({
+                part: ["snippet", "snippet,status,localizations"],
+                resource: {
+                    id: `${arrayIds[SelectValue]}`,
+                    localizations: {
+                        en: {
+                            description: `${selectText}`,
+                            title: `${Title}`,
+                        },
+                        da: {
+                            description: LocalDesc,
+                            title: LocalTitle,
+                        },
+                    },
+                    snippet: {
+                        categoryId: "22",
+                        tags: Tags,
+                        title: `${Title}`,
+                        description: `${selectText}`,
+                    },
+                },
+            })
+                .then(function (response) {
+                console.log("Response", response);
+            }, function (err) {
+                console.error("Execute error", err);
+            });
+        }
+    }
+    else {
+        return gapi.client.youtube.videos
+            .update({
+            part: ["snippet"],
+            resource: {
+                id: `${arrayIds[SelectValue]}`,
+                snippet: {
+                    categoryId: "22",
+                    tags: Tags,
+                    title: `${Title}`,
+                    description: `${selectText}`,
+                },
+            },
+        })
+            .then(function (response) {
+            console.log("Response", response);
+        }, function (err) {
+            console.error("Execute error", err);
+        });
+    }
 }
 gapi.load("client:auth2", function () {
     gapi.auth2.init({ client_id: YclientId, plugin_name: YTPluginName });

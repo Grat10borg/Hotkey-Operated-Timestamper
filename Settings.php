@@ -23,15 +23,19 @@ include "includes/html/HtmlDoc.php";
             <h3>Settings</h3>
             <p>you can also edit the texts at .\Hotkey-Operated-Timestamper\Texts!! ヾ(•ω•`)o</p>
             <?php
-            if (isset($_POST["BeforeDesc"]) && isset($_POST["AfterDesc"]) && isset($_POST["History"])) {
-                file_put_contents("Texts\BeforeTimestamps.txt", ""); // Clear TXT First
-                file_put_contents("Texts\AfterTimestamps.txt", ""); // Clear TXT First
-                file_put_contents("Texts\HistoryChannels.txt", ""); // Clear TXT First
-                file_put_contents("Texts\Tags.txt", "");
-                $ret = file_put_contents("Texts\BeforeTimestamps.txt", $_POST["BeforeDesc"], LOCK_EX); // Add New Text
-                $ret2 = file_put_contents("Texts\AfterTimestamps.txt", $_POST["AfterDesc"], LOCK_EX); // Add New Text
-                $ret3 = file_put_contents("Texts\HistoryChannels.txt", $_POST["History"], LOCK_EX); // Add New Text
-                $ret4 = file_put_contents("Texts\Tags.txt", $_POST["Tags"], LOCK_EX); // Add New Text
+            if (isset($_POST["BeforeDesc"]) && isset($_POST["AfterDesc"]) && isset($_POST["History"]) && isset($_POST["Tags"]) && isset($_POST["LocalBeforeTimestamps"]) && isset($_POST["LocalAfterTimestamps"])) {
+                file_put_contents($BeforeDesc_p, ""); // Clear TXT First
+                file_put_contents($AfterDesc_p, ""); // Clear TXT First
+                file_put_contents($History_p, ""); // Clear TXT First
+                file_put_contents($Tag_p, "");
+                file_put_contents($LocalBeforeDesc_p, "");
+                file_put_contents($LocalAfterDesc_p, "");
+                $ret = file_put_contents($BeforeDesc_p, $_POST["BeforeDesc"], LOCK_EX); // Add New Text
+                $ret2 = file_put_contents($AfterDesc_p, $_POST["AfterDesc"], LOCK_EX); // Add New Text
+                $ret3 = file_put_contents($History_p, $_POST["History"], LOCK_EX); // Add New Text
+                $ret4 = file_put_contents($Tag_p, $_POST["Tags"], LOCK_EX); // Add New Text
+                $ret5 = file_put_contents($LocalBeforeDesc_p, $_POST["LocalBeforeTimestamps"], LOCK_EX);
+                $ret6 = file_put_contents($LocalAfterDesc_p, $_POST["LocalAfterTimestamps"], LOCK_EX);
                 if ($ret === false && $ret2 === false && $ret3 === false && $ret4 === false) {
                     die("Error writing Description Texts");
                 } else {
@@ -40,7 +44,7 @@ include "includes/html/HtmlDoc.php";
             } else {
                 echo "<h2 class='m-5'>No Description Data to Process </h2>";
             }
-            if (isset($_POST['TwitchKey']) && isset($_POST['StreamerUserName']) && isset($_POST['YoutubeClientID']) && isset($_POST['YoutubeApiKey']) && isset($_POST['ClipOffset']) && isset($_POST['TimestampPath']) && isset($_POST["PluginName"])) {
+            if (isset($_POST['TwitchKey']) && isset($_POST['StreamerUserName']) && isset($_POST['YoutubeClientID']) && isset($_POST['YoutubeApiKey']) && isset($_POST['ClipOffset']) && isset($_POST['TimestampPath']) && isset($_POST["PluginName"]) && isset($_POST["Localazation"])) {
                 $data = "Remember the qoutes! if you plan on doing this hacker style. also dont remove this text" . "\n" . '[TwitchApiKey] "' .  $_POST['TwitchKey'] . '",' . "\n" .
                     '[StreamerUserName] "' . $_POST['StreamerUserName'] . '",' . "\n" .
                     '[YoutubeClientID] "' . $_POST['YoutubeClientID'] . '",' . "\n" .
@@ -48,7 +52,8 @@ include "includes/html/HtmlDoc.php";
                     '[ClipOffset] "' . $_POST['ClipOffset'] . '",' . "\n" .
                     '[TimestampPath] "' . $_POST['TimestampPath'] . '",' . "\n" .
                     '[PluginName] "' . $_POST['PluginName'] . '",' . "\n" .
-                    '[Hashtags] "' . $_POST['Hashtags'] . '",' . "\n";
+                    '[Hashtags] "' . $_POST['Hashtags'] . '",' . "\n" .
+                    '[Localized] "' . $_POST["Localazation"] . '",' . "\n";
                 file_put_contents("Texts/Settings.txt", ""); // Clear TXT First
                 $ret = file_put_contents("Texts/Settings.txt", $data, LOCK_EX); // Add New Text
                 if ($ret === false) {
@@ -96,11 +101,24 @@ include "includes/html/HtmlDoc.php";
                                                                                                     } ?></textarea>
                                     <p class="mt-3">Description Tags (separate with <kbd>Enter</kbd>)</p>
                                     <textarea name="Tags" class="d-flex Textarea form-control"><?php
-                                                                                                    if (isset($History)) {
-                                                                                                        foreach ($Tag as $string) {
-                                                                                                            echo $string;
-                                                                                                        }
-                                                                                                    } ?></textarea>
+                                                                                                if (isset($Tag)) {
+                                                                                                    foreach ($Tag as $string) {
+                                                                                                        echo $string;
+                                                                                                    }
+                                                                                                } ?></textarea>
+                                    <p class="mt-3">Localized Before Timestamps!)</p>
+                                    <textarea name="LocalBeforeTimestamps" class="d-flex Textarea form-control"><?php
+                                                                                                                if (isset($LocalBeforeDesc)) {
+                                                                                                                    foreach ($LocalBeforeDesc as $string) {
+                                                                                                                        echo $string;
+                                                                                                                    }
+                                                                                                                } ?></textarea>
+                                    <textarea name="LocalAfterTimestamps" class="d-flex Textarea form-control"><?php
+                                                                                                                if (isset($LocalAfterDesc)) {
+                                                                                                                    foreach ($LocalAfterDesc as $string) {
+                                                                                                                        echo $string;
+                                                                                                                    }
+                                                                                                                } ?></textarea>
 
                                 </div>
                                 <input class="mx-3 HighSubmit btn" type="submit" name="submit" value="Save Data">
@@ -195,6 +213,16 @@ include "includes/html/HtmlDoc.php";
                                         echo "<input value='$Hashtags' class='form-control p-3' placeholder='VOD' name='Hashtags' type='text' id='HashtagsIn'/>";
                                     } else {
                                         echo "<input class='form-control p-3' placeholder='VOD' name='Hashtags' type='text' id='HashtagsIn'/>";
+                                    }
+                                    ?>
+                                </div>
+                                <div class="row m-3">
+                                    <p>Localazation Description Key</p>
+                                    <?php
+                                    if (isset($Localazation)) {
+                                        echo "<input value='$Localazation' class='form-control p-3' placeholder='en' name='Localazation' type='text' id='LocalazationIn'/>";
+                                    } else {
+                                        echo "<input class='form-control p-3' placeholder='VOD' name='Localazation' type='text' id='LocalazationIn'/>";
                                     }
                                     ?>
                                 </div>

@@ -7,3 +7,4 @@ Remember the qoutes! if you plan on doing this hacker style. also dont remove th
 [TimestampPath] "FilepathToInfowriterTXT",
 [PluginName] "Hotkey Operated Timestamper Aka the Projects Name inside the GOOGLE CLOUD CONSOLE",
 [Hashtags] "#Hashtags you want after your title",
+[Localized] "en"

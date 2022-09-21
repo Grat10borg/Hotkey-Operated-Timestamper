@@ -4,10 +4,12 @@ let TimestampTxt = document.getElementById("TimestampTxt");
 let PKey = document.getElementById("TwitchKey");
 let PClip = document.getElementById("ClipOffset");
 let PLogin = document.getElementById("TwitchLogin");
+let Plocal = document.getElementById("Local");
 let RawTxt = TimestampTxt.innerHTML;
 var AppAcessToken = PKey.innerHTML;
 let Clipoffset = parseInt(PClip.innerHTML);
 let StreamerName = PLogin.innerHTML;
+var SettingsLocal = Plocal.innerHTML;
 var AclientId = "";
 var TwitchConnected = false;
 var MultiDimStreamArr = Array();
@@ -15,7 +17,9 @@ var MultiDimRecordArr = Array();
 var StreamDatesArr = Array();
 var RecordDatesArr = Array();
 var DescArrS = new Array();
+var LocalDescArrS = new Array();
 var DescArrR = new Array();
+var LocalDescArrR = new Array();
 validateToken();
 if (CutOuts(RawTxt) == 1) {
     if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
@@ -37,8 +41,8 @@ else {
 let TwitchClip = document.getElementById("TwitchClip");
 TwitchClip.addEventListener("click", async function (event) {
     if (TwitchConnected == true) {
-        let UserIdResp = await HttpCalling(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
-        let UserVods = await HttpCalling(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`);
+        let UserIdResp = await HttpCalling(`https://api.twitch.tv/helix/users?login=${StreamerName}`, false);
+        let UserVods = await HttpCalling(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`, false);
         let TwitchStreamedDate = Array();
         let FullDateTwitch = Array();
         for (let index = 0; index < UserVods["data"].length; index++) {
@@ -75,7 +79,7 @@ TwitchClip.addEventListener("click", async function (event) {
         let RFCdato = new Date();
         RFCdato.setDate(RFCdato.getDate() - 35);
         let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${UserIdResp["data"][0]["id"]}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
-        let resp = await HttpCalling(http2);
+        let resp = await HttpCalling(http2, true);
         let MultiUnsortedClips = Array();
         for (let index = 0; index < TwitchStreamedDate.length; index++) {
             let DayDate = TwitchStreamedDate[index].split("T");
@@ -319,13 +323,31 @@ function CutOuts(RawTxt) {
 function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
     let res = document.getElementById("BeforeDesc");
     let res1 = document.getElementById("AfterDesc");
+    let res2 = document.getElementById("LocalBeforeDesc");
+    let res3 = document.getElementById("LocalAfterDesc");
     let BeforeDesc = res.innerHTML;
     let AfterDesc = res1.innerHTML;
+    let LocalBeforeDesc = res2.innerHTML;
+    let LocalAfterDesc = res3.innerHTML;
     let success = false;
     var Description = "";
+    var LocalDescript = "";
     if (MultiDimStreamArr.length > -1) {
         for (let index = 0; index < MultiDimStreamArr.length; index++) {
             let resArray = MultiDimStreamArr[index];
+            if (SettingsLocal != "") {
+                LocalDescript = LocalBeforeDesc + "\n\n";
+                LocalDescript =
+                    LocalDescript +
+                        `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${Clipoffset})\n`;
+                for (let i = 0; i < resArray.length; i++) {
+                    let timestamp = resArray[i];
+                    LocalDescript = LocalDescript + timestamp + "\n";
+                }
+                LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
+                LocalDescArrS.push(LocalDescript);
+                LocalDescript = "";
+            }
             Description = BeforeDesc + "\n\n";
             Description =
                 Description +
@@ -343,9 +365,21 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
     if (MultiDimRecordArr.length > -1) {
         for (let index = 0; index < MultiDimRecordArr.length; index++) {
             let resArray = MultiDimRecordArr[index];
+            if (SettingsLocal != "") {
+                LocalDescript = LocalBeforeDesc + "\n\n";
+                LocalDescript =
+                    LocalDescript + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+                for (let i = 0; i < resArray.length; i++) {
+                    let timestamp = resArray[i];
+                    LocalDescript = LocalDescript + timestamp + "\n";
+                }
+                LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
+                LocalDescArrR.push(LocalDescript);
+                LocalDescript = "";
+            }
             Description = BeforeDesc + "\n\n";
-            Description = Description +
-                `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+            Description =
+                Description + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
             for (let i = 0; i < resArray.length; i++) {
                 let timestamp = resArray[i];
                 Description = Description + timestamp + "\n";
@@ -391,7 +425,7 @@ function DomSet() {
             li.append(a);
             ul.append(li);
         }
-        SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo");
+        SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo", LocalDescArrS);
     }
     else if (DescArrS.length < 0) {
         console.log("No stream Timestamps found");
@@ -414,7 +448,7 @@ function DomSet() {
             li.append(a);
             ul.append(li);
         }
-        SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo");
+        SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo", LocalDescArrR);
     }
     else {
         console.log("No recording Timestamps found");
@@ -423,7 +457,7 @@ function DomSet() {
     SidebarDiv.append(nav);
     return 1;
 }
-function SetIns(DescArr, DatesArr, string, IDname) {
+function SetIns(DescArr, DatesArr, string, IDname, LocalArr) {
     var DescDiv = document.getElementById("DescriptionAreaDiv");
     for (let index = 0; index < DescArr.length; index++) {
         let AcordDiv = document.createElement("div");
@@ -454,6 +488,12 @@ function SetIns(DescArr, DatesArr, string, IDname) {
         PNo.innerHTML = "Test";
         let h4 = document.createElement("h4");
         h4.innerHTML = `# Suggested Description`;
+        let LocalTextarea = document.createElement("textarea");
+        if (SettingsLocal != "") {
+            LocalTextarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
+            LocalTextarea.innerHTML = LocalArr[index];
+            LocalTextarea.setAttribute("id", `myLocalInput${index}`);
+        }
         let Textarea = document.createElement("textarea");
         Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
         Textarea.innerHTML = DescArr[index];
@@ -480,6 +520,19 @@ function SetIns(DescArr, DatesArr, string, IDname) {
         CharDiv.append(PNo);
         AcordBody.append(CharDiv);
         AcordBody.append(Textarea);
+        if (SettingsLocal != "") {
+            let p = document.createElement("p");
+            p.innerHTML = "localized to: (" + SettingsLocal + ") Description";
+            p.setAttribute("class", "my-2");
+            let input = document.createElement("input");
+            input.classList.add("form-control", "p-3", "my-2");
+            input.setAttribute("id", `LocaleTitle-${index}`);
+            input.setAttribute("placeholder", `title in locale language`);
+            LocalTextarea.setAttribute("id", `LocaleDesc-${index}`);
+            AcordBody.append(p);
+            AcordBody.append(input);
+            AcordBody.append(LocalTextarea);
+        }
         ButtonDiv.append(SelectBtn);
         ButtonDiv.append(CopyBtn);
         ButtonDiv.append(YoutubeBtn);
@@ -633,7 +686,7 @@ async function validateToken() {
     });
     return 1;
 }
-async function HttpCalling(HttpCall) {
+async function HttpCalling(HttpCall, Pagnate) {
     const respon = await fetch(`${HttpCall}`, {
         headers: {
             Authorization: "Bearer " + AppAcessToken,
@@ -642,6 +695,7 @@ async function HttpCalling(HttpCall) {
     })
         .then((respon) => respon.json())
         .then((respon) => {
+        console.log(respon);
         return respon;
     })
         .catch((err) => {

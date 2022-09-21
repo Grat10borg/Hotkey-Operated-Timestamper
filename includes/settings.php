@@ -1,6 +1,8 @@
 <?php
 $BeforeDesc_p = "Texts\BeforeTimestamps.txt";
 $AfterDesc_p = "Texts\AfterTimestamps.txt";
+$LocalBeforeDesc_p = "Texts\LocaleBeforeTimestamps.txt";
+$LocalAfterDesc_p = "Texts\LocaleAfterTimestamps.txt";
 $History_p = "Texts\HistoryChannels.txt";
 $Tag_p = "Texts\Tags.txt";
 
@@ -18,6 +20,7 @@ if(file_exists("Texts\Settings.txt")) {
     $Timestamp_path = $Settings[11];
     $PluginName = $Settings[13];
     $Hashtags = $Settings[15];
+    $Localazation = $Settings[17];
 }
 else {
     $error = "Fatal ERROR could not find Settings.txt at Texts\Settings.txt";
@@ -30,10 +33,20 @@ if (file_exists($BeforeDesc_p)) {
 } else {
     $error = "File Not Found.. file at $BeforeDesc_p was not found";
 }
+if (file_exists($LocalBeforeDesc_p)) {
+    $LocalBeforeDesc = file($LocalBeforeDesc_p);
+} else {
+    $error = "File Not Found.. file at $LocalBeforeDesc_p was not found";
+}
 if (file_exists($AfterDesc_p)) {
     $AfterDesc = file($AfterDesc_p);
 } else {
     $error = "File Not Found.. file at $AfterDesc_p was not found";
+}
+if (file_exists($LocalAfterDesc_p)) {
+    $LocalAfterDesc = file($LocalAfterDesc_p);
+} else {
+    $error = "File Not Found.. file at $LocalAfterDesc_p was not found";
 }
 if (file_exists($History_p)) {
     $History = file($History_p);
