@@ -169,7 +169,9 @@ function GitPushDescription(
     ) as HTMLInputElement;
     let LocalDesc = res.innerHTML;
     let LocalTitle = res2.value;
-    console.log(LocalTitle);
+    if (HashTags != "") {
+        LocalTitle = LocalTitle + " " + HashTags;
+    } 
     if (LocalTitle == "") {
       alert(
         "you have to write a title for the localized version! (U.U )...zzz"

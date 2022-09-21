@@ -425,7 +425,7 @@ function DomSet() {
             li.append(a);
             ul.append(li);
         }
-        SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo", LocalDescArrS);
+        SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo", LocalDescArrS, "LocaleDesc-", "myInput");
     }
     else if (DescArrS.length < 0) {
         console.log("No stream Timestamps found");
@@ -448,7 +448,7 @@ function DomSet() {
             li.append(a);
             ul.append(li);
         }
-        SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo", LocalDescArrR);
+        SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo", LocalDescArrR, "recordLocalInput", "recordInput");
     }
     else {
         console.log("No recording Timestamps found");
@@ -457,7 +457,7 @@ function DomSet() {
     SidebarDiv.append(nav);
     return 1;
 }
-function SetIns(DescArr, DatesArr, string, IDname, LocalArr) {
+function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID) {
     var DescDiv = document.getElementById("DescriptionAreaDiv");
     for (let index = 0; index < DescArr.length; index++) {
         let AcordDiv = document.createElement("div");
@@ -497,7 +497,7 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr) {
         let Textarea = document.createElement("textarea");
         Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
         Textarea.innerHTML = DescArr[index];
-        Textarea.setAttribute("id", `myInput${index}`);
+        Textarea.setAttribute("id", `${TextAreaID}${index}`);
         button.innerHTML = DatesArr[index] + ` - ${string}`;
         let ButtonDiv = document.createElement("div");
         let SelectBtn = document.createElement("button");
@@ -528,7 +528,7 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr) {
             input.classList.add("form-control", "p-3", "my-2");
             input.setAttribute("id", `LocaleTitle-${index}`);
             input.setAttribute("placeholder", `title in locale language`);
-            LocalTextarea.setAttribute("id", `LocaleDesc-${index}`);
+            LocalTextarea.setAttribute("id", `${LocalID}${index}`);
             AcordBody.append(p);
             AcordBody.append(input);
             AcordBody.append(LocalTextarea);

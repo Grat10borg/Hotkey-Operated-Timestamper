@@ -593,7 +593,7 @@ function DomSet() {
       ul.append(li);
     }
 
-    SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo", LocalDescArrS);
+    SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo", LocalDescArrS, "LocaleDesc-", "myInput");
   } else if (DescArrS.length < 0) {
     console.log("No stream Timestamps found");
   }
@@ -615,8 +615,7 @@ function DomSet() {
       li.append(a);
       ul.append(li);
     }
-    // recordings have not been tested yet may not work
-    SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo", LocalDescArrR);
+    SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo", LocalDescArrR, "recordLocalInput", "recordInput");
   } else {
     console.log("No recording Timestamps found");
   }
@@ -632,7 +631,7 @@ function DomSet() {
 // Outputs: Nothing, Void;
 // returns Nothing
 
-function SetIns(DescArr: Array<string>, DatesArr: Array<string>, string: string, IDname: string, LocalArr: Array<string>) {
+function SetIns(DescArr: Array<string>, DatesArr: Array<string>, string: string, IDname: string, LocalArr: Array<string>, LocalID: string, TextAreaID: string) {
   var DescDiv = document.getElementById(
     "DescriptionAreaDiv"
   ) as HTMLInputElement;
@@ -688,7 +687,7 @@ function SetIns(DescArr: Array<string>, DatesArr: Array<string>, string: string,
     let Textarea = document.createElement("textarea");
     Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
     Textarea.innerHTML = DescArr[index];
-    Textarea.setAttribute("id", `myInput${index}`);
+    Textarea.setAttribute("id", `${TextAreaID}${index}`);
     button.innerHTML = DatesArr[index] + ` - ${string}`;
     // Select, Copy, Youtube Bar Vars
 
@@ -729,7 +728,7 @@ function SetIns(DescArr: Array<string>, DatesArr: Array<string>, string: string,
       input.classList.add("form-control", "p-3", "my-2");
       input.setAttribute("id", `LocaleTitle-${index}`);
       input.setAttribute("placeholder", `title in locale language`);
-      LocalTextarea.setAttribute("id", `LocaleDesc-${index}`);
+      LocalTextarea.setAttribute("id", `${LocalID}${index}`);
 
       AcordBody.append(p);
       AcordBody.append(input);
