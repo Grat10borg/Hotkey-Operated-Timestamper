@@ -1,7 +1,10 @@
 Remember the qoutes! if you plan on doing this hacker style. also dont remove this text
 [TwitchApiKey] "",
-[StreamerUserName] "",
+[StreamerUserName] "grat_grot10_berg",
 [YoutubeClientID] "",
 [YoutubeApiKey] "",
 [ClipOffset] "27",
-[TimestampPath] "Texts\Timestamps.txt",
+[TimestampPath] "",
+[PluginName] "Hotkey Operated Timestamper",
+[Hashtags] "",
+[Localized] ""

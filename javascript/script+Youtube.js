@@ -113,16 +113,13 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname, tar
                 resource: {
                     id: `${arrayIds[SelectValue]}`,
                     localizations: {
-                        en: {
-                            description: `${selectText}`,
-                            title: `${Title}`,
-                        },
                         da: {
                             description: LocalDesc,
                             title: LocalTitle,
                         },
                     },
                     snippet: {
+                        defaultLanguage: "en",
                         categoryId: "22",
                         tags: Tags,
                         title: `${Title}`,

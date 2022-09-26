@@ -184,16 +184,13 @@ function GitPushDescription(
             // Body basiclly?
             id: `${arrayIds[SelectValue]}`, // video id
             localizations: {
-              en: {
-                description: `${selectText}`,
-                title: `${Title}`,
-              },
               da: {
                 description: LocalDesc,
                 title: LocalTitle,
               },
             },
             snippet: {
+              defaultLanguage: "en",
               categoryId: "22", // not sure what this does. Note: removing it causes problems
               tags: Tags, // adds users tags onto the video.
               title: `${Title}`,
