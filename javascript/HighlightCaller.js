@@ -250,7 +250,9 @@ async function validateTToken() {
             .then((resp) => {
             if (resp.status) {
                 if (resp.status == 401) {
-                    console.log("This token ('" + TappAcess + "') is invalid ... " + resp.message);
+                    console.log("This token ('" + TappAcess + "') is invalid ... " + resp.message + ".. The Submit Button has been Disabled. you cannot use H.O.T: Highlighter without a Token! _(._. )>");
+                    let Submitbtn = document.getElementById("Submit");
+                    Submitbtn.disabled = true;
                     return 0;
                 }
                 console.log("Unexpected output with a status");
