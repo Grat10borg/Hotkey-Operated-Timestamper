@@ -140,12 +140,12 @@ AddP($Hashtags, "Hashtags");
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingThree">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                # Misc
+                                # Suggested Future Local Version Description
                             </button>
                         </h2>
                         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <p>"hi" :)</p>
+                                <p>"hi" :) i'm still working on this sorry!</p>
                             </div>
                         </div>
                     </div>
