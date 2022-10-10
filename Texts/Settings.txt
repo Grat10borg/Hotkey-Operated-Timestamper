@@ -1,8 +1,8 @@
 Remember the qoutes! if you plan on doing this hacker style. also dont remove this text
-[TwitchApiKey] "k5sdtlyllbjyg48g5qki7cs0a7l2u2",
+[TwitchApiKey] "privat",
 [StreamerUserName] "grat_grot10_berg",
-[YoutubeClientID] "738406360954-a9r9s4jod084g8ac8gec1vv0p9b419di.apps.googleusercontent.com",
-[YoutubeApiKey] "AIzaSyCq512yjXdQLtdUV3n7CzKIe78oDufRovU",
+[YoutubeClientID] "privat-privat.apps.googleusercontent.com",
+[YoutubeApiKey] "privat",
 [ClipOffset] "27",
 [TimestampPath] "Q:\Billeder_2\Art\Stream_Stuff(not named)\Timestamp\Timestamps.txt",
 [PluginName] "Hotkey Operated Timestamper",
