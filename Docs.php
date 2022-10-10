@@ -32,6 +32,7 @@ include "includes/html/HtmlDoc.php";
                 <li><a href="https://github.com/Grat10borg/Hotkey-Operated-Timestamper/wiki/Using-H.O.T-Clip-Highlight-Maker">Using H.O.T Clip Highlight Maker : Highlight Oriented Timestamper</a></li>
             </ul>
         </div>
+        <?php include "includes\html\Footer.php" ?>
     </main>
 </body>
 

@@ -233,6 +233,7 @@ include "includes/html/HtmlDoc.php";
                 </div>
             </div>
         </div>
+        <?php include "includes\html\Footer.php" ?>
     </main>
 
     <!-- Used to test if API keys are valid and to place Old settings into Setting Menu -->

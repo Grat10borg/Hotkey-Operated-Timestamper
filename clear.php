@@ -16,6 +16,7 @@ include "includes/settings.php";
     ?>
     <p>You can close H.O.T down now,</p>
     </div>
+    <?php include "includes\html\Footer.php" ?>
     </main>  
 </body>
 

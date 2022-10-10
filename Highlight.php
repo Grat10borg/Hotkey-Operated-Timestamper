@@ -153,6 +153,7 @@ AddP($Hashtags, "Hashtags");
             </div>
         </div>
         </div>
+        <?php include "includes\html\Footer.php" ?>
     </main>
     <script src="https://embed.twitch.tv/embed/v1.js"></script>
     <script src="https://apis.google.com/js/api.js"></script>

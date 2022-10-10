@@ -53,6 +53,7 @@
                 <div class="form-floating my-3 border-bottom border-secondary pb-5" id="DescriptionAreaDiv"></div>
             </div>
         </div>
+        <?php include "includes\html\Footer.php" ?>
     </main>
     <!-- inporting of Javascript -->
     <script src="https://apis.google.com/js/api.js"></script>
