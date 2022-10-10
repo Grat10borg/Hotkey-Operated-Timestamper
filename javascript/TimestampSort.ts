@@ -604,7 +604,7 @@ function DomSet() {
     aSeprate.classList.add("nav-link", "text-center");
     aSeprate.setAttribute("href", "#Record");
     aSeprate.innerHTML = "# Recordings";
-    liSeparate.classList.add("RecordStreamli");
+    liSeparate.classList.add("RecordStreamli", "rounded");
     liSeparate.append(aSeprate);
     ul.append(liSeparate);
     for (let index = 0; index < DescArrR.length; index++) {
@@ -613,6 +613,7 @@ function DomSet() {
       a.innerHTML = `> - Record - ${index + 1}`;
       a.setAttribute("href", `#Record-${index}`);
       a.classList.add("nav-link", "text-center");
+      li.classList.add("rounded");
       li.append(a);
       ul.append(li);
     }

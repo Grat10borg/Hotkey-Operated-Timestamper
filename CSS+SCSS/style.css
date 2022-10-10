@@ -141,6 +141,11 @@ textarea {
   background-color: #909edd;
 }
 
+.sidebar ul .RecordStreamli:nth-child(odd) {
+  margin-bottom: 15px;
+  background-color: #909edd;
+}
+
 .imgHOTLogo {
   max-width: 250px;
 }
