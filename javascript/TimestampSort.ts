@@ -135,6 +135,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
       UserIdResp["data"][0]["id"]
     }&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
     let resp = await HttpCalling(http2, true);
+    console.log(resp);
     //#endregion
     let MultiUnsortedClips = Array();
     //#region Getting and sorting clips into arrays sorted by Stream dates

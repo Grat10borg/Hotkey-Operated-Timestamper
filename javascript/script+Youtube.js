@@ -100,39 +100,43 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname, tar
         let res2 = document.getElementById(`LocaleTitle-${target}`);
         let LocalDesc = res.innerHTML;
         let LocalTitle = res2.value;
-        if (HashTags != "") {
-            LocalTitle = LocalTitle + " " + HashTags;
-        }
         if (LocalTitle == "") {
             alert("you have to write a title for the localized version! (U.U )...zzz");
         }
-        else {
-            return gapi.client.youtube.videos
-                .update({
-                part: ["snippet", "snippet,status,localizations"],
-                resource: {
-                    id: `${arrayIds[SelectValue]}`,
-                    localizations: {
-                        da: {
-                            description: LocalDesc,
-                            title: LocalTitle,
+        if (LocalDesc.indexOf('<') > -1 || LocalDesc.indexOf('>') > -1) {
+            alert("your description contains an iligal character! like: '<', '>' try removing them! ( ´･･)ﾉ(._.`)");
+        }
+        if (LocalDesc)
+            if (LocalTitle != "" && HashTags != "") {
+                LocalTitle = LocalTitle + " " + HashTags;
+            }
+            else {
+                return gapi.client.youtube.videos
+                    .update({
+                    part: ["snippet", "snippet,status,localizations"],
+                    resource: {
+                        id: `${arrayIds[SelectValue]}`,
+                        localizations: {
+                            da: {
+                                description: LocalDesc,
+                                title: LocalTitle,
+                            },
+                        },
+                        snippet: {
+                            defaultLanguage: "en",
+                            categoryId: "22",
+                            tags: Tags,
+                            title: `${Title}`,
+                            description: `${selectText}`,
                         },
                     },
-                    snippet: {
-                        defaultLanguage: "en",
-                        categoryId: "22",
-                        tags: Tags,
-                        title: `${Title}`,
-                        description: `${selectText}`,
-                    },
-                },
-            })
-                .then(function (response) {
-                console.log("Response", response);
-            }, function (err) {
-                console.error("Execute error", err);
-            });
-        }
+                })
+                    .then(function (response) {
+                    console.log("Response", response);
+                }, function (err) {
+                    console.error("Execute error", err);
+                });
+            }
     }
     else {
         return gapi.client.youtube.videos

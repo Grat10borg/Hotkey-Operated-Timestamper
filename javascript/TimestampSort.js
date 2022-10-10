@@ -80,6 +80,7 @@ TwitchClip.addEventListener("click", async function (event) {
         RFCdato.setDate(RFCdato.getDate() - 35);
         let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${UserIdResp["data"][0]["id"]}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
         let resp = await HttpCalling(http2, true);
+        console.log(resp);
         let MultiUnsortedClips = Array();
         for (let index = 0; index < TwitchStreamedDate.length; index++) {
             let DayDate = TwitchStreamedDate[index].split("T");

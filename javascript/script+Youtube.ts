@@ -169,14 +169,21 @@ function GitPushDescription(
     ) as HTMLInputElement;
     let LocalDesc = res.innerHTML;
     let LocalTitle = res2.value;
-    if (HashTags != "") {
-        LocalTitle = LocalTitle + " " + HashTags;
-    } 
     if (LocalTitle == "") {
       alert(
         "you have to write a title for the localized version! (U.U )...zzz"
       );
-    } else {
+    }
+    if (LocalDesc.indexOf('<') > -1 || LocalDesc.indexOf('>') > -1) {
+      alert(
+        "your description contains an iligal character! like: '<', '>' try removing them! ( ´･･)ﾉ(._.`)"
+      );
+    }
+    if(LocalDesc)
+    if (LocalTitle != "" && HashTags != "") {
+        LocalTitle = LocalTitle + " " + HashTags;
+    } 
+    else {
       return gapi.client.youtube.videos
         .update({
           part: ["snippet", "snippet,status,localizations"],
