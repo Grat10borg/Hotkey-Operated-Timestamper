@@ -366,37 +366,76 @@ function IframClipBuilder(ClipLink: string) {
 // Small functions
 
 //#region ValidateToken, Validates the TappAcess Token and then calls fetchUser()
+
+// needs a VALID Twitch App Auth Token
+//#region validateToken() Validates Token if sucessful returns 1 if not 0
+// Calls the Twitch api with Out App Acess Token and returns a ClientId and tells us if the App Acess Token is Valid or Not
 async function validateTToken() {
-  fetch("https://id.twitch.tv/oauth2/validate", {
+  console.log("Your AccessToken: "+TappAcess);
+  if(TappAcess != undefined && TappAcess != "" && TappAcess != null) {
+  await fetch("https://id.twitch.tv/oauth2/validate", {
     headers: {
       Authorization: "Bearer " + TappAcess,
     },
   })
     .then((resp) => resp.json())
-    .then(async (resp) => {
+    .then((resp) => {
       if (resp.status) {
         if (resp.status == 401) {
-          console.log("This token is invalid" + resp.message);
-          // document.getElementById('output').textContent = 'This token is invalid: ' + resp.message;
+          console.log("This token ('"+TappAcess+"') is invalid ... " + resp.message);
           return 0;
         }
         console.log("Unexpected output with a status");
         return 0;
       }
       if (resp.client_id) {
-        client_id = resp.client_id; // Getting Client Id for page
-        console.log("Validated Token");
+        client_id = resp.client_id;
+        console.log("Token Validated Sucessfully");
         return 1;
       }
       console.log("unexpected Output");
+      return 0;
     })
     .catch((err) => {
-      ErrorMsg("An Error Occured VALIDATING token data", err, "Error");
       console.log(err);
-      console.log("An Error Occured VALIDATING token data");
       return 0;
     });
+  return 1;
 }
+else { return 0; }
+}
+
+// async function validateTToken() {
+//   fetch("https://id.twitch.tv/oauth2/validate", {
+//     headers: {
+//       Authorization: "Bearer " + TappAcess,
+//     },
+//   })
+//     .then((resp) => resp.json())
+//     .then(async (resp) => {
+//       if (resp.status) {
+//         if (resp.status == 401) {
+//           console.log("This token is invalid" + resp.message);
+//           // document.getElementById('output').textContent = 'This token is invalid: ' + resp.message;
+//           return 0;
+//         }
+//         console.log("Unexpected output with a status");
+//         return 0;
+//       }
+//       if (resp.client_id) {
+//         client_id = resp.client_id; // Getting Client Id for page
+//         console.log("Validated Token");
+//         return 1;
+//       }
+//       console.log("unexpected Output");
+//     })
+//     .catch((err) => {
+//       ErrorMsg("An Error Occured VALIDATING token data", err, "Error");
+//       console.log(err);
+//       console.log("An Error Occured VALIDATING token data");
+//       return 0;
+//     });
+// }
 
 //#endregion
 

@@ -4,7 +4,7 @@ Remember the qoutes! if you plan on doing this hacker style. also dont remove th
 [YoutubeClientID] "privat-privat.apps.googleusercontent.com",
 [YoutubeApiKey] "privat",
 [ClipOffset] "27",
-[TimestampPath] "Q:\Billeder_2\Art\Stream_Stuff(not named)\Timestamp\Timestamps.txt",
+[TimestampPath] "C:\xampp\htdocs\TSQ\Hotkey-Operated-Timestamper\Texts\Timestamps.txt",
 [PluginName] "Hotkey Operated Timestamper",
 [Hashtags] "#Vtuber #VtuberEn #Davtuber",
 [Localized] "da"

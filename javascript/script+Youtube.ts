@@ -6,12 +6,56 @@ let TextATags = document.getElementById("Tags") as HTMLElement;
 let HashTagsP = document.getElementById("Hashtags") as HTMLElement;
 let LocalziedYT = document.getElementById("Local") as HTMLElement;
 
-var YclientId = PClient.innerHTML;
-var YApiKey = Pkey.innerHTML;
-let YTPluginName = PPluginName.innerHTML;
-let Tags = TextATags.innerHTML.split("\n");
-let HashTags = HashTagsP.innerHTML;
-let localization = LocalziedYT.innerHTML;
+var auth = document.querySelector(".authUpload") as HTMLInputElement;
+
+var YclientId: string;
+var YApiKey: string;
+let YTPluginName: string;
+let Tags: Array<string>;
+let HashTags: string;
+let localization: string;
+//#region  Test if Data is Useable
+if(PClient != null) {
+  YclientId = PClient.innerHTML;
+}
+else {
+  console.log("Could Not get Youtube ClientId, You will not be able to Connect to Youtube");
+  auth.disabled = true; 
+}
+if(Pkey != null) {
+  YApiKey = Pkey.innerHTML;
+}
+else {
+  console.log("Could Not get Youtube ApiKey, you will not be able to Connect to Youtube");
+  auth.disabled = true; 
+}
+if(PPluginName != null) {
+  YTPluginName = PPluginName.innerHTML;
+}
+else {
+  console.log("You didnt write the plugin name for your Google project in the settings, The Connect to Youtube button May or May Not work?");
+}
+
+// Non "Bad" Errors Aka Self Fixable
+if(TextATags != null) {
+  Tags = TextATags.innerHTML.split("\n");
+}
+else {
+  Tags = Array(); 
+}
+if(HashTagsP != null) {
+  HashTags = HashTagsP.innerHTML;
+}
+else {
+  HashTags = "";
+}
+if (LocalziedYT != null) {
+  localization = LocalziedYT.innerHTML;
+}
+else {
+  localization = "";
+}
+//#endregion
 let localizationDesc = ""; // also show localized descripton alongside general one.
 let localizationTitle = ""; // make an input field for Localzied title
 
@@ -28,7 +72,7 @@ var gapi: any;
 // Retriving Website data to upload onto youtube
 
 //#region Authbtn + collection of Data for Desc Update
-var auth = document.querySelector(".authUpload") as HTMLInputElement;
+
 auth.addEventListener(
   "click",
   function (event) {
@@ -249,7 +293,9 @@ function GitPushDescription(
 
 //#region GapiLoad with our YTClient ID
 gapi.load("client:auth2", function () {
-  gapi.auth2.init({ client_id: YclientId, plugin_name: YTPluginName });
+  if(YclientId != "" && YTPluginName != "" && YclientId != null && YTPluginName != null && YclientId != undefined && YTPluginName != undefined) {
+    gapi.auth2.init({ client_id: YclientId, plugin_name: YTPluginName });
+  }
 });
 //#endregion
 

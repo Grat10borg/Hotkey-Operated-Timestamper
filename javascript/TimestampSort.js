@@ -5,11 +5,47 @@ let PKey = document.getElementById("TwitchKey");
 let PClip = document.getElementById("ClipOffset");
 let PLogin = document.getElementById("TwitchLogin");
 let Plocal = document.getElementById("Local");
-let RawTxt = TimestampTxt.innerHTML;
-var AppAcessToken = PKey.innerHTML;
-let Clipoffset = parseInt(PClip.innerHTML);
-let StreamerName = PLogin.innerHTML;
-var SettingsLocal = Plocal.innerHTML;
+let RawTxt;
+var AppAcessToken;
+let Clipoffset;
+let StreamerName;
+var SettingsLocal;
+if (TimestampTxt != null) {
+    RawTxt = TimestampTxt.innerHTML;
+}
+else {
+    console.log("Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!");
+}
+if (PKey != null) {
+    AppAcessToken = PKey.innerHTML;
+}
+else {
+    console.log("H.O.T could not get your TwitchKey, you will not be able to use Clip-Stamps");
+    let TwitchClipbtn = document.getElementById("TwitchClip");
+    TwitchClipbtn.disabled = true;
+}
+if (PClip != null) {
+    Clipoffset = parseInt(PClip.innerHTML);
+}
+else {
+    console.log("you didnt set a ClipOffset, H.O.T has defaulted to 26 seconds of offset.");
+    Clipoffset = 26;
+}
+if (PLogin != null) {
+    StreamerName = PLogin.innerHTML;
+}
+else {
+    console.log("you didnt set a TwitchLoginName, you will not be able to use Clip-Stamps");
+    let TwitchClipbtn = document.getElementById("TwitchClip");
+    TwitchClipbtn.disabled = true;
+}
+if (Plocal != null) {
+    SettingsLocal = Plocal.innerHTML;
+}
+else {
+    console.log("LocalSettings not found Turning off Local Mode");
+    SettingsLocal = "";
+}
 var AclientId = "";
 var TwitchConnected = false;
 var MultiDimStreamArr = Array();
@@ -21,28 +57,30 @@ var LocalDescArrS = new Array();
 var DescArrR = new Array();
 var LocalDescArrR = new Array();
 validateToken();
-if (CutOuts(RawTxt) == 1) {
-    if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
-        let statsP = document.getElementById("Stats");
-        statsP.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
-        if (DomSet() == 1) {
+if (RawTxt != undefined && RawTxt != "" && RawTxt != null) {
+    if (CutOuts(RawTxt) == 1) {
+        if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
+            let statsP = document.getElementById("Stats");
+            statsP.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
+            if (DomSet() == 1) {
+            }
+            else {
+                console.log("Failed Placing Things in the Websites");
+            }
         }
         else {
-            console.log("Failed Placing Things in the Websites");
+            console.log("Error Creating Description");
         }
     }
     else {
-        console.log("Error Creating Description");
+        console.log("Error Sorting Timestamps");
     }
-}
-else {
-    console.log("Error Sorting Timestamps");
 }
 let TwitchClip = document.getElementById("TwitchClip");
 TwitchClip.addEventListener("click", async function (event) {
     if (TwitchConnected == true) {
-        let UserIdResp = await HttpCalling(`https://api.twitch.tv/helix/users?login=${StreamerName}`, false);
-        let UserVods = await HttpCalling(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`, false);
+        let UserIdResp = await HttpCalling(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
+        let UserVods = await HttpCalling(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`);
         let TwitchStreamedDate = Array();
         let FullDateTwitch = Array();
         for (let index = 0; index < UserVods["data"].length; index++) {
@@ -79,7 +117,7 @@ TwitchClip.addEventListener("click", async function (event) {
         let RFCdato = new Date();
         RFCdato.setDate(RFCdato.getDate() - 35);
         let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${UserIdResp["data"][0]["id"]}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
-        let resp = await HttpCalling(http2, true);
+        let resp = await HttpCalling(http2);
         console.log(resp);
         let MultiUnsortedClips = Array();
         for (let index = 0; index < TwitchStreamedDate.length; index++) {
@@ -655,40 +693,45 @@ function parseISOString(Isostring) {
     return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
 }
 async function validateToken() {
-    await fetch("https://id.twitch.tv/oauth2/validate", {
-        headers: {
-            Authorization: "Bearer " + AppAcessToken,
-        },
-    })
-        .then((resp) => resp.json())
-        .then((resp) => {
-        if (resp.status) {
-            if (resp.status == 401) {
-                console.log("This token is invalid ... " + resp.message);
+    if (AppAcessToken != undefined && AppAcessToken != "" && AppAcessToken != null) {
+        await fetch("https://id.twitch.tv/oauth2/validate", {
+            headers: {
+                Authorization: "Bearer " + AppAcessToken,
+            },
+        })
+            .then((resp) => resp.json())
+            .then((resp) => {
+            if (resp.status) {
+                if (resp.status == 401) {
+                    console.log("This token is invalid ... " + resp.message);
+                    return 0;
+                }
+                console.log("Unexpected output with a status");
                 return 0;
             }
-            console.log("Unexpected output with a status");
+            if (resp.client_id) {
+                AclientId = resp.client_id;
+                TwitchConnected = true;
+                console.log("Token Validated Sucessfully");
+                console.log(resp);
+                let p = document.getElementById("AccessTokenTime");
+                p.innerHTML = `• Your Token will Expire in: \n ${resp.expires_in} seconds.`;
+                return 1;
+            }
+            console.log("unexpected Output");
             return 0;
-        }
-        if (resp.client_id) {
-            AclientId = resp.client_id;
-            TwitchConnected = true;
-            console.log("Token Validated Sucessfully");
-            console.log(resp);
-            let p = document.getElementById("AccessTokenTime");
-            p.innerHTML = `• Your Token will Expire in: \n ${resp.expires_in} seconds.`;
-            return 1;
-        }
-        console.log("unexpected Output");
+        })
+            .catch((err) => {
+            console.log(err);
+            return 0;
+        });
+        return 1;
+    }
+    else {
         return 0;
-    })
-        .catch((err) => {
-        console.log(err);
-        return 0;
-    });
-    return 1;
+    }
 }
-async function HttpCalling(HttpCall, Pagnate) {
+async function HttpCalling(HttpCall) {
     const respon = await fetch(`${HttpCall}`, {
         headers: {
             Authorization: "Bearer " + AppAcessToken,

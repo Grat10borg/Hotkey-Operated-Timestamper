@@ -8,11 +8,50 @@ let PClip = document.getElementById("ClipOffset") as HTMLElement;
 let PLogin = document.getElementById("TwitchLogin") as HTMLElement;
 let Plocal = document.getElementById("Local") as HTMLElement;
 // Settings
-let RawTxt = TimestampTxt.innerHTML;
-var AppAcessToken = PKey.innerHTML as string;
-let Clipoffset = parseInt(PClip.innerHTML); // twitch default
-let StreamerName = PLogin.innerHTML as string;
-var SettingsLocal = Plocal.innerHTML as string;
+let RawTxt;
+var AppAcessToken;
+let Clipoffset;
+let StreamerName;
+var SettingsLocal;
+if (TimestampTxt != null) {
+  RawTxt = TimestampTxt.innerHTML;
+} else {
+  console.log(
+    "Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!"
+  );
+}
+if (PKey != null) {
+  AppAcessToken = PKey.innerHTML as string;
+} else {
+  console.log(
+    "H.O.T could not get your TwitchKey, you will not be able to use Clip-Stamps"
+  );
+  let TwitchClipbtn = document.getElementById("TwitchClip") as HTMLInputElement;
+  TwitchClipbtn.disabled = true;
+}
+if (PClip != null) {
+  Clipoffset = parseInt(PClip.innerHTML); // twitch default
+} else {
+  console.log(
+    "you didnt set a ClipOffset, H.O.T has defaulted to 26 seconds of offset."
+  );
+  Clipoffset = 26;
+}
+if (PLogin != null) {
+  StreamerName = PLogin.innerHTML as string;
+} else {
+  console.log(
+    "you didnt set a TwitchLoginName, you will not be able to use Clip-Stamps"
+  );
+  let TwitchClipbtn = document.getElementById("TwitchClip") as HTMLInputElement;
+  TwitchClipbtn.disabled = true;
+}
+if (Plocal != null) {
+  SettingsLocal = Plocal.innerHTML as string;
+} else {
+  console.log("LocalSettings not found Turning off Local Mode");
+  SettingsLocal = "" as string;
+}
 
 // Asigned later
 var AclientId = "" as string;
@@ -32,24 +71,26 @@ validateToken();
 //#endregion
 
 //#region Basic Setup H.O.T NON Twitch API
-if (CutOuts(RawTxt) == 1) {
-  // Runs CutOuts and if successful run next Method in line
-  if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
-    // Runs SetOps if sucessful run next Method in line
-    // Set in Data to Webpage
-    let statsP = document.getElementById("Stats") as HTMLElement;
-    statsP.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
-    if (DomSet() == 1) {
-      // Domset needs to be ran before we call ValidateToken();
+if (RawTxt != undefined && RawTxt != "" && RawTxt != null) {
+  if (CutOuts(RawTxt) == 1) {
+    // Runs CutOuts and if successful run next Method in line
+    if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
+      // Runs SetOps if sucessful run next Method in line
+      // Set in Data to Webpage
+      let statsP = document.getElementById("Stats") as HTMLElement;
+      statsP.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
+      if (DomSet() == 1) {
+        // Domset needs to be ran before we call ValidateToken();
+      } else {
+        // Error logging
+        console.log("Failed Placing Things in the Websites");
+      }
     } else {
-      // Error logging
-      console.log("Failed Placing Things in the Websites");
+      console.log("Error Creating Description");
     }
   } else {
-    console.log("Error Creating Description");
+    console.log("Error Sorting Timestamps");
   }
-} else {
-  console.log("Error Sorting Timestamps");
 }
 //#endregion
 
@@ -65,13 +106,13 @@ TwitchClip.addEventListener("click", async function (event: any) {
   if (TwitchConnected == true) {
     // Calling API to get ID of streamer with this name
     let UserIdResp = await HttpCalling(
-      `https://api.twitch.tv/helix/users?login=${StreamerName}`,
-      false
+      `https://api.twitch.tv/helix/users?login=${StreamerName}`
+      
     );
     // Calling API to gather VODS from this user.
     let UserVods = await HttpCalling(
-      `https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`,
-      false
+      `https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`
+      
     );
     let TwitchStreamedDate = Array();
     let FullDateTwitch = Array();
@@ -134,7 +175,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
     let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${
       UserIdResp["data"][0]["id"]
     }&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
-    let resp = await HttpCalling(http2, true);
+    let resp = await HttpCalling(http2);
     console.log(resp);
     //#endregion
     let MultiUnsortedClips = Array();
@@ -492,7 +533,7 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
       if (SettingsLocal != "") {
         LocalDescript = LocalBeforeDesc + "\n\n";
         LocalDescript =
-        LocalDescript +
+          LocalDescript +
           `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${Clipoffset})\n`;
         for (let i = 0; i < resArray.length; i++) {
           let timestamp = resArray[i];
@@ -522,17 +563,17 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
     for (let index = 0; index < MultiDimRecordArr.length; index++) {
       let resArray = MultiDimRecordArr[index];
 
-      if(SettingsLocal != "") {
+      if (SettingsLocal != "") {
         LocalDescript = LocalBeforeDesc + "\n\n";
         LocalDescript =
-        LocalDescript + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
-      for (let i = 0; i < resArray.length; i++) {
-        let timestamp = resArray[i];
-        LocalDescript = LocalDescript + timestamp + "\n";
-      }
-      LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
-      LocalDescArrR.push(LocalDescript);
-      LocalDescript = "";
+          LocalDescript + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+        for (let i = 0; i < resArray.length; i++) {
+          let timestamp = resArray[i];
+          LocalDescript = LocalDescript + timestamp + "\n";
+        }
+        LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
+        LocalDescArrR.push(LocalDescript);
+        LocalDescript = "";
       }
 
       Description = BeforeDesc + "\n\n";
@@ -594,7 +635,15 @@ function DomSet() {
       ul.append(li);
     }
 
-    SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo", LocalDescArrS, "LocaleDesc-", "myInput");
+    SetIns(
+      DescArrS,
+      StreamDatesArr,
+      "Stream",
+      "StreamingNo",
+      LocalDescArrS,
+      "LocaleDesc-",
+      "myInput"
+    );
   } else if (DescArrS.length < 0) {
     console.log("No stream Timestamps found");
   }
@@ -617,7 +666,15 @@ function DomSet() {
       li.append(a);
       ul.append(li);
     }
-    SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo", LocalDescArrR, "recordLocalInput", "recordInput");
+    SetIns(
+      DescArrR,
+      RecordDatesArr,
+      "Record",
+      "RecordingNo",
+      LocalDescArrR,
+      "recordLocalInput",
+      "recordInput"
+    );
   } else {
     console.log("No recording Timestamps found");
   }
@@ -633,7 +690,15 @@ function DomSet() {
 // Outputs: Nothing, Void;
 // returns Nothing
 
-function SetIns(DescArr: Array<string>, DatesArr: Array<string>, string: string, IDname: string, LocalArr: Array<string>, LocalID: string, TextAreaID: string) {
+function SetIns(
+  DescArr: Array<string>,
+  DatesArr: Array<string>,
+  string: string,
+  IDname: string,
+  LocalArr: Array<string>,
+  LocalID: string,
+  TextAreaID: string
+) {
   var DescDiv = document.getElementById(
     "DescriptionAreaDiv"
   ) as HTMLInputElement;
@@ -680,8 +745,14 @@ function SetIns(DescArr: Array<string>, DatesArr: Array<string>, string: string,
     // Text Area for Description
 
     let LocalTextarea = document.createElement("textarea");
-    if(SettingsLocal != "") {
-      LocalTextarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
+    if (SettingsLocal != "") {
+      LocalTextarea.classList.add(
+        "d-flex",
+        "m-1",
+        "res",
+        "form-control",
+        "Textarea"
+      );
       LocalTextarea.innerHTML = LocalArr[index];
       LocalTextarea.setAttribute("id", `myLocalInput${index}`);
     }
@@ -722,10 +793,10 @@ function SetIns(DescArr: Array<string>, DatesArr: Array<string>, string: string,
     AcordBody.append(CharDiv);
     // Textarea
     AcordBody.append(Textarea);
-    if(SettingsLocal != "") {
+    if (SettingsLocal != "") {
       let p = document.createElement("p");
-      p.innerHTML="localized to: ("+SettingsLocal+") Description";
-      p.setAttribute("class", "my-2")
+      p.innerHTML = "localized to: (" + SettingsLocal + ") Description";
+      p.setAttribute("class", "my-2");
       let input = document.createElement("input");
       input.classList.add("form-control", "p-3", "my-2");
       input.setAttribute("id", `LocaleTitle-${index}`);
@@ -900,6 +971,7 @@ function parseISOString(Isostring) {
 //#region validateToken() Validates Token if sucessful returns 1 if not 0
 // Calls the Twitch api with Out App Acess Token and returns a ClientId and tells us if the App Acess Token is Valid or Not
 async function validateToken() {
+  if(AppAcessToken != undefined && AppAcessToken != "" && AppAcessToken != null) {
   await fetch("https://id.twitch.tv/oauth2/validate", {
     headers: {
       Authorization: "Bearer " + AppAcessToken,
@@ -933,12 +1005,14 @@ async function validateToken() {
     });
   return 1;
 }
+else { return 0; }
+}
 //#endregion
 
 //#region [async] HttpCaller(HttpCall) multipurpose HttpCaller calls the Httpcall returns The Response if Success if not: 0
 // This makes most calls, intead of a lot of differnt functions this does them instead.
 // TO find out what is called look where its called as the HTTPCALL would need to be sent over.
-async function HttpCalling(HttpCall: string, Pagnate: boolean) {
+async function HttpCalling(HttpCall: string) {
   const respon = await fetch(`${HttpCall}`, {
     headers: {
       Authorization: "Bearer " + AppAcessToken,

@@ -239,34 +239,40 @@ function IframClipBuilder(ClipLink) {
     divPlayer.scrollIntoView();
 }
 async function validateTToken() {
-    fetch("https://id.twitch.tv/oauth2/validate", {
-        headers: {
-            Authorization: "Bearer " + TappAcess,
-        },
-    })
-        .then((resp) => resp.json())
-        .then(async (resp) => {
-        if (resp.status) {
-            if (resp.status == 401) {
-                console.log("This token is invalid" + resp.message);
+    console.log("Your AccessToken: " + TappAcess);
+    if (TappAcess != undefined && TappAcess != "" && TappAcess != null) {
+        await fetch("https://id.twitch.tv/oauth2/validate", {
+            headers: {
+                Authorization: "Bearer " + TappAcess,
+            },
+        })
+            .then((resp) => resp.json())
+            .then((resp) => {
+            if (resp.status) {
+                if (resp.status == 401) {
+                    console.log("This token ('" + TappAcess + "') is invalid ... " + resp.message);
+                    return 0;
+                }
+                console.log("Unexpected output with a status");
                 return 0;
             }
-            console.log("Unexpected output with a status");
+            if (resp.client_id) {
+                client_id = resp.client_id;
+                console.log("Token Validated Sucessfully");
+                return 1;
+            }
+            console.log("unexpected Output");
             return 0;
-        }
-        if (resp.client_id) {
-            client_id = resp.client_id;
-            console.log("Validated Token");
-            return 1;
-        }
-        console.log("unexpected Output");
-    })
-        .catch((err) => {
-        ErrorMsg("An Error Occured VALIDATING token data", err, "Error");
-        console.log(err);
-        console.log("An Error Occured VALIDATING token data");
+        })
+            .catch((err) => {
+            console.log(err);
+            return 0;
+        });
+        return 1;
+    }
+    else {
         return 0;
-    });
+    }
 }
 async function HttpCaller(HttpCall) {
     const respon = await fetch(`${HttpCall}`, {
