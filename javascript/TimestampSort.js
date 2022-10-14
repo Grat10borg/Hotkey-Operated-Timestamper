@@ -374,6 +374,7 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
     if (MultiDimStreamArr.length > -1) {
         for (let index = 0; index < MultiDimStreamArr.length; index++) {
             let resArray = MultiDimStreamArr[index];
+            console.log(resArray);
             if (SettingsLocal != "") {
                 LocalDescript = LocalBeforeDesc + "\n\n";
                 LocalDescript =
@@ -385,6 +386,7 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
                 }
                 LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
                 LocalDescArrS.push(LocalDescript);
+                console.log(LocalDescript);
                 LocalDescript = "";
             }
             Description = BeforeDesc + "\n\n";
@@ -397,6 +399,7 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
             }
             Description = Description + "\n" + AfterDesc;
             DescArrS.push(Description);
+            console.log(Description);
             Description = "";
         }
         success = true;
@@ -440,6 +443,8 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
 function DomSet() {
     DescArrS.reverse();
     DescArrR.reverse();
+    LocalDescArrS.reverse();
+    LocalDescArrR.reverse();
     StreamDatesArr.reverse();
     RecordDatesArr.reverse();
     let SidebarDiv = document.getElementById("SideBar");

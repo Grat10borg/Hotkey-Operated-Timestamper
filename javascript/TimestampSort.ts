@@ -529,7 +529,7 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
     // if has Values
     for (let index = 0; index < MultiDimStreamArr.length; index++) {
       let resArray = MultiDimStreamArr[index];
-
+      console.log(resArray);
       if (SettingsLocal != "") {
         LocalDescript = LocalBeforeDesc + "\n\n";
         LocalDescript =
@@ -541,6 +541,7 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
         }
         LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
         LocalDescArrS.push(LocalDescript);
+        console.log(LocalDescript);
         LocalDescript = "";
       }
 
@@ -554,6 +555,7 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
       }
       Description = Description + "\n" + AfterDesc;
       DescArrS.push(Description);
+      console.log(Description);
       Description = "";
     }
     success = true;
@@ -608,6 +610,8 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
 function DomSet() {
   DescArrS.reverse(); // makes array be Newest First
   DescArrR.reverse();
+  LocalDescArrS.reverse();
+  LocalDescArrR.reverse();
   StreamDatesArr.reverse();
   RecordDatesArr.reverse();
   // Update Sidebar
