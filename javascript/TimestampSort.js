@@ -374,7 +374,6 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
     if (MultiDimStreamArr.length > -1) {
         for (let index = 0; index < MultiDimStreamArr.length; index++) {
             let resArray = MultiDimStreamArr[index];
-            console.log(resArray);
             if (SettingsLocal != "") {
                 LocalDescript = LocalBeforeDesc + "\n\n";
                 LocalDescript =
@@ -386,7 +385,6 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
                 }
                 LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
                 LocalDescArrS.push(LocalDescript);
-                console.log(LocalDescript);
                 LocalDescript = "";
             }
             Description = BeforeDesc + "\n\n";
@@ -399,7 +397,6 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
             }
             Description = Description + "\n" + AfterDesc;
             DescArrS.push(Description);
-            console.log(Description);
             Description = "";
         }
         success = true;
@@ -535,7 +532,7 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID
         h4.innerHTML = `# Suggested Description`;
         let LocalTextarea = document.createElement("textarea");
         if (SettingsLocal != "") {
-            LocalTextarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
+            LocalTextarea.classList.add("d-flex", "m-1", "res", "form-control");
             LocalTextarea.innerHTML = LocalArr[index];
             LocalTextarea.setAttribute("id", `myLocalInput${index}`);
         }
