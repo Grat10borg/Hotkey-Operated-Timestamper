@@ -128,6 +128,10 @@ ChannelSelect.addEventListener("change", async function () {
     selectboxG.firstChild.remove();
   }
   // Updating Game Select box with game name and ids
+  let optionNone = document.createElement("option");
+  optionNone.setAttribute("value", "None");
+  optionNone.append(document.createTextNode("Any Game Id"));
+  selectboxG.appendChild(optionNone);
   for (let index = 0; index < SelectGameResp["data"].length; index++) {
     let gameid = SelectGameResp["data"][index]["id"];
     let gamename = SelectGameResp["data"][index]["name"];
@@ -137,10 +141,6 @@ ChannelSelect.addEventListener("change", async function () {
     optionsG.append(document.createTextNode(gamename));
     selectboxG.appendChild(optionsG);
   }
-  let optionNone = document.createElement("option");
-  optionNone.setAttribute("value", "None");
-  optionNone.append(document.createTextNode("Any Game Id"));
-  selectboxG.appendChild(optionNone);
   selectboxG.disabled = false;
   //#endregion
 });
@@ -406,39 +406,6 @@ async function validateTToken() {
 }
 else { return 0; }
 }
-
-// async function validateTToken() {
-//   fetch("https://id.twitch.tv/oauth2/validate", {
-//     headers: {
-//       Authorization: "Bearer " + TappAcess,
-//     },
-//   })
-//     .then((resp) => resp.json())
-//     .then(async (resp) => {
-//       if (resp.status) {
-//         if (resp.status == 401) {
-//           console.log("This token is invalid" + resp.message);
-//           // document.getElementById('output').textContent = 'This token is invalid: ' + resp.message;
-//           return 0;
-//         }
-//         console.log("Unexpected output with a status");
-//         return 0;
-//       }
-//       if (resp.client_id) {
-//         client_id = resp.client_id; // Getting Client Id for page
-//         console.log("Validated Token");
-//         return 1;
-//       }
-//       console.log("unexpected Output");
-//     })
-//     .catch((err) => {
-//       ErrorMsg("An Error Occured VALIDATING token data", err, "Error");
-//       console.log(err);
-//       console.log("An Error Occured VALIDATING token data");
-//       return 0;
-//     });
-// }
-
 //#endregion
 
 //#region HTTPCaller Method Calls the HTTP call you give with the credentials for the Twitch api

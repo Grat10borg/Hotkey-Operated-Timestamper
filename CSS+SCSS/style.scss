@@ -34,12 +34,14 @@ h4 {
 p {
   color: #293a42;
 }
-.Textarea {
+textarea {
   outline: #293268;
   resize: none;
   height: 12em !important;
-  width: 50em;
 }
+// .Textarea {
+  
+// }
 .form-floating > .form-control:focus,
 .form-floating > .form-control:not(:placeholder-shown) {
   padding-top: 1%;

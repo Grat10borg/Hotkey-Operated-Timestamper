@@ -75,6 +75,10 @@ ChannelSelect.addEventListener("change", async function () {
     while (selectboxG.firstChild) {
         selectboxG.firstChild.remove();
     }
+    let optionNone = document.createElement("option");
+    optionNone.setAttribute("value", "None");
+    optionNone.append(document.createTextNode("Any Game Id"));
+    selectboxG.appendChild(optionNone);
     for (let index = 0; index < SelectGameResp["data"].length; index++) {
         let gameid = SelectGameResp["data"][index]["id"];
         let gamename = SelectGameResp["data"][index]["name"];
@@ -83,10 +87,6 @@ ChannelSelect.addEventListener("change", async function () {
         optionsG.append(document.createTextNode(gamename));
         selectboxG.appendChild(optionsG);
     }
-    let optionNone = document.createElement("option");
-    optionNone.setAttribute("value", "None");
-    optionNone.append(document.createTextNode("Any Game Id"));
-    selectboxG.appendChild(optionNone);
     selectboxG.disabled = false;
 });
 function ClipSorter(Clips, game_id, viewCount) {

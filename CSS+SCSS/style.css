@@ -35,11 +35,10 @@ p {
   color: #293a42;
 }
 
-.Textarea {
+textarea {
   outline: #293268;
   resize: none;
   height: 12em !important;
-  width: 50em;
 }
 
 .form-floating > .form-control:focus,
