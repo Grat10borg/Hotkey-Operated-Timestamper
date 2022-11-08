@@ -83,6 +83,7 @@ let ChannelSelect = document.querySelector("#SelectChannel") as any;
 ChannelSelect.addEventListener("change", async function () {
 //#region Getting channel ID
   let StreamerName = ChannelSelect.options[ChannelSelect.selectedIndex].value;
+  if(StreamerName != "none") {
   console.log("Searching for " + StreamerName); // en
   ErrorDiv.innerHTML = ""; // clear errors
   let UserResp = await HttpCaller(
@@ -143,7 +144,7 @@ ChannelSelect.addEventListener("change", async function () {
   }
   selectboxG.disabled = false;
   //#endregion
-});
+}});
 //#endregion
 
 // Large functions

@@ -47,47 +47,49 @@ form.addEventListener("submit", async function (event) {
 let ChannelSelect = document.querySelector("#SelectChannel");
 ChannelSelect.addEventListener("change", async function () {
     let StreamerName = ChannelSelect.options[ChannelSelect.selectedIndex].value;
-    console.log("Searching for " + StreamerName);
-    ErrorDiv.innerHTML = "";
-    let UserResp = await HttpCaller(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
-    UserId = UserResp["data"][0]["id"];
-    let d = new Date();
-    let RFCdato = new Date();
-    RFCdato.setDate(RFCdato.getDate() - 90);
-    let GameResp = await HttpCaller(`https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`);
-    var GameIds = new Set();
-    for (let index = 0; index < GameResp["data"].length; index++) {
-        GameIds.add(GameResp["data"][index]["game_id"]);
-    }
-    let httpcall = "https://api.twitch.tv/helix/games?";
-    let index = 0;
-    GameIds.forEach((Gameid) => {
-        if (index == 0) {
-            httpcall = httpcall + "id=" + Gameid;
+    if (StreamerName != "none") {
+        console.log("Searching for " + StreamerName);
+        ErrorDiv.innerHTML = "";
+        let UserResp = await HttpCaller(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
+        UserId = UserResp["data"][0]["id"];
+        let d = new Date();
+        let RFCdato = new Date();
+        RFCdato.setDate(RFCdato.getDate() - 90);
+        let GameResp = await HttpCaller(`https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`);
+        var GameIds = new Set();
+        for (let index = 0; index < GameResp["data"].length; index++) {
+            GameIds.add(GameResp["data"][index]["game_id"]);
         }
-        else {
-            httpcall = httpcall + "&id=" + Gameid;
+        let httpcall = "https://api.twitch.tv/helix/games?";
+        let index = 0;
+        GameIds.forEach((Gameid) => {
+            if (index == 0) {
+                httpcall = httpcall + "id=" + Gameid;
+            }
+            else {
+                httpcall = httpcall + "&id=" + Gameid;
+            }
+            index++;
+        });
+        let SelectGameResp = await HttpCaller(httpcall);
+        let selectboxG = document.getElementById("SelectGame");
+        while (selectboxG.firstChild) {
+            selectboxG.firstChild.remove();
         }
-        index++;
-    });
-    let SelectGameResp = await HttpCaller(httpcall);
-    let selectboxG = document.getElementById("SelectGame");
-    while (selectboxG.firstChild) {
-        selectboxG.firstChild.remove();
+        let optionNone = document.createElement("option");
+        optionNone.setAttribute("value", "None");
+        optionNone.append(document.createTextNode("Any Game Id"));
+        selectboxG.appendChild(optionNone);
+        for (let index = 0; index < SelectGameResp["data"].length; index++) {
+            let gameid = SelectGameResp["data"][index]["id"];
+            let gamename = SelectGameResp["data"][index]["name"];
+            let optionsG = document.createElement("option");
+            optionsG.setAttribute("value", gameid);
+            optionsG.append(document.createTextNode(gamename));
+            selectboxG.appendChild(optionsG);
+        }
+        selectboxG.disabled = false;
     }
-    let optionNone = document.createElement("option");
-    optionNone.setAttribute("value", "None");
-    optionNone.append(document.createTextNode("Any Game Id"));
-    selectboxG.appendChild(optionNone);
-    for (let index = 0; index < SelectGameResp["data"].length; index++) {
-        let gameid = SelectGameResp["data"][index]["id"];
-        let gamename = SelectGameResp["data"][index]["name"];
-        let optionsG = document.createElement("option");
-        optionsG.setAttribute("value", gameid);
-        optionsG.append(document.createTextNode(gamename));
-        selectboxG.appendChild(optionsG);
-    }
-    selectboxG.disabled = false;
 });
 function ClipSorter(Clips, game_id, viewCount) {
     var arrclips = Array();
