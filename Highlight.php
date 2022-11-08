@@ -87,47 +87,49 @@ AddP($Hashtags, "Hashtags");
                         </div>
                     </div>
                 </div>
-                <h4># Data!</h4>
-                <div class="border-bottom border-secondary pb-2" id="DataDiv">
-                    <!-- Data is set in when the Api is called  -->
-                    <p class="text-center" id="DataP">please run a query to get date here!! (. ❛ ᴗ ❛.)</p>
-                    <h4 class="m-3"># Highlighter Settings</h4>
-                    <div class="accordion mb-3" id="accordionSettings">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingSettings">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
-                                    H.O.T: Highlighter Settings
-                                </button>
-                            </h2>
-                            <div id="collapseSettings" class="accordion-collapse collapse" aria-labelledby="headingSettings" data-bs-parent="#accordionSettings">
-                                <div class="accordion-body">
-                                    <p class="mb-5">you can change your settings <a href="Settings.php">Here</a></p>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col m-auto">
-                                                <p>Your Twitch APP AccessToken</p>
-                                                <?php
-                                                if (isset($TwitchApiKey)) {
-                                                    echo "<input value='$TwitchApiKey' disabled class='form-control p-3' type='text'/>";
-                                                } else {
-                                                    echo "<input class='form-control p-3' disabled placeholder='' type='text'/>";
-                                                }
-                                                ?>
-                                            </div>
-                                            <div class="col m-auto">
-                                                <p class="pt-2">Quick Search Channels</p>
-                                                <?php
-                                                if (isset($History)) {
-                                                    echo "<textarea disabled class'form-control p-3'>";
-                                                    foreach ($History as $string) {
-                                                         echo $string;
-                                                         echo "\n";
+                <div>
+                    <h4># Data!</h4>
+                    <div class="border-bottom border-secondary pb-2" id="DataDiv">
+                        <!-- Data is set in when the Api is called  -->
+                        <p class="text-center" id="DataP">please run a query to get date here!! (. ❛ ᴗ ❛.)</p>
+                        <h4 class="m-3"># Highlighter Settings</h4>
+                        <div class="accordion mb-3" id="accordionSettings">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingSettings">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
+                                        H.O.T: Highlighter Settings
+                                    </button>
+                                </h2>
+                                <div id="collapseSettings" class="accordion-collapse collapse" aria-labelledby="headingSettings" data-bs-parent="#accordionSettings">
+                                    <div class="accordion-body">
+                                        <p class="mb-5">you can change your settings <a href="Settings.php">Here</a></p>
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col m-auto">
+                                                    <p>Your Twitch APP AccessToken</p>
+                                                    <?php
+                                                    if (isset($TwitchApiKey)) {
+                                                        echo "<input value='$TwitchApiKey' disabled class='form-control p-3' type='text'/>";
+                                                    } else {
+                                                        echo "<input class='form-control p-3' disabled placeholder='' type='text'/>";
                                                     }
-                                                    echo "</textarea>";
-                                                } else {
-                                                    echo "<textarea disabled class'form-control p-3'></textarea>";
-                                                }
-                                                ?>
+                                                    ?>
+                                                </div>
+                                                <div class="col m-auto">
+                                                    <p class="pt-2">Quick Search Channels</p>
+                                                    <?php
+                                                    if (isset($History)) {
+                                                        echo "<textarea disabled class'form-control p-3'>";
+                                                        foreach ($History as $string) {
+                                                            echo $string;
+                                                            echo "\n";
+                                                        }
+                                                        echo "</textarea>";
+                                                    } else {
+                                                        echo "<textarea disabled class'form-control p-3'></textarea>";
+                                                    }
+                                                    ?>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -135,61 +137,63 @@ AddP($Hashtags, "Hashtags");
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="accordion mt-4">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button id="accordLink" disabled class="accordion-button btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                # Clip links
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                            <div>
-                                <div id="Linksarea" class="accordion-body d-flex row">
-                                    <!-- sets in links through javascript -->
+                    <div class="accordion mt-4">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button id="accordLink" disabled class="accordion-button btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    # Clip links
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                <div>
+                                    <div id="Linksarea" class="accordion-body d-flex row">
+                                        <!-- sets in links through javascript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button id="accordDesc" disabled class="btn accordion-button collapsed " type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    # Suggested Description
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="d-flex justify-content-between">
+                                        <h4># Suggested Description</h4>
+                                        <p id="CharCount0"></p>
+                                    </div>
+                                    <!-- H.O.T makes a description for the highlight vid here -->
+                                    <textarea class="d-flex Textarea form-control" id="myInput0"></textarea>
+                                    <div class="d-flex justify-content-left my-3">
+                                        <button class='btn button mx-1 Select' value='0'>Select text</button>
+                                        <button class='btn button mx-1 Copy' value='0'>Copy text</button>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button class="btn button m-2 authUpload">Connect Youtube!</button>
+                                        <select disabled class="col-5 my-1 SelectId" name="SelectId" id="selectId"></select>
+                                        <button class='btn button mx-1 Send' value='0' id='authbtn'>Update YT Vid</button>
+                                    </div>
+                                    <!-- Add copy paste and youtube button -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    # Suggested Future Local Version Description
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <p>"hi" :) i'm still working on this sorry!</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button id="accordDesc" disabled class="btn accordion-button collapsed " type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                # Suggested Description
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex justify-content-between">
-                                    <h4># Suggested Description</h4>
-                                    <p id="CharCount0"></p>
-                                </div>
-                                <!-- H.O.T makes a description for the highlight vid here -->
-                                <textarea class="d-flex Textarea form-control" id="myInput0"></textarea>
-                                <div class="d-flex justify-content-left my-3">
-                                    <button class='btn button mx-1 Select' value='0'>Select text</button>
-                                    <button class='btn button mx-1 Copy' value='0'>Copy text</button>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <button class="btn button m-2 authUpload">Connect Youtube!</button>
-                                    <select disabled class="col-5 my-1 SelectId" name="SelectId" id="selectId"></select>
-                                    <button class='btn button mx-1 Send' value='0' id='authbtn'>Update YT Vid</button>
-                                </div>
-                                <!-- Add copy paste and youtube button -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                # Suggested Future Local Version Description
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <p>"hi" :) i'm still working on this sorry!</p>
-                            </div>
-                        </div>
-                    </div>
+
+
                 </div>
             </div>
         </div>
