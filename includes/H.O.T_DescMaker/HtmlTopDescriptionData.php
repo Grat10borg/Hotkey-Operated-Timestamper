@@ -6,7 +6,7 @@
                     echo "<h4 class='-2 text-danger text-center fs-3'>Error `(*>﹏<*)′</h4>";
                     echo "<h5 class='m-3 text-danger text-center'>$error</h5>";
                 } ?>
-                <div class="justify-content-center d-flex">
+                <div class="justify-content-center d-flex border-bottom border-secondary mb-4">
 
                     <div>
                         <p>H.O.T is a Vod timestamper i designed to work along with the <a target="blank" href="https://obsproject.com/forum/resources/infowriter.345/">Stream-Writer plugin for OBS.</a></p>
@@ -79,7 +79,7 @@
                                                 <p>Your Youtube API key</p>
                                                 <?php
                                                 if (isset($YTClientID)) {
-                                                    echo "<input value='$YTClientID' class='form-control p-3' placeholder='<Longstring of Random Letters>.apps.googleusercontent.com' name='YoutubeClientID' type='text' id='YTClientIn' />";
+                                                    echo "<input value='$YTClientID' disabled class='form-control p-3' placeholder='<Longstring of Random Letters>.apps.googleusercontent.com' name='YoutubeClientID' type='text' id='YTClientIn' />";
                                                 } else {
                                                     echo "<input class='form-control p-3' placeholder='<Longstring of Random Letters>.apps.googleusercontent.com' name='YoutubeClientID' type='text' id='YTClientIn' />";
                                                 }
@@ -89,7 +89,7 @@
                                                 <p>Your Youtube AccessToken</p>
                                                 <?php
                                                 if (isset($YTAPIKey)) {
-                                                    echo "<input value='$YTAPIKey' class='form-control p-3' placeholder='Something like: AIzaSyCq512yjXdQLtdUV3n7CzdIe78oDufRovU'  name='YoutubeApiKey' type='text' id='YTKeyIn' />";
+                                                    echo "<input value='$YTAPIKey' disabled class='form-control p-3' placeholder='Something like: AIzaSyCq512yjXdQLtdUV3n7CzdIe78oDufRovU'  name='YoutubeApiKey' type='text' id='YTKeyIn' />";
                                                 } else {
                                                     echo "<input class='form-control p-3' placeholder='Something like: AIzaSyCq512yjXdQLtdUV3n7CzdIe78oDufRovU'  name='YoutubeApiKey' type='text' id='YTKeyIn' />";
                                                 }
@@ -101,7 +101,7 @@
                                                 <p id="ClipOffsetP">Your ClipOffset</p>
                                                 <?php
                                                 if (isset($ClipsOffset)) {
-                                                    echo "<input value='$ClipsOffset' class='form-control p-3' placeholder='26' name='ClipOffset' type='text' id='ClipOffsetIn' />";
+                                                    echo "<input value='$ClipsOffset' disabled class='form-control p-3' placeholder='26' name='ClipOffset' type='text' id='ClipOffsetIn' />";
                                                 } else {
                                                     echo "<input class='form-control p-3' placeholder='26' name='ClipOffset' type='text' id='ClipOffsetIn' />";
                                                 }
@@ -111,7 +111,7 @@
                                                 <p>Your Timestamp.txt file path</p>
                                                 <?php
                                                 if (isset($Timestamp_path)) {
-                                                    echo "<input value='$Timestamp_path' class='form-control p-3' placeholder='..\Folder\Timestamp.txt' name='TimestampPath' type='text' id='TimeSPathIn'/>";
+                                                    echo "<input value='$Timestamp_path' disabled class='form-control p-3' placeholder='..\Folder\Timestamp.txt' name='TimestampPath' type='text' id='TimeSPathIn'/>";
                                                 } else {
                                                     echo "<input class='form-control p-3' placeholder='..\Folder\Timestamp.txt' name='TimestampPath' type='text' id='TimeSPathIn'/>";
                                                 }
@@ -123,7 +123,7 @@
                                                 <p>Your Hashtags after title</p>
                                                 <?php
                                                 if (isset($Hashtags)) {
-                                                    echo "<input value='$Hashtags' class='form-control p-3' placeholder='VOD' name='Hashtags' type='text' id='HashtagsIn'/>";
+                                                    echo "<input value='$Hashtags' disabled class='form-control p-3' placeholder='VOD' name='Hashtags' type='text' id='HashtagsIn'/>";
                                                 } else {
                                                     echo "<input class='form-control p-3' placeholder='VOD' name='Hashtags' type='text' id='HashtagsIn'/>";
                                                 }
@@ -133,7 +133,7 @@
                                                 <p>Localazation Description Key</p>
                                                 <?php
                                                 if (isset($Localazation)) {
-                                                    echo "<input value='$Localazation' class='form-control p-3' placeholder='en' name='Localazation' type='text' id='LocalazationIn'/>";
+                                                    echo "<input value='$Localazation' disabled class='form-control p-3' placeholder='en' name='Localazation' type='text' id='LocalazationIn'/>";
                                                 } else {
                                                     echo "<input class='form-control p-3' placeholder='VOD' name='Localazation' type='text' id='LocalazationIn'/>";
                                                 }
@@ -141,12 +141,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-
-
-
-
-
                                 </div>
                             </div>
                         </div>
