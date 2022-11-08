@@ -88,9 +88,53 @@ AddP($Hashtags, "Hashtags");
                     </div>
                 </div>
                 <h4># Data!</h4>
-                <div id="DataDiv">
+                <div class="border-bottom border-secondary pb-2" id="DataDiv">
                     <!-- Data is set in when the Api is called  -->
                     <p class="text-center" id="DataP">please run a query to get date here!! (. ❛ ᴗ ❛.)</p>
+                    <h4 class="m-3"># Highlighter Settings</h4>
+                    <div class="accordion mb-3" id="accordionSettings">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingSettings">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
+                                    H.O.T: Highlighter Settings
+                                </button>
+                            </h2>
+                            <div id="collapseSettings" class="accordion-collapse collapse" aria-labelledby="headingSettings" data-bs-parent="#accordionSettings">
+                                <div class="accordion-body">
+                                    <p class="mb-5">you can change your settings <a href="Settings.php">Here</a></p>
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col m-auto">
+                                                <p>Your Twitch APP AccessToken</p>
+                                                <?php
+                                                if (isset($TwitchApiKey)) {
+                                                    echo "<input value='$TwitchApiKey' disabled class='form-control p-3' type='text'/>";
+                                                } else {
+                                                    echo "<input class='form-control p-3' disabled placeholder='' type='text'/>";
+                                                }
+                                                ?>
+                                            </div>
+                                            <div class="col m-auto">
+                                                <p class="pt-2">Quick Search Channels</p>
+                                                <?php
+                                                if (isset($History)) {
+                                                    echo "<textarea disabled class'form-control p-3'>";
+                                                    foreach ($History as $string) {
+                                                         echo $string;
+                                                         echo "\n";
+                                                    }
+                                                    echo "</textarea>";
+                                                } else {
+                                                    echo "<textarea disabled class'form-control p-3'></textarea>";
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="accordion mt-4">
                     <div class="accordion-item">
@@ -103,9 +147,6 @@ AddP($Hashtags, "Hashtags");
                             <div>
                                 <div id="Linksarea" class="accordion-body d-flex row">
                                     <!-- sets in links through javascript -->
-                                    <div class="col">
-                                        <p>testr</p>
-                                    </div>
                                 </div>
                             </div>
                         </div>
