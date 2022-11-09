@@ -1,5 +1,5 @@
 Remember the qoutes! if you plan on doing this hacker style. also dont remove this text
-[TwitchApiKey] "k5sdtlyllbjyg48g5qki7cs0a7l2u2",
+[TwitchApiKey] "4288c26k4gyq71fuq0bimderkzmjtr",
 [StreamerUserName] "grat_grot10_berg",
 [YoutubeClientID] "738406360954-a9r9s4jod084g8ac8gec1vv0p9b419di.apps.googleusercontent.com",
 [YoutubeApiKey] "AIzaSyCq512yjXdQLtdUV3n7CzKIe78oDufRovU",
@@ -7,4 +7,4 @@ Remember the qoutes! if you plan on doing this hacker style. also dont remove th
 [TimestampPath] "C:\xampp\htdocs\TSQ\Hotkey-Operated-Timestamper\Texts\Timestamps.txt",
 [PluginName] "Hotkey Operated Timestamper",
 [Hashtags] "#Vtuber #VtuberEn #Davtuber",
-[Localized] "da"
+[Localized] "da",

@@ -243,6 +243,7 @@ function IframClipBuilder(ClipLink) {
 }
 async function validateTToken() {
     console.log("Your AccessToken: " + TappAcess);
+    let p = document.getElementById("AccessTokenTime");
     if (TappAcess != undefined && TappAcess != "" && TappAcess != null) {
         await fetch("https://id.twitch.tv/oauth2/validate", {
             headers: {
@@ -253,9 +254,14 @@ async function validateTToken() {
             .then((resp) => {
             if (resp.status) {
                 if (resp.status == 401) {
-                    console.log("This token ('" + TappAcess + "') is invalid ... " + resp.message + ".. The Submit Button has been Disabled. you cannot use H.O.T: Highlighter without a Token! _(._. )>");
+                    console.log("This token ('" +
+                        TappAcess +
+                        "') is invalid (" +
+                        resp.message +
+                        ").. The Submit Button has been Disabled. you cannot use H.O.T: Highlighter without a Token! _(._. )>");
                     let Submitbtn = document.getElementById("Submit");
                     Submitbtn.disabled = true;
+                    p.innerHTML = `• Your Token is invalid, try to follow H.O.T wiki for help!.`;
                     return 0;
                 }
                 console.log("Unexpected output with a status");
@@ -264,9 +270,14 @@ async function validateTToken() {
             if (resp.client_id) {
                 client_id = resp.client_id;
                 console.log("Token Validated Sucessfully");
+                let Time = new Date(resp.expires_in * 1000)
+                    .toISOString()
+                    .substr(11, 8);
+                p.innerHTML = `• Current Token Will Expire In: \n ${Time}.`;
                 return 1;
             }
             console.log("unexpected Output");
+            p.innerHTML = `• Your Token returned an unforseen result?.`;
             return 0;
         })
             .catch((err) => {

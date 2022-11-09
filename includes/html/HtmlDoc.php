@@ -13,6 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <link href="CSS+SCSS/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="CSS+SCSS/style.css" type="text/css">
-    <link rel="shortcut icon" href="img\HOT_Icon.ico" />
+    <link rel="shortcut icon" href="img\HOT_Icon.png" />
     <title>H.O.T V-<?php echo $version ?></title>
 </head>

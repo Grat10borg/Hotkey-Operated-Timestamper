@@ -82,7 +82,6 @@ AddP($Hashtags, "Hashtags");
                                 <div id="ErrorDiv"></div>
                                 <p>Highlight Oriented Timestamper was made to help me with collecton and sorting of clips!
                                 <p class="mb-5">it'll Query the clips that fit your parameters and make a description for a YT vid!</p>
-
                             </div>
                         </div>
                     </div>
@@ -104,9 +103,9 @@ AddP($Hashtags, "Hashtags");
                                     <div class="accordion-body">
                                         <div class="container">
                                             <h4># Settings</h4>
-                                            <p class="mb-5">you can change your settings <a href="Settings.php">Here</a></p>
+                                            <p class="mb-2">you can change your settings <a href="Settings.php">Here</a></p>
                                             <div class="row">
-                                                <div class="col m-auto d-flex justify-content-center">
+                                                <div class="col m-auto">
                                                     <div>
                                                         <p>Your Twitch APP AccessToken</p>
                                                         <?php
@@ -116,6 +115,7 @@ AddP($Hashtags, "Hashtags");
                                                             echo "<input class='form-control p-3' disabled placeholder='' type='text'/>";
                                                         }
                                                         ?>
+                                                        <p class="text-secondary mt-2" id="AccessTokenTime"></p>
                                                     </div>
                                                 </div>
                                                 <div class="col m-auto d-flex justify-content-center">
@@ -137,7 +137,7 @@ AddP($Hashtags, "Hashtags");
                                                 </div>
                                             </div>
                                             <hr>
-                                            <h4># Hints!</h4>
+                                            <h4># Hints! <img src="img\HOT_Icon.png" alt="H.O.T small Icon"></h4>
                                             <div>
                                                 <h5>Quick Download Clip Script!</h5>
                                                 <input disabled type="text" class="form-control form-control-sm" value='javascript:window.open(document.getElementsByTagName("video")[0].src)'>

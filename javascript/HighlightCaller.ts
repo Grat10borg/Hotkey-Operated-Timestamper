@@ -41,7 +41,7 @@ form.addEventListener(
     }
     //#endregion
 
-    //#region Testing if Values are Valid 
+    //#region Testing if Values are Valid
     // Tests if start date is an aproved date, else print error
     try {
       Startdate = Startdate.toISOString();
@@ -52,9 +52,7 @@ form.addEventListener(
     // Makes sure the End Date always is a Aproved Date
     if (endDate == "Invalid Date") {
       endDate = new Date(); // make end date be Today right now, clips wont be in the future anyways
-      console.log(
-        "End Date not selected Defaulting to Todays Date"
-      );
+      console.log("End Date not selected Defaulting to Todays Date");
       endDate = endDate.toISOString();
     } else {
       endDate = endDate.toISOString();
@@ -79,70 +77,71 @@ form.addEventListener(
 //#region ChannelSelect Eventhandler
 let ChannelSelect = document.querySelector("#SelectChannel") as any;
 ChannelSelect.addEventListener("change", async function () {
-//#region Getting channel ID
+  //#region Getting channel ID
   let StreamerName = ChannelSelect.options[ChannelSelect.selectedIndex].value;
-  if(StreamerName != "none") {
-  console.log("Searching for " + StreamerName); // en
-  ErrorDiv.innerHTML = ""; // clear errors
-  let UserResp = await HttpCaller(
-    `https://api.twitch.tv/helix/users?login=${StreamerName}`
-  );
-  UserId = UserResp["data"][0]["id"];
-  //#endregion
+  if (StreamerName != "none") {
+    console.log("Searching for " + StreamerName); // en
+    ErrorDiv.innerHTML = ""; // clear errors
+    let UserResp = await HttpCaller(
+      `https://api.twitch.tv/helix/users?login=${StreamerName}`
+    );
+    UserId = UserResp["data"][0]["id"];
+    //#endregion
 
-  //#region Getting GameNames From Clips
-  let d = new Date();
-  let RFCdato = new Date();
-  RFCdato.setDate(RFCdato.getDate() - 90); // takes a month worth of clips
-  let GameResp = await HttpCaller(
-    `https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`
-  );
-  var GameIds = new Set(); // sets can only hold uniq values
-  for (let index = 0; index < GameResp["data"].length; index++) {
-    GameIds.add(GameResp["data"][index]["game_id"]);
-  }
-  //#endregion
-
-  //#region Getting GameIDs From GameNames
-  let httpcall = "https://api.twitch.tv/helix/games?"; // cannot handle more then 100 ids at one time
-  let index = 0;
-  GameIds.forEach((Gameid) => {
-    //console.log(Gameid);
-    if (index == 0) {
-      httpcall = httpcall + "id=" + Gameid;
-    } else {
-      httpcall = httpcall + "&id=" + Gameid;
+    //#region Getting GameNames From Clips
+    let d = new Date();
+    let RFCdato = new Date();
+    RFCdato.setDate(RFCdato.getDate() - 90); // takes a month worth of clips
+    let GameResp = await HttpCaller(
+      `https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`
+    );
+    var GameIds = new Set(); // sets can only hold uniq values
+    for (let index = 0; index < GameResp["data"].length; index++) {
+      GameIds.add(GameResp["data"][index]["game_id"]);
     }
-    index++;
-  });
-  //#endregion
+    //#endregion
 
-  //#region Getting Games from Selected Channel and Placing it on Website.
-  let SelectGameResp = await HttpCaller(httpcall);
-  // getting select box
-  let selectboxG = document.getElementById("SelectGame") as HTMLInputElement;
+    //#region Getting GameIDs From GameNames
+    let httpcall = "https://api.twitch.tv/helix/games?"; // cannot handle more then 100 ids at one time
+    let index = 0;
+    GameIds.forEach((Gameid) => {
+      //console.log(Gameid);
+      if (index == 0) {
+        httpcall = httpcall + "id=" + Gameid;
+      } else {
+        httpcall = httpcall + "&id=" + Gameid;
+      }
+      index++;
+    });
+    //#endregion
 
-  while (selectboxG.firstChild) {
-    // remove old data
-    selectboxG.firstChild.remove();
+    //#region Getting Games from Selected Channel and Placing it on Website.
+    let SelectGameResp = await HttpCaller(httpcall);
+    // getting select box
+    let selectboxG = document.getElementById("SelectGame") as HTMLInputElement;
+
+    while (selectboxG.firstChild) {
+      // remove old data
+      selectboxG.firstChild.remove();
+    }
+    // Updating Game Select box with game name and ids
+    let optionNone = document.createElement("option");
+    optionNone.setAttribute("value", "None");
+    optionNone.append(document.createTextNode("Any Game Id"));
+    selectboxG.appendChild(optionNone);
+    for (let index = 0; index < SelectGameResp["data"].length; index++) {
+      let gameid = SelectGameResp["data"][index]["id"];
+      let gamename = SelectGameResp["data"][index]["name"];
+
+      let optionsG = document.createElement("option");
+      optionsG.setAttribute("value", gameid);
+      optionsG.append(document.createTextNode(gamename));
+      selectboxG.appendChild(optionsG);
+    }
+    selectboxG.disabled = false;
+    //#endregion
   }
-  // Updating Game Select box with game name and ids
-  let optionNone = document.createElement("option");
-  optionNone.setAttribute("value", "None");
-  optionNone.append(document.createTextNode("Any Game Id"));
-  selectboxG.appendChild(optionNone);
-  for (let index = 0; index < SelectGameResp["data"].length; index++) {
-    let gameid = SelectGameResp["data"][index]["id"];
-    let gamename = SelectGameResp["data"][index]["name"];
-
-    let optionsG = document.createElement("option");
-    optionsG.setAttribute("value", gameid);
-    optionsG.append(document.createTextNode(gamename));
-    selectboxG.appendChild(optionsG);
-  }
-  selectboxG.disabled = false;
-  //#endregion
-}});
+});
 //#endregion
 
 // Large functions
@@ -226,7 +225,7 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   let DataDiv = document.querySelector("#DataDiv") as HTMLElement;
   DataDiv.appendChild(insertP);
   //#endregion
- 
+
   //#region Set in Links
   let textAreaDiv = document.querySelector("#Linksarea") as HTMLElement;
   let Desc = document.querySelector("#myInput0") as HTMLInputElement;
@@ -271,7 +270,7 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     p.classList.add("col-3", "text-center");
 
     // set text
-    button.textContent="Play Clip →";
+    button.textContent = "Play Clip →";
     a.text = ` ‣ Clip ${i + 1} - '${sortcliped[i]["title"]}'`; // sets text
     p.append(
       document.createTextNode(
@@ -285,25 +284,27 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     rowdiv.append(p);
     textAreaDiv.append(rowdiv);
   }
- // Add event handler for watching clips with button clicks
-let ClipBtns = document.querySelectorAll(".ClipBtn");
-for (let i = 0; i < ClipBtns.length; i++) {
-  ClipBtns[i].addEventListener(
-        "click",
-        function(event: any) {
-          console.log(event.target.value);
-          let Id = event.target.value.split("-");
-          console.log(Id);
-          let Link = document.getElementById(`Clip-${Id[1]}`) as HTMLAnchorElement;
-          console.log(Link);
-          IframClipBuilder(Link.href);
-        },
-        true
+  // Add event handler for watching clips with button clicks
+  let ClipBtns = document.querySelectorAll(".ClipBtn");
+  for (let i = 0; i < ClipBtns.length; i++) {
+    ClipBtns[i].addEventListener(
+      "click",
+      function (event: any) {
+        console.log(event.target.value);
+        let Id = event.target.value.split("-");
+        console.log(Id);
+        let Link = document.getElementById(
+          `Clip-${Id[1]}`
+        ) as HTMLAnchorElement;
+        console.log(Link);
+        IframClipBuilder(Link.href);
+      },
+      true
     );
-}
+  }
 
-//#endregion
-  
+  //#endregion
+
   //#region Description Making
   // Make Description for Would be Hightligt
   text = text + "Clips by:";
@@ -341,25 +342,27 @@ for (let i = 0; i < ClipBtns.length; i++) {
 }
 //#endregion
 
-
 //#region IframeClipBuilder(IframeId: string) // Accepts Any Link to A Twitch Clip
 // ran when you click submit. sets an Iframe on the website
 function IframClipBuilder(ClipLink: string) {
-  let divPlayer = document.getElementById("IframePlayerLater") as HTMLElement; 
-  let menuDiv = document.getElementById("MenuLogoDiv") as HTMLElement; 
+  let divPlayer = document.getElementById("IframePlayerLater") as HTMLElement;
+  let menuDiv = document.getElementById("MenuLogoDiv") as HTMLElement;
   let slug = ClipLink.split("/");
   let Iframe = document.createElement("iframe");
-  Iframe.setAttribute("src", `https://clips.twitch.tv/embed?clip=${slug[3]}&parent=localhost&autoplay=true&muted=true`);
+  Iframe.setAttribute(
+    "src",
+    `https://clips.twitch.tv/embed?clip=${slug[3]}&parent=localhost&autoplay=true&muted=true`
+  );
   Iframe.setAttribute("frameborder", "0");
   Iframe.setAttribute("allowfullscreen", "true");
   Iframe.setAttribute("scrolling", "no");
   Iframe.setAttribute("height", "378");
   Iframe.setAttribute("width", "620");
   Iframe.setAttribute("id", "IframeClip");
-  menuDiv.innerHTML="";// remove logo
-  divPlayer.innerHTML=""; // or old clip
+  menuDiv.innerHTML = ""; // remove logo
+  divPlayer.innerHTML = ""; // or old clip
   divPlayer.append(Iframe);
-  
+
   // download button
   //let downloadbtn = document.createElement("button") as HTMLElement;
   divPlayer.scrollIntoView(); // move view upto player
@@ -374,40 +377,58 @@ function IframClipBuilder(ClipLink: string) {
 //#region validateToken() Validates Token if sucessful returns 1 if not 0
 // Calls the Twitch api with Out App Acess Token and returns a ClientId and tells us if the App Acess Token is Valid or Not
 async function validateTToken() {
-  console.log("Your AccessToken: "+TappAcess);
-  if(TappAcess != undefined && TappAcess != "" && TappAcess != null) {
-  await fetch("https://id.twitch.tv/oauth2/validate", {
-    headers: {
-      Authorization: "Bearer " + TappAcess,
-    },
-  })
-    .then((resp) => resp.json())
-    .then((resp) => {
-      if (resp.status) {
-        if (resp.status == 401) {
-          console.log("This token ('"+TappAcess+"') is invalid ... " + resp.message+".. The Submit Button has been Disabled. you cannot use H.O.T: Highlighter without a Token! _(._. )>");
-          let Submitbtn = document.getElementById("Submit") as HTMLInputElement;
-          Submitbtn.disabled = true;
+  console.log("Your AccessToken: " + TappAcess);
+  let p = document.getElementById("AccessTokenTime") as HTMLElement;
+  if (TappAcess != undefined && TappAcess != "" && TappAcess != null) {
+    await fetch("https://id.twitch.tv/oauth2/validate", {
+      headers: {
+        Authorization: "Bearer " + TappAcess,
+      },
+    })
+      .then((resp) => resp.json())
+      .then((resp) => {
+        if (resp.status) {
+          if (resp.status == 401) {
+            console.log(
+              "This token ('" +
+                TappAcess +
+                "') is invalid (" +
+                resp.message +
+                ").. The Submit Button has been Disabled. you cannot use H.O.T: Highlighter without a Token! _(._. )>"
+                
+            );
+            let Submitbtn = document.getElementById(
+              "Submit"
+            ) as HTMLInputElement;
+            Submitbtn.disabled = true;
+            p.innerHTML = `• Your Token is invalid, try to follow H.O.T wiki for help!.`;
+            return 0;
+          }
+          console.log("Unexpected output with a status");
           return 0;
         }
-        console.log("Unexpected output with a status");
+        if (resp.client_id) {
+          client_id = resp.client_id;
+          console.log("Token Validated Sucessfully");
+          
+          let Time = new Date(resp.expires_in * 1000)
+            .toISOString()
+            .substr(11, 8);
+          p.innerHTML = `• Current Token Will Expire In: \n ${Time}.`;
+          return 1;
+        }
+        console.log("unexpected Output");
+        p.innerHTML = `• Your Token returned an unforseen result?.`;
         return 0;
-      }
-      if (resp.client_id) {
-        client_id = resp.client_id;
-        console.log("Token Validated Sucessfully");
-        return 1;
-      }
-      console.log("unexpected Output");
-      return 0;
-    })
-    .catch((err) => {
-      console.log(err);
-      return 0;
-    });
-  return 1;
-}
-else { return 0; }
+      })
+      .catch((err) => {
+        console.log(err);
+        return 0;
+      });
+    return 1;
+  } else {
+    return 0;
+  }
 }
 //#endregion
 
