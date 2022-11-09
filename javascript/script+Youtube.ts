@@ -419,3 +419,4 @@ function CalcChars(event): any {
   return string.length;
 }
 //#endregion
+

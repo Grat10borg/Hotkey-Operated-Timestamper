@@ -37,7 +37,6 @@ form.addEventListener(
     let game_id = form.SelectGame.options[form.SelectGame.selectedIndex].value;
     let viewCount = form.viewcount.value;
     if (viewCount == "") {
-      // sets default value if none is given
       viewCount = 1;
     }
     //#endregion
@@ -54,7 +53,7 @@ form.addEventListener(
     if (endDate == "Invalid Date") {
       endDate = new Date(); // make end date be Today right now, clips wont be in the future anyways
       console.log(
-        "Sluts Dato var ikke sat, defaulter til Dagens dato som sluts dato"
+        "End Date not selected Defaulting to Todays Date"
       );
       endDate = endDate.toISOString();
     } else {
@@ -69,7 +68,6 @@ form.addEventListener(
     console.log(ClipResp);
     ClipSorter(ClipResp, game_id, viewCount);
     //#endregion
-    
   },
   true
 );
@@ -357,9 +355,13 @@ function IframClipBuilder(ClipLink: string) {
   Iframe.setAttribute("scrolling", "no");
   Iframe.setAttribute("height", "378");
   Iframe.setAttribute("width", "620");
+  Iframe.setAttribute("id", "IframeClip");
   menuDiv.innerHTML="";// remove logo
   divPlayer.innerHTML=""; // or old clip
   divPlayer.append(Iframe);
+  
+  // download button
+  //let downloadbtn = document.createElement("button") as HTMLElement;
   divPlayer.scrollIntoView(); // move view upto player
 }
 //#endregion

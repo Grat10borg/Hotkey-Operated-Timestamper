@@ -1,8 +1,10 @@
-<?php   include "includes/html/HtmlDoc.php";  // makes the DoctypeHtml, also sets in version num in title  ?> 
+<?php include "includes/html/HtmlDoc.php";  // makes the DoctypeHtml, also sets in version num in title  
+?>
+
 <body>
     <?php
     include "includes/settings.php"; // general vars things you can change is imported here, like the file root for the txt!
-    include "includes/ArrayMaker.php";  
+    include "includes/ArrayMaker.php";
 
 
     if (file_exists($Timestamp_path)) { // if there is a file at the end of the file path
@@ -14,21 +16,47 @@
             $error = "File Found. File was empty though.. file at $Timestamp_path did not have content";
         }
         #region Testing if values arent Null
-        if($BeforeDesc != "") {AddArrTextArea($BeforeDesc, "BeforeDesc");} // Text placed before any timestamps
-        if($AfterDesc != "") {AddArrTextArea($AfterDesc, "AfterDesc");} // Text placed after any timestamps.
-        if($Tag != "") {AddArrTextArea($Tag, "Tags");}  
-        if($LocalAfterDesc != "") {AddArrTextArea($LocalAfterDesc, "LocalAfterDesc");} 
-        if($LocalBeforeDesc != "") {AddArrTextArea($LocalBeforeDesc, "LocalBeforeDesc");}    
-        
+        if ($BeforeDesc != "") {
+            AddArrTextArea($BeforeDesc, "BeforeDesc");
+        } // Text placed before any timestamps
+        if ($AfterDesc != "") {
+            AddArrTextArea($AfterDesc, "AfterDesc");
+        } // Text placed after any timestamps.
+        if ($Tag != "") {
+            AddArrTextArea($Tag, "Tags");
+        }
+        if ($LocalAfterDesc != "") {
+            AddArrTextArea($LocalAfterDesc, "LocalAfterDesc");
+        }
+        if ($LocalBeforeDesc != "") {
+            AddArrTextArea($LocalBeforeDesc, "LocalBeforeDesc");
+        }
+
         // Api keys, Settings 
-        if($TwitchApiKey != "") {AddP($TwitchApiKey, "TwitchKey");}
-        if($StreamerLogin != ""){AddP($StreamerLogin, "TwitchLogin");}
-        if($YTClientID != ""){AddP($YTClientID, "YTClient");}
-        if($YTAPIKey != ""){ AddP($YTAPIKey, "YTKey");}
-        if($PluginName != ""){ AddP($PluginName, "YTPluginName");}
-        if($ClipsOffset != ""){AddP($ClipsOffset, "ClipOffset");}
-        if($Hashtags != ""){ AddP($Hashtags, "Hashtags");}
-        if($Localazation != ""){ AddP($Localazation, "Local");} 
+        if ($TwitchApiKey != "") {
+            AddP($TwitchApiKey, "TwitchKey");
+        }
+        if ($StreamerLogin != "") {
+            AddP($StreamerLogin, "TwitchLogin");
+        }
+        if ($YTClientID != "") {
+            AddP($YTClientID, "YTClient");
+        }
+        if ($YTAPIKey != "") {
+            AddP($YTAPIKey, "YTKey");
+        }
+        if ($PluginName != "") {
+            AddP($PluginName, "YTPluginName");
+        }
+        if ($ClipsOffset != "") {
+            AddP($ClipsOffset, "ClipOffset");
+        }
+        if ($Hashtags != "") {
+            AddP($Hashtags, "Hashtags");
+        }
+        if ($Localazation != "") {
+            AddP($Localazation, "Local");
+        }
         #endregion
     } else {
         $error = "Failed to find Txt at file path. please check if its spelt 100% correctly \n $Timestamp_path";

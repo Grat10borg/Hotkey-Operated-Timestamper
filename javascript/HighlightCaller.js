@@ -34,7 +34,7 @@ form.addEventListener("submit", async function (event) {
     }
     if (endDate == "Invalid Date") {
         endDate = new Date();
-        console.log("Sluts Dato var ikke sat, defaulter til Dagens dato som sluts dato");
+        console.log("End Date not selected Defaulting to Todays Date");
         endDate = endDate.toISOString();
     }
     else {
@@ -235,6 +235,7 @@ function IframClipBuilder(ClipLink) {
     Iframe.setAttribute("scrolling", "no");
     Iframe.setAttribute("height", "378");
     Iframe.setAttribute("width", "620");
+    Iframe.setAttribute("id", "IframeClip");
     menuDiv.innerHTML = "";
     divPlayer.innerHTML = "";
     divPlayer.append(Iframe);

@@ -88,48 +88,60 @@ AddP($Hashtags, "Hashtags");
                     </div>
                 </div>
                 <div>
-                    <h4># Data!</h4>
                     <div class="border-bottom border-secondary pb-2" id="DataDiv">
+                        <h4># Data!</h4>
                         <!-- Data is set in when the Api is called  -->
                         <p class="text-center" id="DataP">please run a query to get date here!! (. ❛ ᴗ ❛.)</p>
-                        <h4 class="m-3"># Highlighter Settings</h4>
+                        <h4 class=""># Highlighter Settings & Hints!</h4>
                         <div class="accordion mb-3" id="accordionSettings">
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="headingSettings">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
-                                        H.O.T: Highlighter Settings
+                                        H.O.T: Highlighter Settings + Hints!
                                     </button>
                                 </h2>
                                 <div id="collapseSettings" class="accordion-collapse collapse" aria-labelledby="headingSettings" data-bs-parent="#accordionSettings">
                                     <div class="accordion-body">
-                                        <p class="mb-5">you can change your settings <a href="Settings.php">Here</a></p>
                                         <div class="container">
+                                            <h4># Settings</h4>
+                                            <p class="mb-5">you can change your settings <a href="Settings.php">Here</a></p>
                                             <div class="row">
-                                                <div class="col m-auto">
-                                                    <p>Your Twitch APP AccessToken</p>
-                                                    <?php
-                                                    if (isset($TwitchApiKey)) {
-                                                        echo "<input value='$TwitchApiKey' disabled class='form-control p-3' type='text'/>";
-                                                    } else {
-                                                        echo "<input class='form-control p-3' disabled placeholder='' type='text'/>";
-                                                    }
-                                                    ?>
-                                                </div>
-                                                <div class="col m-auto">
-                                                    <p class="pt-2">Quick Search Channels</p>
-                                                    <?php
-                                                    if (isset($History)) {
-                                                        echo "<textarea disabled class'form-control p-3'>";
-                                                        foreach ($History as $string) {
-                                                            echo $string;
-                                                            echo "\n";
+                                                <div class="col m-auto d-flex justify-content-center">
+                                                    <div>
+                                                        <p>Your Twitch APP AccessToken</p>
+                                                        <?php
+                                                        if (isset($TwitchApiKey)) {
+                                                            echo "<input value='$TwitchApiKey' disabled class='form-control p-3' type='text'/>";
+                                                        } else {
+                                                            echo "<input class='form-control p-3' disabled placeholder='' type='text'/>";
                                                         }
-                                                        echo "</textarea>";
-                                                    } else {
-                                                        echo "<textarea disabled class'form-control p-3'></textarea>";
-                                                    }
-                                                    ?>
+                                                        ?>
+                                                    </div>
                                                 </div>
+                                                <div class="col m-auto d-flex justify-content-center">
+                                                    <div>
+                                                        <p class="pt-2">Quick Search Channels</p>
+                                                        <?php
+                                                        if (isset($History)) {
+                                                            echo "<textarea disabled class'form-control p-3'>";
+                                                            foreach ($History as $string) {
+                                                                echo $string;
+                                                                echo "\n";
+                                                            }
+                                                            echo "</textarea>";
+                                                        } else {
+                                                            echo "<textarea disabled class'form-control p-3'></textarea>";
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <h4># Hints!</h4>
+                                            <div>
+                                                <h5>Quick Download Clip Script!</h5>
+                                                <input disabled type="text" class="form-control form-control-sm" value='javascript:window.open(document.getElementsByTagName("video")[0].src)'>
+                                                <p>put this as a bookmark and click on it when on Twitch's clip page!</p>
                                             </div>
                                         </div>
                                     </div>
