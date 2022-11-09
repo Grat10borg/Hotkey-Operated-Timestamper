@@ -2,9 +2,13 @@
 let PBeforeDesc = document.getElementById("BeforeDesc");
 let PAfterDesc = document.getElementById("AfterDesc");
 let PTKey = document.getElementById("TwitchKey");
+let PLBeforeDesc = document.getElementById("LocalBeforeDesc");
+let PLAfterDesc = document.getElementById("LocalAfterDesc");
 let BeforeDesc = PBeforeDesc.innerHTML;
 let AfterDesc = PAfterDesc.innerHTML;
 var TappAcess = PTKey.innerHTML;
+let LocalBeforeDesc = PLBeforeDesc.innerHTML;
+let LocalAfterDesc = PLAfterDesc.innerHTML;
 let UserId = "";
 let client_id = "";
 validateTToken();
@@ -149,19 +153,34 @@ function ClipSorter(Clips, game_id, viewCount) {
     let DataDiv = document.querySelector("#DataDiv");
     DataDiv.appendChild(insertP);
     let textAreaDiv = document.querySelector("#Linksarea");
-    let Desc = document.querySelector("#myInput0");
     let clipCredit = new Set();
     let x = 0;
     duration = 0;
+    let localmode = false;
+    let locale = document.getElementById("Local");
+    if (locale.innerHTML != "" && locale.innerHTML != "none") {
+        localmode = true;
+    }
     let text = "";
     text = text + BeforeDesc + "\n\n";
+    let LocaleText = "";
+    if (localmode == true) {
+        let LocaleBeforeDesc = document.getElementById("LocalBeforeDesc");
+        LocaleText = LocaleText + LocaleBeforeDesc.innerHTML + "\n\n";
+    }
     textAreaDiv.innerHTML = "";
     for (let i = 0; i < sortcliped.length; i++) {
         if (i == 0) {
             text = text + `• 0:00 ${sortcliped[i]["title"]}\n`;
+            if (localmode == true) {
+                LocaleText = LocaleText + `• 0:00 ${sortcliped[i]["title"]}\n`;
+            }
         }
         else {
             text = text + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
+            if (localmode == true) {
+                LocaleText = LocaleText + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
+            }
         }
         duration = duration + sortcliped[i]["duration"];
         clipCredit.add(sortcliped[i]["creator_name"]);
@@ -201,12 +220,25 @@ function ClipSorter(Clips, game_id, viewCount) {
         }, true);
     }
     text = text + "Clips by:";
+    if (localmode == true) {
+        LocaleText = LocaleText + "Clips by:";
+    }
     clipCredit.forEach((element) => {
         text = text + ` ${element},`;
+        if (localmode == true) {
+            LocaleText = LocaleText + ` ${element},`;
+        }
     });
     text = text.slice(0, text.length - 1);
     text = text + "\n\n" + AfterDesc;
+    let Desc = document.querySelector("#myInput0");
     Desc.textContent = text;
+    if (localmode == true) {
+        LocaleText = LocaleText.slice(0, text.length - 1);
+        LocaleText = LocaleText + "\n\n" + LocalAfterDesc;
+        let localDesc = document.querySelector("#LocalDescription");
+        localDesc.textContent = LocaleText;
+    }
     let Charcount = text.length;
     let p = document.querySelector(`#CharCount0`);
     p.textContent = `${Charcount}`;
@@ -223,6 +255,10 @@ function ClipSorter(Clips, game_id, viewCount) {
     accorddesc.disabled = false;
     let accordLink = document.querySelector("#accordLink");
     accordLink.disabled = false;
+    if (localmode == true) {
+        let accordLocal = document.querySelector("#accordLocalDesc");
+        accordLocal.disabled = false;
+    }
 }
 function IframClipBuilder(ClipLink) {
     let divPlayer = document.getElementById("IframePlayerLater");

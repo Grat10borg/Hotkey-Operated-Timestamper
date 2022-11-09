@@ -25,13 +25,15 @@
         if ($Tag != "") {
             AddArrTextArea($Tag, "Tags");
         }
-        if ($LocalAfterDesc != "") {
-            AddArrTextArea($LocalAfterDesc, "LocalAfterDesc");
+        if ($Localazation != "") {
+            AddP($Localazation, "Local");
+            if ($LocalAfterDesc != "") {
+                AddArrTextArea($LocalAfterDesc, "LocalAfterDesc");
+            }
+            if ($LocalBeforeDesc != "") {
+                AddArrTextArea($LocalBeforeDesc, "LocalBeforeDesc");
+            }
         }
-        if ($LocalBeforeDesc != "") {
-            AddArrTextArea($LocalBeforeDesc, "LocalBeforeDesc");
-        }
-
         // Api keys, Settings 
         if ($TwitchApiKey != "") {
             AddP($TwitchApiKey, "TwitchKey");
@@ -53,9 +55,6 @@
         }
         if ($Hashtags != "") {
             AddP($Hashtags, "Hashtags");
-        }
-        if ($Localazation != "") {
-            AddP($Localazation, "Local");
         }
         #endregion
     } else {

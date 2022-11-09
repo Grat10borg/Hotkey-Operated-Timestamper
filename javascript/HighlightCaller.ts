@@ -3,11 +3,16 @@
 let PBeforeDesc = document.getElementById("BeforeDesc") as HTMLInputElement;
 let PAfterDesc = document.getElementById("AfterDesc") as HTMLInputElement;
 let PTKey = document.getElementById("TwitchKey") as HTMLElement;
+let PLBeforeDesc = document.getElementById("LocalBeforeDesc") as HTMLInputElement;
+let PLAfterDesc = document.getElementById("LocalAfterDesc") as HTMLInputElement;
 
 // Settings
 let BeforeDesc = PBeforeDesc.innerHTML;
 let AfterDesc = PAfterDesc.innerHTML;
 var TappAcess = PTKey.innerHTML;
+let LocalBeforeDesc = PLBeforeDesc.innerHTML;
+let LocalAfterDesc = PLAfterDesc.innerHTML;
+
 
 // Asigned later
 let UserId = "";
@@ -228,20 +233,38 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 
   //#region Set in Links
   let textAreaDiv = document.querySelector("#Linksarea") as HTMLElement;
-  let Desc = document.querySelector("#myInput0") as HTMLInputElement;
+  
   let clipCredit = new Set(); // holds credit for clips
 
   let x = 0;
   duration = 0;
+
+  let localmode = false;
+  let locale = document.getElementById("Local") as HTMLElement;
+  if(locale.innerHTML != "" && locale.innerHTML != "none") 
+  {
+    localmode = true;
+  }
+  // Making Description
   let text = ""; // initialzes vars for getting duration
   text = text + BeforeDesc + "\n\n"; // adds the description
+  // locale version of description
+  let LocaleText = "" as string;
+  if(localmode == true) 
+  {
+    let LocaleBeforeDesc = document.getElementById("LocalBeforeDesc") as HTMLElement;
+    LocaleText = LocaleText + LocaleBeforeDesc.innerHTML + "\n\n";
+  }
+
   textAreaDiv.innerHTML = ""; // removes ALL previous links
   for (let i = 0; i < sortcliped.length; i++) {
     // duration getter, + highlight description maker
     if (i == 0) {
       text = text + `• 0:00 ${sortcliped[i]["title"]}\n`; // makes start chapter for youtube description
+      if (localmode == true) {LocaleText = LocaleText + `• 0:00 ${sortcliped[i]["title"]}\n`;}
     } else {
       text = text + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
+      if (localmode == true) {LocaleText = LocaleText + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;}
     }
     duration = duration + sortcliped[i]["duration"];
     clipCredit.add(sortcliped[i]["creator_name"]);
@@ -308,14 +331,27 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   //#region Description Making
   // Make Description for Would be Hightligt
   text = text + "Clips by:";
+  if(localmode == true) {LocaleText = LocaleText + "Clips by:";}
   clipCredit.forEach((element) => {
     // note: clipcredit is a Set it only holds unique values
     text = text + ` ${element},`;
+    if(localmode == true) {LocaleText = LocaleText + ` ${element},`;}
   });
 
   text = text.slice(0, text.length - 1);
   text = text + "\n\n" + AfterDesc;
+  // finished description change
+  let Desc = document.querySelector("#myInput0") as HTMLInputElement;
   Desc.textContent = text;
+  if(localmode == true) {
+    LocaleText = LocaleText.slice(0, text.length - 1);
+    LocaleText = LocaleText + "\n\n" + LocalAfterDesc;
+
+    let localDesc = document.querySelector("#LocalDescription") as HTMLInputElement;
+    localDesc.textContent = LocaleText;
+  }
+
+
   //#endregion
 
   //#region Text Counter Set in
@@ -339,6 +375,10 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   accorddesc.disabled = false;
   let accordLink = document.querySelector("#accordLink") as HTMLInputElement;
   accordLink.disabled = false;
+  if(localmode == true) {
+    let accordLocal = document.querySelector("#accordLocalDesc") as HTMLInputElement;
+    accordLocal.disabled = false;
+  }
 }
 //#endregion
 
@@ -410,7 +450,6 @@ async function validateTToken() {
         if (resp.client_id) {
           client_id = resp.client_id;
           console.log("Token Validated Sucessfully");
-          
           let Time = new Date(resp.expires_in * 1000)
             .toISOString()
             .substr(11, 8);

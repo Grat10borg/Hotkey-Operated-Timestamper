@@ -717,7 +717,10 @@ async function validateToken() {
                 console.log("Token Validated Sucessfully");
                 console.log(resp);
                 let p = document.getElementById("AccessTokenTime");
-                p.innerHTML = `• Your Token will Expire in: \n ${resp.expires_in} seconds.`;
+                let Time = new Date(resp.expires_in * 1000)
+                    .toISOString()
+                    .substr(11, 8);
+                p.innerHTML = `• Current Token Will Expire In: \n ${Time}.`;
                 return 1;
             }
             console.log("unexpected Output");

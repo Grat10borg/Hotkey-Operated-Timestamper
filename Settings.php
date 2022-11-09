@@ -83,7 +83,7 @@ include "includes/html/HtmlDoc.php";
                                                                                                             foreach ($BeforeDesc as $string) {
                                                                                                                 echo $string;
                                                                                                             }}?></textarea>
-                                    <p class="mt-3">After Timestamps (TopText)</p>
+                                    <p class="mt-3">After Timestamps (BottomText)</p>
                                     <textarea name="AfterDesc" class="d-flex Textarea form-control"><?php
                                                                                                     if (isset($AfterDesc)) {
                                                                                                         foreach ($AfterDesc as $string) {
@@ -102,12 +102,13 @@ include "includes/html/HtmlDoc.php";
                                                                                                     foreach ($Tag as $string) {
                                                                                                         echo $string;
                                                                                                     }}?></textarea>
-                                    <p class="mt-3">Localized Before Timestamps!)</p>
+                                    <p class="mt-3">Localized Before Timestamps! (TopText)</p>
                                     <textarea name="LocalBeforeTimestamps" class="d-flex Textarea form-control"><?php
                                                                                                                 if (isset($LocalBeforeDesc)) {
                                                                                                                     foreach ($LocalBeforeDesc as $string) {
                                                                                                                         echo $string;
                                                                                                                     }}?></textarea>
+                                    <p class="mt-3">Localized After Timestamps! (BottomText)</p>
                                     <textarea name="LocalAfterTimestamps" class="d-flex Textarea form-control"><?php
                                                                                                                 if (isset($LocalAfterDesc)) {
                                                                                                                     foreach ($LocalAfterDesc as $string) {

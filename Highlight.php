@@ -3,16 +3,40 @@ include "includes/html/HtmlDoc.php";
 include "includes/settings.php";
 include "includes/ArrayMaker.php";
 
-AddArrTextArea($BeforeDesc, "BeforeDesc"); // Text placed before any timestamps
-AddArrTextArea($AfterDesc, "AfterDesc"); // Text placed after any timestamps.
-AddArrTextArea($Tag, "Tags");
+if ($BeforeDesc != "") {
+    AddArrTextArea($BeforeDesc, "BeforeDesc");
+} // Text placed before any timestamps
+if ($AfterDesc != "") {
+    AddArrTextArea($AfterDesc, "AfterDesc");
+} // Text placed after any timestamps.
+if ($Localazation != "") {
+    AddP($Localazation, "Local");
+    if ($LocalAfterDesc != "") {
+        AddArrTextArea($LocalAfterDesc, "LocalAfterDesc");
+    }
+    if ($LocalBeforeDesc != "") {
+        AddArrTextArea($LocalBeforeDesc, "LocalBeforeDesc");
+    }
+}
+
+//AddArrTextArea($Tag, "Tags");
 
 // Api keys, Settings 
-AddP($TwitchApiKey, "TwitchKey");
-AddP($YTClientID, "YTClient");
-AddP($YTAPIKey, "YTKey");
-AddP($PluginName, "YTPluginName");
-AddP($Hashtags, "Hashtags");
+if ($TwitchApiKey != "") {
+    AddP($TwitchApiKey, "TwitchKey");
+}
+if ($YTClientID != "") {
+    AddP($YTClientID, "YTClient");
+}
+if ($YTAPIKey != "") {
+    AddP($YTAPIKey, "YTKey");
+}
+if ($PluginName != "") {
+    AddP($PluginName, "YTPluginName");
+}
+if ($Hashtags != "") {
+    AddP($Hashtags, "Hashtags");
+}
 ?>
 
 <body>
@@ -137,7 +161,7 @@ AddP($Hashtags, "Hashtags");
                                                 </div>
                                             </div>
                                             <hr>
-                                            <h4># Hints! <img src="img\HOT_Icon.png" alt="H.O.T small Icon"></h4>
+                                            <h4># Hints! <img src="img/HOT_Icon.ico" alt="H.O.T small Icon"></h4>
                                             <div>
                                                 <h5>Quick Download Clip Script!</h5>
                                                 <input disabled type="text" class="form-control form-control-sm" value='javascript:window.open(document.getElementsByTagName("video")[0].src)'>
@@ -193,13 +217,27 @@ AddP($Hashtags, "Hashtags");
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingThree">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    # Suggested Future Local Version Description
+                                <button id="accordLocalDesc" disabled class="btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    # Local Suggested Description
                                 </button>
                             </h2>
                             <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
-                                    <p>"hi" :) i'm still working on this sorry!</p>
+                                    <div class="d-flex justify-content-between">
+                                        <h4># Local Suggested Description</h4>
+                                        <!-- <p id="CharCount0"></p> -->
+                                    </div>
+                                    <!-- H.O.T makes a description for the highlight vid here -->
+                                    <textarea class="d-flex Textarea form-control" id="LocalDescription"></textarea>
+                                    <div class="d-flex justify-content-left my-3">
+                                        <button disabled class='btn button mx-1 Select' value='0'>Select text</button>
+                                        <button disabled class='btn button mx-1 Copy' value='0'>Copy text</button>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button disabled class="btn button m-2 authUpload">Connect Youtube!</button>
+                                        <select disabled class="col-5 my-1 SelectId" name="SelectId" id="selectId"></select>
+                                        <button disabled class='btn button mx-1 Send' value='0' id='authbtn'>Update YT Vid</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
