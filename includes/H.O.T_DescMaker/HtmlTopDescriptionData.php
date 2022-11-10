@@ -11,7 +11,7 @@
                     <div>
                         <p>H.O.T is a Vod timestamper i designed to work along with the <a target="blank" href="https://obsproject.com/forum/resources/infowriter.345/">Stream-Writer plugin for OBS.</a></p>
                         <p>it cuts down all the timestamps into the smallest amount of characters,</p>
-                        <p class="mb-3">and formats it into your desciption!</p>
+                        <p class="mb-3">and formats it into your description!</p>
                     </div>
                 </div>
                 <div class="container row border-bottom border-secondary pb-5">

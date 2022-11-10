@@ -993,10 +993,11 @@ async function validateToken() {
         console.log("Token Validated Sucessfully");
         console.log(resp);
         let p = document.getElementById("AccessTokenTime") as HTMLElement;
-        let Time = new Date(resp.expires_in * 1000)
-            .toISOString()
-            .substr(11, 8);
-          p.innerHTML = `• Current Token Will Expire In: \n ${Time}.`;
+        let Time = new Date(resp.expires_in * 1000);
+        let TimeStrDash = Time.toISOString().split("-");
+        let TimeStrT = TimeStrDash[2].split("T");
+        let TimeString = `${parseInt(TimeStrDash[1].substring(1,2)) -1} Month ${TimeStrT[0]} Days & ${TimeStrT[1].substring(0, 8)} Hours`;
+        p.innerHTML = `• Current Token Will Expire In: <br> ${TimeString}.`;
         return 1;
       }
       console.log("unexpected Output");
