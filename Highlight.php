@@ -161,7 +161,7 @@ if ($Hashtags != "") {
                                                 </div>
                                             </div>
                                             <hr>
-                                            <h4># Hints! <img src="img/HOT_Icon.ico" alt="H.O.T small Icon"></h4>
+                                            <h4># Hints! <img class="imgPixelIcon" src="img/HOT_Icon.ico" alt="H.O.T small Icon"></h4>
                                             <div>
                                                 <h5>Quick Download Clip Script!</h5>
                                                 <input disabled type="text" class="form-control form-control-sm" value='javascript:window.open(document.getElementsByTagName("video")[0].src)'>

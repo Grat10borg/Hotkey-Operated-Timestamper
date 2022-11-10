@@ -132,6 +132,11 @@ textarea {
 }
 .imgHOTLogo {
   max-width: 250px;
+  image-rendering: pixelated;
+}
+.imgPixelIcon {
+  width: 32px;
+  image-rendering: pixelated;
 }
 // DescMaker Specific
 
