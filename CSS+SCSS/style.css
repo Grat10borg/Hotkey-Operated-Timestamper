@@ -39,11 +39,11 @@ body ::-webkit-scrollbar-thumb {
 }
 
 body ::-webkit-scrollbar-track {
-  background: #7d85ba;
+  background: #61699a;
 }
 
 body ::-webkit-scrollbar-thumb:hover {
-  background: #00aaa5;
+  background: #27d3cb;
 }
 
 .background {
