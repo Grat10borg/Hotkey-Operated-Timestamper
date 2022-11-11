@@ -1,12 +1,52 @@
 // Main CSS
 html {
   scroll-behavior: smooth;
+  // #region Scrollbar styling for General Page
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #464b8c;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #293268;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00aaa5;
+  }
+  // #endregion
 }
 
 body {
   font-family: "Comfortaa";
   background-image: url("BackgroundLines.png");
   font-weight: bold;
+  // #region Scrollbar styling for General Page
+  /* width */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #909edd;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #7d85ba;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00aaa5;
+  }
+  // #endregion
 }
 .background {
   background-color: #f0f0f0;
