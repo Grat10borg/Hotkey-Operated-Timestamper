@@ -40,6 +40,11 @@ if ($Hashtags != "") {
 ?>
 
 <body>
+    <!-- <div class="fixed-bottom">
+        <div class="align-self-end">
+            <p class="text-light">H.O.T Radio placement here!</p>
+        </div>
+    </div> -->
     <div id="access_token"></div> <!-- data is inputted then removed, not best practice -->
     <main class="container background">
         <div class="row">
@@ -48,8 +53,8 @@ if ($Hashtags != "") {
         </div>
         <div class="row">
             <!-- Side bar -->
-            <div class="col-3 ms-3 mt-3 rounded-top sidebar">
-                <form id="HighlighForm">
+            <div class="relativ col-3 ms-3 mt-3 rounded-top d-flex justify-content-center sidebar">
+                <form class="" id="HighlighForm">
                     <div class="row p-2 m-2 mt-3 rounded">
                         <label for="SelectGame">Channel</label>
                         <select name="SelectChannel" id="SelectChannel" class="form-select form-select-sm my-2" aria-label=".form-select-sm example">
@@ -86,10 +91,11 @@ if ($Hashtags != "") {
                         <input id="Submit" class="my-3 btn HighSubmit" type="submit" value="Make Request">
                     </div>
                 </form>
-                <div class="row">
-                    <h5 class="Error text-center m-1 mt-3" id="user_data"></h5> <!-- Error print -->
+                <div class="absolute p-3 m-3 rounded">
+                    <a id="ScrollTop" class="btn HighSubmit">Return to Top of Page</a>
                 </div>
             </div>
+
             <div class="col">
                 <div class="row-* m-3 mt-5 pt-5 justify-content-around">
                     <!-- content -->

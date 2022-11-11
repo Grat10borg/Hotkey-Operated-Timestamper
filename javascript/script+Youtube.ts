@@ -15,44 +15,44 @@ let Tags: Array<string>;
 let HashTags: string;
 let localization: string;
 //#region  Test if Data is Useable
-if(PClient != null) {
+if (PClient != null) {
   YclientId = PClient.innerHTML;
+} else {
+  console.log(
+    "Could Not get Youtube ClientId, You will not be able to Connect to Youtube"
+  );
+  auth.disabled = true;
 }
-else {
-  console.log("Could Not get Youtube ClientId, You will not be able to Connect to Youtube");
-  auth.disabled = true; 
-}
-if(Pkey != null) {
+if (Pkey != null) {
   YApiKey = Pkey.innerHTML;
+} else {
+  console.log(
+    "Could Not get Youtube ApiKey, you will not be able to Connect to Youtube"
+  );
+  auth.disabled = true;
 }
-else {
-  console.log("Could Not get Youtube ApiKey, you will not be able to Connect to Youtube");
-  auth.disabled = true; 
-}
-if(PPluginName != null) {
+if (PPluginName != null) {
   YTPluginName = PPluginName.innerHTML;
-}
-else {
-  console.log("You didnt write the plugin name for your Google project in the settings, The Connect to Youtube button May or May Not work?");
+} else {
+  console.log(
+    "You didnt write the plugin name for your Google project in the settings, The Connect to Youtube button May or May Not work?"
+  );
 }
 
 // Non "Bad" Errors Aka Self Fixable
-if(TextATags != null) {
+if (TextATags != null) {
   Tags = TextATags.innerHTML.split("\n");
+} else {
+  Tags = Array();
 }
-else {
-  Tags = Array(); 
-}
-if(HashTagsP != null) {
+if (HashTagsP != null) {
   HashTags = HashTagsP.innerHTML;
-}
-else {
+} else {
   HashTags = "";
 }
 if (LocalziedYT != null) {
   localization = LocalziedYT.innerHTML;
-}
-else {
+} else {
   localization = "";
 }
 //#endregion
@@ -218,49 +218,48 @@ function GitPushDescription(
         "you have to write a title for the localized version! (U.U )...zzz"
       );
     }
-    if (LocalDesc.indexOf('<') > -1 || LocalDesc.indexOf('>') > -1) {
+    if (LocalDesc.indexOf("<") > -1 || LocalDesc.indexOf(">") > -1) {
       alert(
         "your description contains an iligal character! like: '<', '>' try removing them! ( ´･･)ﾉ(._.`)"
       );
     }
-    if(LocalDesc)
-    if (LocalTitle != "" && HashTags != "") {
+    if (LocalDesc)
+      if (LocalTitle != "" && HashTags != "") {
         LocalTitle = LocalTitle + " " + HashTags;
-    } 
-    else {
-      return gapi.client.youtube.videos
-        .update({
-          part: ["snippet", "snippet,status,localizations"],
-          resource: {
-            // Body basiclly?
-            id: `${arrayIds[SelectValue]}`, // video id
-            localizations: {
-              da: {
-                description: LocalDesc,
-                title: LocalTitle,
+      } else {
+        return gapi.client.youtube.videos
+          .update({
+            part: ["snippet", "snippet,status,localizations"],
+            resource: {
+              // Body basiclly?
+              id: `${arrayIds[SelectValue]}`, // video id
+              localizations: {
+                da: {
+                  description: LocalDesc,
+                  title: LocalTitle,
+                },
+              },
+              snippet: {
+                defaultLanguage: "en",
+                categoryId: "22", // not sure what this does. Note: removing it causes problems
+                tags: Tags, // adds users tags onto the video.
+                title: `${Title}`,
+                description: `${selectText}`,
               },
             },
-            snippet: {
-              defaultLanguage: "en",
-              categoryId: "22", // not sure what this does. Note: removing it causes problems
-              tags: Tags, // adds users tags onto the video.
-              title: `${Title}`,
-              description: `${selectText}`,
+          })
+          .then(
+            function (response: Response) {
+              // Handle the results here (response.result has the parsed body).
+              console.log("Response", response);
+              // show success by the yt button
+              // or show error
             },
-          },
-        })
-        .then(
-          function (response: Response) {
-            // Handle the results here (response.result has the parsed body).
-            console.log("Response", response);
-            // show success by the yt button
-            // or show error
-          },
-          function (err: any) {
-            console.error("Execute error", err);
-          }
-        );
-    }
+            function (err: any) {
+              console.error("Execute error", err);
+            }
+          );
+      }
   } else {
     return gapi.client.youtube.videos
       .update({
@@ -293,7 +292,14 @@ function GitPushDescription(
 
 //#region GapiLoad with our YTClient ID
 gapi.load("client:auth2", function () {
-  if(YclientId != "" && YTPluginName != "" && YclientId != null && YTPluginName != null && YclientId != undefined && YTPluginName != undefined) {
+  if (
+    YclientId != "" &&
+    YTPluginName != "" &&
+    YclientId != null &&
+    YTPluginName != null &&
+    YclientId != undefined &&
+    YTPluginName != undefined
+  ) {
     gapi.auth2.init({ client_id: YclientId, plugin_name: YTPluginName });
   }
 });
@@ -398,19 +404,23 @@ for (let i = 0; i < Textarea.length; i++) {
 
 // make only once. then let the evenhandler do the rest of the work
 let StartTextarea: any = document.querySelectorAll(".Textarea");
-for (let i = 0; i < StartTextarea.length; i++) {
-  let Charcount = StartTextarea[i].value as any;
-  let p = document.querySelector(`#CharCount${i}`) as HTMLElement; // needs to be html element
-  p.textContent = Charcount.length;
-  if (Charcount > 5000) {
-    // timestamps likely wont work, and its over the Maximum the youtube description can handle
-    p.setAttribute("class", "CharaRed");
-  } else if (Charcount > 3000) {
-    // timestamps may stop working. thumbnails may also lose graphics at this/a bit under size too
-    p.setAttribute("class", "CharaYellow");
-  } else {
-    // become green, Prime Timestamp range.
-    p.setAttribute("class", "CharaGreen");
+if (StartTextarea != null) {
+  for (let i = 0; i < StartTextarea.length; i++) {
+    let Charcount = StartTextarea[i].value as any;
+    let p = document.querySelector(`#CharCount${i}`) as HTMLElement; // needs to be html element
+    if (p != null) {
+      p.textContent = Charcount.length;
+      if (Charcount > 5000) {
+        // timestamps likely wont work, and its over the Maximum the youtube description can handle
+        p.setAttribute("class", "CharaRed");
+      } else if (Charcount > 3000) {
+        // timestamps may stop working. thumbnails may also lose graphics at this/a bit under size too
+        p.setAttribute("class", "CharaYellow");
+      } else {
+        // become green, Prime Timestamp range.
+        p.setAttribute("class", "CharaGreen");
+      }
+    }
   }
 }
 
@@ -420,3 +430,10 @@ function CalcChars(event): any {
 }
 //#endregion
 
+let ScrollTop = document.getElementById("ScrollTop") as HTMLElement;
+ScrollTop.addEventListener("click", function (event) {
+  if (ScrollTop != null) {
+    let TopNav = document.getElementById("TopNav") as HTMLElement;
+    TopNav.scrollIntoView(true);
+  }
+});

@@ -189,10 +189,8 @@ function ClipSorter(Clips, game_id, viewCount) {
         let a = document.createElement("a");
         let p = document.createElement("p");
         rowdiv.classList.add("row", "m-2", "ps-0");
-        if (i % 2 == 0) {
-            rowdiv.classList.add("Linkbg");
-        }
-        button.classList.add("col-3", "p-1", "btn", "HighSubmit", "ClipBtn");
+        rowdiv.classList.add("Linkbg");
+        button.classList.add("col-3", "p-1", "btn", "ClipBtn");
         button.setAttribute("value", `Btn-${i}`);
         button.setAttribute("href", "#IframePlayerLater");
         a.classList.add("col-6", "ClipLink");

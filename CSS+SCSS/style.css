@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: "Comfortaa";
   background-image: url("BackgroundLines.png");
@@ -234,23 +238,59 @@ textarea {
 }
 
 .ClipLink {
-  color: #91403d;
+  color: #ff6675;
 }
 
 .ClipLink:hover {
-  color: #c68961;
+  color: #b23c40;
 }
 
 .ClipLink:visited {
-  color: #673d91;
+  color: #854cbf;
 }
 
 .ClipLink:visited:hover {
-  color: #ac50a1;
+  color: #431e66;
 }
 
-.Linkbg {
+.ClipBtn {
+  background-color: #27d3cb;
+  color: #f0f0f0;
+}
+
+.ClipBtn:hover {
+  background-color: #009994;
+  color: #f0f0f0;
+}
+
+.Linkbg:nth-child(odd) {
   background-color: #dae0e9;
+}
+
+.Linkbg:nth-child(odd) .ClipLink {
+  color: #dd3745;
+}
+
+.Linkbg:nth-child(odd) .ClipLink:hover {
+  color: #a52639;
+}
+
+.Linkbg:nth-child(odd) .ClipLink:visited {
+  color: #5d2f8c;
+}
+
+.Linkbg:nth-child(odd) .ClipLink:visited:hover {
+  color: #431e66;
+}
+
+.Linkbg:nth-child(odd) .ClipBtn {
+  background-color: #00aaa5;
+  color: #f0f0f0;
+}
+
+.Linkbg:nth-child(odd) .ClipBtn:hover {
+  background-color: #007672;
+  color: #f0f0f0;
 }
 
 .HighSubmit {
@@ -261,5 +301,18 @@ textarea {
 .HighSubmit:hover {
   background-color: #00aaa5;
   color: #f0f0f0;
+}
+
+.relativ {
+  position: relative;
+}
+
+.absolute {
+  background-color: #7d85ba;
+  position: absolute;
+  bottom: 0;
+  margin: auto;
+  display: block;
+  text-align: center;
 }
 /*# sourceMappingURL=style.css.map */

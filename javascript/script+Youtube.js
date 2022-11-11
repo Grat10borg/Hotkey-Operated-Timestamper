@@ -141,7 +141,7 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname, tar
         if (LocalTitle == "") {
             alert("you have to write a title for the localized version! (U.U )...zzz");
         }
-        if (LocalDesc.indexOf('<') > -1 || LocalDesc.indexOf('>') > -1) {
+        if (LocalDesc.indexOf("<") > -1 || LocalDesc.indexOf(">") > -1) {
             alert("your description contains an iligal character! like: '<', '>' try removing them! ( ´･･)ﾉ(._.`)");
         }
         if (LocalDesc)
@@ -198,7 +198,12 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname, tar
     }
 }
 gapi.load("client:auth2", function () {
-    if (YclientId != "" && YTPluginName != "" && YclientId != null && YTPluginName != null && YclientId != undefined && YTPluginName != undefined) {
+    if (YclientId != "" &&
+        YTPluginName != "" &&
+        YclientId != null &&
+        YTPluginName != null &&
+        YclientId != undefined &&
+        YTPluginName != undefined) {
         gapi.auth2.init({ client_id: YclientId, plugin_name: YTPluginName });
     }
 });
@@ -253,21 +258,32 @@ for (let i = 0; i < Textarea.length; i++) {
     });
 }
 let StartTextarea = document.querySelectorAll(".Textarea");
-for (let i = 0; i < StartTextarea.length; i++) {
-    let Charcount = StartTextarea[i].value;
-    let p = document.querySelector(`#CharCount${i}`);
-    p.textContent = Charcount.length;
-    if (Charcount > 5000) {
-        p.setAttribute("class", "CharaRed");
-    }
-    else if (Charcount > 3000) {
-        p.setAttribute("class", "CharaYellow");
-    }
-    else {
-        p.setAttribute("class", "CharaGreen");
+if (StartTextarea != null) {
+    for (let i = 0; i < StartTextarea.length; i++) {
+        let Charcount = StartTextarea[i].value;
+        let p = document.querySelector(`#CharCount${i}`);
+        if (p != null) {
+            p.textContent = Charcount.length;
+            if (Charcount > 5000) {
+                p.setAttribute("class", "CharaRed");
+            }
+            else if (Charcount > 3000) {
+                p.setAttribute("class", "CharaYellow");
+            }
+            else {
+                p.setAttribute("class", "CharaGreen");
+            }
+        }
     }
 }
 function CalcChars(event) {
     let string = event.target.value;
     return string.length;
 }
+let ScrollTop = document.getElementById("ScrollTop");
+ScrollTop.addEventListener("click", function (event) {
+    if (ScrollTop != null) {
+        let TopNav = document.getElementById("TopNav");
+        TopNav.scrollIntoView(true);
+    }
+});

@@ -68,16 +68,20 @@
         </div>
         <div class="row">
             <!-- Side bar -->
-            <div class="col-2 ms-3 mt-3 sidebar rounded" id="SideBar"></div>
+            <div class="relativ col-2 ms-3 mt-3 sidebar d-flex justify-content-center rounded" id="SideBar">
+                <div class="absolute m-3 p-2 py-3 px-4 rounded">
+                    <a id="ScrollTop" class="btn HighSubmit px-4">To Top ↑</a>
+                </div>
+            </div>
             <div class="col mt-3 maindatabar">
                 <div class="row-10 m-3 mt-5 pt-5 justify-content-around">
                     <!-- contains the huge images in the middle of the screen plus the Data bar and the Options bar -->
                     <?php include "includes/H.O.T_DescMaker/HtmlTopDescriptionData.php"; ?>
                 </div>
-            </div>
-            <div>
-                <!-- printer of the Clip and descptions in the Textareas -->
-                <div class="form-floating my-3 border-bottom border-secondary pb-5" id="DescriptionAreaDiv"></div>
+                <div>
+                    <!-- printer of the Clip and descptions in the Textareas -->
+                    <div class="form-floating my-3 border-bottom border-secondary pb-5" id="DescriptionAreaDiv"></div>
+                </div>
             </div>
         </div>
         <?php include "includes\html\Footer.php" ?>
