@@ -196,13 +196,18 @@ textarea {
       image-rendering: pixelated;
 }
 
-.imgPixelIcon {
-  width: 32px;
+.imgIcon {
+  display: inline-block;
+  width: 32px !important;
   -ms-interpolation-mode: nearest-neighbor;
       image-rendering: -webkit-optimize-contrast;
       image-rendering: -moz-crisp-edges;
       image-rendering: -o-pixelated;
       image-rendering: pixelated;
+}
+
+a .imgIcon:hover {
+  opacity: 80%;
 }
 
 .CharaGreen {
@@ -238,15 +243,6 @@ textarea {
 }
 
 .imgPixel {
-  -ms-interpolation-mode: nearest-neighbor;
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: -moz-crisp-edges;
-      image-rendering: -o-pixelated;
-      image-rendering: pixelated;
-}
-
-.imgIcon {
-  width: 28px;
   -ms-interpolation-mode: nearest-neighbor;
       image-rendering: -webkit-optimize-contrast;
       image-rendering: -moz-crisp-edges;

@@ -50,7 +50,7 @@
                             </h2>
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
-                                    <p class="mb-5">you can change your settings <a href="Settings.php">Here</a></p>
+                                    <p class="mb-5">you can change your settings <a href="Settings.php">Here <img class="imgIcon" src="img\Icons\GearCuteIcon.png"></a></p>
                                     <div class="container">
                                         <div class="row">
                                             <div class="col m-auto">
@@ -74,7 +74,7 @@
                                                 ?>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row mt-3">
                                             <div class="col">
                                                 <p>Your Youtube API key</p>
                                                 <?php

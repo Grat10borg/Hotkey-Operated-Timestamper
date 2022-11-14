@@ -178,10 +178,17 @@ textarea {
   max-width: 250px;
   image-rendering: pixelated;
 }
-.imgPixelIcon {
-  width: 32px;
+.imgIcon {
+  display: inline-block; // so it can sit besides text
+  width: 32px !important;
   image-rendering: pixelated;
 }
+a{
+  .imgIcon:hover{
+    opacity: 80%;
+    }
+}
+
 // DescMaker Specific
 
 .CharaGreen {
@@ -213,10 +220,6 @@ textarea {
 }
 
 .imgPixel {
-  image-rendering: pixelated;
-}
-.imgIcon {
-  width: 28px;
   image-rendering: pixelated;
 }
 .errorImg {
