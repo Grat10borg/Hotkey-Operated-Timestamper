@@ -91,9 +91,6 @@ if ($Hashtags != "") {
                         <input id="Submit" class="my-3 btn HighSubmit" type="submit" value="Make Request">
                     </div>
                 </form>
-                <div class="absolute p-3 m-3 rounded">
-                    <a id="ScrollTop" class="btn HighSubmit">Return to Top of Page</a>
-                </div>
             </div>
 
             <div class="col">
@@ -252,6 +249,9 @@ if ($Hashtags != "") {
 
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <a class="ms-3 col-3 sidebar btn HighSubmit" id="ScrollTop">To Top ↑</a>
         </div>
         </div>
         <?php include "includes\html\Footer.php" ?>
