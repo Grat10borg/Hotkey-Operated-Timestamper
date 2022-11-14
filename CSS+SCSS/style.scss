@@ -183,6 +183,11 @@ textarea {
   width: 32px !important;
   image-rendering: pixelated;
 }
+.imgIconSmall {
+  display: inline-block; // so it can sit besides text
+  width: 16px !important;
+  image-rendering: pixelated;
+}
 a{
   .imgIcon:hover{
     opacity: 80%;

@@ -20,7 +20,7 @@ include "includes/html/HtmlDoc.php";
             ?>
         </div>
         <div class="m-5 p-5 mt-0">
-            <h3>Settings</h3>
+            <h3>Settings <img class="imgIcon" src="img\Icons\GearCuteIcon.png"></h3>
             <p>you can also edit the texts at .\Hotkey-Operated-Timestamper\Texts!! ヾ(•ω•`)o</p>
             <?php
             if (isset($_POST["BeforeDesc"]) && isset($_POST["AfterDesc"]) && isset($_POST["History"]) && isset($_POST["Tags"]) && isset($_POST["LocalBeforeTimestamps"]) && isset($_POST["LocalAfterTimestamps"])) {
@@ -70,7 +70,7 @@ include "includes/html/HtmlDoc.php";
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="TextMisc">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" , data-bs-target="#TextMiscDiv" aria-expanded="false" , aria-controls="TextMiscDiv">
-                            Description Texts!
+                           <img class="imgIcon" src="img\Icons\TimestampTXTIcon.png"> | Description Texts!
                         </button>
                     </h2>
                     <div id="TextMiscDiv" class="accordion-collapse collapse" aria-labelledby="TextMisc" data-bs-parent="#accordionExample">
@@ -123,14 +123,14 @@ include "includes/html/HtmlDoc.php";
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="Settings">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#CollapSettings" aria-expanded="false" aria-controls="CollapSettings">
-                            Settings.txt
+                            <img class="imgIcon" src="img\Icons\TimestampTXT2Icon.png"> |  Settings.txt
                         </button>
                     </h2>
                     <div id="CollapSettings" class="accordion-collapse collapse" aria-labelledby="Settings" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <form class="container" id="Settingform" action="Settings.php" method="POST">
                                 <div class="row m-3">
-                                    <p id="TwitchKeyP">Your Twitch APP AccessToken</p>
+                                    <p id="TwitchKeyP"><img class="imgIcon" src="img\Icons\TwitchIcon.png"> - Your Twitch APP AccessToken </p>
                                     <?php
                                     if (isset($TwitchApiKey)) {
                                         echo "<input value='$TwitchApiKey' class='form-control p-3' placeholder='Something like: bss6p3k7o39u8bv6y3hotdi1dszdlw' name='TwitchKey' type='text' id='TwitchKeyIn'/>";
@@ -140,7 +140,7 @@ include "includes/html/HtmlDoc.php";
                                     ?>
                                 </div>
                                 <div class="row m-3">
-                                    <p>Your Twitch Username</p>
+                                    <p><img class="imgIcon" src="img\Icons\TwitchIcon.png"> - Your Twitch Username</p>
                                     <?php
                                     if (isset($StreamerLogin)) {
                                         echo "<input value='$StreamerLogin' class='form-control p-3' placeholder='The Name in Your Url: marinemammalrescue' name='StreamerUserName' type='text' id='TwitchLoginIn'/>";
@@ -151,7 +151,7 @@ include "includes/html/HtmlDoc.php";
 
                                 </div>
                                 <div class="row m-3">
-                                    <p>Your Youtube ClientId</p>
+                                    <p><img class="imgIcon" src="img\Icons\YouTubeIcon.png"> - Your Youtube ClientId</p>
                                     <?php
                                     if (isset($YTClientID)) {
                                         echo "<input value='$YTClientID' class='form-control p-3' placeholder='<Longstring of Random Letters>.apps.googleusercontent.com' name='YoutubeClientID' type='text' id='YTClientIn' />";
@@ -161,7 +161,7 @@ include "includes/html/HtmlDoc.php";
                                     ?>
                                 </div>
                                 <div class="row m-3">
-                                    <p>Your Youtube AccessToken</p>
+                                    <p><img class="imgIcon" src="img\Icons\YouTubeIcon.png"> - Your Youtube AccessToken</p>
                                     <?php
                                     if (isset($YTAPIKey)) {
                                         echo "<input value='$YTAPIKey' class='form-control p-3' placeholder='Something like: AIzaSyCq512yjXdQLtdUV3n7CzdIe78oDufRovU'  name='YoutubeApiKey' type='text' id='YTKeyIn' />";
@@ -171,7 +171,7 @@ include "includes/html/HtmlDoc.php";
                                     ?>
                                 </div>
                                 <div class="row m-3">
-                                    <p>Your Google Cloud Console Project Name</p>
+                                    <p><img class="imgIcon" src="img\Icons\YouTubeIcon.png"> - Your Google Cloud Console Project Name</p>
                                     <?php
                                     if (isset($PluginName)) {
                                         echo "<input value='$PluginName' class='form-control p-3' placeholder='Hotkey Operated Timestamper' name='PluginName' type='text' id='YTPluginIn'/>";
@@ -181,7 +181,7 @@ include "includes/html/HtmlDoc.php";
                                     ?>
                                 </div>
                                 <div class="row m-3">
-                                    <p id="ClipOffsetP">Your ClipOffset</p>
+                                    <p id="ClipOffsetP"><img class="imgIcon" src="img\Icons\TextDocIcon.png"> - Your ClipOffset</p>
                                     <?php
                                     if (isset($ClipsOffset)) {
                                         echo "<input value='$ClipsOffset' class='form-control p-3' placeholder='26' name='ClipOffset' type='text' id='ClipOffsetIn' />";
@@ -191,7 +191,7 @@ include "includes/html/HtmlDoc.php";
                                     ?>
                                 </div>
                                 <div class="row m-3">
-                                    <p>Your Timestamp.txt file path</p>
+                                    <p><img class="imgIcon" src="img\Icons\TimestampTXTIcon.png"> - Your Timestamp.txt file path</p>
                                     <?php
                                     if (isset($Timestamp_path)) {
                                         echo "<input value='$Timestamp_path' class='form-control p-3' placeholder='..\Folder\Timestamp.txt' name='TimestampPath' type='text' id='TimeSPathIn'/>";
@@ -201,7 +201,7 @@ include "includes/html/HtmlDoc.php";
                                     ?>
                                 </div>
                                 <div class="row m-3">
-                                    <p>Your Hashtags/Text after Vod Title</p>
+                                    <p><img class="imgIcon" src="img\Icons\YouTubeIcon.png"> - Your Hashtags/Text after Vod Title</p>
                                     <?php
                                     if (isset($Hashtags)) {
                                         echo "<input value='$Hashtags' class='form-control p-3' placeholder='VOD' name='Hashtags' type='text' id='HashtagsIn'/>";
@@ -211,7 +211,7 @@ include "includes/html/HtmlDoc.php";
                                     ?>
                                 </div>
                                 <div class="row m-3">
-                                    <p>Localazation Description Key</p>
+                                    <p><img class="imgIcon" src="img\Icons\YouTubeIcon.png"> - Localazation Description Key</p>
                                     <?php
                                     if (isset($Localazation)) {
                                         echo "<input value='$Localazation' class='form-control p-3' placeholder='en' name='Localazation' type='text' id='LocalazationIn'/>";

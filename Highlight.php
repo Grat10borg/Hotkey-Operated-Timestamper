@@ -123,18 +123,18 @@ if ($Hashtags != "") {
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="headingSettings">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
-                                        H.O.T: Highlighter Settings + Hints!
+                                        <img class="me-2 imgIcon" src="img\Icons\GearCuteIcon.png"> | H.O.T: Highlighter Settings + Hints!
                                     </button>
                                 </h2>
                                 <div id="collapseSettings" class="accordion-collapse collapse" aria-labelledby="headingSettings" data-bs-parent="#accordionSettings">
                                     <div class="accordion-body">
                                         <div class="container">
-                                            <h4># Settings</h4>
+                                            <h3># Settings</h3>
                                             <p class="mb-2">you can change your settings <a href="Settings.php">Here</a></p>
                                             <div class="row">
                                                 <div class="col m-auto">
                                                     <div>
-                                                        <p>Your Twitch APP AccessToken</p>
+                                                        <p><img class="imgIcon" src="img\Icons\TwitchIcon.png"> | Your Twitch APP AccessToken </p>
                                                         <?php
                                                         if (isset($TwitchApiKey)) {
                                                             echo "<input value='$TwitchApiKey' disabled class='form-control p-3' type='text'/>";
@@ -164,7 +164,7 @@ if ($Hashtags != "") {
                                                 </div>
                                             </div>
                                             <hr>
-                                            <h4># Hints! <img class="imgIcon" src="img/HOT_Icon.png" alt="H.O.T small Icon"></h4>
+                                            <h3># Hints! <img class="imgIcon" src="img/HOT_Icon.png" alt="H.O.T small Icon"></h3>
                                             <div>
                                                 <h5>Quick Download Clip Script!</h5>
                                                 <input disabled type="text" class="form-control form-control-sm" value='javascript:window.open(document.getElementsByTagName("video")[0].src)'>
@@ -180,7 +180,7 @@ if ($Hashtags != "") {
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
                                 <button id="accordLink" disabled class="accordion-button btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                    # Clip links
+                                <img class="me-2 imgIcon" src="img\Icons\TimestampTXT2Icon.png"> | # Clip links
                                 </button>
                             </h2>
                             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -194,13 +194,13 @@ if ($Hashtags != "") {
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingTwo">
                                 <button id="accordDesc" disabled class="btn accordion-button collapsed " type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    # Suggested Description
+                                <img class="me-2 imgIcon" src="img\Icons\TextDocIcon.png"> | # Suggested Description
                                 </button>
                             </h2>
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     <div class="d-flex justify-content-between">
-                                        <h4># Suggested Description</h4>
+                                        <h4> # Suggested Description</h4>
                                         <p id="CharCount0"></p>
                                     </div>
                                     <!-- H.O.T makes a description for the highlight vid here -->
@@ -221,7 +221,7 @@ if ($Hashtags != "") {
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingThree">
                                 <button id="accordLocalDesc" disabled class="btn accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    # Local Suggested Description
+                                    <img class="me-2 imgIcon" src="img\Icons\TextDocIcon.png"> | # Local Suggested Description
                                 </button>
                             </h2>
                             <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">

@@ -761,7 +761,13 @@ function SetIns(
     Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
     Textarea.innerHTML = DescArr[index];
     Textarea.setAttribute("id", `${TextAreaID}${index}`);
-    button.innerHTML = DatesArr[index] + ` - ${string}`;
+    if(index % 2) {
+      button.innerHTML = "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> "+"| "+ DatesArr[index] + ` - ${string}`;
+    }
+    else {
+      button.innerHTML = "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> "+"| "+ DatesArr[index] + ` - ${string}`;
+    }
+
     // Select, Copy, Youtube Bar Vars
 
     // Buttons

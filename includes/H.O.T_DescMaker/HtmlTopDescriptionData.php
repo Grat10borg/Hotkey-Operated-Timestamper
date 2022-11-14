@@ -18,11 +18,11 @@
                     <div class="col me-4">
                         <h4 class="text-center"># Options</h4>
                         <div class="row">
-                            <button class="btn py-2 my-2" id="TwitchClip">Use Twitch Clip-stamps instead</button>
+                            <button class="btn py-2 my-2" id="TwitchClip">Use Twitch Clip-stamps instead <img class="imgIcon" src="img\Icons\TwitchIcon.png" alt=""></button>
                             <p class="col" hidden id="TwitchMsg"></p>
                         </div>
                         <div class="row">
-                            <button class="btn-danger py-2 btn my-2 authUpload">Connect Youtube!</button>
+                            <button class="btn-danger py-2 btn my-2 authUpload">Connect Youtube! <img class="imgIcon" src="img\Icons\YouTubeIcon.png" alt=""> </button>
                         </div>
                         <div class="row">
                             <select disabled class="py-3 SelectId" name="SelectId" id="selectId"></select>
@@ -35,9 +35,8 @@
                             <p id="AccessTokenTime"></p>
                             <form class="row" action="clear.php" method="get">
                                 <p>• currently getting timestamps from: <?php echo $Timestamp_path ?></p>
-                                <input class="py-2 Clear btn TimestampClear" type="submit" value="Clear Timestamps?" />
+                                <a class="py-2 Clear btn TimestampClear" href="clear.php">Clear Timestamps? | <img class="imgIcon" src="img\Icons\TimestampTXTIcon.png"></a>
                             </form>
-
                         </div>
                     </div>
                     <h4 class="m-3"># Description Maker Settings</h4>
@@ -45,12 +44,13 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingTwo">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    H.O.T: Description Maker Settings
+                                <img class="me-2 imgIcon" src="img\Icons\GearCuteIcon.png" alt=""> | H.O.T: Description Maker Settings
                                 </button>
                             </h2>
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
-                                    <p class="mb-5">you can change your settings <a href="Settings.php">Here <img class="imgIcon" src="img\Icons\GearCuteIcon.png"></a></p>
+                                    <h3># Settings</h3>
+                                    <p class="mb-5">you can change your settings <a href="Settings.php">Here</a></p>
                                     <div class="container">
                                         <div class="row">
                                             <div class="col m-auto">
