@@ -107,12 +107,10 @@ TwitchClip.addEventListener("click", async function (event: any) {
     // Calling API to get ID of streamer with this name
     let UserIdResp = await HttpCalling(
       `https://api.twitch.tv/helix/users?login=${StreamerName}`
-      
     );
     // Calling API to gather VODS from this user.
     let UserVods = await HttpCalling(
       `https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`
-      
     );
     let TwitchStreamedDate = Array();
     let FullDateTwitch = Array();
@@ -740,19 +738,14 @@ function SetIns(
     CharDiv.classList.add("d-flex", "justify-content-between");
     let PNo = document.createElement("p");
     PNo.setAttribute("id", `CharCount${index}`);
-    PNo.innerHTML = "Test";
-    let h4 = document.createElement("h4");
-    h4.innerHTML = `# Suggested Description`;
+    PNo.innerHTML = "CharCounter";
+    let h3 = document.createElement("h3");
+    h3.innerHTML = `# Suggested Description`;
     // Text Area for Description
 
     let LocalTextarea = document.createElement("textarea");
     if (SettingsLocal != "") {
-      LocalTextarea.classList.add(
-        "d-flex",
-        "m-1",
-        "res",
-        "form-control"
-      );
+      LocalTextarea.classList.add("d-flex", "m-1", "res", "form-control");
       LocalTextarea.innerHTML = LocalArr[index];
       LocalTextarea.setAttribute("id", `myLocalInput${index}`);
     }
@@ -761,11 +754,18 @@ function SetIns(
     Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
     Textarea.innerHTML = DescArr[index];
     Textarea.setAttribute("id", `${TextAreaID}${index}`);
-    if(index % 2) {
-      button.innerHTML = "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> "+"| "+ DatesArr[index] + ` - ${string}`;
-    }
-    else {
-      button.innerHTML = "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> "+"| "+ DatesArr[index] + ` - ${string}`;
+    if (index % 2) {
+      button.innerHTML =
+        "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
+        "| " +
+        DatesArr[index] +
+        ` - ${string}`;
+    } else {
+      button.innerHTML =
+        "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
+        "| " +
+        DatesArr[index] +
+        ` - ${string}`;
     }
 
     // Select, Copy, Youtube Bar Vars
@@ -794,31 +794,39 @@ function SetIns(
     //collapsedDiv.
 
     // Over Text area Bar
-    CharDiv.append(h4);
+    CharDiv.append(h3);
     CharDiv.append(PNo);
     AcordBody.append(CharDiv);
     // Textarea
     AcordBody.append(Textarea);
+    // Button Bar
+    ButtonDiv.append(SelectBtn);
+    ButtonDiv.append(CopyBtn);
+    ButtonDiv.append(YoutubeBtn);
+    AcordBody.append(ButtonDiv);
     if (SettingsLocal != "") {
-      let p = document.createElement("p");
-      p.innerHTML = "localized to: (" + SettingsLocal + ") Description";
-      p.setAttribute("class", "my-2");
+      let hr = document.createElement("hr") as HTMLElement;
+      let FontDiv = document.createElement("div") as HTMLElement;
+      FontDiv.classList.add("d-flex", "justify-content-between");
+      let h3 = document.createElement("h3") as HTMLElement;
+      h3.innerHTML = "# Suggested Description: (" + SettingsLocal + ")";
+      h3.setAttribute("class", "my-2");
+      let PNo = document.createElement("p");
+      PNo.setAttribute("id", `CharCount${index}`);
+      PNo.innerHTML = "CharCounter";
       let input = document.createElement("input");
       input.classList.add("form-control", "p-3", "my-2");
       input.setAttribute("id", `LocaleTitle-${index}`);
       input.setAttribute("placeholder", `title in locale language`);
       LocalTextarea.setAttribute("id", `${LocalID}${index}`);
 
-      AcordBody.append(p);
+      FontDiv.append(h3);
+      FontDiv.append(PNo);
+      AcordBody.append(hr);
+      AcordBody.append(FontDiv);
       AcordBody.append(input);
       AcordBody.append(LocalTextarea);
     }
-
-    // Button Bar
-    ButtonDiv.append(SelectBtn);
-    ButtonDiv.append(CopyBtn);
-    ButtonDiv.append(YoutubeBtn);
-    AcordBody.append(ButtonDiv);
 
     // Final Appening
     collapsedDiv.append(AcordBody);
@@ -977,45 +985,52 @@ function parseISOString(Isostring) {
 //#region validateToken() Validates Token if sucessful returns 1 if not 0
 // Calls the Twitch api with Out App Acess Token and returns a ClientId and tells us if the App Acess Token is Valid or Not
 async function validateToken() {
-  if(AppAcessToken != undefined && AppAcessToken != "" && AppAcessToken != null) {
-  await fetch("https://id.twitch.tv/oauth2/validate", {
-    headers: {
-      Authorization: "Bearer " + AppAcessToken,
-    },
-  })
-    .then((resp) => resp.json())
-    .then((resp) => {
-      if (resp.status) {
-        if (resp.status == 401) {
-          console.log("This token is invalid ... " + resp.message);
+  if (
+    AppAcessToken != undefined &&
+    AppAcessToken != "" &&
+    AppAcessToken != null
+  ) {
+    await fetch("https://id.twitch.tv/oauth2/validate", {
+      headers: {
+        Authorization: "Bearer " + AppAcessToken,
+      },
+    })
+      .then((resp) => resp.json())
+      .then((resp) => {
+        if (resp.status) {
+          if (resp.status == 401) {
+            console.log("This token is invalid ... " + resp.message);
+            return 0;
+          }
+          console.log("Unexpected output with a status");
           return 0;
         }
-        console.log("Unexpected output with a status");
+        if (resp.client_id) {
+          AclientId = resp.client_id;
+          TwitchConnected = true;
+          console.log("Token Validated Sucessfully");
+          console.log(resp);
+          let p = document.getElementById("AccessTokenTime") as HTMLElement;
+          let Time = new Date(resp.expires_in * 1000);
+          let TimeStrDash = Time.toISOString().split("-");
+          let TimeStrT = TimeStrDash[2].split("T");
+          let TimeString = `${
+            parseInt(TimeStrDash[1].substring(1, 2)) - 1
+          } Month ${TimeStrT[0]} Days & ${TimeStrT[1].substring(0, 8)} Hours`;
+          p.innerHTML = `• Current Token Will Expire In: <br> ${TimeString}.`;
+          return 1;
+        }
+        console.log("unexpected Output");
         return 0;
-      }
-      if (resp.client_id) {
-        AclientId = resp.client_id;
-        TwitchConnected = true;
-        console.log("Token Validated Sucessfully");
-        console.log(resp);
-        let p = document.getElementById("AccessTokenTime") as HTMLElement;
-        let Time = new Date(resp.expires_in * 1000);
-        let TimeStrDash = Time.toISOString().split("-");
-        let TimeStrT = TimeStrDash[2].split("T");
-        let TimeString = `${parseInt(TimeStrDash[1].substring(1,2)) -1} Month ${TimeStrT[0]} Days & ${TimeStrT[1].substring(0, 8)} Hours`;
-        p.innerHTML = `• Current Token Will Expire In: <br> ${TimeString}.`;
-        return 1;
-      }
-      console.log("unexpected Output");
-      return 0;
-    })
-    .catch((err) => {
-      console.log(err);
-      return 0;
-    });
-  return 1;
-}
-else { return 0; }
+      })
+      .catch((err) => {
+        console.log(err);
+        return 0;
+      });
+    return 1;
+  } else {
+    return 0;
+  }
 }
 //#endregion
 

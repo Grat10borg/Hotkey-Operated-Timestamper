@@ -94,7 +94,7 @@ if ($Hashtags != "") {
             </div>
 
             <div class="col">
-                <div class="row-* m-3 mt-5 pt-5 justify-content-around">
+                <div class="row-* mb-3 mt-5 pt-5 justify-content-around border-bottom border-secondary pb-2">
                     <!-- content -->
                     <!-- contains the huge images in the middle of the screen plus the Data bar and the Options bar -->
                     <!-- Logo and text gets removed for an iframe for clip viewing -->
@@ -131,7 +131,7 @@ if ($Hashtags != "") {
                                         <div class="container">
                                             <h3># Settings</h3>
                                             <p class="mb-2">you can change your settings <a href="Settings.php">Here</a></p>
-                                            <div class="row">
+                                            <div class="row align-items-top">
                                                 <div class="col m-auto">
                                                     <div>
                                                         <p><img class="imgIcon" src="img\Icons\TwitchIcon.png"> | Your Twitch APP AccessToken </p>

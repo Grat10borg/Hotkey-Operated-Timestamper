@@ -527,9 +527,9 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID
         CharDiv.classList.add("d-flex", "justify-content-between");
         let PNo = document.createElement("p");
         PNo.setAttribute("id", `CharCount${index}`);
-        PNo.innerHTML = "Test";
-        let h4 = document.createElement("h4");
-        h4.innerHTML = `# Suggested Description`;
+        PNo.innerHTML = "CharCounter";
+        let h3 = document.createElement("h3");
+        h3.innerHTML = `# Suggested Description`;
         let LocalTextarea = document.createElement("textarea");
         if (SettingsLocal != "") {
             LocalTextarea.classList.add("d-flex", "m-1", "res", "form-control");
@@ -541,10 +541,18 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID
         Textarea.innerHTML = DescArr[index];
         Textarea.setAttribute("id", `${TextAreaID}${index}`);
         if (index % 2) {
-            button.innerHTML = "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " + "| " + DatesArr[index] + ` - ${string}`;
+            button.innerHTML =
+                "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
+                    "| " +
+                    DatesArr[index] +
+                    ` - ${string}`;
         }
         else {
-            button.innerHTML = "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " + "| " + DatesArr[index] + ` - ${string}`;
+            button.innerHTML =
+                "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
+                    "| " +
+                    DatesArr[index] +
+                    ` - ${string}`;
         }
         let ButtonDiv = document.createElement("div");
         let SelectBtn = document.createElement("button");
@@ -563,27 +571,36 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID
         YoutubeBtn.setAttribute("value", `${index}`);
         h2.append(button);
         AcordItem.append(h2);
-        CharDiv.append(h4);
+        CharDiv.append(h3);
         CharDiv.append(PNo);
         AcordBody.append(CharDiv);
         AcordBody.append(Textarea);
+        ButtonDiv.append(SelectBtn);
+        ButtonDiv.append(CopyBtn);
+        ButtonDiv.append(YoutubeBtn);
+        AcordBody.append(ButtonDiv);
         if (SettingsLocal != "") {
-            let p = document.createElement("p");
-            p.innerHTML = "localized to: (" + SettingsLocal + ") Description";
-            p.setAttribute("class", "my-2");
+            let hr = document.createElement("hr");
+            let FontDiv = document.createElement("div");
+            FontDiv.classList.add("d-flex", "justify-content-between");
+            let h3 = document.createElement("h3");
+            h3.innerHTML = "# Suggested Description: (" + SettingsLocal + ")";
+            h3.setAttribute("class", "my-2");
+            let PNo = document.createElement("p");
+            PNo.setAttribute("id", `CharCount${index}`);
+            PNo.innerHTML = "CharCounter";
             let input = document.createElement("input");
             input.classList.add("form-control", "p-3", "my-2");
             input.setAttribute("id", `LocaleTitle-${index}`);
             input.setAttribute("placeholder", `title in locale language`);
             LocalTextarea.setAttribute("id", `${LocalID}${index}`);
-            AcordBody.append(p);
+            FontDiv.append(h3);
+            FontDiv.append(PNo);
+            AcordBody.append(hr);
+            AcordBody.append(FontDiv);
             AcordBody.append(input);
             AcordBody.append(LocalTextarea);
         }
-        ButtonDiv.append(SelectBtn);
-        ButtonDiv.append(CopyBtn);
-        ButtonDiv.append(YoutubeBtn);
-        AcordBody.append(ButtonDiv);
         collapsedDiv.append(AcordBody);
         AcordItem.append(collapsedDiv);
         AcordDiv.append(AcordItem);
@@ -700,7 +717,9 @@ function parseISOString(Isostring) {
     return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
 }
 async function validateToken() {
-    if (AppAcessToken != undefined && AppAcessToken != "" && AppAcessToken != null) {
+    if (AppAcessToken != undefined &&
+        AppAcessToken != "" &&
+        AppAcessToken != null) {
         await fetch("https://id.twitch.tv/oauth2/validate", {
             headers: {
                 Authorization: "Bearer " + AppAcessToken,
