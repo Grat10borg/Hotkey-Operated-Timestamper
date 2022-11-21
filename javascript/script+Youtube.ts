@@ -366,18 +366,6 @@ function SelectText(event): void {
 }
 //#endregion
 
-//#region Clear Event
-// Make btn event for Clearing button, only makes an alert
-const Clear = document.querySelector(".Clear");
-Clear?.addEventListener(
-  "click",
-  function () {
-    alert("Clearing Timestamps");
-  },
-  true
-);
-//#endregion
-
 //#region Updating Text Length Event
 let Textarea = document.querySelectorAll(".Textarea"); // gets array of Textarea elements
 for (let i = 0; i < Textarea.length; i++) {
@@ -437,3 +425,40 @@ ScrollTop.addEventListener("click", function (event) {
     TopNav.scrollIntoView(true);
   }
 });
+
+//#region
+let Locked = document.getElementById("Locked") as HTMLElement;
+if (Locked != null) {
+  Locked.addEventListener(
+    "click",
+    function () {
+
+      const Clear = document.getElementById("Clear") as HTMLButtonElement;
+      let LockedIcon = document.getElementById("LockedIcon") as HTMLImageElement;
+      if ((Clear.disabled == true)) {
+        Clear.disabled = false;
+        LockedIcon.src= "img\\Icons\\UnlockedIcon.png";
+      } else {
+        Clear.disabled = true;
+        LockedIcon.src= "img\\Icons\\LockedIcon.png";
+      }
+    },
+    true
+  );
+}
+//#endregion
+
+//#region Clear Event
+// Make btn event for Clearing button, only makes an alert
+const Clear = document.querySelector(".Clear") as HTMLElement;
+if (Clear != null) {
+  Clear.addEventListener(
+    "click",
+    function () {
+      alert("Clearing Timestamps");
+      window.location.href = "clear.php";
+    },
+    true
+  );
+}
+//#endregion

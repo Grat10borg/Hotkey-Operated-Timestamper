@@ -236,10 +236,6 @@ function SelectText(event) {
     selectText.setSelectionRange(0, 99999);
     navigator.clipboard.writeText(selectText.value);
 }
-const Clear = document.querySelector(".Clear");
-Clear?.addEventListener("click", function () {
-    alert("Clearing Timestamps");
-}, true);
 let Textarea = document.querySelectorAll(".Textarea");
 for (let i = 0; i < Textarea.length; i++) {
     Textarea[i].addEventListener("keyup", function (event) {
@@ -287,3 +283,25 @@ ScrollTop.addEventListener("click", function (event) {
         TopNav.scrollIntoView(true);
     }
 });
+let Locked = document.getElementById("Locked");
+if (Locked != null) {
+    Locked.addEventListener("click", function () {
+        const Clear = document.getElementById("Clear");
+        let LockedIcon = document.getElementById("LockedIcon");
+        if ((Clear.disabled == true)) {
+            Clear.disabled = false;
+            LockedIcon.src = "img\\Icons\\UnlockedIcon.png";
+        }
+        else {
+            Clear.disabled = true;
+            LockedIcon.src = "img\\Icons\\LockedIcon.png";
+        }
+    }, true);
+}
+const Clear = document.querySelector(".Clear");
+if (Clear != null) {
+    Clear.addEventListener("click", function () {
+        alert("Clearing Timestamps");
+        window.location.href = "clear.php";
+    }, true);
+}
