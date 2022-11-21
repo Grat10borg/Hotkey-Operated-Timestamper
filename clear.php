@@ -7,9 +7,9 @@ include "includes/settings.php";
         <div class="m-5 p-5 mt-0">    
     <?php  
     echo "<h3> $Timestamp_path has been cleared </h3>";
-    if (file_exists($_SESSION['$Timestam'])) {
+    if (file_exists($Timestamp_path)) {
         // clear Timestamps from the clear timestamp button
-        file_put_contents($_SESSION['$Timestam'], "");
+        file_put_contents($Timestamp_path, "");
     }
     ?>
     <p>You can close H.O.T down now <img class="imgIcon" src="img\HOT_Icon.png"></p>

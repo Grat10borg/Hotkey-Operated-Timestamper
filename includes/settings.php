@@ -6,6 +6,13 @@ $LocalAfterDesc_p = "Texts\LocaleAfterTimestamps.txt";
 $History_p = "Texts\HistoryChannels.txt";
 $Tag_p = "Texts\Tags.txt";
 
+if (isset($_SESSION) == false) {
+    session_start();
+}
+else {
+    session_destroy();
+}
+
 // reads file as a string instead of an array
 if(file_exists("Texts\Settings.txt")) {
     $SettingsTxt = file_get_contents("Texts\Settings.txt");

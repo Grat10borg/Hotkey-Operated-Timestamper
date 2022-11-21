@@ -426,13 +426,12 @@ ScrollTop.addEventListener("click", function (event) {
   }
 });
 
-//#region
+//#region Lock Event
 let Locked = document.getElementById("Locked") as HTMLElement;
 if (Locked != null) {
   Locked.addEventListener(
     "click",
     function () {
-
       const Clear = document.getElementById("Clear") as HTMLButtonElement;
       let LockedIcon = document.getElementById("LockedIcon") as HTMLImageElement;
       if ((Clear.disabled == true)) {
