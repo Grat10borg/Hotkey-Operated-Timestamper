@@ -162,7 +162,7 @@ TwitchClip.addEventListener("click", async function (event) {
             TempSortedClips = Array();
         }
         for (let index = 0; index < TwitchStreamedDate.length; index++) {
-            let Desc = document.getElementById(`myInput${index}`);
+            let Desc = document.getElementById(`streamtextarr${index}`);
             var NewDesc = "";
             if (Desc == null) {
                 continue;
@@ -466,7 +466,7 @@ function DomSet() {
             li.append(a);
             ul.append(li);
         }
-        SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo", LocalDescArrS, "LocaleDesc-", "myInput");
+        SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo", LocalDescArrS, "LocaleDesc-", "streamtextarr", 0);
     }
     else if (DescArrS.length < 0) {
         console.log("No stream Timestamps found");
@@ -490,7 +490,12 @@ function DomSet() {
             li.append(a);
             ul.append(li);
         }
-        SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo", LocalDescArrR, "recordLocalInput", "recordInput");
+        if (SettingsLocal == "") {
+            SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo", LocalDescArrR, "recordLocalInput", "recordInput", DescArrS.length);
+        }
+        else {
+            SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo", LocalDescArrR, "recordLocalInput", "recordInput", DescArrS.length * 2);
+        }
     }
     else {
         console.log("No recording Timestamps found");
@@ -499,7 +504,7 @@ function DomSet() {
     SidebarDiv.append(nav);
     return 1;
 }
-function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID) {
+function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID, CharCount_index) {
     var DescDiv = document.getElementById("DescriptionAreaDiv");
     for (let index = 0; index < DescArr.length; index++) {
         let AcordDiv = document.createElement("div");
@@ -526,18 +531,19 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID
         let CharDiv = document.createElement("div");
         CharDiv.classList.add("d-flex", "justify-content-between");
         let PNo = document.createElement("p");
-        PNo.setAttribute("id", `CharCount${index}`);
+        PNo.setAttribute("id", `CharCount${CharCount_index}`);
+        CharCount_index++;
         PNo.innerHTML = "CharCounter";
         let h3 = document.createElement("h3");
         h3.innerHTML = `# Suggested Description`;
         let LocalTextarea = document.createElement("textarea");
         if (SettingsLocal != "") {
-            LocalTextarea.classList.add("d-flex", "m-1", "res", "form-control");
+            LocalTextarea.classList.add("d-flex", "m-1", "res", "form-control", "Charcounts");
             LocalTextarea.innerHTML = LocalArr[index];
             LocalTextarea.setAttribute("id", `myLocalInput${index}`);
         }
         let Textarea = document.createElement("textarea");
-        Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
+        Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea", "Charcounts");
         Textarea.innerHTML = DescArr[index];
         Textarea.setAttribute("id", `${TextAreaID}${index}`);
         if (index % 2) {
@@ -587,7 +593,7 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID
             h3.innerHTML = "# Suggested Description: (" + SettingsLocal + ")";
             h3.setAttribute("class", "my-2");
             let PNo = document.createElement("p");
-            PNo.setAttribute("id", `CharCount${index}`);
+            PNo.setAttribute("id", `CharCount${CharCount_index}`);
             PNo.innerHTML = "CharCounter";
             let input = document.createElement("input");
             input.classList.add("form-control", "p-3", "my-2");
@@ -600,6 +606,7 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID
             AcordBody.append(FontDiv);
             AcordBody.append(input);
             AcordBody.append(LocalTextarea);
+            CharCount_index++;
         }
         collapsedDiv.append(AcordBody);
         AcordItem.append(collapsedDiv);

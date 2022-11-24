@@ -253,21 +253,20 @@ for (let i = 0; i < Textarea.length; i++) {
         }
     });
 }
-let StartTextarea = document.querySelectorAll(".Textarea");
-if (StartTextarea != null) {
-    for (let i = 0; i < StartTextarea.length; i++) {
-        let Charcount = StartTextarea[i].value;
-        let p = document.querySelector(`#CharCount${i}`);
-        if (p != null) {
-            p.textContent = Charcount.length;
-            if (Charcount > 5000) {
-                p.setAttribute("class", "CharaRed");
+let StartTextareas = document.querySelectorAll(".Charcounts");
+if (StartTextareas != null) {
+    for (let i = 0; i < StartTextareas.length; i++) {
+        if (StartTextareas[i].hidden == false) {
+            let Pelement = document.getElementById(`CharCount${i}`);
+            Pelement.innerHTML = StartTextareas[i].textContent.length;
+            if (StartTextareas[i].textContent.length > 5000) {
+                Pelement.setAttribute("class", "CharaRed");
             }
-            else if (Charcount > 3000) {
-                p.setAttribute("class", "CharaYellow");
+            else if (StartTextareas[i].textContent.length > 3000) {
+                Pelement.setAttribute("class", "CharaYellow");
             }
             else {
-                p.setAttribute("class", "CharaGreen");
+                Pelement.setAttribute("class", "CharaGreen");
             }
         }
     }
@@ -281,7 +280,7 @@ if (ShowHiddenText != null) {
     ShowHiddenText.addEventListener("click", function (event) {
         let PasswordInputs = document.querySelectorAll('[type="password"]');
         if (PasswordInputs != null) {
-            PasswordInputs.forEach(Input => {
+            PasswordInputs.forEach((Input) => {
                 Input.type = "text";
             });
         }
@@ -299,7 +298,7 @@ if (Locked != null) {
     Locked.addEventListener("click", function () {
         const Clear = document.getElementById("Clear");
         let LockedIcon = document.getElementById("LockedIcon");
-        if ((Clear.disabled == true)) {
+        if (Clear.disabled == true) {
             Clear.disabled = false;
             LockedIcon.src = "img\\Icons\\UnlockedIcon.png";
         }

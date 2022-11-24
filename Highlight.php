@@ -261,8 +261,8 @@ if ($Hashtags != "") {
     </main>
     <script src="https://embed.twitch.tv/embed/v1.js"></script>
     <script src="https://apis.google.com/js/api.js"></script>
-    <script src="javascript/script+Youtube.js"></script>
     <script src="javascript/HighlightCaller.js"></script>
+    <script src="javascript/script+Youtube.js"></script>
     <script src="CSS+SCSS/bootstrap/js/bootstrap.js"></script>
 </body>
 

@@ -237,7 +237,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
     //#region Foreaching, Sorting and placing in ALL timestamps from Twitch
     for (let index = 0; index < TwitchStreamedDate.length; index++) {
       // TextArea
-      let Desc = document.getElementById(`myInput${index}`) as HTMLInputElement;
+      let Desc = document.getElementById(`streamtextarr${index}`) as HTMLInputElement;
       var NewDesc = ""; // Finished Description Var
 
       // Handling of BAD data
@@ -613,7 +613,6 @@ function DomSet() {
   let SidebarDiv = document.getElementById("SideBar") as HTMLElement;
   let nav = document.createElement("nav");
   let ul = document.createElement("ul");
-
   if (DescArrS.length > 0) {
     let liSeparate = document.createElement("li");
     let aSeprate = document.createElement("a");
@@ -641,7 +640,8 @@ function DomSet() {
       "StreamingNo",
       LocalDescArrS,
       "LocaleDesc-",
-      "myInput"
+      "streamtextarr",
+      0
     );
   } else if (DescArrS.length < 0) {
     console.log("No stream Timestamps found");
@@ -665,15 +665,31 @@ function DomSet() {
       li.append(a);
       ul.append(li);
     }
-    SetIns(
-      DescArrR,
-      RecordDatesArr,
-      "Record",
-      "RecordingNo",
-      LocalDescArrR,
-      "recordLocalInput",
-      "recordInput"
-    );
+    // If LocalMode is on it will double the amount of textareas and charcounters since now both a tranlated and original description is made!
+    if(SettingsLocal == ""){
+      SetIns(
+        DescArrR,
+        RecordDatesArr,
+        "Record",
+        "RecordingNo",
+        LocalDescArrR,
+        "recordLocalInput",
+        "recordInput",
+        DescArrS.length
+      );
+    }
+    else {
+      SetIns(
+        DescArrR,
+        RecordDatesArr,
+        "Record",
+        "RecordingNo",
+        LocalDescArrR,
+        "recordLocalInput",
+        "recordInput",
+        DescArrS.length*2
+      );
+    }
   } else {
     console.log("No recording Timestamps found");
   }
@@ -689,6 +705,7 @@ function DomSet() {
 // Outputs: Nothing, Void;
 // returns Nothing
 
+
 function SetIns(
   DescArr: Array<string>,
   DatesArr: Array<string>,
@@ -696,8 +713,10 @@ function SetIns(
   IDname: string,
   LocalArr: Array<string>,
   LocalID: string,
-  TextAreaID: string
+  TextAreaID: string,
+  CharCount_index: number
 ) {
+  
   var DescDiv = document.getElementById(
     "DescriptionAreaDiv"
   ) as HTMLInputElement;
@@ -737,7 +756,8 @@ function SetIns(
     let CharDiv = document.createElement("div");
     CharDiv.classList.add("d-flex", "justify-content-between");
     let PNo = document.createElement("p");
-    PNo.setAttribute("id", `CharCount${index}`);
+    PNo.setAttribute("id", `CharCount${CharCount_index}`);
+    CharCount_index++;
     PNo.innerHTML = "CharCounter";
     let h3 = document.createElement("h3");
     h3.innerHTML = `# Suggested Description`;
@@ -745,13 +765,13 @@ function SetIns(
 
     let LocalTextarea = document.createElement("textarea");
     if (SettingsLocal != "") {
-      LocalTextarea.classList.add("d-flex", "m-1", "res", "form-control");
+      LocalTextarea.classList.add("d-flex", "m-1", "res", "form-control", "Charcounts");
       LocalTextarea.innerHTML = LocalArr[index];
       LocalTextarea.setAttribute("id", `myLocalInput${index}`);
     }
 
     let Textarea = document.createElement("textarea");
-    Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea");
+    Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea", "Charcounts");
     Textarea.innerHTML = DescArr[index];
     Textarea.setAttribute("id", `${TextAreaID}${index}`);
     if (index % 2) {
@@ -812,7 +832,7 @@ function SetIns(
       h3.innerHTML = "# Suggested Description: (" + SettingsLocal + ")";
       h3.setAttribute("class", "my-2");
       let PNo = document.createElement("p");
-      PNo.setAttribute("id", `CharCount${index}`);
+      PNo.setAttribute("id", `CharCount${CharCount_index}`);
       PNo.innerHTML = "CharCounter";
       let input = document.createElement("input");
       input.classList.add("form-control", "p-3", "my-2");
@@ -826,6 +846,7 @@ function SetIns(
       AcordBody.append(FontDiv);
       AcordBody.append(input);
       AcordBody.append(LocalTextarea);
+      CharCount_index++;
     }
 
     // Final Appening

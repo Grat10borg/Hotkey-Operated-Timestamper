@@ -391,22 +391,27 @@ for (let i = 0; i < Textarea.length; i++) {
 }
 
 // make only once. then let the evenhandler do the rest of the work
-let StartTextarea: any = document.querySelectorAll(".Textarea");
-if (StartTextarea != null) {
-  for (let i = 0; i < StartTextarea.length; i++) {
-    let Charcount = StartTextarea[i].value as any;
-    let p = document.querySelector(`#CharCount${i}`) as HTMLElement; // needs to be html element
-    if (p != null) {
-      p.textContent = Charcount.length;
-      if (Charcount > 5000) {
+let StartTextareas: any = document.querySelectorAll(
+  ".Charcounts"
+) as NodeListOf<HTMLTextAreaElement>;
+if (StartTextareas != null) {
+  for (let i = 0; i < StartTextareas.length; i++) {
+    // removes textareas used for PHP and Javascript txt getting
+    if (StartTextareas[i].hidden == false) {
+      // removes textareas without a charcounter
+      let Pelement = document.getElementById(
+        `CharCount${i}`
+      ) as HTMLParagraphElement;
+      Pelement.innerHTML = StartTextareas[i].textContent.length;
+      if (StartTextareas[i].textContent.length > 5000) {
         // timestamps likely wont work, and its over the Maximum the youtube description can handle
-        p.setAttribute("class", "CharaRed");
-      } else if (Charcount > 3000) {
+        Pelement.setAttribute("class", "CharaRed");
+      } else if (StartTextareas[i].textContent.length > 3000) {
         // timestamps may stop working. thumbnails may also lose graphics at this/a bit under size too
-        p.setAttribute("class", "CharaYellow");
+        Pelement.setAttribute("class", "CharaYellow");
       } else {
         // become green, Prime Timestamp range.
-        p.setAttribute("class", "CharaGreen");
+        Pelement.setAttribute("class", "CharaGreen");
       }
     }
   }
@@ -420,14 +425,16 @@ function CalcChars(event): any {
 
 // General / ALL
 //#region Show Hidden Text boxes Event
-let ShowHiddenText = document.getElementById("ShowSettings") as HTMLDivElement; 
-if(ShowHiddenText != null) {
-  ShowHiddenText.addEventListener("click", function(event){
-    let PasswordInputs = document.querySelectorAll('[type="password"]') as NodeListOf<HTMLInputElement>;
-    if(PasswordInputs != null) {
-      PasswordInputs.forEach(Input => {
-        Input.type="text";
-    });
+let ShowHiddenText = document.getElementById("ShowSettings") as HTMLDivElement;
+if (ShowHiddenText != null) {
+  ShowHiddenText.addEventListener("click", function (event) {
+    let PasswordInputs = document.querySelectorAll(
+      '[type="password"]'
+    ) as NodeListOf<HTMLInputElement>;
+    if (PasswordInputs != null) {
+      PasswordInputs.forEach((Input) => {
+        Input.type = "text";
+      });
     }
   });
 }
@@ -451,13 +458,15 @@ if (Locked != null) {
     "click",
     function () {
       const Clear = document.getElementById("Clear") as HTMLButtonElement;
-      let LockedIcon = document.getElementById("LockedIcon") as HTMLImageElement;
-      if ((Clear.disabled == true)) {
+      let LockedIcon = document.getElementById(
+        "LockedIcon"
+      ) as HTMLImageElement;
+      if (Clear.disabled == true) {
         Clear.disabled = false;
-        LockedIcon.src= "img\\Icons\\UnlockedIcon.png";
+        LockedIcon.src = "img\\Icons\\UnlockedIcon.png";
       } else {
         Clear.disabled = true;
-        LockedIcon.src= "img\\Icons\\LockedIcon.png";
+        LockedIcon.src = "img\\Icons\\LockedIcon.png";
       }
     },
     true
