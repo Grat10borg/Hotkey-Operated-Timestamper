@@ -36,9 +36,9 @@
                             <div class="row">
                                 <p>• currently getting timestamps from: <?php echo $Timestamp_path ?></p>
                                 <div class="py-2">
-                                <a id="Locked" class="py-2 btn TimestampClear" ><img id="LockedIcon" class="imgIcon" src="img\Icons\LockedIcon.png"></a>
-                                <!-- <a class="py-2 px-5 Clear btn TimestampClear" href="clear.php">Clear Timestamps? | <img class="imgIcon" src="img\Icons\TimestampTXTIcon.png"></a> -->
-                                <button id="Clear" class="py-2 px-5 Clear btn TimestampClear" disabled>Clear Timestamps? | <img class="imgIcon" src="img\Icons\TimestampTXTIcon.png"></button>
+                                    <a id="Locked" class="py-2 btn TimestampClear"><img id="LockedIcon" class="imgIcon" src="img\Icons\LockedIcon.png"></a>
+                                    <!-- <a class="py-2 px-5 Clear btn TimestampClear" href="clear.php">Clear Timestamps? | <img class="imgIcon" src="img\Icons\TimestampTXTIcon.png"></a> -->
+                                    <button id="Clear" class="py-2 px-5 Clear btn TimestampClear" disabled>Clear Timestamps? | <img class="imgIcon" src="img\Icons\TimestampTXTIcon.png"></button>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingTwo">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                <img class="me-2 imgIcon" src="img\Icons\GearCuteIcon.png" alt=""> | H.O.T: Description Maker Settings
+                                    <img class="me-2 imgIcon" src="img\Icons\GearCuteIcon.png" alt=""> | H.O.T: Description Maker Settings
                                 </button>
                             </h2>
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
@@ -56,14 +56,17 @@
                                     <h3># Settings</h3>
                                     <p class="mb-5">you can change your settings <a href="Settings.php">Here</a></p>
                                     <div class="container">
+                                        <div class="btn TimestampClear m-1 mb-4" id="ShowSettings">
+                                            <span><img class="imgIcon me-2" src="img/Icons/LockedIcon.png">Show private settings?</span>
+                                        </div>
                                         <div class="row">
                                             <div class="col m-auto">
                                                 <p>Your Twitch APP AccessToken</p>
                                                 <?php
                                                 if (isset($TwitchApiKey)) {
-                                                    echo "<input value='$TwitchApiKey' disabled class='form-control p-3' type='text'/>";
+                                                    echo "<input value='$TwitchApiKey' disabled class='form-control p-3' type='password'/>";
                                                 } else {
-                                                    echo "<input class='form-control p-3' disabled placeholder='' type='text'/>";
+                                                    echo "<input class='form-control p-3' disabled placeholder='' type='password'/>";
                                                 }
                                                 ?>
                                             </div>
@@ -83,9 +86,9 @@
                                                 <p>Your Youtube API key</p>
                                                 <?php
                                                 if (isset($YTClientID)) {
-                                                    echo "<input value='$YTClientID' disabled class='form-control p-3' placeholder='<Longstring of Random Letters>.apps.googleusercontent.com' name='YoutubeClientID' type='text' id='YTClientIn' />";
+                                                    echo "<input value='$YTClientID' disabled class='form-control p-3' placeholder='<Longstring of Random Letters>.apps.googleusercontent.com' name='YoutubeClientID' type='password' id='YTClientIn' />";
                                                 } else {
-                                                    echo "<input class='form-control p-3' placeholder='<Longstring of Random Letters>.apps.googleusercontent.com' name='YoutubeClientID' type='text' id='YTClientIn' />";
+                                                    echo "<input class='form-control p-3' placeholder='<Longstring of Random Letters>.apps.googleusercontent.com' name='YoutubeClientID' type='password' id='YTClientIn' />";
                                                 }
                                                 ?>
                                             </div>
@@ -93,9 +96,9 @@
                                                 <p>Your Youtube AccessToken</p>
                                                 <?php
                                                 if (isset($YTAPIKey)) {
-                                                    echo "<input value='$YTAPIKey' disabled class='form-control p-3' placeholder='Something like: AIzaSyCq512yjXdQLtdUV3n7CzdIe78oDufRovU'  name='YoutubeApiKey' type='text' id='YTKeyIn' />";
+                                                    echo "<input value='$YTAPIKey' disabled class='form-control p-3' placeholder='Something like: AIzaSyCq512yjXdQLtdUV3n7CzdIe78oDufRovU'  name='YoutubeApiKey' type='password' id='YTKeyIn' />";
                                                 } else {
-                                                    echo "<input class='form-control p-3' placeholder='Something like: AIzaSyCq512yjXdQLtdUV3n7CzdIe78oDufRovU'  name='YoutubeApiKey' type='text' id='YTKeyIn' />";
+                                                    echo "<input class='form-control p-3' placeholder='Something like: AIzaSyCq512yjXdQLtdUV3n7CzdIe78oDufRovU'  name='YoutubeApiKey' type='password' id='YTKeyIn' />";
                                                 }
                                                 ?>
                                             </div>
@@ -115,9 +118,9 @@
                                                 <p>Your Timestamp.txt file path</p>
                                                 <?php
                                                 if (isset($Timestamp_path)) {
-                                                    echo "<input value='$Timestamp_path' disabled class='form-control p-3' placeholder='..\Folder\Timestamp.txt' name='TimestampPath' type='text' id='TimeSPathIn'/>";
+                                                    echo "<input value='$Timestamp_path' disabled class='form-control p-3' placeholder='..\Folder\Timestamp.txt' name='TimestampPath' type='password' id='TimeSPathIn'/>";
                                                 } else {
-                                                    echo "<input class='form-control p-3' placeholder='..\Folder\Timestamp.txt' name='TimestampPath' type='text' id='TimeSPathIn'/>";
+                                                    echo "<input class='form-control p-3' placeholder='..\Folder\Timestamp.txt' name='TimestampPath' type='password' id='TimeSPathIn'/>";
                                                 }
                                                 ?>
                                             </div>

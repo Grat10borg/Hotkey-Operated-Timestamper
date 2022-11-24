@@ -276,6 +276,17 @@ function CalcChars(event) {
     let string = event.target.value;
     return string.length;
 }
+let ShowHiddenText = document.getElementById("ShowSettings");
+if (ShowHiddenText != null) {
+    ShowHiddenText.addEventListener("click", function (event) {
+        let PasswordInputs = document.querySelectorAll('[type="password"]');
+        if (PasswordInputs != null) {
+            PasswordInputs.forEach(Input => {
+                Input.type = "text";
+            });
+        }
+    });
+}
 let ScrollTop = document.getElementById("ScrollTop");
 ScrollTop.addEventListener("click", function (event) {
     if (ScrollTop != null) {

@@ -418,6 +418,22 @@ function CalcChars(event): any {
 }
 //#endregion
 
+// General / ALL
+//#region Show Hidden Text boxes Event
+let ShowHiddenText = document.getElementById("ShowSettings") as HTMLDivElement; 
+if(ShowHiddenText != null) {
+  ShowHiddenText.addEventListener("click", function(event){
+    let PasswordInputs = document.querySelectorAll('[type="password"]') as NodeListOf<HTMLInputElement>;
+    if(PasswordInputs != null) {
+      PasswordInputs.forEach(Input => {
+        Input.type="text";
+    });
+    }
+  });
+}
+//#endregion
+
+//#region Scroll To Top Event
 let ScrollTop = document.getElementById("ScrollTop") as HTMLElement;
 ScrollTop.addEventListener("click", function (event) {
   if (ScrollTop != null) {
@@ -425,7 +441,9 @@ ScrollTop.addEventListener("click", function (event) {
     TopNav.scrollIntoView(true);
   }
 });
+//#endregion
 
+// Description Maker
 //#region Lock Event
 let Locked = document.getElementById("Locked") as HTMLElement;
 if (Locked != null) {

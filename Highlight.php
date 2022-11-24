@@ -131,15 +131,18 @@ if ($Hashtags != "") {
                                         <div class="container">
                                             <h3># Settings</h3>
                                             <p class="mb-2">you can change your settings <a href="Settings.php">Here</a></p>
+                                            <div class="btn TimestampClear m-1 mb-4" id="ShowSettings">
+                                                <span><img class="imgIcon me-2" src="img/Icons/LockedIcon.png">Show private settings?</span>
+                                            </div>
                                             <div class="row align-items-top">
                                                 <div class="col m-auto">
                                                     <div>
                                                         <p><img class="imgIcon" src="img\Icons\TwitchIcon.png"> | Your Twitch APP AccessToken </p>
                                                         <?php
                                                         if (isset($TwitchApiKey)) {
-                                                            echo "<input value='$TwitchApiKey' disabled class='form-control p-3' type='text'/>";
+                                                            echo "<input value='$TwitchApiKey' disabled class='form-control p-3' type='password'/>";
                                                         } else {
-                                                            echo "<input class='form-control p-3' disabled placeholder='' type='text'/>";
+                                                            echo "<input class='form-control p-3' disabled placeholder='' type='password'/>";
                                                         }
                                                         ?>
                                                         <p class="text-secondary mt-2" id="AccessTokenTime"></p>
@@ -180,7 +183,7 @@ if ($Hashtags != "") {
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
                                 <button id="accordLink" disabled class="accordion-button btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                <img class="me-2 imgIcon" src="img\Icons\TimestampTXT2Icon.png"> | # Clip links
+                                    <img class="me-2 imgIcon" src="img\Icons\TimestampTXT2Icon.png"> | # Clip links
                                 </button>
                             </h2>
                             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -194,7 +197,7 @@ if ($Hashtags != "") {
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingTwo">
                                 <button id="accordDesc" disabled class="btn accordion-button collapsed " type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                <img class="me-2 imgIcon" src="img\Icons\TextDocIcon.png"> | # Suggested Description
+                                    <img class="me-2 imgIcon" src="img\Icons\TextDocIcon.png"> | # Suggested Description
                                 </button>
                             </h2>
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
