@@ -209,7 +209,7 @@ function GitPushDescription(
   if (localization != "") {
     let res = document.getElementById(`LocaleDesc-${target}`) as HTMLElement;
     let res2 = document.getElementById(
-      `LocaleTitle-${target}`
+      `LocaleDescTitle-${target}`
     ) as HTMLInputElement;
     let LocalDesc = res.innerHTML;
     let LocalTitle = res2.value;

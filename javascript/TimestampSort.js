@@ -597,7 +597,7 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID
             PNo.innerHTML = "CharCounter";
             let input = document.createElement("input");
             input.classList.add("form-control", "p-3", "my-2");
-            input.setAttribute("id", `LocaleTitle-${index}`);
+            input.setAttribute("id", `${LocalID}Title-${index}`);
             input.setAttribute("placeholder", `title in locale language`);
             LocalTextarea.setAttribute("id", `${LocalID}${index}`);
             FontDiv.append(h3);

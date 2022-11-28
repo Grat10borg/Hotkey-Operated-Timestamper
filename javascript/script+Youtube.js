@@ -135,7 +135,7 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname, tar
     }
     if (localization != "") {
         let res = document.getElementById(`LocaleDesc-${target}`);
-        let res2 = document.getElementById(`LocaleTitle-${target}`);
+        let res2 = document.getElementById(`LocaleDescTitle-${target}`);
         let LocalDesc = res.innerHTML;
         let LocalTitle = res2.value;
         if (LocalTitle == "") {
