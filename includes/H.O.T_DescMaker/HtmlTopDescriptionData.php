@@ -43,7 +43,7 @@
                             </div>
                         </div>
                     </div>
-                    <h4 class="m-3"># Description Maker Settings</h4>
+                    <h4 class="m-3"># Description Maker Settings + Hints!</h4>
                     <div class="accordion mb-3" id="accordionExample">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingTwo">
@@ -146,6 +146,20 @@
                                                 }
                                                 ?>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div>
+                                        <h3># Hints! <img class="imgIcon" src="img/HOT_Icon.png"></h3>
+                                        <br>
+                                        <div>
+                                            <h5>Changing Settings!</h5>
+                                            <p>H.O.T uses txt files to make your descriptions, you can either edit them in the files or go to <a href="Settings.php">Settings!</a> and change them there</p>
+                                        </div>
+                                        <br>
+                                        <div>
+                                            <h5>Is H.O.T lagging?</h5>
+                                            <p>H.O.T could start having trouble loading your timestamps if they're too big! else check the console, and maybe send a bug report to the <a href="https://github.com/Grat10borg/Hotkey-Operated-Timestamper">H.O.T Github!</a></p>
                                         </div>
                                     </div>
                                 </div>

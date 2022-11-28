@@ -168,11 +168,19 @@ if ($Hashtags != "") {
                                             </div>
                                             <hr>
                                             <h3># Hints! <img class="imgIcon" src="img/HOT_Icon.png" alt="H.O.T small Icon"></h3>
+                                            <br>
                                             <div>
                                                 <h5>Quick Download Clip Script!</h5>
                                                 <input disabled type="text" class="form-control form-control-sm" value='javascript:window.open(document.getElementsByTagName("video")[0].src)'>
                                                 <p>put this as a bookmark and click on it when on Twitch's clip page!</p>
                                             </div>
+                                            <br>
+                                            <div>
+                                                <h5>Quick Testing H.O.T Highlighter!</h5>
+                                                <p>if you select a channel, and then press <kbd>Make Request</kbd>, then H.O.T assumes the rest of the parameters</p>
+                                                <p>it'll get clips of up to 90 days ago, with a maximum amount of clips being 100</p>
+                                            </div>
+                                            <br>
                                         </div>
                                     </div>
                                 </div>
