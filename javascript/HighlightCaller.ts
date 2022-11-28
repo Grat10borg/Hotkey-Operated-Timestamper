@@ -355,7 +355,7 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 
   //#endregion
 
-  //#region Text Counter Set in
+  //#region Text Counters Set in
   let Charcount = text.length;
   let p = document.querySelector(`#CharCount0`) as HTMLElement; // needs to be html element
   p.textContent = `${Charcount}`;
@@ -368,6 +368,22 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   } else {
     // become green, Prime Timestamp range.
     p.setAttribute("class", "CharaGreen");
+  }
+
+  if( localmode == true) {
+    let Charcount = LocaleText.length;
+    let p = document.querySelector(`#CharCount1`) as HTMLElement; // needs to be html element
+    p.textContent = `${Charcount}`;
+    if (Charcount > 5000) {
+      // timestamps likely wont work, and its over the Maximum the youtube description can handle
+      p.setAttribute("class", "CharaRed");
+    } else if (Charcount > 3000) {
+      // timestamps may stop working. thumbnails may also lose graphics at this/a bit under size too
+      p.setAttribute("class", "CharaYellow");
+    } else {
+      // become green, Prime Timestamp range.
+      p.setAttribute("class", "CharaGreen");
+    }
   }
   //#endregion
 

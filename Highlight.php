@@ -207,7 +207,7 @@ if ($Hashtags != "") {
                                         <p id="CharCount0"></p>
                                     </div>
                                     <!-- H.O.T makes a description for the highlight vid here -->
-                                    <textarea class="d-flex Textarea form-control" id="myInput0"></textarea>
+                                    <textarea class="d-flex Textarea form-control Charcounts" id="myInput0"></textarea>
                                     <div class="d-flex justify-content-left my-3">
                                         <button class='btn button mx-1 Select' value='0'>Select text</button>
                                         <button class='btn button mx-1 Copy' value='0'>Copy text</button>
@@ -231,10 +231,10 @@ if ($Hashtags != "") {
                                 <div class="accordion-body">
                                     <div class="d-flex justify-content-between">
                                         <h4># Local Suggested Description</h4>
-                                        <!-- <p id="CharCount0"></p> -->
+                                        <p id="CharCount1"></p>
                                     </div>
                                     <!-- H.O.T makes a description for the highlight vid here -->
-                                    <textarea class="d-flex Textarea form-control" id="LocalDescription"></textarea>
+                                    <textarea class="d-flex Textarea form-control Charcounts" id="LocalDescription"></textarea>
                                     <div class="d-flex justify-content-left my-3">
                                         <button disabled class='btn button mx-1 Select' value='0'>Select text</button>
                                         <button disabled class='btn button mx-1 Copy' value='0'>Copy text</button>

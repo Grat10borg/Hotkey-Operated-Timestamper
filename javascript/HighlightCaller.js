@@ -249,6 +249,20 @@ function ClipSorter(Clips, game_id, viewCount) {
     else {
         p.setAttribute("class", "CharaGreen");
     }
+    if (localmode == true) {
+        let Charcount = LocaleText.length;
+        let p = document.querySelector(`#CharCount1`);
+        p.textContent = `${Charcount}`;
+        if (Charcount > 5000) {
+            p.setAttribute("class", "CharaRed");
+        }
+        else if (Charcount > 3000) {
+            p.setAttribute("class", "CharaYellow");
+        }
+        else {
+            p.setAttribute("class", "CharaGreen");
+        }
+    }
     let accorddesc = document.querySelector("#accordDesc");
     accorddesc.disabled = false;
     let accordLink = document.querySelector("#accordLink");
