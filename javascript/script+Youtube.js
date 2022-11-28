@@ -236,7 +236,7 @@ function SelectText(event) {
     selectText.setSelectionRange(0, 99999);
     navigator.clipboard.writeText(selectText.value);
 }
-let Textarea = document.querySelectorAll(".Textarea");
+let Textarea = document.querySelectorAll(".Charcounts");
 for (let i = 0; i < Textarea.length; i++) {
     Textarea[i].addEventListener("keyup", function (event) {
         let Charcount = CalcChars(event);
@@ -277,7 +277,7 @@ function CalcChars(event) {
 }
 let ShowHiddenText = document.getElementById("ShowSettings");
 if (ShowHiddenText != null) {
-    ShowHiddenText.addEventListener("click", function (event) {
+    ShowHiddenText.addEventListener("click", function () {
         let PasswordInputs = document.querySelectorAll('[type="password"]');
         if (PasswordInputs != null) {
             PasswordInputs.forEach((Input) => {

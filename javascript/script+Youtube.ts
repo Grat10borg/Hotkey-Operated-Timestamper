@@ -367,7 +367,7 @@ function SelectText(event): void {
 //#endregion
 
 //#region Updating Text Length Event
-let Textarea = document.querySelectorAll(".Textarea"); // gets array of Textarea elements
+let Textarea = document.querySelectorAll(".Charcounts") as NodeListOf<HTMLTextAreaElement>; // gets array of Textarea elements
 for (let i = 0; i < Textarea.length; i++) {
   Textarea[i].addEventListener("keyup", function (event) {
     let Charcount = CalcChars(event);
@@ -427,7 +427,7 @@ function CalcChars(event): any {
 //#region Show Hidden Text boxes Event
 let ShowHiddenText = document.getElementById("ShowSettings") as HTMLDivElement;
 if (ShowHiddenText != null) {
-  ShowHiddenText.addEventListener("click", function (event) {
+  ShowHiddenText.addEventListener("click", function () {
     let PasswordInputs = document.querySelectorAll(
       '[type="password"]'
     ) as NodeListOf<HTMLInputElement>;
