@@ -22,7 +22,7 @@
                             <p class="col" hidden id="TwitchMsg"></p>
                         </div>
                         <div class="row">
-                            <button class="btn-danger py-2 btn my-2 authUpload">Connect Youtube! <img class="imgIcon" src="img\Icons\YouTubeIcon.png" alt=""> </button>
+                            <button disabled class="btn-danger py-2 btn my-2 authUpload">Connect Youtube! <img class="imgIcon" src="img\Icons\YouTubeIcon.png" alt=""> </button>
                         </div>
                         <div class="row">
                             <select disabled class="py-3 SelectId" name="SelectId" id="selectId"></select>
