@@ -66,6 +66,8 @@ var LocalDescArrS = new Array();
 var DescArrR = new Array(); // holds all the Finished Recording descriptions
 var LocalDescArrR = new Array();
 
+var StreamDatesRaw = new Array();
+
 //#region Token Validation.
 validateToken();
 //#endregion
@@ -108,102 +110,73 @@ TwitchClip.addEventListener("click", async function (event: any) {
     let UserIdResp = await HttpCalling(
       `https://api.twitch.tv/helix/users?login=${StreamerName}`
     );
-    // Calling API to gather VODS from this user.
-    let UserVods = await HttpCalling(
-      `https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`
-    );
-    let TwitchStreamedDate = Array();
-    let FullDateTwitch = Array();
-
-    //#region VOD Sorting
-    for (let index = 0; index < UserVods["data"].length; index++) {
-      if (UserVods["data"][index]["type"] == "highlight") {
-        continue; // skip highlights
-      } else {
-        // places the Date "2022-08-22" in a array
-        let Timestamps = UserVods["data"][index]["published_at"].split("T");
-        FullDateTwitch.push(UserVods["data"][index]["published_at"]);
-        TwitchStreamedDate.push(Timestamps[0]);
-      }
-    }
-    //#endregion
 
     //#region Getting Timestamp from Acord buttons
     // Getting Timestamps from Acord buttons
-    let AcorBtns = document.getElementsByClassName("accordion-button");
+    
+    let AcorBtns = Array();
+    for (let index = 0; index < StreamDatesArr.length; index++) {
+      AcorBtns.push(document.getElementById(`AcordBtn-${index}`));
+    }
     let StreamedDate = Array(); // date a stream took place local ver
     for (let index = 0; index < AcorBtns.length; index++) {
       let Timestamps = AcorBtns[index].innerHTML.split(" ");
-      StreamedDate.push(Timestamps[0]);
+      StreamedDate.push(Timestamps[5]);
     }
     //#endregion
 
-    //#region StreamDate Aprover
-    let Aproved_StreamTime = Array();
-    let StreamIndex = Array(); // holds the Aproved index for TwitchStreamedDate
-    for (let i = 0; i < TwitchStreamedDate.length; i++) {
-      for (let index = 0; index < StreamedDate.length; index++) {
-        // if "2022-08-22" == "2022-08-22"
-        if (TwitchStreamedDate[i] == StreamedDate[index]) {
-          Aproved_StreamTime.push(StreamedDate.indexOf(TwitchStreamedDate[i]));
-          StreamIndex.push(i);
-        }
-      }
+    // Checking if there even is any VODS
+    let UserVods = await HttpCalling(
+      `https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`
+    );
+    if (UserVods["data"].length != 0) {
+      console.log("Did not find any VOD's");
     }
-    //#endregion
+    // let TwitchStreamedDate = Array();
+    // let FullDateTwitch = Array();
 
-    //#region Acord Title Placer
-    // Adds titles to acord buttons for easy seeing stream timestamps.
-    // Also removes some of the less useful date data like hours minutes, seconds replaces it with the title of the stream instead.
-    for (let index = 0; index < Aproved_StreamTime.length; index++) {
-      let AcordBtn = document.getElementById(
-        `AcordBtn-${Aproved_StreamTime[index]}`
-      ) as HTMLElement;
-      AcordBtn.innerHTML = `${TwitchStreamedDate[StreamIndex[index]]} - ${
-        UserVods["data"][StreamIndex[index]]["title"]
-      }`;
-    }
-    //#endregion
+    //#region VOD Sorting
 
-    // Getting clips from 35 days ago to today.
-    //#region Setting up
-    let d = new Date();
-    let RFCdato = new Date();
-    RFCdato.setDate(RFCdato.getDate() - 35); // takes a month worth of clips
-    let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${
-      UserIdResp["data"][0]["id"]
-    }&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
-    let resp = await HttpCalling(http2);
-    console.log(resp);
-    //#endregion
-    let MultiUnsortedClips = Array();
-    //#region Getting and sorting clips into arrays sorted by Stream dates
-    for (let index = 0; index < TwitchStreamedDate.length; index++) {
-      let DayDate = TwitchStreamedDate[index].split("T");
+    var MultidimClipResps = Array();
+    for (let index = 0; index < StreamDatesArr.length; index++) {
+      let StartDate = new Date(StreamDatesArr[index]); // starting date set to stream start time.
+      let EndDate = new Date(StreamDatesArr[index]); // gets whole day worth time. note: going over 24 hours stream time would be a problem.
+      EndDate.setDate(EndDate.getDate() + 1);
+      let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${
+        UserIdResp["data"][0]["id"]
+      }&first=100&started_at=${StartDate.toISOString()}&ended_at=${EndDate.toISOString()}`;
+      let resp = await HttpCalling(http2);
+      //console.log(StreamedDate[index]);
+      //#region Getting and sorting clips into arrays sorted by Stream dates
+
+      // Test if Clipper is the Streamer
       let Clips = Array();
       for (let i = 0; i < resp["data"].length; i++) {
-        let TestDate = Array();
-        if (resp["data"][i]["creator_name"] == StreamerName) {
-          let str = resp["data"][i]["created_at"];
-          TestDate = str.split("T");
-        }
-        if (DayDate[0] == TestDate[0]) {
+        if (resp["data"][i]["creator_name"].toLowerCase() == StreamerName.toLowerCase()) {
           Clips.push(resp["data"][i]);
+        } else {
+          // Ignore clips not made by self.
         }
       }
 
       // Sort clips after Date Newest to Oldest.
-      MultiUnsortedClips.push(Clips);
+      MultidimClipResps.push(Clips);
     }
+    console.log(MultidimClipResps[0]);
+
+    //#region Setting up
+
+    //#endregion
+
     //#endregion
 
     //#region Clip Sorter
     let ClipsDateArr = Array();
     let MultiStreamClips = Array();
-    for (let index = 0; index < MultiUnsortedClips.length; index++) {
+    for (let index = 0; index < MultidimClipResps.length; index++) {
       let Clips = Array();
-      for (let i = 0; i < MultiUnsortedClips[index].length; i++) {
-        Clips.push(parseISOString(MultiUnsortedClips[index][i]["created_at"]));
+      for (let i = 0; i < MultidimClipResps[index].length; i++) {
+        Clips.push(parseISOString(MultidimClipResps[index][i]["created_at"]));
       }
       // Sorting to correct dates
       Clips.sort(function (a, b) {
@@ -215,9 +188,9 @@ TwitchClip.addEventListener("click", async function (event: any) {
 
     //#region Make Multidim sorted array
     let TempSortedClips = Array();
-    for (let x = 0; x < MultiUnsortedClips.length; x++) {
+    for (let x = 0; x < MultidimClipResps.length; x++) {
       // multi dim array = 11, 5
-      let UnsortedClipArr = MultiUnsortedClips[x];
+      let UnsortedClipArr = MultidimClipResps[x];
       for (let q = 0; q < ClipsDateArr[x].length; q++) {
         for (let y = 0; y < UnsortedClipArr.length; y++) {
           // 11 elements in one array
@@ -225,32 +198,35 @@ TwitchClip.addEventListener("click", async function (event: any) {
             UnsortedClipArr[y]["created_at"].toString()
           ); // Clip Unsorted Dates
           if (ClipsDateArr[x][q].toString() == Date.toString()) {
-            TempSortedClips.push(MultiUnsortedClips[x][y]);
+            TempSortedClips.push(MultidimClipResps[x][y]);
           }
         }
       }
       MultiStreamClips.push(TempSortedClips);
       TempSortedClips = Array(); // reset
     }
+    console.log(MultiStreamClips);
     //#endregion
-
+    var TimestampTwitch = Array();
     //#region Foreaching, Sorting and placing in ALL timestamps from Twitch
-    for (let index = 0; index < TwitchStreamedDate.length; index++) {
+    for (let index = 0; index < StreamDatesArr.length; index++) {
       // TextArea
-      let Desc = document.getElementById(`streamtextarr${index}`) as HTMLInputElement;
+      let Desc = document.getElementById(
+        `streamtextarr${index}`
+      ) as HTMLInputElement;
       var NewDesc = ""; // Finished Description Var
 
       // Handling of BAD data
       if (Desc == null) {
         continue; // skip non existing descriptions, if you dont have a full copy of local timestamps.
       }
-      if (Desc.innerHTML.search(TwitchStreamedDate[StreamIndex[index]]) != -1) {
-        continue; // Skip timestamps if local timestamps does not contain copy of the stream searched for.
-      }
-      console.log(TwitchStreamedDate[StreamIndex[index]]);
-      console.log(MultiStreamClips[StreamIndex[index]]);
+      // if (Desc.innerHTML.search(TwitchStreamedDate[StreamIndex[index]]) != -1) {
+      //   continue; // Skip timestamps if local timestamps does not contain copy of the stream searched for.
+      // }
+      //console.log(TwitchStreamedDate[StreamIndex[index]]);
+      //console.log(MultiStreamClips[StreamIndex[index]]);
 
-      let TimestampTwitch = Array();
+     
       let LocalSceneShift = Array();
       let TimeTwitch = Array();
       let LocalSceneTime = Array();
@@ -282,31 +258,41 @@ TwitchClip.addEventListener("click", async function (event: any) {
 
       //#endregion
 
+
+      console.log(LocalSceneTimetemp);
+      console.log(LocalSceneShifttemp);
+
       //#region Creating timestamps with titles in a single string
       // sets in Clip timestamp.
-      for (let i = 0; i < MultiStreamClips[StreamIndex[index]].length; i++) {
+      //console.log(MultidimClipResps);
+      for (let i = 0; i < MultidimClipResps[index].length; i++) {
         // gives a timestamp close to LOCAL timestamp from Twitch API.
-        TimestampTwitch.push(
-          "• " +
-            SectoTimestamp(
-              MultiStreamClips[StreamIndex[index]][i]["vod_offset"]
-            ) +
-            " " +
-            MultiStreamClips[StreamIndex[index]][i]["title"]
-        );
-        TimeTwitch.push(
-          SectoTimestamp(MultiStreamClips[StreamIndex[index]][i]["vod_offset"])
-        );
+        if(MultidimClipResps[index][i]["vod_offset"] != null && MultidimClipResps[index][i]["vod_offset"] != "null") {
+          // if the clips have Vod_offsets, then use vod offsets instead of local stamps since then they'll fit exsactly with clip title
+          TimestampTwitch.push(
+            "• " +
+              SectoTimestamp(
+                MultiStreamClips[MultidimClipResps[index]][i]["vod_offset"]
+              ) +
+              " " +
+              MultiStreamClips[MultidimClipResps[index]][i]["title"]
+          );
+        }
+        else {
+          console.log(MultiDimStreamArr[index][i]);
+          TimeTwitch.push(MultiDimStreamArr[index][i]);
+        }
+
       }
       //#endregion
 
-      console.log(LocalSceneTimetemp);
       // set timestamp arrays into one big one that we have to sort.
       let TimestampArr = Array();
       let TimeArr = Array();
       TimestampArr = LocalSceneShifttemp.concat(TimestampTwitch);
       TimeArr = LocalSceneTimetemp.concat(TimeTwitch);
 
+      console.log(TimestampArr);
       // sort timestamps into correct sorting
       // fun fact the indexes are named: Q,T,Pie,u because thats what u are :)
       //#region Making Timestamps into Dates and sorting them.
@@ -375,12 +361,42 @@ TwitchClip.addEventListener("click", async function (event: any) {
       //#endregion
     }
     //#endregion
+
+    //#region Acord Title Placer
+    // Adds titles to acord buttons for easy seeing stream timestamps.
+    // Also removes some of the less useful date data like hours minutes, seconds replaces it with the title of the stream instead.
+    for (let QT = 0; QT < StreamDatesArr.length; QT++) {
+
+      
+      // Test if there is a VOD to this date, so we can set the old title in it Else give stream playing
+      let gameresp = await HttpCalling(
+        `https://api.twitch.tv/helix/games?id=${MultidimClipResps[QT][0]["game_id"]}`
+      );
+      if (QT % 2) {
+        AcorBtns[QT].innerHTML =
+          "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
+          "| " +
+          StreamDatesArr[QT] +
+          ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${MultidimClipResps[QT].length} Clips`;
+      } else {
+        AcorBtns[QT].innerHTML =
+          "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
+          "| " +
+          StreamDatesArr[QT] +
+          ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${MultidimClipResps[QT].length} Clips`;
+      }
+    }
+    //#endregion
+
+    // Found No Vods to get names from.
   } else {
-    // if token was not validated when you clicked, it'll try to validate, then you can click again and it Should work*
+    console.log("Failed to Validate Token Try Again");
     validateToken();
-    console.log("Token was not validated try again..");
   }
 });
+
+//#endregion
+
 //#endregion
 
 // Large Functions
@@ -666,7 +682,7 @@ function DomSet() {
       ul.append(li);
     }
     // If LocalMode is on it will double the amount of textareas and charcounters since now both a tranlated and original description is made!
-    if(SettingsLocal == ""){
+    if (SettingsLocal == "") {
       SetIns(
         DescArrR,
         RecordDatesArr,
@@ -677,8 +693,7 @@ function DomSet() {
         "recordInput",
         DescArrS.length
       );
-    }
-    else {
+    } else {
       SetIns(
         DescArrR,
         RecordDatesArr,
@@ -687,7 +702,7 @@ function DomSet() {
         LocalDescArrR,
         "recordLocalInput",
         "recordInput",
-        DescArrS.length*2
+        DescArrS.length * 2
       );
     }
   } else {
@@ -705,7 +720,6 @@ function DomSet() {
 // Outputs: Nothing, Void;
 // returns Nothing
 
-
 function SetIns(
   DescArr: Array<string>,
   DatesArr: Array<string>,
@@ -716,7 +730,6 @@ function SetIns(
   TextAreaID: string,
   CharCount_index: number
 ) {
-  
   var DescDiv = document.getElementById(
     "DescriptionAreaDiv"
   ) as HTMLInputElement;
@@ -765,13 +778,26 @@ function SetIns(
 
     let LocalTextarea = document.createElement("textarea");
     if (SettingsLocal != "") {
-      LocalTextarea.classList.add("d-flex", "m-1", "res", "form-control", "Charcounts");
+      LocalTextarea.classList.add(
+        "d-flex",
+        "m-1",
+        "res",
+        "form-control",
+        "Charcounts"
+      );
       LocalTextarea.innerHTML = LocalArr[index];
       LocalTextarea.setAttribute("id", `myLocalInput${index}`);
     }
 
     let Textarea = document.createElement("textarea");
-    Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea", "Charcounts");
+    Textarea.classList.add(
+      "d-flex",
+      "m-1",
+      "res",
+      "form-control",
+      "Textarea",
+      "Charcounts"
+    );
     Textarea.innerHTML = DescArr[index];
     Textarea.setAttribute("id", `${TextAreaID}${index}`);
     if (index % 2) {
@@ -1067,7 +1093,6 @@ async function HttpCalling(HttpCall: string) {
   })
     .then((respon) => respon.json())
     .then((respon) => {
-      console.log(respon);
       // Return Response on Success
       return respon;
     })

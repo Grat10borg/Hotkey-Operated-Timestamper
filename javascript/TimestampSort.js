@@ -56,6 +56,7 @@ var DescArrS = new Array();
 var LocalDescArrS = new Array();
 var DescArrR = new Array();
 var LocalDescArrR = new Array();
+var StreamDatesRaw = new Array();
 validateToken();
 if (RawTxt != undefined && RawTxt != "" && RawTxt != null) {
     if (CutOuts(RawTxt) == 1) {
@@ -80,67 +81,43 @@ let TwitchClip = document.getElementById("TwitchClip");
 TwitchClip.addEventListener("click", async function (event) {
     if (TwitchConnected == true) {
         let UserIdResp = await HttpCalling(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
-        let UserVods = await HttpCalling(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`);
-        let TwitchStreamedDate = Array();
-        let FullDateTwitch = Array();
-        for (let index = 0; index < UserVods["data"].length; index++) {
-            if (UserVods["data"][index]["type"] == "highlight") {
-                continue;
-            }
-            else {
-                let Timestamps = UserVods["data"][index]["published_at"].split("T");
-                FullDateTwitch.push(UserVods["data"][index]["published_at"]);
-                TwitchStreamedDate.push(Timestamps[0]);
-            }
+        let AcorBtns = Array();
+        for (let index = 0; index < StreamDatesArr.length; index++) {
+            AcorBtns.push(document.getElementById(`AcordBtn-${index}`));
         }
-        let AcorBtns = document.getElementsByClassName("accordion-button");
         let StreamedDate = Array();
         for (let index = 0; index < AcorBtns.length; index++) {
             let Timestamps = AcorBtns[index].innerHTML.split(" ");
-            StreamedDate.push(Timestamps[0]);
+            StreamedDate.push(Timestamps[5]);
         }
-        let Aproved_StreamTime = Array();
-        let StreamIndex = Array();
-        for (let i = 0; i < TwitchStreamedDate.length; i++) {
-            for (let index = 0; index < StreamedDate.length; index++) {
-                if (TwitchStreamedDate[i] == StreamedDate[index]) {
-                    Aproved_StreamTime.push(StreamedDate.indexOf(TwitchStreamedDate[i]));
-                    StreamIndex.push(i);
-                }
-            }
+        let UserVods = await HttpCalling(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`);
+        if (UserVods["data"].length != 0) {
+            console.log("Did not find any VOD's");
         }
-        for (let index = 0; index < Aproved_StreamTime.length; index++) {
-            let AcordBtn = document.getElementById(`AcordBtn-${Aproved_StreamTime[index]}`);
-            AcordBtn.innerHTML = `${TwitchStreamedDate[StreamIndex[index]]} - ${UserVods["data"][StreamIndex[index]]["title"]}`;
-        }
-        let d = new Date();
-        let RFCdato = new Date();
-        RFCdato.setDate(RFCdato.getDate() - 35);
-        let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${UserIdResp["data"][0]["id"]}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`;
-        let resp = await HttpCalling(http2);
-        console.log(resp);
-        let MultiUnsortedClips = Array();
-        for (let index = 0; index < TwitchStreamedDate.length; index++) {
-            let DayDate = TwitchStreamedDate[index].split("T");
+        var MultidimClipResps = Array();
+        for (let index = 0; index < StreamDatesArr.length; index++) {
+            let StartDate = new Date(StreamDatesArr[index]);
+            let EndDate = new Date(StreamDatesArr[index]);
+            EndDate.setDate(EndDate.getDate() + 1);
+            let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${UserIdResp["data"][0]["id"]}&first=100&started_at=${StartDate.toISOString()}&ended_at=${EndDate.toISOString()}`;
+            let resp = await HttpCalling(http2);
             let Clips = Array();
             for (let i = 0; i < resp["data"].length; i++) {
-                let TestDate = Array();
-                if (resp["data"][i]["creator_name"] == StreamerName) {
-                    let str = resp["data"][i]["created_at"];
-                    TestDate = str.split("T");
-                }
-                if (DayDate[0] == TestDate[0]) {
+                if (resp["data"][i]["creator_name"].toLowerCase() == StreamerName.toLowerCase()) {
                     Clips.push(resp["data"][i]);
                 }
+                else {
+                }
             }
-            MultiUnsortedClips.push(Clips);
+            MultidimClipResps.push(Clips);
         }
+        console.log(MultidimClipResps[0]);
         let ClipsDateArr = Array();
         let MultiStreamClips = Array();
-        for (let index = 0; index < MultiUnsortedClips.length; index++) {
+        for (let index = 0; index < MultidimClipResps.length; index++) {
             let Clips = Array();
-            for (let i = 0; i < MultiUnsortedClips[index].length; i++) {
-                Clips.push(parseISOString(MultiUnsortedClips[index][i]["created_at"]));
+            for (let i = 0; i < MultidimClipResps[index].length; i++) {
+                Clips.push(parseISOString(MultidimClipResps[index][i]["created_at"]));
             }
             Clips.sort(function (a, b) {
                 return a - b;
@@ -148,31 +125,27 @@ TwitchClip.addEventListener("click", async function (event) {
             ClipsDateArr.push(Clips);
         }
         let TempSortedClips = Array();
-        for (let x = 0; x < MultiUnsortedClips.length; x++) {
-            let UnsortedClipArr = MultiUnsortedClips[x];
+        for (let x = 0; x < MultidimClipResps.length; x++) {
+            let UnsortedClipArr = MultidimClipResps[x];
             for (let q = 0; q < ClipsDateArr[x].length; q++) {
                 for (let y = 0; y < UnsortedClipArr.length; y++) {
                     let Date = parseISOString(UnsortedClipArr[y]["created_at"].toString());
                     if (ClipsDateArr[x][q].toString() == Date.toString()) {
-                        TempSortedClips.push(MultiUnsortedClips[x][y]);
+                        TempSortedClips.push(MultidimClipResps[x][y]);
                     }
                 }
             }
             MultiStreamClips.push(TempSortedClips);
             TempSortedClips = Array();
         }
-        for (let index = 0; index < TwitchStreamedDate.length; index++) {
+        console.log(MultiStreamClips);
+        var TimestampTwitch = Array();
+        for (let index = 0; index < StreamDatesArr.length; index++) {
             let Desc = document.getElementById(`streamtextarr${index}`);
             var NewDesc = "";
             if (Desc == null) {
                 continue;
             }
-            if (Desc.innerHTML.search(TwitchStreamedDate[StreamIndex[index]]) != -1) {
-                continue;
-            }
-            console.log(TwitchStreamedDate[StreamIndex[index]]);
-            console.log(MultiStreamClips[StreamIndex[index]]);
-            let TimestampTwitch = Array();
             let LocalSceneShift = Array();
             let TimeTwitch = Array();
             let LocalSceneTime = Array();
@@ -196,18 +169,25 @@ TwitchClip.addEventListener("click", async function (event) {
                 LocalSceneShift = Array();
                 LocalSceneTime = Array();
             }
-            for (let i = 0; i < MultiStreamClips[StreamIndex[index]].length; i++) {
-                TimestampTwitch.push("• " +
-                    SectoTimestamp(MultiStreamClips[StreamIndex[index]][i]["vod_offset"]) +
-                    " " +
-                    MultiStreamClips[StreamIndex[index]][i]["title"]);
-                TimeTwitch.push(SectoTimestamp(MultiStreamClips[StreamIndex[index]][i]["vod_offset"]));
-            }
             console.log(LocalSceneTimetemp);
+            console.log(LocalSceneShifttemp);
+            for (let i = 0; i < MultidimClipResps[index].length; i++) {
+                if (MultidimClipResps[index][i]["vod_offset"] != null && MultidimClipResps[index][i]["vod_offset"] != "null") {
+                    TimestampTwitch.push("• " +
+                        SectoTimestamp(MultiStreamClips[MultidimClipResps[index]][i]["vod_offset"]) +
+                        " " +
+                        MultiStreamClips[MultidimClipResps[index]][i]["title"]);
+                }
+                else {
+                    console.log(MultiDimStreamArr[index][i]);
+                    TimeTwitch.push(MultiDimStreamArr[index][i]);
+                }
+            }
             let TimestampArr = Array();
             let TimeArr = Array();
             TimestampArr = LocalSceneShifttemp.concat(TimestampTwitch);
             TimeArr = LocalSceneTimetemp.concat(TimeTwitch);
+            console.log(TimestampArr);
             let SortTime = Array();
             for (let q = 0; q < TimestampArr.length; q++) {
                 SortTime.push(TimestampToDate(TimeArr[q]));
@@ -257,10 +237,27 @@ TwitchClip.addEventListener("click", async function (event) {
                 }
             }
         }
+        for (let QT = 0; QT < StreamDatesArr.length; QT++) {
+            let gameresp = await HttpCalling(`https://api.twitch.tv/helix/games?id=${MultidimClipResps[QT][0]["game_id"]}`);
+            if (QT % 2) {
+                AcorBtns[QT].innerHTML =
+                    "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
+                        "| " +
+                        StreamDatesArr[QT] +
+                        ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${MultidimClipResps[QT].length} Clips`;
+            }
+            else {
+                AcorBtns[QT].innerHTML =
+                    "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
+                        "| " +
+                        StreamDatesArr[QT] +
+                        ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${MultidimClipResps[QT].length} Clips`;
+            }
+        }
     }
     else {
+        console.log("Failed to Validate Token Try Again");
         validateToken();
-        console.log("Token was not validated try again..");
     }
 });
 function CutOuts(RawTxt) {
@@ -777,7 +774,6 @@ async function HttpCalling(HttpCall) {
     })
         .then((respon) => respon.json())
         .then((respon) => {
-        console.log(respon);
         return respon;
     })
         .catch((err) => {

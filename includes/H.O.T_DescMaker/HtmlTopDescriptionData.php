@@ -43,12 +43,12 @@
                             </div>
                         </div>
                     </div>
-                    <h4 class="m-3"># Description Maker Settings + Hints!</h4>
+                    <h4 class="m-3"># Description Maker Settings & Hints!</h4>
                     <div class="accordion mb-3" id="accordionExample">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingTwo">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    <img class="me-2 imgIcon" src="img\Icons\GearCuteIcon.png" alt=""> | H.O.T: Description Maker Settings
+                                    <img class="me-2 imgIcon" src="img\Icons\GearCuteIcon.png" alt=""> | H.O.T: Description Maker Settings + Hints!
                                 </button>
                             </h2>
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
