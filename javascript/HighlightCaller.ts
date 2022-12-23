@@ -3,16 +3,15 @@
 let PBeforeDesc = document.getElementById("BeforeDesc") as HTMLInputElement;
 let PAfterDesc = document.getElementById("AfterDesc") as HTMLInputElement;
 let PTKey = document.getElementById("TwitchKey") as HTMLElement;
-let PLBeforeDesc = document.getElementById("LocalBeforeDesc") as HTMLInputElement;
+let PLBeforeDesc = document.getElementById(
+  "LocalBeforeDesc"
+) as HTMLInputElement;
 let PLAfterDesc = document.getElementById("LocalAfterDesc") as HTMLInputElement;
 
 // Settings
 let BeforeDesc = PBeforeDesc.innerHTML;
 let AfterDesc = PAfterDesc.innerHTML;
 var TappAcess = PTKey.innerHTML;
-let LocalBeforeDesc = PLBeforeDesc.innerHTML;
-let LocalAfterDesc = PLAfterDesc.innerHTML;
-
 
 // Asigned later
 let UserId = "";
@@ -233,7 +232,7 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 
   //#region Set in Links
   let textAreaDiv = document.querySelector("#Linksarea") as HTMLElement;
-  
+
   let clipCredit = new Set(); // holds credit for clips
 
   let x = 0;
@@ -241,18 +240,23 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 
   let localmode = false;
   let locale = document.getElementById("Local") as HTMLElement;
-  if(locale.innerHTML != "" && locale.innerHTML != "none") 
-  {
-    localmode = true;
+  if (locale != null) {
+    if (locale.innerHTML != "" && locale.innerHTML != "none") {
+      localmode = true;
+    }
+  } else {
+    localmode = false;
   }
+
   // Making Description
   let text = ""; // initialzes vars for getting duration
   text = text + BeforeDesc + "\n\n"; // adds the description
   // locale version of description
   let LocaleText = "" as string;
-  if(localmode == true) 
-  {
-    let LocaleBeforeDesc = document.getElementById("LocalBeforeDesc") as HTMLElement;
+  if (localmode == true) {
+    let LocaleBeforeDesc = document.getElementById(
+      "LocalBeforeDesc"
+    ) as HTMLElement;
     LocaleText = LocaleText + LocaleBeforeDesc.innerHTML + "\n\n";
   }
 
@@ -261,10 +265,15 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     // duration getter, + highlight description maker
     if (i == 0) {
       text = text + `• 0:00 ${sortcliped[i]["title"]}\n`; // makes start chapter for youtube description
-      if (localmode == true) {LocaleText = LocaleText + `• 0:00 ${sortcliped[i]["title"]}\n`;}
+      if (localmode == true) {
+        LocaleText = LocaleText + `• 0:00 ${sortcliped[i]["title"]}\n`;
+      }
     } else {
       text = text + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
-      if (localmode == true) {LocaleText = LocaleText + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;}
+      if (localmode == true) {
+        LocaleText =
+          LocaleText + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
+      }
     }
     duration = duration + sortcliped[i]["duration"];
     clipCredit.add(sortcliped[i]["creator_name"]);
@@ -282,7 +291,7 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     rowdiv.classList.add("Linkbg");
     // if (i % 2 == 0) {
     //   // adds a slightly darker background every Other link
-      
+
     // }
     button.classList.add("col-3", "p-1", "btn", "ClipBtn");
     button.setAttribute("value", `Btn-${i}`);
@@ -332,11 +341,15 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   //#region Description Making
   // Make Description for Would be Hightligt
   text = text + "Clips by:";
-  if(localmode == true) {LocaleText = LocaleText + "Clips by:";}
+  if (localmode == true) {
+    LocaleText = LocaleText + "Clips by:";
+  }
   clipCredit.forEach((element) => {
     // note: clipcredit is a Set it only holds unique values
     text = text + ` ${element},`;
-    if(localmode == true) {LocaleText = LocaleText + ` ${element},`;}
+    if (localmode == true) {
+      LocaleText = LocaleText + ` ${element},`;
+    }
   });
 
   text = text.slice(0, text.length - 1);
@@ -344,14 +357,16 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   // finished description change
   let Desc = document.querySelector("#myInput0") as HTMLInputElement;
   Desc.textContent = text;
-  if(localmode == true) {
+  if (localmode == true) {
+    let LocalAfterDesc = PLAfterDesc.innerHTML;
     LocaleText = LocaleText.slice(0, text.length - 1);
     LocaleText = LocaleText + "\n\n" + LocalAfterDesc;
 
-    let localDesc = document.querySelector("#LocalDescription") as HTMLInputElement;
+    let localDesc = document.querySelector(
+      "#LocalDescription"
+    ) as HTMLInputElement;
     localDesc.textContent = LocaleText;
   }
-
 
   //#endregion
 
@@ -370,7 +385,7 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     p.setAttribute("class", "CharaGreen");
   }
 
-  if( localmode == true) {
+  if (localmode == true) {
     let Charcount = LocaleText.length;
     let p = document.querySelector(`#CharCount1`) as HTMLElement; // needs to be html element
     p.textContent = `${Charcount}`;
@@ -392,8 +407,10 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   accorddesc.disabled = false;
   let accordLink = document.querySelector("#accordLink") as HTMLInputElement;
   accordLink.disabled = false;
-  if(localmode == true) {
-    let accordLocal = document.querySelector("#accordLocalDesc") as HTMLInputElement;
+  if (localmode == true) {
+    let accordLocal = document.querySelector(
+      "#accordLocalDesc"
+    ) as HTMLInputElement;
     accordLocal.disabled = false;
   }
 }
@@ -452,7 +469,6 @@ async function validateTToken() {
                 "') is invalid (" +
                 resp.message +
                 ").. The Submit Button has been Disabled. you cannot use H.O.T: Highlighter without a Token! _(._. )>"
-                
             );
             let Submitbtn = document.getElementById(
               "Submit"
@@ -470,7 +486,9 @@ async function validateTToken() {
           let Time = new Date(resp.expires_in * 1000);
           let TimeStrDash = Time.toISOString().split("-");
           let TimeStrT = TimeStrDash[2].split("T");
-          let TimeString = `${parseInt(TimeStrDash[1].substring(1,2)) -1} Month ${TimeStrT[0]} Days & ${TimeStrT[1].substring(0, 8)} Hours`;
+          let TimeString = `${
+            parseInt(TimeStrDash[1].substring(1, 2)) - 1
+          } Month ${TimeStrT[0]} Days & ${TimeStrT[1].substring(0, 8)} Hours`;
           p.innerHTML = `• Current Token Will Expire In: <br> ${TimeString}.`;
           return 1;
         }

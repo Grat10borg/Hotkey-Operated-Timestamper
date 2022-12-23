@@ -7,8 +7,6 @@ let PLAfterDesc = document.getElementById("LocalAfterDesc");
 let BeforeDesc = PBeforeDesc.innerHTML;
 let AfterDesc = PAfterDesc.innerHTML;
 var TappAcess = PTKey.innerHTML;
-let LocalBeforeDesc = PLBeforeDesc.innerHTML;
-let LocalAfterDesc = PLAfterDesc.innerHTML;
 let UserId = "";
 let client_id = "";
 validateTToken();
@@ -158,8 +156,13 @@ function ClipSorter(Clips, game_id, viewCount) {
     duration = 0;
     let localmode = false;
     let locale = document.getElementById("Local");
-    if (locale.innerHTML != "" && locale.innerHTML != "none") {
-        localmode = true;
+    if (locale != null) {
+        if (locale.innerHTML != "" && locale.innerHTML != "none") {
+            localmode = true;
+        }
+    }
+    else {
+        localmode = false;
     }
     let text = "";
     text = text + BeforeDesc + "\n\n";
@@ -179,7 +182,8 @@ function ClipSorter(Clips, game_id, viewCount) {
         else {
             text = text + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
             if (localmode == true) {
-                LocaleText = LocaleText + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
+                LocaleText =
+                    LocaleText + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
             }
         }
         duration = duration + sortcliped[i]["duration"];
@@ -232,6 +236,7 @@ function ClipSorter(Clips, game_id, viewCount) {
     let Desc = document.querySelector("#myInput0");
     Desc.textContent = text;
     if (localmode == true) {
+        let LocalAfterDesc = PLAfterDesc.innerHTML;
         LocaleText = LocaleText.slice(0, text.length - 1);
         LocaleText = LocaleText + "\n\n" + LocalAfterDesc;
         let localDesc = document.querySelector("#LocalDescription");
