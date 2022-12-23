@@ -56,19 +56,22 @@ var arrayIds = Array();
 var arrayVidname = Array();
 var optionValue = 0;
 var gapi;
+let StartTextareas = document.querySelectorAll(".Charcounts");
 auth.addEventListener("click", function (event) {
     authAllowDescChange().then(loadClientChannel()).then(GetVideoIds);
 }, true);
 var Send = document.querySelectorAll(".Send");
 for (let i = 0; i < Send.length; i++) {
     Send[i].addEventListener("click", function (event) {
-        console.log(event.target.value);
-        var num = event.target.value;
-        var selectText = document.getElementById(`myInput${num}`);
-        selectText.select();
-        selectText.setSelectionRange(0, 99999);
-        var select = document.querySelector(".SelectId");
-        GitPushDescription(selectText.value, select.value, arrayIds, arrayVidname, event.target.value);
+        if (StartTextareas != null) {
+            StartTextareas[event.target.value].select();
+            StartTextareas[event.target.value].setSelectionRange(0, 99999);
+            var select = document.querySelector(".SelectId");
+            GitPushDescription(StartTextareas[event.target.value].value, select.value, arrayIds, arrayVidname, event.target.value);
+        }
+        else {
+            console.log("did not find any acceptable Textareas");
+        }
     }, true);
 }
 function authAllowDescChange() {
@@ -214,13 +217,15 @@ for (let i = 0; i < Copy.length; i++) {
     }, true);
 }
 function copyText(event) {
-    console.log(event.target.value);
-    var num = event.target.value;
-    var copyText = document.getElementById(`myInput${num}`);
-    copyText.select();
-    copyText.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(copyText.value);
-    alert("Copied the text: " + copyText.value);
+    if (StartTextareas != null) {
+        StartTextareas[event.target.value].select();
+        StartTextareas[event.target.value].setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(StartTextareas[event.target.value].value);
+        alert("Copied the text: " + StartTextareas[event.target.value].value);
+    }
+    else {
+        console.log("did not find any acceptable Textareas");
+    }
 }
 let Select = document.querySelectorAll(".Select");
 for (let i = 0; i < Select.length; i++) {
@@ -229,12 +234,14 @@ for (let i = 0; i < Select.length; i++) {
     }, true);
 }
 function SelectText(event) {
-    console.log(event.target.value);
-    var num = event.target.value;
-    var selectText = document.getElementById(`myInput${num}`);
-    selectText.select();
-    selectText.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(selectText.value);
+    if (StartTextareas != null) {
+        StartTextareas[event.target.value].select();
+        StartTextareas[event.target.value].setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(StartTextareas[event.target.value].value);
+    }
+    else {
+        console.log("did not find any acceptable Textareas");
+    }
 }
 let Textarea = document.querySelectorAll(".Charcounts");
 for (let i = 0; i < Textarea.length; i++) {
@@ -253,7 +260,6 @@ for (let i = 0; i < Textarea.length; i++) {
         }
     });
 }
-let StartTextareas = document.querySelectorAll(".Charcounts");
 if (StartTextareas != null) {
     for (let i = 0; i < StartTextareas.length; i++) {
         if (StartTextareas[i].hidden == false) {

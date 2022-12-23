@@ -113,7 +113,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
 
     //#region Getting Timestamp from Acord buttons
     // Getting Timestamps from Acord buttons
-    
+
     let AcorBtns = Array();
     for (let index = 0; index < StreamDatesArr.length; index++) {
       AcorBtns.push(document.getElementById(`AcordBtn-${index}`));
@@ -129,8 +129,10 @@ TwitchClip.addEventListener("click", async function (event: any) {
     let UserVods = await HttpCalling(
       `https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`
     );
-    if (UserVods["data"].length != 0) {
+    if (UserVods["data"].length == 0) {
       console.log("Did not find any VOD's");
+    } else {
+      console.log("Found: " + UserVods["data"].length + " VODs");
     }
     // let TwitchStreamedDate = Array();
     // let FullDateTwitch = Array();
@@ -152,7 +154,10 @@ TwitchClip.addEventListener("click", async function (event: any) {
       // Test if Clipper is the Streamer
       let Clips = Array();
       for (let i = 0; i < resp["data"].length; i++) {
-        if (resp["data"][i]["creator_name"].toLowerCase() == StreamerName.toLowerCase()) {
+        if (
+          resp["data"][i]["creator_name"].toLowerCase() ==
+          StreamerName.toLowerCase()
+        ) {
           Clips.push(resp["data"][i]);
         } else {
           // Ignore clips not made by self.
@@ -226,7 +231,6 @@ TwitchClip.addEventListener("click", async function (event: any) {
       //console.log(TwitchStreamedDate[StreamIndex[index]]);
       //console.log(MultiStreamClips[StreamIndex[index]]);
 
-     
       let LocalSceneShift = Array();
       let TimeTwitch = Array();
       let LocalSceneTime = Array();
@@ -258,7 +262,6 @@ TwitchClip.addEventListener("click", async function (event: any) {
 
       //#endregion
 
-
       console.log(LocalSceneTimetemp);
       console.log(LocalSceneShifttemp);
 
@@ -267,7 +270,10 @@ TwitchClip.addEventListener("click", async function (event: any) {
       //console.log(MultidimClipResps);
       for (let i = 0; i < MultidimClipResps[index].length; i++) {
         // gives a timestamp close to LOCAL timestamp from Twitch API.
-        if(MultidimClipResps[index][i]["vod_offset"] != null && MultidimClipResps[index][i]["vod_offset"] != "null") {
+        if (
+          MultidimClipResps[index][i]["vod_offset"] != null &&
+          MultidimClipResps[index][i]["vod_offset"] != "null"
+        ) {
           // if the clips have Vod_offsets, then use vod offsets instead of local stamps since then they'll fit exsactly with clip title
           TimestampTwitch.push(
             "• " +
@@ -277,12 +283,10 @@ TwitchClip.addEventListener("click", async function (event: any) {
               " " +
               MultiStreamClips[MultidimClipResps[index]][i]["title"]
           );
-        }
-        else {
+        } else {
           console.log(MultiDimStreamArr[index][i]);
           TimeTwitch.push(MultiDimStreamArr[index][i]);
         }
-
       }
       //#endregion
 
@@ -366,8 +370,6 @@ TwitchClip.addEventListener("click", async function (event: any) {
     // Adds titles to acord buttons for easy seeing stream timestamps.
     // Also removes some of the less useful date data like hours minutes, seconds replaces it with the title of the stream instead.
     for (let QT = 0; QT < StreamDatesArr.length; QT++) {
-
-      
       // Test if there is a VOD to this date, so we can set the old title in it Else give stream playing
       let gameresp = await HttpCalling(
         `https://api.twitch.tv/helix/games?id=${MultidimClipResps[QT][0]["game_id"]}`
@@ -531,7 +533,7 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
 
   let BeforeDesc = res.innerHTML;
   let AfterDesc = res1.innerHTML;
-  let LocalBeforeDesc:string;
+  let LocalBeforeDesc: string;
   let LocalAfterDesc: string;
   let success = false;
   var Description = ""; // Finished Description Var
@@ -774,7 +776,6 @@ function SetIns(
     CharDiv.classList.add("d-flex", "justify-content-between");
     let PNo = document.createElement("p");
     PNo.setAttribute("id", `CharCount${CharCount_index}`);
-    CharCount_index++;
     PNo.innerHTML = "CharCounter";
     let h3 = document.createElement("h3");
     h3.innerHTML = `# Suggested Description`;
@@ -833,10 +834,9 @@ function SetIns(
     CopyBtn.classList.add("btn", "mx-1", "Copy", "button");
     YoutubeBtn.classList.add("btn", "mx-1", "Send", "button");
     YoutubeBtn.setAttribute("id", "authbtn");
-    SelectBtn.setAttribute("value", `${index}`);
-    CopyBtn.setAttribute("value", `${index}`);
-    YoutubeBtn.setAttribute("value", `${index}`);
-
+    SelectBtn.setAttribute("value", `${CharCount_index}`);
+    CopyBtn.setAttribute("value", `${CharCount_index}`);
+    YoutubeBtn.setAttribute("value", `${CharCount_index}`);
     // Apending
     h2.append(button);
     AcordItem.append(h2);
@@ -854,6 +854,9 @@ function SetIns(
     ButtonDiv.append(CopyBtn);
     ButtonDiv.append(YoutubeBtn);
     AcordBody.append(ButtonDiv);
+
+    CharCount_index++; // Counter for how many TextAreas there is.
+
     if (SettingsLocal != "") {
       let hr = document.createElement("hr") as HTMLElement;
       let FontDiv = document.createElement("div") as HTMLElement;
@@ -869,6 +872,30 @@ function SetIns(
       input.setAttribute("id", `${LocalID}Title-${index}`);
       input.setAttribute("placeholder", `title in locale language`);
       LocalTextarea.setAttribute("id", `${LocalID}${index}`);
+      // Copy/select Buttons
+      let ButtonDivL = document.createElement("div");
+      ButtonDivL.classList.add("my-3");
+      // Select
+      let SelectLBtn = document.createElement("button") as HTMLElement;
+      SelectLBtn.innerHTML = "Select Text";
+      SelectLBtn.classList.add("btn", "mx-1", "Select", "button");
+      SelectLBtn.setAttribute("value", `${CharCount_index}`);
+      // Copy
+      let CopyBtnL = document.createElement("button");
+      CopyBtnL.innerHTML = "Copy Text";
+      CopyBtnL.classList.add("btn", "mx-1", "Copy", "button");
+      CopyBtnL.setAttribute("value", `${CharCount_index}`);
+      // Youtube
+      let YoutubeBtnL = document.createElement("button");
+      YoutubeBtnL.innerHTML = "Update YT Vid";
+      YoutubeBtnL.classList.add("btn", "mx-1", "Send", "button");
+      YoutubeBtnL.setAttribute("id", "authbtn");
+      YoutubeBtnL.setAttribute("value", `${CharCount_index}`);
+
+      // Appending
+      ButtonDivL.append(SelectLBtn);
+      ButtonDivL.append(CopyBtnL);
+      ButtonDivL.append(YoutubeBtnL);
 
       FontDiv.append(h3);
       FontDiv.append(PNo);
@@ -876,6 +903,7 @@ function SetIns(
       AcordBody.append(FontDiv);
       AcordBody.append(input);
       AcordBody.append(LocalTextarea);
+      AcordBody.append(ButtonDivL);
       CharCount_index++;
     }
 
@@ -1060,7 +1088,6 @@ async function validateToken() {
           AclientId = resp.client_id;
           TwitchConnected = true;
           console.log("Token Validated Sucessfully");
-          console.log(resp);
           let p = document.getElementById("AccessTokenTime") as HTMLElement;
           let Time = new Date(resp.expires_in * 1000);
           let TimeStrDash = Time.toISOString().split("-");

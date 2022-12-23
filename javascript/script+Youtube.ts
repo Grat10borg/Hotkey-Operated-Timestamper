@@ -64,6 +64,12 @@ var arrayVidname = Array();
 var optionValue = 0;
 var gapi: any;
 
+// ALL the text areas on the page.
+let StartTextareas: any = document.querySelectorAll(
+  ".Charcounts"
+) as NodeListOf<HTMLTextAreaElement>;
+
+
 /** the youtube connection also needs to be updated for security reasons */
 // or so it says
 
@@ -87,24 +93,24 @@ for (let i = 0; i < Send.length; i++) {
   Send[i].addEventListener(
     "click",
     function (event: any) {
-      console.log(event.target.value);
-      var num = event.target.value;
-      var selectText = document.getElementById(
-        `myInput${num}`
-      ) as HTMLInputElement;
-      selectText.select();
-      selectText.setSelectionRange(0, 99999);
-
-      var select = document.querySelector(".SelectId") as HTMLInputElement;
-
-      // updates desc
-      GitPushDescription(
-        selectText.value,
-        select.value,
-        arrayIds,
-        arrayVidname,
-        event.target.value
-      );
+      if(StartTextareas != null) {
+        //console.log(event.target.value);
+        StartTextareas[event.target.value].select();
+        StartTextareas[event.target.value].setSelectionRange(0, 99999);
+        var select = document.querySelector(".SelectId") as HTMLInputElement;
+  
+        // updates desc
+        GitPushDescription(
+          StartTextareas[event.target.value].value,
+          select.value,
+          arrayIds,
+          arrayVidname,
+          event.target.value
+        );
+      }
+      else {
+        console.log("did not find any acceptable Textareas");
+      }
     },
     true
   );
@@ -305,6 +311,7 @@ gapi.load("client:auth2", function () {
 });
 //#endregion
 
+
 // Normal Event Handlers
 
 //#region Copy To Clipboard Event
@@ -321,19 +328,21 @@ for (let i = 0; i < Copy.length; i++) {
 }
 
 function copyText(event): void {
-  console.log(event.target.value);
-  var num = event.target.value;
-  var copyText = document.getElementById(`myInput${num}`) as HTMLInputElement; // HTMLINPUTELEMENT does have the .select() method, the normal HtmlElement doesnt have it
+  if (StartTextareas != null) {
+    //console.log(event.target.value);
 
-  /* Select the text field */
-  copyText.select();
-  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+    /* Select the text field */
+    StartTextareas[event.target.value].select();
+    StartTextareas[event.target.value].setSelectionRange(0, 99999); /* For mobile devices */
 
-  /* Copy the text inside the text field */
-  navigator.clipboard.writeText(copyText.value);
+    /* Copy the text inside the text field */
+    navigator.clipboard.writeText(StartTextareas[event.target.value].value);
 
-  /* Alert the copied text */
-  alert("Copied the text: " + copyText.value);
+    /* Alert the copied text */
+    alert("Copied the text: " + StartTextareas[event.target.value].value);
+  } else {
+    console.log("did not find any acceptable Textareas");
+  }
 }
 
 //#endregion
@@ -352,22 +361,23 @@ for (let i = 0; i < Select.length; i++) {
 }
 
 function SelectText(event): void {
-  /* Get the text field */
-  console.log(event.target.value);
-  var num = event.target.value;
-  var selectText = document.getElementById(`myInput${num}`) as HTMLInputElement;
+  if (StartTextareas != null) {
+    /* Select the text field */
+    StartTextareas[event.target.value].select();
+    StartTextareas[event.target.value].setSelectionRange(0, 99999); /* For mobile devices */
 
-  /* Select the text field */
-  selectText.select();
-  selectText.setSelectionRange(0, 99999); /* For mobile devices */
-
-  /* Copy the text inside the text field */
-  navigator.clipboard.writeText(selectText.value);
+    /* Copy the text inside the text field */
+    navigator.clipboard.writeText(StartTextareas[event.target.value].value);
+  } else {
+    console.log("did not find any acceptable Textareas");
+  }
 }
 //#endregion
 
 //#region Updating Text Length Event
-let Textarea = document.querySelectorAll(".Charcounts") as NodeListOf<HTMLTextAreaElement>; // gets array of Textarea elements
+let Textarea = document.querySelectorAll(
+  ".Charcounts"
+) as NodeListOf<HTMLTextAreaElement>; // gets array of Textarea elements
 for (let i = 0; i < Textarea.length; i++) {
   Textarea[i].addEventListener("keyup", function (event) {
     let Charcount = CalcChars(event);
@@ -391,9 +401,6 @@ for (let i = 0; i < Textarea.length; i++) {
 }
 
 // make only once. then let the evenhandler do the rest of the work
-let StartTextareas: any = document.querySelectorAll(
-  ".Charcounts"
-) as NodeListOf<HTMLTextAreaElement>;
 if (StartTextareas != null) {
   for (let i = 0; i < StartTextareas.length; i++) {
     // removes textareas used for PHP and Javascript txt getting
