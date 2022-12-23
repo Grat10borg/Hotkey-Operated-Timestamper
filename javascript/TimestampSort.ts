@@ -531,8 +531,8 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
 
   let BeforeDesc = res.innerHTML;
   let AfterDesc = res1.innerHTML;
-  let LocalBeforeDesc = res2.innerHTML;
-  let LocalAfterDesc = res3.innerHTML;
+  let LocalBeforeDesc:string;
+  let LocalAfterDesc: string;
   let success = false;
   var Description = ""; // Finished Description Var
   var LocalDescript = ""; // finished description in another language
@@ -544,6 +544,8 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
     for (let index = 0; index < MultiDimStreamArr.length; index++) {
       let resArray = MultiDimStreamArr[index];
       if (SettingsLocal != "") {
+        LocalBeforeDesc = res2.innerHTML;
+        LocalAfterDesc = res3.innerHTML;
         LocalDescript = LocalBeforeDesc + "\n\n";
         LocalDescript =
           LocalDescript +
@@ -577,6 +579,8 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
       let resArray = MultiDimRecordArr[index];
 
       if (SettingsLocal != "") {
+        LocalBeforeDesc = res2.innerHTML;
+        LocalAfterDesc = res3.innerHTML;
         LocalDescript = LocalBeforeDesc + "\n\n";
         LocalDescript =
           LocalDescript + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;

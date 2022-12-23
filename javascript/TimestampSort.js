@@ -363,8 +363,8 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
     let res3 = document.getElementById("LocalAfterDesc");
     let BeforeDesc = res.innerHTML;
     let AfterDesc = res1.innerHTML;
-    let LocalBeforeDesc = res2.innerHTML;
-    let LocalAfterDesc = res3.innerHTML;
+    let LocalBeforeDesc;
+    let LocalAfterDesc;
     let success = false;
     var Description = "";
     var LocalDescript = "";
@@ -372,6 +372,8 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
         for (let index = 0; index < MultiDimStreamArr.length; index++) {
             let resArray = MultiDimStreamArr[index];
             if (SettingsLocal != "") {
+                LocalBeforeDesc = res2.innerHTML;
+                LocalAfterDesc = res3.innerHTML;
                 LocalDescript = LocalBeforeDesc + "\n\n";
                 LocalDescript =
                     LocalDescript +
@@ -402,6 +404,8 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
         for (let index = 0; index < MultiDimRecordArr.length; index++) {
             let resArray = MultiDimRecordArr[index];
             if (SettingsLocal != "") {
+                LocalBeforeDesc = res2.innerHTML;
+                LocalAfterDesc = res3.innerHTML;
                 LocalDescript = LocalBeforeDesc + "\n\n";
                 LocalDescript =
                     LocalDescript + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
