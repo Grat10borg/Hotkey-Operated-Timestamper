@@ -1,6 +1,10 @@
-<?php include "includes/html/HtmlDoc.php";  // makes the DoctypeHtml, also sets in version num in title  
-?>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?php include "includes/html/HtmlDoc.php";?>
+    <link rel="shortcut icon" href="img\HOT_Icon.ico"/>
+    <title>H.O.T: Description Maker 📃</title>
+</head>
 <body>
     <?php
     include "includes/settings.php"; // general vars things you can change is imported here, like the file root for the txt!

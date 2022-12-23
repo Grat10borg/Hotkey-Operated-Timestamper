@@ -1,5 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?php include "includes/html/HtmlDoc.php";?>
+    <link rel="shortcut icon" href="img\HOT_Icon.ico"/>
+    <title>H.O.T -> Clear Timestamps 💿</title>
+</head>
 <?php 
-include "includes/html/HtmlDoc.php";
 include "includes/settings.php";
 ?>
 <body>

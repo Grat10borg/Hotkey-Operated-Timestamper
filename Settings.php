@@ -1,7 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?php include "includes/html/HtmlDoc.php";?>
+    <link rel="shortcut icon" href="img\Icons\GearCuteIcon.png"/>
+    <title>H.O.T: Settings ⚙</title>
+</head>
 <?php
 include "includes/ArrayMaker.php";
 include "includes/settings.php";
-include "includes/html/HtmlDoc.php";
 ?>
 
 <body>

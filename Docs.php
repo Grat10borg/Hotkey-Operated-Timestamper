@@ -1,6 +1,10 @@
-<?php
-include "includes/html/HtmlDoc.php";
-?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?php include "includes/html/HtmlDoc.php";?>
+    <link rel="shortcut icon" href="img\Icons\TextDocIcon.png"/>
+    <title>H.O.T: Docs 📚</title>
+</head>
 
 <body>
     <main class="container background">
