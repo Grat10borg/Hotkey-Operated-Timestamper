@@ -112,8 +112,6 @@ TwitchClip.addEventListener("click", async function (event: any) {
     );
 
     //#region Getting Timestamp from Acord buttons
-    // Getting Timestamps from Acord buttons
-
     let AcorBtns = Array();
     for (let index = 0; index < StreamDatesArr.length; index++) {
       AcorBtns.push(document.getElementById(`AcordBtn-${index}`));
@@ -125,21 +123,29 @@ TwitchClip.addEventListener("click", async function (event: any) {
     }
     //#endregion
 
-    // Checking if there even is any VODS
-    let UserVods = await HttpCalling(
+    //#region Checking if there even is any VODS
+    let VODcount = 0;
+    let UserVods = (await HttpCalling(
       `https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`
-    );
+    )) as Array<string>;
     if (UserVods["data"].length == 0) {
       console.log("Did not find any VOD's");
     } else {
-      console.log("Found: " + UserVods["data"].length + " VODs");
+      // counting VODs
+      for (let index = 0; index < UserVods["data"].length; index++) {
+        if (UserVods["data"][index]["type"] != "highlight") {
+          VODcount++;
+        }
+      }
     }
-    // let TwitchStreamedDate = Array();
-    // let FullDateTwitch = Array();
+    //#endregion
 
-    //#region VOD Sorting
+    if (VODcount != 0 || VODcount != null) {
+      // Getting clips with a VOD
+      console.log("Found: " + VODcount + " VODs");
 
-    var MultidimClipResps = Array();
+      //#region VOD Sorting
+      var MultidimClipResps = Array();
     for (let index = 0; index < StreamDatesArr.length; index++) {
       let StartDate = new Date(StreamDatesArr[index]); // starting date set to stream start time.
       let EndDate = new Date(StreamDatesArr[index]); // gets whole day worth time. note: going over 24 hours stream time would be a problem.
@@ -278,14 +284,14 @@ TwitchClip.addEventListener("click", async function (event: any) {
           TimestampTwitch.push(
             "• " +
               SectoTimestamp(
-                MultiStreamClips[MultidimClipResps[index]][i]["vod_offset"]
+                MultidimClipResps[index][i]["vod_offset"]
               ) +
               " " +
-              MultiStreamClips[MultidimClipResps[index]][i]["title"]
+              MultidimClipResps[index][i]["title"]
           );
         } else {
           console.log(MultiDimStreamArr[index][i]);
-          TimeTwitch.push(MultiDimStreamArr[index][i]);
+          TimeTwitch.push(MultidimClipResps[index][i]["vod_offset"]);
         }
       }
       //#endregion
@@ -302,7 +308,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
       //#region Making Timestamps into Dates and sorting them.
       let SortTime = Array();
       for (let q = 0; q < TimestampArr.length; q++) {
-        SortTime.push(TimestampToDate(TimeArr[q]));
+        let res = TimestampArr[q].split(" ");
+        SortTime.push(TimestampToDate(res[1]));
       }
 
       SortTime.sort();
@@ -328,8 +335,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
       // for each til we find the correct index
       for (let Pie = 0; Pie < Timestamps.length; Pie++) {
         let Reg = new RegExp(Timestamps[Pie] + ".*");
-        for (let u = 0; u < TimeArr.length; u++) {
-          if (TimeArr[u].match(Reg)) {
+        for (let u = 0; u < TimestampArr.length; u++) {
+          if (TimestampArr[u].match(Reg)) {
             CompleteTimestampArr.push(TimestampArr[u]);
             break;
           }
@@ -390,6 +397,11 @@ TwitchClip.addEventListener("click", async function (event: any) {
     }
     //#endregion
 
+    // Found No Vods to get names from.
+    } else {
+      // Getting clips without a VOD
+      console.log("Found: Getting clips for streams without VODs");
+    }
     // Found No Vods to get names from.
   } else {
     console.log("Failed to Validate Token Try Again");
