@@ -152,11 +152,6 @@ TwitchClip.addEventListener("click", async function (event) {
             console.log(MultiStreamClips);
             var TimestampTwitch = Array();
             for (let index = 0; index < StreamDatesArr.length; index++) {
-                let Desc = document.getElementById(`streamtextarr${index}`);
-                var NewDesc = "";
-                if (Desc == null) {
-                    continue;
-                }
                 let LocalSceneShift = Array();
                 let TimeTwitch = Array();
                 let LocalSceneTime = Array();
@@ -232,40 +227,15 @@ TwitchClip.addEventListener("click", async function (event) {
                 }
                 if (CompleteTimestampArr.length > 0) {
                     for (let index = 0; index < CompleteTimestampArr.length; index++) {
-                        let res = document.getElementById("BeforeDesc");
-                        let res1 = document.getElementById("AfterDesc");
-                        let BeforeDesc = res.innerHTML;
-                        let AfterDesc = res1.innerHTML;
-                        let resArray = CompleteTimestampArr;
-                        NewDesc = BeforeDesc + "\n\n";
-                        NewDesc =
-                            NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
-                        for (let i = 0; i < resArray.length; i++) {
-                            let timestamp = resArray[i];
-                            NewDesc = NewDesc + timestamp + "\n";
+                        DescriptionReplace(CompleteTimestampArr, index);
+                        if (SettingsLocal == true) {
+                            index++;
                         }
-                        NewDesc = NewDesc + "\n" + AfterDesc;
-                        Desc.innerHTML = NewDesc;
-                        NewDesc = "";
                     }
                 }
             }
             for (let QT = 0; QT < StreamDatesArr.length; QT++) {
-                let gameresp = await HttpCalling(`https://api.twitch.tv/helix/games?id=${MultidimClipResps[QT][0]["game_id"]}`);
-                if (QT % 2) {
-                    AcorBtns[QT].innerHTML =
-                        "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
-                            "| " +
-                            StreamDatesArr[QT] +
-                            ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${MultidimClipResps[QT].length} Clips`;
-                }
-                else {
-                    AcorBtns[QT].innerHTML =
-                        "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
-                            "| " +
-                            StreamDatesArr[QT] +
-                            ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${MultidimClipResps[QT].length} Clips`;
-                }
+                TitleReplace(MultidimClipResps, QT);
             }
         }
         else {
@@ -277,6 +247,65 @@ TwitchClip.addEventListener("click", async function (event) {
         validateToken();
     }
 });
+async function DescriptionReplace(TimestampsArr, Index) {
+    let Desc = document.getElementsByClassName(`Charcounts`);
+    console.log(Desc);
+    var NewDesc = "";
+    var LNewDesc = "";
+    if (SettingsLocal != false && SettingsLocal != "false") {
+        let res = document.getElementById("LocalBeforeDesc");
+        let res1 = document.getElementById("LocalAfterDesc");
+        let BeforeDesc = res.innerHTML;
+        let AfterDesc = res1.innerHTML;
+        let resArray = TimestampsArr;
+        LNewDesc = BeforeDesc + "\n\n";
+        LNewDesc = LNewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+        for (let i = 0; i < resArray.length; i++) {
+            let timestamp = resArray[i];
+            LNewDesc = LNewDesc + timestamp + "\n";
+        }
+        LNewDesc = LNewDesc + "\n" + AfterDesc;
+        Desc[Index].innerHTML = LNewDesc;
+        LNewDesc = "";
+    }
+    else {
+        let res = document.getElementById("BeforeDesc");
+        let res1 = document.getElementById("AfterDesc");
+        let BeforeDesc = res.innerHTML;
+        let AfterDesc = res1.innerHTML;
+        let resArray = TimestampsArr;
+        NewDesc = BeforeDesc + "\n\n";
+        NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+        for (let i = 0; i < resArray.length; i++) {
+            let timestamp = resArray[i];
+            NewDesc = NewDesc + timestamp + "\n";
+        }
+        NewDesc = NewDesc + "\n" + AfterDesc;
+        Desc[Index].innerHTML = NewDesc;
+        NewDesc = "";
+    }
+}
+async function TitleReplace(ClipRespsonse, Index) {
+    let gameresp = await HttpCalling(`https://api.twitch.tv/helix/games?id=${ClipRespsonse[Index][0]["game_id"]}`);
+    let AcorBtns = Array();
+    for (let q = 0; q < StreamDatesArr.length; q++) {
+        AcorBtns.push(document.getElementById(`AcordBtn-${q}`));
+    }
+    if (Index % 2) {
+        AcorBtns[Index].innerHTML =
+            "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
+                "| " +
+                StreamDatesArr[Index] +
+                ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${ClipRespsonse[Index].length} Clips`;
+    }
+    else {
+        AcorBtns[Index].innerHTML =
+            "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
+                "| " +
+                StreamDatesArr[Index] +
+                ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${ClipRespsonse[Index].length} Clips`;
+    }
+}
 function CutOuts(RawTxt) {
     let RawTxtArr = RawTxt.split("\n");
     let StreamArr = Array();
