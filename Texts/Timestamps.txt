@@ -638,3 +638,15 @@ EVENT:STOP STREAM @ 2022-10-30 20:55:42 Stream Time Marker Reset to 0
 0:00:00 Record Time Marker (not recording)
 0:00:00 Stream Time Marker (not streaming)
 
+2023-01-30 09:38:17
+0:00:00 Record Time Marker (not recording)
+
+EVENT:STOP STREAM @ 2023-01-30 13:19:18 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+
+2023-01-30 14:14:55
+0:00:00 Record Time Marker (not recording)
+
+EVENT:STOP STREAM @ 2023-01-30 14:19:00 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+
