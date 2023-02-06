@@ -125,6 +125,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
     }
     //#endregion
 
+
     //#region Checking if there even is any VODS
     let VODcount = 0;
     let UserVods = (await HttpCalling(
@@ -139,11 +140,12 @@ TwitchClip.addEventListener("click", async function (event: any) {
     //#endregion
 
     if (VODcount != 0 || VODcount != null) {
+      let res = AcorBtns[0].innerHTML.split(" ");
       // Getting clips with a VOD
       console.log("Found: " + VODcount + " VODs");
 
       // Gets Sorted Clips on the same day of the stream.
-      var MultidimClipResps = SortClips(await GetClipsFromDate(StreamedDate[0],UserIdResp["data"][0]["id"]), false) as Array<string>;
+      var MultidimClipResps = SortClips(await GetClipsFromDate(res[5],UserIdResp["data"][0]["id"]), false) as Array<string>;
       console.log(MultidimClipResps);
 
       // Description Vars
@@ -197,24 +199,20 @@ TwitchClip.addEventListener("click", async function (event: any) {
         if(MultidimClipResps[0]["vod_offset"] != null && MultidimClipResps[0]["vod_offset"] != "null") {
           for (let i = 0; i < MultidimClipResps[0].length; i++) {
             // gives a timestamp close to LOCAL timestamp from Twitch API.
-            if (
-              MultidimClipResps[i]["vod_offset"] != null &&
-              MultidimClipResps[i]["vod_offset"] != "null"
-            ) {
-              // if the clips have Vod_offsets, then use vod offsets instead of local stamps since then they'll fit exsactly with clip title
               TimestampTwitch.push(
                 "• " +
                   SectoTimestamp(MultidimClipResps[i]["vod_offset"]) +
                   " " +
                   MultidimClipResps[i]["title"]
               );
-            } 
             TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
           }
         }
         else { // needs to get clip timestamps without vod_offset.
           let Timestamps = AcorBtns[0].innerHTML.split(" ");
-          console.log(StreamedDate[0] + Timestamps[6]);
+          console.log(Timestamps[5][0]+Timestamps[5][1]+Timestamps[5][2]+Timestamps[5][3],Timestamps[5][5]+Timestamps[5][6],Timestamps[5][8]+Timestamps[5][9], Timestamps[6][0]+Timestamps[6][1],Timestamps[6][3]+Timestamps[6][4],Timestamps[6][6]+Timestamps[6][7]);
+          let StreamDate = new Date(Timestamps[5][0]+Timestamps[5][1]+Timestamps[5][2]+Timestamps[5][3],Timestamps[5][5]+Timestamps[5][6],Timestamps[5][8]+Timestamps[5][9], Timestamps[6][0]+Timestamps[6][1],Timestamps[6][3]+Timestamps[6][4],Timestamps[6][6]+Timestamps[6][7]);
+          console.log(StreamDate);
           let ClipDates = SortClips(MultidimClipResps, true);
           console.log(ClipDates);
         }
@@ -311,6 +309,75 @@ TwitchClip.addEventListener("click", async function (event: any) {
     validateToken();
   }
 });
+
+async function DescriptionReplace(TimestampsArr: Array<string>, Index: number) {
+  let Desc = document.getElementsByClassName(
+    `Charcounts`
+  ) as any;
+  console.log(Desc);
+  var NewDesc = ""; // Finished Description Var
+  var LNewDesc = ""; // Finished Description Var
+  if (SettingsLocal != false && SettingsLocal != "false") {
+    let res = document.getElementById("LocalBeforeDesc") as HTMLInputElement;
+    let res1 = document.getElementById("LocalAfterDesc") as HTMLInputElement;
+  
+    let BeforeDesc = res.innerHTML;
+    let AfterDesc = res1.innerHTML;
+    let resArray = TimestampsArr;
+  
+    LNewDesc = BeforeDesc + "\n\n";
+    LNewDesc = LNewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+    for (let i = 0; i < resArray.length; i++) {
+      let timestamp = resArray[i];
+      LNewDesc = LNewDesc + timestamp + "\n";
+    }
+    LNewDesc = LNewDesc + "\n" + AfterDesc;
+    Desc[Index].innerHTML = LNewDesc;
+    LNewDesc = "";
+  }
+  else {
+    let res = document.getElementById("BeforeDesc") as HTMLInputElement;
+    let res1 = document.getElementById("AfterDesc") as HTMLInputElement;
+  
+    let BeforeDesc = res.innerHTML;
+    let AfterDesc = res1.innerHTML;
+    let resArray = TimestampsArr;
+  
+    NewDesc = BeforeDesc + "\n\n";
+    NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+    for (let i = 0; i < resArray.length; i++) {
+      let timestamp = resArray[i];
+      NewDesc = NewDesc + timestamp + "\n";
+    }
+    NewDesc = NewDesc + "\n" + AfterDesc;
+    Desc[Index].innerHTML = NewDesc;
+    NewDesc = "";
+  }
+}
+
+async function TitleReplace(ClipRespsonse: Array<string>, Index: number) {
+  // Test if there is a VOD to this date, so we can set the old title in it Else give stream playing
+  let gameresp = await HttpCalling(
+    `https://api.twitch.tv/helix/games?id=${ClipRespsonse[Index][0]["game_id"]}`
+  );
+  let AcorBtns = Array();
+  for (let q = 0; q < StreamDatesArr.length; q++) {
+    AcorBtns.push(document.getElementById(`AcordBtn-${q}`));
+  }
+  if (Index % 2) {
+    AcorBtns[Index].innerHTML =
+      "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
+      "| " +
+      StreamDatesArr[Index] +
+      ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${ClipRespsonse[Index].length} Clips`;
+  } else {
+    AcorBtns[Index].innerHTML =
+      "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
+      "| " +
+      StreamDatesArr[Index] +
+      ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${ClipRespsonse[Index].length} Clips`;
+  }
+}
 
 //#endregion
 

@@ -98,8 +98,9 @@ TwitchClip.addEventListener("click", async function (event) {
             }
         }
         if (VODcount != 0 || VODcount != null) {
+            let res = AcorBtns[0].innerHTML.split(" ");
             console.log("Found: " + VODcount + " VODs");
-            var MultidimClipResps = SortClips(await GetClipsFromDate(StreamedDate[0], UserIdResp["data"][0]["id"]), false);
+            var MultidimClipResps = SortClips(await GetClipsFromDate(res[5], UserIdResp["data"][0]["id"]), false);
             console.log(MultidimClipResps);
             let Desc = document.getElementById(`streamtextarr${0}`);
             var NewDesc = "";
@@ -134,19 +135,18 @@ TwitchClip.addEventListener("click", async function (event) {
             console.log(LocalSceneShifttemp);
             if (MultidimClipResps[0]["vod_offset"] != null && MultidimClipResps[0]["vod_offset"] != "null") {
                 for (let i = 0; i < MultidimClipResps[0].length; i++) {
-                    if (MultidimClipResps[i]["vod_offset"] != null &&
-                        MultidimClipResps[i]["vod_offset"] != "null") {
-                        TimestampTwitch.push("• " +
-                            SectoTimestamp(MultidimClipResps[i]["vod_offset"]) +
-                            " " +
-                            MultidimClipResps[i]["title"]);
-                    }
+                    TimestampTwitch.push("• " +
+                        SectoTimestamp(MultidimClipResps[i]["vod_offset"]) +
+                        " " +
+                        MultidimClipResps[i]["title"]);
                     TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
                 }
             }
             else {
                 let Timestamps = AcorBtns[0].innerHTML.split(" ");
-                console.log(StreamedDate[0] + Timestamps[6]);
+                console.log(Timestamps[5][0] + Timestamps[5][1] + Timestamps[5][2] + Timestamps[5][3], Timestamps[5][5] + Timestamps[5][6], Timestamps[5][8] + Timestamps[5][9], Timestamps[6][0] + Timestamps[6][1], Timestamps[6][3] + Timestamps[6][4], Timestamps[6][6] + Timestamps[6][7]);
+                let StreamDate = new Date(Timestamps[5][0] + Timestamps[5][1] + Timestamps[5][2] + Timestamps[5][3], Timestamps[5][5] + Timestamps[5][6], Timestamps[5][8] + Timestamps[5][9], Timestamps[6][0] + Timestamps[6][1], Timestamps[6][3] + Timestamps[6][4], Timestamps[6][6] + Timestamps[6][7]);
+                console.log(StreamDate);
                 let ClipDates = SortClips(MultidimClipResps, true);
                 console.log(ClipDates);
             }
@@ -214,6 +214,65 @@ TwitchClip.addEventListener("click", async function (event) {
         validateToken();
     }
 });
+async function DescriptionReplace(TimestampsArr, Index) {
+    let Desc = document.getElementsByClassName(`Charcounts`);
+    console.log(Desc);
+    var NewDesc = "";
+    var LNewDesc = "";
+    if (SettingsLocal != false && SettingsLocal != "false") {
+        let res = document.getElementById("LocalBeforeDesc");
+        let res1 = document.getElementById("LocalAfterDesc");
+        let BeforeDesc = res.innerHTML;
+        let AfterDesc = res1.innerHTML;
+        let resArray = TimestampsArr;
+        LNewDesc = BeforeDesc + "\n\n";
+        LNewDesc = LNewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+        for (let i = 0; i < resArray.length; i++) {
+            let timestamp = resArray[i];
+            LNewDesc = LNewDesc + timestamp + "\n";
+        }
+        LNewDesc = LNewDesc + "\n" + AfterDesc;
+        Desc[Index].innerHTML = LNewDesc;
+        LNewDesc = "";
+    }
+    else {
+        let res = document.getElementById("BeforeDesc");
+        let res1 = document.getElementById("AfterDesc");
+        let BeforeDesc = res.innerHTML;
+        let AfterDesc = res1.innerHTML;
+        let resArray = TimestampsArr;
+        NewDesc = BeforeDesc + "\n\n";
+        NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+        for (let i = 0; i < resArray.length; i++) {
+            let timestamp = resArray[i];
+            NewDesc = NewDesc + timestamp + "\n";
+        }
+        NewDesc = NewDesc + "\n" + AfterDesc;
+        Desc[Index].innerHTML = NewDesc;
+        NewDesc = "";
+    }
+}
+async function TitleReplace(ClipRespsonse, Index) {
+    let gameresp = await HttpCalling(`https://api.twitch.tv/helix/games?id=${ClipRespsonse[Index][0]["game_id"]}`);
+    let AcorBtns = Array();
+    for (let q = 0; q < StreamDatesArr.length; q++) {
+        AcorBtns.push(document.getElementById(`AcordBtn-${q}`));
+    }
+    if (Index % 2) {
+        AcorBtns[Index].innerHTML =
+            "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
+                "| " +
+                StreamDatesArr[Index] +
+                ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${ClipRespsonse[Index].length} Clips`;
+    }
+    else {
+        AcorBtns[Index].innerHTML =
+            "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
+                "| " +
+                StreamDatesArr[Index] +
+                ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${ClipRespsonse[Index].length} Clips`;
+    }
+}
 function CutOuts(RawTxt) {
     let RawTxtArr = RawTxt.split("\n");
     let StreamArr = Array();
