@@ -125,7 +125,6 @@ TwitchClip.addEventListener("click", async function (event: any) {
     }
     //#endregion
 
-
     //#region Checking if there even is any VODS
     let VODcount = 0;
     let UserVods = (await HttpCalling(
@@ -145,156 +144,145 @@ TwitchClip.addEventListener("click", async function (event: any) {
       console.log("Found: " + VODcount + " VODs");
 
       // Gets Sorted Clips on the same day of the stream.
-      var MultidimClipResps = SortClips(await GetClipsFromDate(res[5],UserIdResp["data"][0]["id"]), false) as Array<string>;
+      var MultidimClipResps = SortClips(
+        await GetClipsFromDate(res[5], UserIdResp["data"][0]["id"]),
+        false
+      ) as Array<string>;
       console.log(MultidimClipResps);
 
       // Description Vars
-    
-        let Desc = document.getElementById(
-          `streamtextarr${0}`
-        ) as HTMLInputElement;
-        var NewDesc = ""; // Finished Description Var
-        var NewLocalDesc = ""; // Finished Local Description.
+      var TimestampTwitch = Array();
+      let TimeTwitch = Array();
+      let LocalSceneShift = Array();
+      let LocalSceneTime = Array();
 
-        var TimestampTwitch = Array();
-        let TimeTwitch = Array();
-        let LocalSceneShift = Array();
-        let LocalSceneTime = Array();
-
-        // get Clip Offset but should also get Start Creative or Scene shift timestamps.
-        //#region Getting Local Scene Shift timestamps
-        // get Local Timestamps for scenes
-        let LocalSceneShifttemp = Array();
-        let LocalSceneTimetemp = Array();
-        for (let V = 0; V < MultiDimStreamArr[0].length; V++) {
-          let res = MultiDimStreamArr[V];
-          if (res == undefined) {
-            // for some reason keeps running into indexes it doesnt have? this fixes it but MAyyyy be not the best fix
-            continue;
-          }
-          else {
-            for (let i = 0; i < res.length; i++) {
-              let Timestamp = res[i]; // String with timestamp
-              if (Timestamp.match(/▸.*/i)) {
-                LocalSceneShift.push(Timestamp);
-                let R = Timestamp.split(" ");
-                LocalSceneTime.push(R[1]);
-              }
-            }
-            LocalSceneShifttemp = LocalSceneShift;
-            LocalSceneTimetemp = LocalSceneTime;
-            LocalSceneShift = Array();
-            LocalSceneTime = Array();
-          }
-        }
-
-        //#endregion
-
-        console.log(LocalSceneTimetemp);
-        console.log(LocalSceneShifttemp);
-
-        //#region Creating timestamps with titles in a single string
-        // sets in Clip timestamp.
-        //console.log(MultidimClipResps);
-        if(MultidimClipResps[0]["vod_offset"] != null && MultidimClipResps[0]["vod_offset"] != "null") {
-          for (let i = 0; i < MultidimClipResps[0].length; i++) {
-            // gives a timestamp close to LOCAL timestamp from Twitch API.
-              TimestampTwitch.push(
-                "• " +
-                  SectoTimestamp(MultidimClipResps[i]["vod_offset"]) +
-                  " " +
-                  MultidimClipResps[i]["title"]
-              );
-            TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
-          }
-        }
-        else { // needs to get clip timestamps without vod_offset.
-          let Timestamps = AcorBtns[0].innerHTML.split(" ");
-          console.log(Timestamps[5][0]+Timestamps[5][1]+Timestamps[5][2]+Timestamps[5][3],Timestamps[5][5]+Timestamps[5][6],Timestamps[5][8]+Timestamps[5][9], Timestamps[6][0]+Timestamps[6][1],Timestamps[6][3]+Timestamps[6][4],Timestamps[6][6]+Timestamps[6][7]);
-          let StreamDate = new Date(Timestamps[5][0]+Timestamps[5][1]+Timestamps[5][2]+Timestamps[5][3],Timestamps[5][5]+Timestamps[5][6],Timestamps[5][8]+Timestamps[5][9], Timestamps[6][0]+Timestamps[6][1],Timestamps[6][3]+Timestamps[6][4],Timestamps[6][6]+Timestamps[6][7]);
-          console.log(StreamDate);
-          let ClipDates = SortClips(MultidimClipResps, true);
-          console.log(ClipDates);
-        }
-       
-        //#endregion
-
-        // set timestamp arrays into one big one that we have to sort.
-        let TimestampArr = Array();
-        let TimeArr = Array();
-        TimestampArr = LocalSceneShifttemp.concat(TimestampTwitch);
-        TimeArr = LocalSceneTimetemp.concat(TimeTwitch);
-
-        //console.log(TimestampArr);
-        // sort timestamps into correct sorting
-        // fun fact the indexes are named: Q,T,Pie,u because thats what u are :)
-        //#region Making Timestamps into Dates and sorting them.
-        let SortTime = Array();
-        for (let q = 0; q < TimestampArr.length; q++) {
-          let res = TimestampArr[q].split(" ");
-          SortTime.push(TimestampToDate(res[1]));
-        }
-
-        SortTime.sort();
-        //#endregion
-        let Timestamps = Array();
-        //#region Sorted Dates get turned into timestamps again.
-        for (let t = 0; t < SortTime.length; t++) {
-          let T = SortTime[t].toString().split(" ");
-          let TestHour = T[4].split(":");
-          let Timestamp;
-          if (TestHour[0][0] == "0") {
-            Timestamp = to2Time(T[4].substring(1)); // skips >0<0:20:40 of the timestamp
-            Timestamps.push(Timestamp);
-          } else {
-            // keeps extra hour placement for 24 hour timestamps.
-            Timestamp = to2Time(T[4]);
-            Timestamps.push(Timestamp);
-          }
-        }
-        //#endregion
-        let CompleteTimestampArr = Array();
-        //#region finding the correct indexs for titles and completing the sorting
-        // for each til we find the correct index
-        for (let Pie = 0; Pie < Timestamps.length; Pie++) {
-          let Reg = new RegExp(Timestamps[Pie] + ".*");
-          for (let u = 0; u < TimestampArr.length; u++) {
-            if (TimestampArr[u].match(Reg)) {
-              CompleteTimestampArr.push(TimestampArr[u]);
-              break;
+      // get Clip Offset but should also get Start Creative or Scene shift timestamps.
+      //#region Getting Local Scene Shift timestamps
+      // get Local Timestamps for scenes
+      let LocalSceneShifttemp = Array();
+      let LocalSceneTimetemp = Array();
+      for (let V = 0; V < MultiDimStreamArr[0].length; V++) {
+        let res = MultiDimStreamArr[V];
+        if (res == undefined) {
+          // for some reason keeps running into indexes it doesnt have? this fixes it but MAyyyy be not the best fix
+          continue;
+        } else {
+          for (let i = 0; i < res.length; i++) {
+            let Timestamp = res[i]; // String with timestamp
+            if (Timestamp.match(/▸.*/i)) {
+              LocalSceneShift.push(Timestamp);
+              let R = Timestamp.split(" ");
+              LocalSceneTime.push(R[1]);
             }
           }
+          LocalSceneShifttemp = LocalSceneShift;
+          LocalSceneTimetemp = LocalSceneTime;
+          LocalSceneShift = Array();
+          LocalSceneTime = Array();
         }
-        //#endregion
+      }
 
-        //#region Making the new description and placing it into the correct Text area
-        // Makes a Working Description
-        // If Not Null
-        if (CompleteTimestampArr.length > 0) {
-          // if has Values
-          for (let index = 0; index < CompleteTimestampArr.length; index++) {
-            let res = document.getElementById("BeforeDesc") as HTMLInputElement;
-            let res1 = document.getElementById("AfterDesc") as HTMLInputElement;
-
-            let BeforeDesc = res.innerHTML;
-            let AfterDesc = res1.innerHTML;
-            let resArray = CompleteTimestampArr;
-
-            NewDesc = BeforeDesc + "\n\n";
-            NewDesc =
-              NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
-            for (let i = 0; i < resArray.length; i++) {
-              let timestamp = resArray[i];
-              NewDesc = NewDesc + timestamp + "\n";
-            }
-            NewDesc = NewDesc + "\n" + AfterDesc;
-            Desc.innerHTML = NewDesc;
-            NewDesc = "";
-          }
+      // sets in Clip timestamp.
+      //console.log(MultidimClipResps);
+      if (
+        MultidimClipResps[0]["vod_offset"] != null &&
+        MultidimClipResps[0]["vod_offset"] != "null"
+      ) {
+        for (let i = 0; i < MultidimClipResps[0].length; i++) {
+          // gives a timestamp close to LOCAL timestamp from Twitch API.
+          TimestampTwitch.push(
+            "• " +
+              SectoTimestamp(MultidimClipResps[i]["vod_offset"]) +
+              " " +
+              MultidimClipResps[i]["title"]
+          );
+          TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
         }
-        //#endregion
-      //}
+      } else {
+        // needs to get clip timestamps without vod_offset.
+        let Timestamps = AcorBtns[0].innerHTML.split(" ");
+        console.log(
+          Timestamps[5][0] +
+            Timestamps[5][1] +
+            Timestamps[5][2] +
+            Timestamps[5][3],
+          Timestamps[5][5] + Timestamps[5][6],
+          Timestamps[5][8] + Timestamps[5][9],
+          Timestamps[6][0] + Timestamps[6][1],
+          Timestamps[6][3] + Timestamps[6][4],
+          Timestamps[6][6] + Timestamps[6][7]
+        );
+        let StreamDate = new Date(
+          Timestamps[5][0] +
+            Timestamps[5][1] +
+            Timestamps[5][2] +
+            Timestamps[5][3],
+          Timestamps[5][5] + Timestamps[5][6],
+          Timestamps[5][8] + Timestamps[5][9],
+          Timestamps[6][0] + Timestamps[6][1],
+          Timestamps[6][3] + Timestamps[6][4],
+          Timestamps[6][6] + Timestamps[6][7]
+        );
+        console.log(StreamDate);
+        let ClipDates = SortClips(MultidimClipResps, true);
+        console.log(ClipDates);
+      }
+
       //#endregion
+
+      // set timestamp arrays into one big one that we have to sort.
+      let TimestampArr = Array();
+      let TimeArr = Array();
+      TimestampArr = LocalSceneShifttemp.concat(TimestampTwitch);
+      TimeArr = LocalSceneTimetemp.concat(TimeTwitch);
+
+      //console.log(TimestampArr);
+      // sort timestamps into correct sorting
+      // fun fact the indexes are named: Q,T,Pie,u because thats what u are :)
+      //#region Making Timestamps into Dates and sorting them.
+      let SortTime = Array();
+      for (let q = 0; q < TimestampArr.length; q++) {
+        let res = TimestampArr[q].split(" ");
+        SortTime.push(TimestampToDate(res[1]));
+      }
+
+      SortTime.sort();
+      //#endregion
+      let Timestamps = Array();
+      //#region Sorted Dates get turned into timestamps again.
+      for (let t = 0; t < SortTime.length; t++) {
+        let T = SortTime[t].toString().split(" ");
+        let TestHour = T[4].split(":");
+        let Timestamp;
+        if (TestHour[0][0] == "0") {
+          Timestamp = to2Time(T[4].substring(1)); // skips >0<0:20:40 of the timestamp
+          Timestamps.push(Timestamp);
+        } else {
+          // keeps extra hour placement for 24 hour timestamps.
+          Timestamp = to2Time(T[4]);
+          Timestamps.push(Timestamp);
+        }
+      }
+      //#endregion
+      let CompleteTimestampArr = Array();
+      //#region finding the correct indexs for titles and completing the sorting
+      // for each til we find the correct index
+      for (let Pie = 0; Pie < Timestamps.length; Pie++) {
+        let Reg = new RegExp(Timestamps[Pie] + ".*");
+        for (let u = 0; u < TimestampArr.length; u++) {
+          if (TimestampArr[u].match(Reg)) {
+            CompleteTimestampArr.push(TimestampArr[u]);
+            break;
+          }
+        }
+      }
+      //#endregion
+      
+      try {
+        DescriptionReplace(CompleteTimestampArr, 0);
+      } catch (error) {
+        console.error();
+      }
 
       // change Acord button titles.
       ChangeAcordButtonNames(MultidimClipResps, 0, AcorBtns);
@@ -311,38 +299,46 @@ TwitchClip.addEventListener("click", async function (event: any) {
 });
 
 async function DescriptionReplace(TimestampsArr: Array<string>, Index: number) {
-  let Desc = document.getElementsByClassName(
-    `Charcounts`
-  ) as any;
+  let Desc = document.getElementsByClassName(`Charcounts`) as any;
   console.log(Desc);
   var NewDesc = ""; // Finished Description Var
   var LNewDesc = ""; // Finished Description Var
   if (SettingsLocal != false && SettingsLocal != "false") {
     let res = document.getElementById("LocalBeforeDesc") as HTMLInputElement;
     let res1 = document.getElementById("LocalAfterDesc") as HTMLInputElement;
-  
-    let BeforeDesc = res.innerHTML;
-    let AfterDesc = res1.innerHTML;
+    let res2 = document.getElementById("BeforeDesc") as HTMLInputElement;
+    let res3 = document.getElementById("AfterDesc") as HTMLInputElement;
+
+    let BeforeDescL = res.innerHTML;
+    let AfterDescL = res1.innerHTML;
+    let BeforeDesc = res2.innerHTML;
+    let AfterDesc = res3.innerHTML;
+
     let resArray = TimestampsArr;
-  
-    LNewDesc = BeforeDesc + "\n\n";
+
+    LNewDesc = BeforeDescL + "\n\n";
     LNewDesc = LNewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+    NewDesc = BeforeDesc + "\n\n";
+    NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
     for (let i = 0; i < resArray.length; i++) {
       let timestamp = resArray[i];
       LNewDesc = LNewDesc + timestamp + "\n";
+      NewDesc = NewDesc + timestamp + "\n";
     }
-    LNewDesc = LNewDesc + "\n" + AfterDesc;
-    Desc[Index].innerHTML = LNewDesc;
+    LNewDesc = LNewDesc + "\n" + AfterDescL;
+    NewDesc = NewDesc + "\n" + AfterDesc;
+    Desc[Index].innerHTML = NewDesc;
+    Desc[Index + 1].innerHTML = LNewDesc;
     LNewDesc = "";
-  }
-  else {
+    NewDesc = "";
+  } else {
     let res = document.getElementById("BeforeDesc") as HTMLInputElement;
     let res1 = document.getElementById("AfterDesc") as HTMLInputElement;
-  
+
     let BeforeDesc = res.innerHTML;
     let AfterDesc = res1.innerHTML;
     let resArray = TimestampsArr;
-  
+
     NewDesc = BeforeDesc + "\n\n";
     NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
     for (let i = 0; i < resArray.length; i++) {
@@ -352,30 +348,6 @@ async function DescriptionReplace(TimestampsArr: Array<string>, Index: number) {
     NewDesc = NewDesc + "\n" + AfterDesc;
     Desc[Index].innerHTML = NewDesc;
     NewDesc = "";
-  }
-}
-
-async function TitleReplace(ClipRespsonse: Array<string>, Index: number) {
-  // Test if there is a VOD to this date, so we can set the old title in it Else give stream playing
-  let gameresp = await HttpCalling(
-    `https://api.twitch.tv/helix/games?id=${ClipRespsonse[Index][0]["game_id"]}`
-  );
-  let AcorBtns = Array();
-  for (let q = 0; q < StreamDatesArr.length; q++) {
-    AcorBtns.push(document.getElementById(`AcordBtn-${q}`));
-  }
-  if (Index % 2) {
-    AcorBtns[Index].innerHTML =
-      "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
-      "| " +
-      StreamDatesArr[Index] +
-      ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${ClipRespsonse[Index].length} Clips`;
-  } else {
-    AcorBtns[Index].innerHTML =
-      "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
-      "| " +
-      StreamDatesArr[Index] +
-      ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${ClipRespsonse[Index].length} Clips`;
   }
 }
 
@@ -1163,10 +1135,9 @@ function SortClips(Clips: Array<string>, GetClipDates: boolean) {
       }
     }
   }
-  if(GetClipDates == true) {
+  if (GetClipDates == true) {
     return ClipsDateArr;
-  }
-  else {
+  } else {
     return SortedClips;
   }
 }
