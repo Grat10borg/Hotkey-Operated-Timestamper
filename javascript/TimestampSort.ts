@@ -200,33 +200,52 @@ TwitchClip.addEventListener("click", async function (event: any) {
           TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
         }
       } else {
+        console.log("NO VOD FOUND FOR THIS STREAM");
         // needs to get clip timestamps without vod_offset.
         let Timestamps = AcorBtns[StreamsStreamed].innerHTML.split(" ");
-        //console.log(
-          //Timestamps[5][0] +
-          //  Timestamps[5][1] +
-          //  Timestamps[5][2] +
-         // /  Timestamps[5][3],
-         // Timestamps[5][5] + Timestamps[5][6],
-         // Timestamps[5][8] + Timestamps[5][9],
-         /// Timestamps[6][0] + Timestamps[6][1],
-         // Timestamps[6][3] + Timestamps[6][4],
-        //  Timestamps[6][6] + Timestamps[6][7]
-        //);
+
+        console.log(
+          Timestamps[5][0] +
+            Timestamps[5][1] +
+            Timestamps[5][2] +
+            Timestamps[5][3]+"-"+ // 2022 = Years
+          Timestamps[5][5] + Timestamps[5][6]+"-"+ // 10 = Months
+          Timestamps[5][8] + Timestamps[5][9]+"T"+ // 30 = Days
+          Timestamps[6][0] + Timestamps[6][1]+":"+ // 19 = Hours
+          Timestamps[6][3] + Timestamps[6][4]+":"+ // 29 = Minutes
+          Timestamps[6][6] + Timestamps[6][7]+"Z"  // 20 = Seconds
+        );
         let StreamDate = new Date(
           Timestamps[5][0] +
             Timestamps[5][1] +
             Timestamps[5][2] +
-            Timestamps[5][3],
-          Timestamps[5][5] + Timestamps[5][6],
-          Timestamps[5][8] + Timestamps[5][9],
-          Timestamps[6][0] + Timestamps[6][1],
-          Timestamps[6][3] + Timestamps[6][4],
-          Timestamps[6][6] + Timestamps[6][7]
+            Timestamps[5][3]+"-"+ // 2022 = Years
+          Timestamps[5][5] + Timestamps[5][6]+"-"+ // 10 = Months
+          Timestamps[5][8] + Timestamps[5][9]+"T"+ // 30 = Days
+          Timestamps[6][0] + Timestamps[6][1]+":"+ // 19 = Hours
+          Timestamps[6][3] + Timestamps[6][4]+":"+ // 29 = Minutes
+          Timestamps[6][6] + Timestamps[6][7]+"Z"  // 20 = Seconds
         );
-        //console.log(StreamDate);
+        console.log(StreamDate.toISOString());
+        
         let ClipDates = SortClips(MultidimClipResps, true);
-        //console.log(ClipDates);
+
+        //console.log(MultidimClipResps);
+        //console.log(MultidimClipResps.length);
+
+        for (let i = 0; i < MultidimClipResps.length; i++) {
+          console.log(ClipDates[i].toISOString());
+          // gives a timestamp close to LOCAL timestamp from Twitch API.
+          TimestampTwitch.push(
+            "• " +
+              // a yt timestamp needs to be here
+             // SectoTimestamp(MultidimClipResps[i]["vod_offset"]) +
+              " " +
+              MultidimClipResps[i]["title"]
+          );
+          // Also needs the ty timestamp.
+          TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
+        }
       }
 
       //#endregion

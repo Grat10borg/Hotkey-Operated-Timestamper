@@ -132,7 +132,7 @@ if (RawTxt != undefined && RawTxt != "" && RawTxt != null) {
 var TwitchClip = document.getElementById("TwitchClip");
 TwitchClip.addEventListener("click", function (event) {
     return __awaiter(this, void 0, void 0, function () {
-        var UserIdResp, AcorBtns, StreamedDate, index, index, Timestamps, VODcount, UserVods, index, StreamsStreamed, res, MultidimClipResps, _a, TimestampTwitch, TimeTwitch, LocalSceneShift, LocalSceneTime, LocalSceneShifttemp, LocalSceneTimetemp, V, res_1, i, Timestamp, R, i, Timestamps_1, StreamDate, ClipDates, TimestampArr, TimeArr, SortTime, q, res_2, Timestamps, t, T, TestHour, Timestamp, CompleteTimestampArr, Pie, Reg, u;
+        var UserIdResp, AcorBtns, StreamedDate, index, index, Timestamps, VODcount, UserVods, index, StreamsStreamed, res, MultidimClipResps, _a, TimestampTwitch, TimeTwitch, LocalSceneShift, LocalSceneTime, LocalSceneShifttemp, LocalSceneTimetemp, V, res_1, i, Timestamp, R, i, Timestamps_1, StreamDate, ClipDates, i, TimestampArr, TimeArr, SortTime, q, res_2, Timestamps, t, T, TestHour, Timestamp, CompleteTimestampArr, Pie, Reg, u;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -212,13 +212,43 @@ TwitchClip.addEventListener("click", function (event) {
                         }
                     }
                     else {
+                        console.log("NO VOD FOUND FOR THIS STREAM");
                         Timestamps_1 = AcorBtns[StreamsStreamed].innerHTML.split(" ");
+                        console.log(Timestamps_1[5][0] +
+                            Timestamps_1[5][1] +
+                            Timestamps_1[5][2] +
+                            Timestamps_1[5][3] + "-" + // 2022 = Years
+                            Timestamps_1[5][5] + Timestamps_1[5][6] + "-" + // 10 = Months
+                            Timestamps_1[5][8] + Timestamps_1[5][9] + "T" + // 30 = Days
+                            Timestamps_1[6][0] + Timestamps_1[6][1] + ":" + // 19 = Hours
+                            Timestamps_1[6][3] + Timestamps_1[6][4] + ":" + // 29 = Minutes
+                            Timestamps_1[6][6] + Timestamps_1[6][7] + "Z" // 20 = Seconds
+                        );
                         StreamDate = new Date(Timestamps_1[5][0] +
                             Timestamps_1[5][1] +
                             Timestamps_1[5][2] +
-                            Timestamps_1[5][3], Timestamps_1[5][5] + Timestamps_1[5][6], Timestamps_1[5][8] + Timestamps_1[5][9], Timestamps_1[6][0] + Timestamps_1[6][1], Timestamps_1[6][3] + Timestamps_1[6][4], Timestamps_1[6][6] + Timestamps_1[6][7]);
+                            Timestamps_1[5][3] + "-" + // 2022 = Years
+                            Timestamps_1[5][5] + Timestamps_1[5][6] + "-" + // 10 = Months
+                            Timestamps_1[5][8] + Timestamps_1[5][9] + "T" + // 30 = Days
+                            Timestamps_1[6][0] + Timestamps_1[6][1] + ":" + // 19 = Hours
+                            Timestamps_1[6][3] + Timestamps_1[6][4] + ":" + // 29 = Minutes
+                            Timestamps_1[6][6] + Timestamps_1[6][7] + "Z" // 20 = Seconds
+                        );
+                        console.log(StreamDate.toISOString());
                         ClipDates = SortClips(MultidimClipResps, true);
-                        //console.log(ClipDates);
+                        //console.log(MultidimClipResps);
+                        //console.log(MultidimClipResps.length);
+                        for (i = 0; i < MultidimClipResps.length; i++) {
+                            console.log(ClipDates[i].toISOString());
+                            // gives a timestamp close to LOCAL timestamp from Twitch API.
+                            TimestampTwitch.push("• " +
+                                // a yt timestamp needs to be here
+                                // SectoTimestamp(MultidimClipResps[i]["vod_offset"]) +
+                                " " +
+                                MultidimClipResps[i]["title"]);
+                            // Also needs the ty timestamp.
+                            TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
+                        }
                     }
                     TimestampArr = Array();
                     TimeArr = Array();
