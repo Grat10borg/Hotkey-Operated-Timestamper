@@ -137,11 +137,12 @@ TwitchClip.addEventListener("click", async function (event: any) {
       }
     }
     //#endregion
-
+    for (let StreamsStreamed = 0; StreamsStreamed < StreamedDate.length; StreamsStreamed++) {
+      
     if (VODcount != 0 || VODcount != null) {
-      let res = AcorBtns[0].innerHTML.split(" ");
+      let res = AcorBtns[StreamsStreamed].innerHTML.split(" ");
       // Getting clips with a VOD
-      console.log("Found: " + VODcount + " VODs");
+      //console.log("Found: " + VODcount + " VODs");
 
       // Gets Sorted Clips on the same day of the stream.
       var MultidimClipResps = SortClips(
@@ -161,7 +162,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
       // get Local Timestamps for scenes
       let LocalSceneShifttemp = Array();
       let LocalSceneTimetemp = Array();
-      for (let V = 0; V < MultiDimStreamArr[0].length; V++) {
+      for (let V = 0; V < MultiDimStreamArr[StreamsStreamed].length; V++) {
         let res = MultiDimStreamArr[V];
         if (res == undefined) {
           // for some reason keeps running into indexes it doesnt have? this fixes it but MAyyyy be not the best fix
@@ -188,7 +189,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
         MultidimClipResps[0]["vod_offset"] != null &&
         MultidimClipResps[0]["vod_offset"] != "null"
       ) {
-        for (let i = 0; i < MultidimClipResps[0].length; i++) {
+        for (let i = 0; i < MultidimClipResps[StreamsStreamed].length; i++) {
           // gives a timestamp close to LOCAL timestamp from Twitch API.
           TimestampTwitch.push(
             "• " +
@@ -200,18 +201,18 @@ TwitchClip.addEventListener("click", async function (event: any) {
         }
       } else {
         // needs to get clip timestamps without vod_offset.
-        let Timestamps = AcorBtns[0].innerHTML.split(" ");
-        console.log(
-          Timestamps[5][0] +
-            Timestamps[5][1] +
-            Timestamps[5][2] +
-            Timestamps[5][3],
-          Timestamps[5][5] + Timestamps[5][6],
-          Timestamps[5][8] + Timestamps[5][9],
-          Timestamps[6][0] + Timestamps[6][1],
-          Timestamps[6][3] + Timestamps[6][4],
-          Timestamps[6][6] + Timestamps[6][7]
-        );
+        let Timestamps = AcorBtns[StreamsStreamed].innerHTML.split(" ");
+        //console.log(
+          //Timestamps[5][0] +
+          //  Timestamps[5][1] +
+          //  Timestamps[5][2] +
+         // /  Timestamps[5][3],
+         // Timestamps[5][5] + Timestamps[5][6],
+         // Timestamps[5][8] + Timestamps[5][9],
+         /// Timestamps[6][0] + Timestamps[6][1],
+         // Timestamps[6][3] + Timestamps[6][4],
+        //  Timestamps[6][6] + Timestamps[6][7]
+        //);
         let StreamDate = new Date(
           Timestamps[5][0] +
             Timestamps[5][1] +
@@ -223,9 +224,9 @@ TwitchClip.addEventListener("click", async function (event: any) {
           Timestamps[6][3] + Timestamps[6][4],
           Timestamps[6][6] + Timestamps[6][7]
         );
-        console.log(StreamDate);
+        //console.log(StreamDate);
         let ClipDates = SortClips(MultidimClipResps, true);
-        console.log(ClipDates);
+        //console.log(ClipDates);
       }
 
       //#endregion
@@ -277,20 +278,22 @@ TwitchClip.addEventListener("click", async function (event: any) {
         }
       }
       //#endregion
-      
+
       try {
-        DescriptionReplace(CompleteTimestampArr, 0);
+        // Creates both a local (if enabled) and normal description and replaces the correct index of description.
+        DescriptionReplace(CompleteTimestampArr, StreamsStreamed);
       } catch (error) {
         console.error();
       }
 
       // change Acord button titles.
-      ChangeAcordButtonNames(MultidimClipResps, 0, AcorBtns);
+      ChangeAcordButtonNames(MultidimClipResps, StreamsStreamed, AcorBtns);
     } else {
       // Found No Vods to get names from.
       // Getting clips without a VOD
       console.log("Getting clips for streams without VODs");
     }
+  }
     // Found No Vods to get names from.
   } else {
     console.log("Failed to Validate Token Try Again");
@@ -300,7 +303,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
 
 async function DescriptionReplace(TimestampsArr: Array<string>, Index: number) {
   let Desc = document.getElementsByClassName(`Charcounts`) as any;
-  console.log(Desc);
+  //console.log(Desc);
   var NewDesc = ""; // Finished Description Var
   var LNewDesc = ""; // Finished Description Var
   if (SettingsLocal != false && SettingsLocal != "false") {

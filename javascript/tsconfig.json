@@ -12,7 +12,7 @@
 
     /* Language and Environment */
     "target": "esnext",
-    "watch": true,
+    //"watch": true,
     "lib": ["DOM", "ES2017"],  
     "noImplicitAny": false, 
     "removeComments": true,                                   /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
