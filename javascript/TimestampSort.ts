@@ -121,10 +121,10 @@ TwitchClip.addEventListener("click", async function (event: any) {
     }
     for (let index = 0; index < AcorBtns.length; index++) {
       let Timestamps = AcorBtns[index].innerHTML.split(" ");
-      StreamedDate.push(Timestamps[5]);
+      StreamedDate.push(Timestamps[5] +"T"+ Timestamps[6]+".000Z");
     }
     //#endregion
-
+    console.log(StreamedDate);
     //#region Checking if there even is any VODS
     let VODcount = 0;
     let UserVods = (await HttpCalling(
@@ -161,7 +161,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
       //#region Getting Local Scene Shift timestamps
       // get Local Timestamps for scenes
       let LocalSceneShifttemp = Array();
-      let LocalSceneTimetemp = Array();
+      //let LocalSceneTimetemp = Array();
       for (let V = 0; V < MultiDimStreamArr[StreamsStreamed].length; V++) {
         let res = MultiDimStreamArr[V];
         if (res == undefined) {
@@ -177,9 +177,9 @@ TwitchClip.addEventListener("click", async function (event: any) {
             }
           }
           LocalSceneShifttemp = LocalSceneShift;
-          LocalSceneTimetemp = LocalSceneTime;
+          //LocalSceneTimetemp = LocalSceneTime;
           LocalSceneShift = Array();
-          LocalSceneTime = Array();
+          //LocalSceneTime = Array();
         }
       }
 
@@ -202,31 +202,31 @@ TwitchClip.addEventListener("click", async function (event: any) {
       } else {
         console.log("NO VOD FOUND FOR THIS STREAM");
         // needs to get clip timestamps without vod_offset.
-        let Timestamps = AcorBtns[StreamsStreamed].innerHTML.split(" ");
+        //let Timestamps = AcorBtns[StreamsStreamed].innerHTML.split(" ");
 
-        console.log(
-          Timestamps[5][0] +
-            Timestamps[5][1] +
-            Timestamps[5][2] +
-            Timestamps[5][3]+"-"+ // 2022 = Years
-          Timestamps[5][5] + Timestamps[5][6]+"-"+ // 10 = Months
-          Timestamps[5][8] + Timestamps[5][9]+"T"+ // 30 = Days
-          Timestamps[6][0] + Timestamps[6][1]+":"+ // 19 = Hours
-          Timestamps[6][3] + Timestamps[6][4]+":"+ // 29 = Minutes
-          Timestamps[6][6] + Timestamps[6][7]+"Z"  // 20 = Seconds
-        );
-        let StreamDate = new Date(
-          Timestamps[5][0] +
-            Timestamps[5][1] +
-            Timestamps[5][2] +
-            Timestamps[5][3]+"-"+ // 2022 = Years
-          Timestamps[5][5] + Timestamps[5][6]+"-"+ // 10 = Months
-          Timestamps[5][8] + Timestamps[5][9]+"T"+ // 30 = Days
-          Timestamps[6][0] + Timestamps[6][1]+":"+ // 19 = Hours
-          Timestamps[6][3] + Timestamps[6][4]+":"+ // 29 = Minutes
-          Timestamps[6][6] + Timestamps[6][7]+"Z"  // 20 = Seconds
-        );
-        console.log(StreamDate.toISOString());
+        // console.log(
+        //   Timestamps[5][0] +
+        //     Timestamps[5][1] +
+        //     Timestamps[5][2] +
+        //     Timestamps[5][3]+"-"+ // 2022 = Years
+        //   Timestamps[5][5] + Timestamps[5][6]+"-"+ // 10 = Months
+        //   Timestamps[5][8] + Timestamps[5][9]+"T"+ // 30 = Days
+        //   Timestamps[6][0] + Timestamps[6][1]+":"+ // 19 = Hours
+        //   Timestamps[6][3] + Timestamps[6][4]+":"+ // 29 = Minutes
+        //   Timestamps[6][6] + Timestamps[6][7]+".000Z"  // 20 = Seconds
+        // );
+        // let StreamDate = new Date(
+        //   Timestamps[5][0] +
+        //     Timestamps[5][1] +
+        //     Timestamps[5][2] +
+        //     Timestamps[5][3]+"-"+ // 2022 = Years
+        //   Timestamps[5][5] + Timestamps[5][6]+"-"+ // 10 = Months
+        //   Timestamps[5][8] + Timestamps[5][9]+"T"+ // 30 = Days
+        //   Timestamps[6][0] + Timestamps[6][1]+":"+ // 19 = Hours
+        //   Timestamps[6][3] + Timestamps[6][4]+":"+ // 29 = Minutes
+        //   Timestamps[6][6] + Timestamps[6][7]+".000Z"  // 20 = Seconds
+        // );
+        //console.log(StreamDate.toISOString());
         
         let ClipDates = SortClips(MultidimClipResps, true);
 
@@ -234,12 +234,22 @@ TwitchClip.addEventListener("click", async function (event: any) {
         //console.log(MultidimClipResps.length);
 
         for (let i = 0; i < MultidimClipResps.length; i++) {
-          console.log(ClipDates[i].toISOString());
+          //console.log(ClipDates[i].toISOString());
+          let ClipTimestamp = "" as string
+          if(MultidimClipResps[i]["vod_offset"] != null && MultidimClipResps[i]["vod_offset"] != "") {
+            ClipTimestamp = SectoTimestamp(MultidimClipResps[i]["vod_offset"]);
+          }
+          else {
+            //console.log(StreamedDate[StreamsStreamed]);
+            //console.log(ClipDates[i]);
+            ClipTimestamp = GetClipVODOffsetFromDate(StreamedDate[StreamsStreamed], ClipDates[i].toISOString());
+            //ClipTimestamp = "[VOD OFFSET NOT FOUND...]";
+          }
           // gives a timestamp close to LOCAL timestamp from Twitch API.
           TimestampTwitch.push(
             "• " +
-              // a yt timestamp needs to be here
-             // SectoTimestamp(MultidimClipResps[i]["vod_offset"]) +
+              
+            ClipTimestamp +
               " " +
               MultidimClipResps[i]["title"]
           );
@@ -252,9 +262,10 @@ TwitchClip.addEventListener("click", async function (event: any) {
 
       // set timestamp arrays into one big one that we have to sort.
       let TimestampArr = Array();
-      let TimeArr = Array();
+      //let TimeArr = Array();
       TimestampArr = LocalSceneShifttemp.concat(TimestampTwitch);
-      TimeArr = LocalSceneTimetemp.concat(TimeTwitch);
+      console.log(TimestampArr);
+      //TimeArr = LocalSceneTimetemp.concat(TimeTwitch);
 
       //console.log(TimestampArr);
       // sort timestamps into correct sorting
@@ -263,15 +274,20 @@ TwitchClip.addEventListener("click", async function (event: any) {
       let SortTime = Array();
       for (let q = 0; q < TimestampArr.length; q++) {
         let res = TimestampArr[q].split(" ");
+        //console.log(res); // Clips don't have timestamps.
+        //console.log(res[1]);
         SortTime.push(TimestampToDate(res[1]));
       }
-
+      console.log(SortTime);
       SortTime.sort();
       //#endregion
       let Timestamps = Array();
       //#region Sorted Dates get turned into timestamps again.
       for (let t = 0; t < SortTime.length; t++) {
         let T = SortTime[t].toString().split(" ");
+        console.log(SortTime[t].toString().split(" "));
+        //console.log(T);
+        //console.log(T[4].split(":"));
         let TestHour = T[4].split(":");
         let Timestamp;
         if (TestHour[0][0] == "0") {
@@ -311,6 +327,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
       // Found No Vods to get names from.
       // Getting clips without a VOD
       console.log("Getting clips for streams without VODs");
+
+
     }
   }
     // Found No Vods to get names from.
@@ -319,6 +337,25 @@ TwitchClip.addEventListener("click", async function (event: any) {
     validateToken();
   }
 });
+
+function GetClipVODOffsetFromDate(StreamDate:string, ClipedDate: String) {
+  console.log(StreamDate);
+  console.log(ClipedDate);
+
+  let StreamDateTime = parseISOString(StreamDate) as Date;
+  let ClipDateTime = parseISOString(ClipedDate) as Date;
+  console.log(StreamDateTime);
+  console.log(ClipDateTime);
+
+  var secounds = (StreamDateTime.getTime() - ClipDateTime.getTime()) / 1000;
+  console.log(secounds);
+
+  let date = new Date(1970, 0, 1);
+  date.setSeconds(secounds);
+  console.log(date);
+
+  return "blep"
+}
 
 async function DescriptionReplace(TimestampsArr: Array<string>, Index: number) {
   let Desc = document.getElementsByClassName(`Charcounts`) as any;
