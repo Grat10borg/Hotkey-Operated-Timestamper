@@ -208,18 +208,15 @@ TwitchClip.addEventListener("click", async function (event) {
     }
 });
 function GetClipVODOffsetFromDate(StreamDate, ClipedDate) {
-    console.log(StreamDate);
-    console.log(ClipedDate);
     let StreamDateTime = parseISOString(StreamDate);
     let ClipDateTime = parseISOString(ClipedDate);
-    console.log(StreamDateTime);
-    console.log(ClipDateTime);
     var secounds = (StreamDateTime.getTime() - ClipDateTime.getTime()) / 1000;
     console.log(secounds);
-    let date = new Date(1970, 0, 1);
-    date.setSeconds(secounds);
-    console.log(date);
-    return "blep";
+    if (secounds < 0) {
+        secounds = Math.abs(secounds);
+    }
+    console.log(SectoTimestamp(secounds));
+    return SectoTimestamp(secounds);
 }
 async function DescriptionReplace(TimestampsArr, Index) {
     let Desc = document.getElementsByClassName(`Charcounts`);
