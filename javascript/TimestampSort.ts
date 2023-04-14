@@ -199,39 +199,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
           );
           TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
         }
-      } else {
-        console.log("NO VOD FOUND FOR THIS STREAM");
-        // needs to get clip timestamps without vod_offset.
-        //let Timestamps = AcorBtns[StreamsStreamed].innerHTML.split(" ");
-
-        // console.log(
-        //   Timestamps[5][0] +
-        //     Timestamps[5][1] +
-        //     Timestamps[5][2] +
-        //     Timestamps[5][3]+"-"+ // 2022 = Years
-        //   Timestamps[5][5] + Timestamps[5][6]+"-"+ // 10 = Months
-        //   Timestamps[5][8] + Timestamps[5][9]+"T"+ // 30 = Days
-        //   Timestamps[6][0] + Timestamps[6][1]+":"+ // 19 = Hours
-        //   Timestamps[6][3] + Timestamps[6][4]+":"+ // 29 = Minutes
-        //   Timestamps[6][6] + Timestamps[6][7]+".000Z"  // 20 = Seconds
-        // );
-        // let StreamDate = new Date(
-        //   Timestamps[5][0] +
-        //     Timestamps[5][1] +
-        //     Timestamps[5][2] +
-        //     Timestamps[5][3]+"-"+ // 2022 = Years
-        //   Timestamps[5][5] + Timestamps[5][6]+"-"+ // 10 = Months
-        //   Timestamps[5][8] + Timestamps[5][9]+"T"+ // 30 = Days
-        //   Timestamps[6][0] + Timestamps[6][1]+":"+ // 19 = Hours
-        //   Timestamps[6][3] + Timestamps[6][4]+":"+ // 29 = Minutes
-        //   Timestamps[6][6] + Timestamps[6][7]+".000Z"  // 20 = Seconds
-        // );
-        //console.log(StreamDate.toISOString());
-        
+      } else {        
         let ClipDates = SortClips(MultidimClipResps, true);
-
-        //console.log(MultidimClipResps);
-        //console.log(MultidimClipResps.length);
 
         for (let i = 0; i < MultidimClipResps.length; i++) {
           //console.log(ClipDates[i].toISOString());
@@ -240,10 +209,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
             ClipTimestamp = SectoTimestamp(MultidimClipResps[i]["vod_offset"]);
           }
           else {
-            //console.log(StreamedDate[StreamsStreamed]);
-            //console.log(ClipDates[i]);
             ClipTimestamp = GetClipVODOffsetFromDate(StreamedDate[StreamsStreamed], ClipDates[i].toISOString());
-            //ClipTimestamp = "[VOD OFFSET NOT FOUND...]";
           }
           // gives a timestamp close to LOCAL timestamp from Twitch API.
           TimestampTwitch.push(
@@ -264,7 +230,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
       let TimestampArr = Array();
       //let TimeArr = Array();
       TimestampArr = LocalSceneShifttemp.concat(TimestampTwitch);
-      console.log(TimestampArr);
+      //console.log(TimestampArr);
       //TimeArr = LocalSceneTimetemp.concat(TimeTwitch);
 
       //console.log(TimestampArr);
@@ -278,14 +244,14 @@ TwitchClip.addEventListener("click", async function (event: any) {
         //console.log(res[1]);
         SortTime.push(TimestampToDate(res[1]));
       }
-      console.log(SortTime);
+      //console.log(SortTime);
       SortTime.sort();
       //#endregion
       let Timestamps = Array();
       //#region Sorted Dates get turned into timestamps again.
       for (let t = 0; t < SortTime.length; t++) {
         let T = SortTime[t].toString().split(" ");
-        console.log(SortTime[t].toString().split(" "));
+        //console.log(SortTime[t].toString().split(" "));
         //console.log(T);
         //console.log(T[4].split(":"));
         let TestHour = T[4].split(":");
@@ -314,12 +280,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
       }
       //#endregion
 
-      try {
-        // Creates both a local (if enabled) and normal description and replaces the correct index of description.
-        DescriptionReplace(CompleteTimestampArr, StreamsStreamed);
-      } catch (error) {
-        console.error();
-      }
+      // Creates both a local (if enabled) and normal description and replaces the correct index of description.
+      DescriptionReplace(CompleteTimestampArr, StreamsStreamed);
 
       // change Acord button titles.
       ChangeAcordButtonNames(MultidimClipResps, StreamsStreamed, AcorBtns);
@@ -348,7 +310,7 @@ function GetClipVODOffsetFromDate(StreamDate:string, ClipedDate: String) {
   //console.log(ClipDateTime);
 
   var secounds = (StreamDateTime.getTime() - ClipDateTime.getTime()) / 1000 as any;
-  console.log(secounds);
+  //console.log(secounds);
 
   // let date = new Date(1970, 0, 1);
   // date.setHours(-ClipDateTime.getHours());
@@ -356,7 +318,7 @@ function GetClipVODOffsetFromDate(StreamDate:string, ClipedDate: String) {
   if(secounds < 0){
     secounds = Math.abs(secounds);
   }
-  console.log(SectoTimestamp(secounds));
+  //console.log(SectoTimestamp(secounds));
 
   return SectoTimestamp(secounds);
 }

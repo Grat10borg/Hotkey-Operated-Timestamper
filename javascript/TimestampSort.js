@@ -137,7 +137,6 @@ TwitchClip.addEventListener("click", async function (event) {
                     }
                 }
                 else {
-                    console.log("NO VOD FOUND FOR THIS STREAM");
                     let ClipDates = SortClips(MultidimClipResps, true);
                     for (let i = 0; i < MultidimClipResps.length; i++) {
                         let ClipTimestamp = "";
@@ -156,18 +155,15 @@ TwitchClip.addEventListener("click", async function (event) {
                 }
                 let TimestampArr = Array();
                 TimestampArr = LocalSceneShifttemp.concat(TimestampTwitch);
-                console.log(TimestampArr);
                 let SortTime = Array();
                 for (let q = 0; q < TimestampArr.length; q++) {
                     let res = TimestampArr[q].split(" ");
                     SortTime.push(TimestampToDate(res[1]));
                 }
-                console.log(SortTime);
                 SortTime.sort();
                 let Timestamps = Array();
                 for (let t = 0; t < SortTime.length; t++) {
                     let T = SortTime[t].toString().split(" ");
-                    console.log(SortTime[t].toString().split(" "));
                     let TestHour = T[4].split(":");
                     let Timestamp;
                     if (TestHour[0][0] == "0") {
@@ -211,11 +207,9 @@ function GetClipVODOffsetFromDate(StreamDate, ClipedDate) {
     let StreamDateTime = parseISOString(StreamDate);
     let ClipDateTime = parseISOString(ClipedDate);
     var secounds = (StreamDateTime.getTime() - ClipDateTime.getTime()) / 1000;
-    console.log(secounds);
     if (secounds < 0) {
         secounds = Math.abs(secounds);
     }
-    console.log(SectoTimestamp(secounds));
     return SectoTimestamp(secounds);
 }
 async function DescriptionReplace(TimestampsArr, Index) {
