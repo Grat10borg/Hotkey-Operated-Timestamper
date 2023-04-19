@@ -137,6 +137,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
       }
     }
     //#endregion
+    let textareaPrint = 0 as number;
     for (let StreamsStreamed = 0; StreamsStreamed < StreamedDate.length; StreamsStreamed++) {
       
     if (VODcount != 0 || VODcount != null) {
@@ -184,7 +185,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
       }
 
       // sets in Clip timestamp.
-      console.log(MultidimClipResps);
+      //console.log(MultidimClipResps);
       // if (
       //   MultidimClipResps[0]["vod_offset"] != null &&
       //   MultidimClipResps[0]["vod_offset"] != "null"
@@ -285,7 +286,12 @@ TwitchClip.addEventListener("click", async function (event: any) {
       //#endregion
 
       // Creates both a local (if enabled) and normal description and replaces the correct index of description.
-      DescriptionReplace(CompleteTimestampArr, StreamsStreamed);
+      DescriptionReplace(CompleteTimestampArr, textareaPrint, false);
+      textareaPrint++;
+      if(SettingsLocal != false && SettingsLocal != "false") {
+        DescriptionReplace(CompleteTimestampArr, textareaPrint, true);
+        textareaPrint++;
+      }
 
       // change Acord button titles.
       ChangeAcordButtonNames(MultidimClipResps, StreamsStreamed, AcorBtns);
@@ -327,39 +333,29 @@ function GetClipVODOffsetFromDate(StreamDate:string, ClipedDate: String) {
   return SectoTimestamp(secounds);
 }
 
-async function DescriptionReplace(TimestampsArr: Array<string>, Index: number) {
+async function DescriptionReplace(TimestampsArr: Array<string>, Index: number, localprint: boolean) {
   let Desc = document.getElementsByClassName(`Charcounts`) as any;
   //console.log(Desc);
   var NewDesc = ""; // Finished Description Var
   var LNewDesc = ""; // Finished Description Var
-  if (SettingsLocal != false && SettingsLocal != "false") {
+  if (localprint == true) {
     let res = document.getElementById("LocalBeforeDesc") as HTMLInputElement;
     let res1 = document.getElementById("LocalAfterDesc") as HTMLInputElement;
-    let res2 = document.getElementById("BeforeDesc") as HTMLInputElement;
-    let res3 = document.getElementById("AfterDesc") as HTMLInputElement;
 
     let BeforeDescL = res.innerHTML;
     let AfterDescL = res1.innerHTML;
-    let BeforeDesc = res2.innerHTML;
-    let AfterDesc = res3.innerHTML;
 
     let resArray = TimestampsArr;
 
     LNewDesc = BeforeDescL + "\n\n";
     LNewDesc = LNewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
-    NewDesc = BeforeDesc + "\n\n";
-    NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
     for (let i = 0; i < resArray.length; i++) {
       let timestamp = resArray[i];
       LNewDesc = LNewDesc + timestamp + "\n";
-      NewDesc = NewDesc + timestamp + "\n";
     }
     LNewDesc = LNewDesc + "\n" + AfterDescL;
-    NewDesc = NewDesc + "\n" + AfterDesc;
-    Desc[Index].innerHTML = NewDesc;
-    Desc[Index + 1].innerHTML = LNewDesc;
+    Desc[Index].innerHTML = LNewDesc;
     LNewDesc = "";
-    NewDesc = "";
   } else {
     let res = document.getElementById("BeforeDesc") as HTMLInputElement;
     let res1 = document.getElementById("AfterDesc") as HTMLInputElement;

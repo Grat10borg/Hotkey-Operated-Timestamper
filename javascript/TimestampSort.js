@@ -97,6 +97,7 @@ TwitchClip.addEventListener("click", async function (event) {
                 VODcount++;
             }
         }
+        let textareaPrint = 0;
         for (let StreamsStreamed = 0; StreamsStreamed < StreamedDate.length; StreamsStreamed++) {
             if (VODcount != 0 || VODcount != null) {
                 let res = AcorBtns[StreamsStreamed].innerHTML.split(" ");
@@ -124,7 +125,6 @@ TwitchClip.addEventListener("click", async function (event) {
                         LocalSceneShift = Array();
                     }
                 }
-                console.log(MultidimClipResps);
                 let ClipDates = SortClips(MultidimClipResps, true);
                 for (let i = 0; i < MultidimClipResps.length; i++) {
                     let ClipTimestamp = "";
@@ -171,7 +171,12 @@ TwitchClip.addEventListener("click", async function (event) {
                         }
                     }
                 }
-                DescriptionReplace(CompleteTimestampArr, StreamsStreamed);
+                DescriptionReplace(CompleteTimestampArr, textareaPrint, false);
+                textareaPrint++;
+                if (SettingsLocal != false && SettingsLocal != "false") {
+                    DescriptionReplace(CompleteTimestampArr, textareaPrint, true);
+                    textareaPrint++;
+                }
                 ChangeAcordButtonNames(MultidimClipResps, StreamsStreamed, AcorBtns);
             }
             else {
@@ -193,35 +198,25 @@ function GetClipVODOffsetFromDate(StreamDate, ClipedDate) {
     }
     return SectoTimestamp(secounds);
 }
-async function DescriptionReplace(TimestampsArr, Index) {
+async function DescriptionReplace(TimestampsArr, Index, localprint) {
     let Desc = document.getElementsByClassName(`Charcounts`);
     var NewDesc = "";
     var LNewDesc = "";
-    if (SettingsLocal != false && SettingsLocal != "false") {
+    if (localprint == true) {
         let res = document.getElementById("LocalBeforeDesc");
         let res1 = document.getElementById("LocalAfterDesc");
-        let res2 = document.getElementById("BeforeDesc");
-        let res3 = document.getElementById("AfterDesc");
         let BeforeDescL = res.innerHTML;
         let AfterDescL = res1.innerHTML;
-        let BeforeDesc = res2.innerHTML;
-        let AfterDesc = res3.innerHTML;
         let resArray = TimestampsArr;
         LNewDesc = BeforeDescL + "\n\n";
         LNewDesc = LNewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
-        NewDesc = BeforeDesc + "\n\n";
-        NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
         for (let i = 0; i < resArray.length; i++) {
             let timestamp = resArray[i];
             LNewDesc = LNewDesc + timestamp + "\n";
-            NewDesc = NewDesc + timestamp + "\n";
         }
         LNewDesc = LNewDesc + "\n" + AfterDescL;
-        NewDesc = NewDesc + "\n" + AfterDesc;
-        Desc[Index].innerHTML = NewDesc;
-        Desc[Index + 1].innerHTML = LNewDesc;
+        Desc[Index].innerHTML = LNewDesc;
         LNewDesc = "";
-        NewDesc = "";
     }
     else {
         let res = document.getElementById("BeforeDesc");
