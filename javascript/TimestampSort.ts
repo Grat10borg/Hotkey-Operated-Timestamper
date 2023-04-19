@@ -124,7 +124,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
       StreamedDate.push(Timestamps[5] +"T"+ Timestamps[6]+".000Z");
     }
     //#endregion
-    console.log(StreamedDate);
+    //console.log(StreamedDate);
     //#region Checking if there even is any VODS
     let VODcount = 0;
     let UserVods = (await HttpCalling(
@@ -149,7 +149,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
         await GetClipsFromDate(res[5], UserIdResp["data"][0]["id"]),
         false
       ) as Array<string>;
-      console.log(MultidimClipResps);
+      //console.log(MultidimClipResps);
 
       // Description Vars
       var TimestampTwitch = Array();
@@ -184,22 +184,24 @@ TwitchClip.addEventListener("click", async function (event: any) {
       }
 
       // sets in Clip timestamp.
-      //console.log(MultidimClipResps);
-      if (
-        MultidimClipResps[0]["vod_offset"] != null &&
-        MultidimClipResps[0]["vod_offset"] != "null"
-      ) {
-        for (let i = 0; i < MultidimClipResps[StreamsStreamed].length; i++) {
-          // gives a timestamp close to LOCAL timestamp from Twitch API.
-          TimestampTwitch.push(
-            "• " +
-              SectoTimestamp(MultidimClipResps[i]["vod_offset"]) +
-              " " +
-              MultidimClipResps[i]["title"]
-          );
-          TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
-        }
-      } else {        
+      console.log(MultidimClipResps);
+      // if (
+      //   MultidimClipResps[0]["vod_offset"] != null &&
+      //   MultidimClipResps[0]["vod_offset"] != "null"
+      // ) {
+        
+        // for (let i = 0; i < MultidimClipResps[StreamsStreamed].length; i++) {
+        //   console.log(MultidimClipResps[i]["vod_offset"]);
+        //   // gives a timestamp close to LOCAL timestamp from Twitch API.
+        //   TimestampTwitch.push(
+        //     "• " +
+        //       SectoTimestamp(MultidimClipResps[i]["vod_offset"]) +
+        //       " " +
+        //       MultidimClipResps[i]["title"]
+        //   );
+          //TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
+      //   }
+      // } else {        
         let ClipDates = SortClips(MultidimClipResps, true);
 
         for (let i = 0; i < MultidimClipResps.length; i++) {
@@ -209,7 +211,9 @@ TwitchClip.addEventListener("click", async function (event: any) {
             ClipTimestamp = SectoTimestamp(MultidimClipResps[i]["vod_offset"]);
           }
           else {
+            //console.log("Not VodOffsetFound");
             ClipTimestamp = GetClipVODOffsetFromDate(StreamedDate[StreamsStreamed], ClipDates[i].toISOString());
+            //console.log(ClipTimestamp);
           }
           // gives a timestamp close to LOCAL timestamp from Twitch API.
           TimestampTwitch.push(
@@ -220,8 +224,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
               MultidimClipResps[i]["title"]
           );
           // Also needs the ty timestamp.
-          TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
-        }
+          //TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
+        // }
       }
 
       //#endregion

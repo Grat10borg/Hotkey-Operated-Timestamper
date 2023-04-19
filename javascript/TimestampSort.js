@@ -90,7 +90,6 @@ TwitchClip.addEventListener("click", async function (event) {
             let Timestamps = AcorBtns[index].innerHTML.split(" ");
             StreamedDate.push(Timestamps[5] + "T" + Timestamps[6] + ".000Z");
         }
-        console.log(StreamedDate);
         let VODcount = 0;
         let UserVods = (await HttpCalling(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`));
         for (let index = 0; index < UserVods["data"].length; index++) {
@@ -102,7 +101,6 @@ TwitchClip.addEventListener("click", async function (event) {
             if (VODcount != 0 || VODcount != null) {
                 let res = AcorBtns[StreamsStreamed].innerHTML.split(" ");
                 var MultidimClipResps = SortClips(await GetClipsFromDate(res[5], UserIdResp["data"][0]["id"]), false);
-                console.log(MultidimClipResps);
                 var TimestampTwitch = Array();
                 let TimeTwitch = Array();
                 let LocalSceneShift = Array();
@@ -126,32 +124,20 @@ TwitchClip.addEventListener("click", async function (event) {
                         LocalSceneShift = Array();
                     }
                 }
-                if (MultidimClipResps[0]["vod_offset"] != null &&
-                    MultidimClipResps[0]["vod_offset"] != "null") {
-                    for (let i = 0; i < MultidimClipResps[StreamsStreamed].length; i++) {
-                        TimestampTwitch.push("• " +
-                            SectoTimestamp(MultidimClipResps[i]["vod_offset"]) +
-                            " " +
-                            MultidimClipResps[i]["title"]);
-                        TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
+                console.log(MultidimClipResps);
+                let ClipDates = SortClips(MultidimClipResps, true);
+                for (let i = 0; i < MultidimClipResps.length; i++) {
+                    let ClipTimestamp = "";
+                    if (MultidimClipResps[i]["vod_offset"] != null && MultidimClipResps[i]["vod_offset"] != "") {
+                        ClipTimestamp = SectoTimestamp(MultidimClipResps[i]["vod_offset"]);
                     }
-                }
-                else {
-                    let ClipDates = SortClips(MultidimClipResps, true);
-                    for (let i = 0; i < MultidimClipResps.length; i++) {
-                        let ClipTimestamp = "";
-                        if (MultidimClipResps[i]["vod_offset"] != null && MultidimClipResps[i]["vod_offset"] != "") {
-                            ClipTimestamp = SectoTimestamp(MultidimClipResps[i]["vod_offset"]);
-                        }
-                        else {
-                            ClipTimestamp = GetClipVODOffsetFromDate(StreamedDate[StreamsStreamed], ClipDates[i].toISOString());
-                        }
-                        TimestampTwitch.push("• " +
-                            ClipTimestamp +
-                            " " +
-                            MultidimClipResps[i]["title"]);
-                        TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
+                    else {
+                        ClipTimestamp = GetClipVODOffsetFromDate(StreamedDate[StreamsStreamed], ClipDates[i].toISOString());
                     }
+                    TimestampTwitch.push("• " +
+                        ClipTimestamp +
+                        " " +
+                        MultidimClipResps[i]["title"]);
                 }
                 let TimestampArr = Array();
                 TimestampArr = LocalSceneShifttemp.concat(TimestampTwitch);
@@ -185,12 +171,7 @@ TwitchClip.addEventListener("click", async function (event) {
                         }
                     }
                 }
-                try {
-                    DescriptionReplace(CompleteTimestampArr, StreamsStreamed);
-                }
-                catch (error) {
-                    console.error();
-                }
+                DescriptionReplace(CompleteTimestampArr, StreamsStreamed);
                 ChangeAcordButtonNames(MultidimClipResps, StreamsStreamed, AcorBtns);
             }
             else {
