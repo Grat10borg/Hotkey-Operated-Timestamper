@@ -103,12 +103,12 @@ TwitchClip.addEventListener("click", async function (event) {
                 let res = AcorBtns[StreamsStreamed].innerHTML.split(" ");
                 var MultidimClipResps = SortClips(await GetClipsFromDate(res[5], UserIdResp["data"][0]["id"]), false);
                 var TimestampTwitch = Array();
-                let TimeTwitch = Array();
                 let LocalSceneShift = Array();
                 let LocalSceneTime = Array();
                 let LocalSceneShifttemp = Array();
                 for (let V = 0; V < MultiDimStreamArr[StreamsStreamed].length; V++) {
                     let res = MultiDimStreamArr[V];
+                    console.log(res);
                     if (res == undefined) {
                         continue;
                     }
@@ -189,52 +189,6 @@ TwitchClip.addEventListener("click", async function (event) {
         validateToken();
     }
 });
-function GetClipVODOffsetFromDate(StreamDate, ClipedDate) {
-    let StreamDateTime = parseISOString(StreamDate);
-    let ClipDateTime = parseISOString(ClipedDate);
-    var secounds = (StreamDateTime.getTime() - ClipDateTime.getTime()) / 1000;
-    if (secounds < 0) {
-        secounds = Math.abs(secounds);
-    }
-    return SectoTimestamp(secounds);
-}
-async function DescriptionReplace(TimestampsArr, Index, localprint) {
-    let Desc = document.getElementsByClassName(`Charcounts`);
-    var NewDesc = "";
-    var LNewDesc = "";
-    if (localprint == true) {
-        let res = document.getElementById("LocalBeforeDesc");
-        let res1 = document.getElementById("LocalAfterDesc");
-        let BeforeDescL = res.innerHTML;
-        let AfterDescL = res1.innerHTML;
-        let resArray = TimestampsArr;
-        LNewDesc = BeforeDescL + "\n\n";
-        LNewDesc = LNewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
-        for (let i = 0; i < resArray.length; i++) {
-            let timestamp = resArray[i];
-            LNewDesc = LNewDesc + timestamp + "\n";
-        }
-        LNewDesc = LNewDesc + "\n" + AfterDescL;
-        Desc[Index].innerHTML = LNewDesc;
-        LNewDesc = "";
-    }
-    else {
-        let res = document.getElementById("BeforeDesc");
-        let res1 = document.getElementById("AfterDesc");
-        let BeforeDesc = res.innerHTML;
-        let AfterDesc = res1.innerHTML;
-        let resArray = TimestampsArr;
-        NewDesc = BeforeDesc + "\n\n";
-        NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
-        for (let i = 0; i < resArray.length; i++) {
-            let timestamp = resArray[i];
-            NewDesc = NewDesc + timestamp + "\n";
-        }
-        NewDesc = NewDesc + "\n" + AfterDesc;
-        Desc[Index].innerHTML = NewDesc;
-        NewDesc = "";
-    }
-}
 function CutOuts(RawTxt) {
     let RawTxtArr = RawTxt.split("\n");
     let StreamArr = Array();
@@ -835,5 +789,51 @@ async function ChangeAcordButtonNames(Clips, index, AcordButtonArr) {
                 "| " +
                 StreamDatesArr[index] +
                 ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${Clips.length} Clips`;
+    }
+}
+function GetClipVODOffsetFromDate(StreamDate, ClipedDate) {
+    let StreamDateTime = parseISOString(StreamDate);
+    let ClipDateTime = parseISOString(ClipedDate);
+    var secounds = (StreamDateTime.getTime() - ClipDateTime.getTime()) / 1000;
+    if (secounds < 0) {
+        secounds = Math.abs(secounds);
+    }
+    return SectoTimestamp(secounds);
+}
+async function DescriptionReplace(TimestampsArr, Index, localprint) {
+    let Desc = document.getElementsByClassName(`Charcounts`);
+    if (localprint == true) {
+        var LNewDesc = "";
+        let res = document.getElementById("LocalBeforeDesc");
+        let res1 = document.getElementById("LocalAfterDesc");
+        let BeforeDescL = res.innerHTML;
+        let AfterDescL = res1.innerHTML;
+        let resArray = TimestampsArr;
+        LNewDesc = BeforeDescL + "\n\n";
+        LNewDesc = LNewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+        for (let i = 0; i < resArray.length; i++) {
+            let timestamp = resArray[i];
+            LNewDesc = LNewDesc + timestamp + "\n";
+        }
+        LNewDesc = LNewDesc + "\n" + AfterDescL;
+        Desc[Index].innerHTML = LNewDesc;
+        LNewDesc = "";
+    }
+    else {
+        var NewDesc = "";
+        let res = document.getElementById("BeforeDesc");
+        let res1 = document.getElementById("AfterDesc");
+        let BeforeDesc = res.innerHTML;
+        let AfterDesc = res1.innerHTML;
+        let resArray = TimestampsArr;
+        NewDesc = BeforeDesc + "\n\n";
+        NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+        for (let i = 0; i < resArray.length; i++) {
+            let timestamp = resArray[i];
+            NewDesc = NewDesc + timestamp + "\n";
+        }
+        NewDesc = NewDesc + "\n" + AfterDesc;
+        Desc[Index].innerHTML = NewDesc;
+        NewDesc = "";
     }
 }

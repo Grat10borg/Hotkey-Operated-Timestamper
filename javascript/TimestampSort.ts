@@ -149,7 +149,6 @@ TwitchClip.addEventListener("click", async function (event: any) {
 
       // Description Vars
       var TimestampTwitch = Array();
-      let TimeTwitch = Array();
       let LocalSceneShift = Array();
       let LocalSceneTime = Array();
 
@@ -158,8 +157,10 @@ TwitchClip.addEventListener("click", async function (event: any) {
       // get Local Timestamps for scenes
       let LocalSceneShifttemp = Array();
       //let LocalSceneTimetemp = Array();
+      
       for (let V = 0; V < MultiDimStreamArr[StreamsStreamed].length; V++) {
         let res = MultiDimStreamArr[V];
+        console.log(res);
         if (res == undefined) {
           // for some reason keeps running into indexes it doesnt have? this fixes it but MAyyyy be not the best fix
           continue;
@@ -167,15 +168,15 @@ TwitchClip.addEventListener("click", async function (event: any) {
           for (let i = 0; i < res.length; i++) {
             let Timestamp = res[i]; // String with timestamp
             if (Timestamp.match(/▸.*/i)) {
+              //console.log(Timestamp);
               LocalSceneShift.push(Timestamp);
               let R = Timestamp.split(" ");
               LocalSceneTime.push(R[1]);
             }
           }
           LocalSceneShifttemp = LocalSceneShift;
-          //LocalSceneTimetemp = LocalSceneTime;
+          //console.log(LocalSceneShifttemp);
           LocalSceneShift = Array();
-          //LocalSceneTime = Array();
         }
       }
 
