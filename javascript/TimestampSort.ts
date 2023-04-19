@@ -124,7 +124,6 @@ TwitchClip.addEventListener("click", async function (event: any) {
       StreamedDate.push(Timestamps[5] +"T"+ Timestamps[6]+".000Z");
     }
     //#endregion
-    //console.log(StreamedDate);
     //#region Checking if there even is any VODS
     let VODcount = 0;
     let UserVods = (await HttpCalling(
@@ -142,15 +141,11 @@ TwitchClip.addEventListener("click", async function (event: any) {
       
     if (VODcount != 0 || VODcount != null) {
       let res = AcorBtns[StreamsStreamed].innerHTML.split(" ");
-      // Getting clips with a VOD
-      //console.log("Found: " + VODcount + " VODs");
-
       // Gets Sorted Clips on the same day of the stream.
       var MultidimClipResps = SortClips(
         await GetClipsFromDate(res[5], UserIdResp["data"][0]["id"]),
         false
       ) as Array<string>;
-      //console.log(MultidimClipResps);
 
       // Description Vars
       var TimestampTwitch = Array();
@@ -184,37 +179,15 @@ TwitchClip.addEventListener("click", async function (event: any) {
         }
       }
 
-      // sets in Clip timestamp.
-      //console.log(MultidimClipResps);
-      // if (
-      //   MultidimClipResps[0]["vod_offset"] != null &&
-      //   MultidimClipResps[0]["vod_offset"] != "null"
-      // ) {
-        
-        // for (let i = 0; i < MultidimClipResps[StreamsStreamed].length; i++) {
-        //   console.log(MultidimClipResps[i]["vod_offset"]);
-        //   // gives a timestamp close to LOCAL timestamp from Twitch API.
-        //   TimestampTwitch.push(
-        //     "• " +
-        //       SectoTimestamp(MultidimClipResps[i]["vod_offset"]) +
-        //       " " +
-        //       MultidimClipResps[i]["title"]
-        //   );
-          //TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
-      //   }
-      // } else {        
         let ClipDates = SortClips(MultidimClipResps, true);
 
         for (let i = 0; i < MultidimClipResps.length; i++) {
-          //console.log(ClipDates[i].toISOString());
           let ClipTimestamp = "" as string
           if(MultidimClipResps[i]["vod_offset"] != null && MultidimClipResps[i]["vod_offset"] != "") {
             ClipTimestamp = SectoTimestamp(MultidimClipResps[i]["vod_offset"]);
           }
           else {
-            //console.log("Not VodOffsetFound");
             ClipTimestamp = GetClipVODOffsetFromDate(StreamedDate[StreamsStreamed], ClipDates[i].toISOString());
-            //console.log(ClipTimestamp);
           }
           // gives a timestamp close to LOCAL timestamp from Twitch API.
           TimestampTwitch.push(
@@ -224,41 +197,28 @@ TwitchClip.addEventListener("click", async function (event: any) {
               " " +
               MultidimClipResps[i]["title"]
           );
-          // Also needs the ty timestamp.
-          //TimeTwitch.push(MultidimClipResps[i]["vod_offset"]);
-        // }
       }
 
       //#endregion
 
       // set timestamp arrays into one big one that we have to sort.
       let TimestampArr = Array();
-      //let TimeArr = Array();
       TimestampArr = LocalSceneShifttemp.concat(TimestampTwitch);
-      //console.log(TimestampArr);
-      //TimeArr = LocalSceneTimetemp.concat(TimeTwitch);
 
-      //console.log(TimestampArr);
       // sort timestamps into correct sorting
       // fun fact the indexes are named: Q,T,Pie,u because thats what u are :)
       //#region Making Timestamps into Dates and sorting them.
       let SortTime = Array();
       for (let q = 0; q < TimestampArr.length; q++) {
         let res = TimestampArr[q].split(" ");
-        //console.log(res); // Clips don't have timestamps.
-        //console.log(res[1]);
         SortTime.push(TimestampToDate(res[1]));
       }
-      //console.log(SortTime);
       SortTime.sort();
       //#endregion
       let Timestamps = Array();
       //#region Sorted Dates get turned into timestamps again.
       for (let t = 0; t < SortTime.length; t++) {
         let T = SortTime[t].toString().split(" ");
-        //console.log(SortTime[t].toString().split(" "));
-        //console.log(T);
-        //console.log(T[4].split(":"));
         let TestHour = T[4].split(":");
         let Timestamp;
         if (TestHour[0][0] == "0") {
@@ -310,71 +270,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
   }
 });
 
-function GetClipVODOffsetFromDate(StreamDate:string, ClipedDate: String) {
-  //console.log(StreamDate);
-  //console.log(ClipedDate);
 
-  let StreamDateTime = parseISOString(StreamDate) as Date;
-  let ClipDateTime = parseISOString(ClipedDate) as Date;
-  //console.log(StreamDateTime);
-  //console.log(ClipDateTime);
-
-  var secounds = (StreamDateTime.getTime() - ClipDateTime.getTime()) / 1000 as any;
-  //console.log(secounds);
-
-  // let date = new Date(1970, 0, 1);
-  // date.setHours(-ClipDateTime.getHours());
-  // date.setSeconds(secounds);
-  if(secounds < 0){
-    secounds = Math.abs(secounds);
-  }
-  //console.log(SectoTimestamp(secounds));
-
-  return SectoTimestamp(secounds);
-}
-
-async function DescriptionReplace(TimestampsArr: Array<string>, Index: number, localprint: boolean) {
-  let Desc = document.getElementsByClassName(`Charcounts`) as any;
-  //console.log(Desc);
-  var NewDesc = ""; // Finished Description Var
-  var LNewDesc = ""; // Finished Description Var
-  if (localprint == true) {
-    let res = document.getElementById("LocalBeforeDesc") as HTMLInputElement;
-    let res1 = document.getElementById("LocalAfterDesc") as HTMLInputElement;
-
-    let BeforeDescL = res.innerHTML;
-    let AfterDescL = res1.innerHTML;
-
-    let resArray = TimestampsArr;
-
-    LNewDesc = BeforeDescL + "\n\n";
-    LNewDesc = LNewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
-    for (let i = 0; i < resArray.length; i++) {
-      let timestamp = resArray[i];
-      LNewDesc = LNewDesc + timestamp + "\n";
-    }
-    LNewDesc = LNewDesc + "\n" + AfterDescL;
-    Desc[Index].innerHTML = LNewDesc;
-    LNewDesc = "";
-  } else {
-    let res = document.getElementById("BeforeDesc") as HTMLInputElement;
-    let res1 = document.getElementById("AfterDesc") as HTMLInputElement;
-
-    let BeforeDesc = res.innerHTML;
-    let AfterDesc = res1.innerHTML;
-    let resArray = TimestampsArr;
-
-    NewDesc = BeforeDesc + "\n\n";
-    NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
-    for (let i = 0; i < resArray.length; i++) {
-      let timestamp = resArray[i];
-      NewDesc = NewDesc + timestamp + "\n";
-    }
-    NewDesc = NewDesc + "\n" + AfterDesc;
-    Desc[Index].innerHTML = NewDesc;
-    NewDesc = "";
-  }
-}
 
 //#endregion
 
@@ -1190,4 +1086,59 @@ async function ChangeAcordButtonNames(
       ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${Clips.length} Clips`;
   }
 }
+
+// Calcs how many seconds into the vod a clip was made, effectively making the Twitch VODOffset without the need for the api
+function GetClipVODOffsetFromDate(StreamDate:string, ClipedDate: String) {
+  let StreamDateTime = parseISOString(StreamDate) as Date;
+  let ClipDateTime = parseISOString(ClipedDate) as Date;
+  var secounds = (StreamDateTime.getTime() - ClipDateTime.getTime()) / 1000 as any;
+  if(secounds < 0){
+    secounds = Math.abs(secounds);
+  }
+  return SectoTimestamp(secounds);
+}
+
+// Replaces the descriptions of the textareas
+async function DescriptionReplace(TimestampsArr: Array<string>, Index: number, localprint: boolean) {
+  let Desc = document.getElementsByClassName(`Charcounts`) as any;
+  if (localprint == true) {
+    var LNewDesc = ""; // Finished Description Var
+    let res = document.getElementById("LocalBeforeDesc") as HTMLInputElement;
+    let res1 = document.getElementById("LocalAfterDesc") as HTMLInputElement;
+
+    let BeforeDescL = res.innerHTML;
+    let AfterDescL = res1.innerHTML;
+
+    let resArray = TimestampsArr;
+
+    LNewDesc = BeforeDescL + "\n\n";
+    LNewDesc = LNewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+    for (let i = 0; i < resArray.length; i++) {
+      let timestamp = resArray[i];
+      LNewDesc = LNewDesc + timestamp + "\n";
+    }
+    LNewDesc = LNewDesc + "\n" + AfterDescL;
+    Desc[Index].innerHTML = LNewDesc;
+    LNewDesc = "";
+  } else {
+    var NewDesc = ""; // Finished Description Var
+    let res = document.getElementById("BeforeDesc") as HTMLInputElement;
+    let res1 = document.getElementById("AfterDesc") as HTMLInputElement;
+
+    let BeforeDesc = res.innerHTML;
+    let AfterDesc = res1.innerHTML;
+    let resArray = TimestampsArr;
+
+    NewDesc = BeforeDesc + "\n\n";
+    NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+    for (let i = 0; i < resArray.length; i++) {
+      let timestamp = resArray[i];
+      NewDesc = NewDesc + timestamp + "\n";
+    }
+    NewDesc = NewDesc + "\n" + AfterDesc;
+    Desc[Index].innerHTML = NewDesc;
+    NewDesc = "";
+  }
+}
+
 //#endregion
