@@ -107,8 +107,7 @@ TwitchClip.addEventListener("click", async function (event) {
                 let LocalSceneTime = Array();
                 let LocalSceneShifttemp = Array();
                 for (let V = 0; V < MultiDimStreamArr[StreamsStreamed].length; V++) {
-                    let res = MultiDimStreamArr[V];
-                    console.log(res);
+                    let res = MultiDimStreamArr[StreamsStreamed];
                     if (res == undefined) {
                         continue;
                     }

@@ -157,10 +157,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
       // get Local Timestamps for scenes
       let LocalSceneShifttemp = Array();
       //let LocalSceneTimetemp = Array();
-      
       for (let V = 0; V < MultiDimStreamArr[StreamsStreamed].length; V++) {
-        let res = MultiDimStreamArr[V];
-        console.log(res);
+        let res = MultiDimStreamArr[StreamsStreamed];
         if (res == undefined) {
           // for some reason keeps running into indexes it doesnt have? this fixes it but MAyyyy be not the best fix
           continue;
