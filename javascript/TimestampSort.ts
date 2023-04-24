@@ -1,12 +1,28 @@
 // Misc
-let HotV = "V-1.0"; // the version of H.o.t
+let HotV = "V-1.0_beta"; // the version of H.o.t
 
-// Get these from Files in the furture
-let TimestampTxt = document.getElementById("TimestampTxt") as HTMLInputElement;
-let PKey = document.getElementById("TwitchKey") as HTMLElement;
-let PClip = document.getElementById("ClipOffset") as HTMLElement;
-let PLogin = document.getElementById("TwitchLogin") as HTMLElement;
-let Plocal = document.getElementById("Local") as HTMLElement;
+// Shorthand Dom versions
+const $ = document;
+const $$ = {
+  dom: document,
+
+  // document methods
+  id: $.getElementById.bind($),
+  make: $.createElement.bind($),
+  query: $.querySelector.bind($),
+  query_all: $.querySelectorAll.bind($),
+
+  // just here to help me out when working.
+  log: console.log,
+}
+$$.log($$.id("TwitchKey")?.innerHTML);
+
+// Get these from Files in the future
+let TimestampTxt = $$.id("TimestampTxt") as HTMLInputElement;
+let PKey = $$.id("TwitchKey") as HTMLElement;
+let PClip = $$.id("ClipOffset") as HTMLElement;
+let PLogin = $$.id("TwitchLogin") as HTMLElement;
+let Plocal = $$.id("Local") as HTMLElement;
 // Settings
 let RawTxt;
 var AppAcessToken;
@@ -16,23 +32,23 @@ var SettingsLocal;
 if (TimestampTxt != null) {
   RawTxt = TimestampTxt.innerHTML;
 } else {
-  console.log(
+  $$.log(
     "Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!"
   );
 }
 if (PKey != null) {
   AppAcessToken = PKey.innerHTML as string;
 } else {
-  console.log(
+  $$.log(
     "H.O.T could not get your TwitchKey, you will not be able to use Clip-Stamps"
   );
-  let TwitchClipbtn = document.getElementById("TwitchClip") as HTMLInputElement;
+  let TwitchClipbtn = $$.id("TwitchClip") as HTMLInputElement;
   TwitchClipbtn.disabled = true;
 }
 if (PClip != null) {
   Clipoffset = parseInt(PClip.innerHTML); // twitch default
 } else {
-  console.log(
+  $$.log(
     "you didnt set a ClipOffset, H.O.T has defaulted to 26 seconds of offset."
   );
   Clipoffset = 26;
@@ -40,16 +56,16 @@ if (PClip != null) {
 if (PLogin != null) {
   StreamerName = PLogin.innerHTML as string;
 } else {
-  console.log(
+  $$.log(
     "you didnt set a TwitchLoginName, you will not be able to use Clip-Stamps"
   );
-  let TwitchClipbtn = document.getElementById("TwitchClip") as HTMLInputElement;
+  let TwitchClipbtn = $$.id("TwitchClip") as HTMLInputElement;
   TwitchClipbtn.disabled = true;
 }
 if (Plocal != null) {
   SettingsLocal = Plocal.innerHTML as string;
 } else {
-  console.log("LocalSettings not found Turning off Local Mode");
+  $$.log("LocalSettings not found Turning off Local Mode");
   SettingsLocal = "" as string;
 }
 
@@ -79,19 +95,19 @@ if (RawTxt != undefined && RawTxt != "" && RawTxt != null) {
     if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
       // Runs SetOps if sucessful run next Method in line
       // Set in Data to Webpage
-      let statsP = document.getElementById("Stats") as HTMLElement;
-      statsP.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
+      let stats = $$.id("Stats") as HTMLElement;
+      stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
       if (DomSet() == 1) {
         // Domset needs to be ran before we call ValidateToken();
       } else {
         // Error logging
-        console.log("Failed Placing Things in the Websites");
+        $$.log("Failed Placing Things in the Websites");
       }
     } else {
-      console.log("Error Creating Description");
+      $$.log("Error Creating Description");
     }
   } else {
-    console.log("Error Sorting Timestamps");
+    $$.log("Error Sorting Timestamps");
   }
 }
 //#endregion
@@ -166,14 +182,12 @@ TwitchClip.addEventListener("click", async function (event: any) {
           for (let i = 0; i < res.length; i++) {
             let Timestamp = res[i]; // String with timestamp
             if (Timestamp.match(/▸.*/i)) {
-              //console.log(Timestamp);
               LocalSceneShift.push(Timestamp);
               let R = Timestamp.split(" ");
               LocalSceneTime.push(R[1]);
             }
           }
           LocalSceneShifttemp = LocalSceneShift;
-          //console.log(LocalSceneShifttemp);
           LocalSceneShift = Array();
         }
       }
@@ -257,14 +271,14 @@ TwitchClip.addEventListener("click", async function (event: any) {
     } else {
       // Found No Vods to get names from.
       // Getting clips without a VOD
-      console.log("Getting clips for streams without VODs");
+      $$.log("Getting clips for streams without VODs");
 
 
     }
   }
     // Found No Vods to get names from.
   } else {
-    console.log("Failed to Validate Token Try Again");
+    $$.log("Failed to Validate Token Try Again");
     validateToken();
   }
 });
@@ -306,7 +320,7 @@ function CutOuts(RawTxt: string) {
       continue;
     }
     if (Word.match(/EVENT:STOP.*/i)) {
-      //console.log("In Event Stop: " + Word); // enters
+      //$$.log("In Event Stop: " + Word); // enters
       // add what ever array into multidim array
       if (typeof StreamArr !== "undefined") {
         if (StreamArr.length != 0) {
@@ -352,7 +366,7 @@ function CutOuts(RawTxt: string) {
         }
       }
     } else if (Word.search(/0:00:00.*/i) != 0) {
-      //console.log("word passed 0:00:00 test:"+ Word);
+      //$$.log("word passed 0:00:00 test:"+ Word);
       if (Word.match(/.*Record.*/i)) {
         let Timestamp =
           "• " + to2Time(AddClipDelay(Word, Clipoffset)) + ` [ClipNo${ClipNo}]`;
@@ -486,7 +500,7 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
     return 1;
   } else {
     // error message
-    console.log("Both Stream and Recording Arrays returned Nothing.");
+    $$.log("Both Stream and Recording Arrays returned Nothing.");
     return 0;
   }
 }
@@ -540,7 +554,7 @@ function DomSet() {
       0
     );
   } else if (DescArrS.length < 0) {
-    console.log("No stream Timestamps found");
+    $$.log("No stream Timestamps found");
   }
   if (DescArrR.length > 0) {
     let liSeparate = document.createElement("li");
@@ -586,7 +600,7 @@ function DomSet() {
       );
     }
   } else {
-    console.log("No recording Timestamps found");
+    $$.log("No recording Timestamps found");
   }
   nav.append(ul);
   SidebarDiv.append(nav);
@@ -872,7 +886,7 @@ function SectoTimestamp(seconds: any) {
   let date = new Date(); // find out why it prints timestamps like "12:12:26" remove the 12 // Fixed
   date.setHours(0, 0, 0); // sets date to 00:00:00
   date.setSeconds(seconds); // adds secounds making it into a timestamp
-  let dateText = date.toString(); // cuts timestamp out // effectively the same that gets printed when you do console.log(date);
+  let dateText = date.toString(); // cuts timestamp out // effectively the same that gets printed when you do $$.log(date);
   dateText = dateText.substring(16, 25);
   let DigitA = dateText.split(":"); // *8*, *07*, *28*
   if (DigitA[0] == "00") {
@@ -952,16 +966,16 @@ async function validateToken() {
       .then((resp) => {
         if (resp.status) {
           if (resp.status == 401) {
-            console.log("This token is invalid ... " + resp.message);
+            $$.log("This token is invalid ... " + resp.message);
             return 0;
           }
-          console.log("Unexpected output with a status");
+          $$.log("Unexpected output with a status");
           return 0;
         }
         if (resp.client_id) {
           AclientId = resp.client_id;
           TwitchConnected = true;
-          console.log("Token Validated Sucessfully");
+          $$.log("Token Validated Sucessfully");
           let p = document.getElementById("AccessTokenTime") as HTMLElement;
           let Time = new Date(resp.expires_in * 1000);
           let TimeStrDash = Time.toISOString().split("-");
@@ -972,11 +986,11 @@ async function validateToken() {
           p.innerHTML = `• Current Token Will Expire In: <br> ${TimeString}.`;
           return 1;
         }
-        console.log("unexpected Output");
+        $$.log("unexpected Output");
         return 0;
       })
       .catch((err) => {
-        console.log(err);
+        $$.log(err);
         return 0;
       });
     return 1;
@@ -1003,7 +1017,7 @@ async function HttpCalling(HttpCall: string) {
     })
     .catch((err) => {
       // Print Error if any. And return 0
-      console.log(err);
+      $$.log(err);
       return err;
     });
   return respon;

@@ -1,10 +1,20 @@
 "use strict";
-let HotV = "V-1.0";
-let TimestampTxt = document.getElementById("TimestampTxt");
-let PKey = document.getElementById("TwitchKey");
-let PClip = document.getElementById("ClipOffset");
-let PLogin = document.getElementById("TwitchLogin");
-let Plocal = document.getElementById("Local");
+let HotV = "V-1.0_beta";
+const $ = document;
+const $$ = {
+    dom: document,
+    id: $.getElementById.bind($),
+    make: $.createElement.bind($),
+    query: $.querySelector.bind($),
+    query_all: $.querySelectorAll.bind($),
+    log: console.log,
+};
+$$.log($$.id("TwitchKey")?.innerHTML);
+let TimestampTxt = $$.id("TimestampTxt");
+let PKey = $$.id("TwitchKey");
+let PClip = $$.id("ClipOffset");
+let PLogin = $$.id("TwitchLogin");
+let Plocal = $$.id("Local");
 let RawTxt;
 var AppAcessToken;
 let Clipoffset;
@@ -14,36 +24,36 @@ if (TimestampTxt != null) {
     RawTxt = TimestampTxt.innerHTML;
 }
 else {
-    console.log("Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!");
+    $$.log("Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!");
 }
 if (PKey != null) {
     AppAcessToken = PKey.innerHTML;
 }
 else {
-    console.log("H.O.T could not get your TwitchKey, you will not be able to use Clip-Stamps");
-    let TwitchClipbtn = document.getElementById("TwitchClip");
+    $$.log("H.O.T could not get your TwitchKey, you will not be able to use Clip-Stamps");
+    let TwitchClipbtn = $$.id("TwitchClip");
     TwitchClipbtn.disabled = true;
 }
 if (PClip != null) {
     Clipoffset = parseInt(PClip.innerHTML);
 }
 else {
-    console.log("you didnt set a ClipOffset, H.O.T has defaulted to 26 seconds of offset.");
+    $$.log("you didnt set a ClipOffset, H.O.T has defaulted to 26 seconds of offset.");
     Clipoffset = 26;
 }
 if (PLogin != null) {
     StreamerName = PLogin.innerHTML;
 }
 else {
-    console.log("you didnt set a TwitchLoginName, you will not be able to use Clip-Stamps");
-    let TwitchClipbtn = document.getElementById("TwitchClip");
+    $$.log("you didnt set a TwitchLoginName, you will not be able to use Clip-Stamps");
+    let TwitchClipbtn = $$.id("TwitchClip");
     TwitchClipbtn.disabled = true;
 }
 if (Plocal != null) {
     SettingsLocal = Plocal.innerHTML;
 }
 else {
-    console.log("LocalSettings not found Turning off Local Mode");
+    $$.log("LocalSettings not found Turning off Local Mode");
     SettingsLocal = "";
 }
 var AclientId = "";
@@ -61,8 +71,8 @@ validateToken();
 if (RawTxt != undefined && RawTxt != "" && RawTxt != null) {
     if (CutOuts(RawTxt) == 1) {
         if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
-            let statsP = document.getElementById("Stats");
-            statsP.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
+            let stats = $$.id("Stats");
+            stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
             if (DomSet() == 1) {
             }
             else {
