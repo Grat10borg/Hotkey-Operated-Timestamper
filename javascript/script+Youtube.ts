@@ -1,12 +1,30 @@
-// gets ID from settings file embeded by PHP
-let Pkey = document.getElementById("YTKey") as HTMLElement;
-let PClient = document.getElementById("YTClient") as HTMLElement;
-let PPluginName = document.getElementById("YTPluginName") as HTMLElement;
-let TextATags = document.getElementById("Tags") as HTMLElement;
-let HashTagsP = document.getElementById("Hashtags") as HTMLElement;
-let LocalziedYT = document.getElementById("Local") as HTMLElement;
 
-var auth = document.querySelector(".authUpload") as HTMLInputElement;
+// Shorthand Dom versions
+const $ = document;
+const $$ = {
+  dom: document,
+
+  // document methods
+  id: $.getElementById.bind($),
+  class: $.getElementsByClassName.bind($),
+  make: $.createElement.bind($),
+  query: $.querySelector.bind($),
+  query_all: $.querySelectorAll.bind($),
+
+  // just here to help me out when working.
+  log: console.log,
+}
+
+
+// gets ID from settings file embeded by PHP
+let Pkey = $$.id("YTKey") as HTMLElement;
+let PClient = $$.id("YTClient") as HTMLElement;
+let PPluginName = $$.id("YTPluginName") as HTMLElement;
+let TextATags = $$.id("Tags") as HTMLElement;
+let HashTagsP = $$.id("Hashtags") as HTMLElement;
+let LocalziedYT = $$.id("Local") as HTMLElement;
+
+var auth = $$.query(".authUpload") as HTMLInputElement;
 
 var YclientId: string;
 var YApiKey: string;
@@ -18,7 +36,7 @@ let localization: string;
 if (PClient != null) {
   YclientId = PClient.innerHTML;
 } else {
-  console.log(
+  $$.log(
     "Could Not get Youtube ClientId, You will not be able to Connect to Youtube"
   );
   auth.disabled = true;
@@ -26,7 +44,7 @@ if (PClient != null) {
 if (Pkey != null) {
   YApiKey = Pkey.innerHTML;
 } else {
-  console.log(
+  $$.log(
     "Could Not get Youtube ApiKey, you will not be able to Connect to Youtube"
   );
   auth.disabled = true;
@@ -34,7 +52,7 @@ if (Pkey != null) {
 if (PPluginName != null) {
   YTPluginName = PPluginName.innerHTML;
 } else {
-  console.log(
+  $$.log(
     "You didnt write the plugin name for your Google project in the settings, The Connect to Youtube button May or May Not work?"
   );
 }
@@ -88,7 +106,7 @@ auth.addEventListener(
   true
 );
 
-var Send = document.querySelectorAll(".Send") as NodeListOf<HTMLInputElement>;
+var Send = $$.query_all(".Send") as NodeListOf<HTMLInputElement>;
 for (let i = 0; i < Send.length; i++) {
   Send[i].addEventListener(
     "click",
@@ -97,7 +115,7 @@ for (let i = 0; i < Send.length; i++) {
         //console.log(event.target.value);
         StartTextareas[event.target.value].select();
         StartTextareas[event.target.value].setSelectionRange(0, 99999);
-        var select = document.querySelector(".SelectId") as HTMLInputElement;
+        var select = $$.query(".SelectId") as HTMLInputElement;
   
         // updates desc
         GitPushDescription(
@@ -126,7 +144,7 @@ function authAllowDescChange() {
     .signIn({ scope: "https://www.googleapis.com/auth/youtube.force-ssl" })
     .then(
       function () {
-        console.log("Sign-in successful");
+        $$.log("Sign-in successful");
       },
       function (err: any) {
         console.error("Error signing in", err);
@@ -140,7 +158,7 @@ function loadClientChannel() {
     .load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
     .then(
       function () {
-        console.log("GAPI client loaded for API");
+        $$.log("GAPI client loaded for API");
       },
       function (err: any) {
         console.error("Error loading GAPI client for API", err);
@@ -170,14 +188,14 @@ function GetVideoIds() {
           arrayVidname[index] =
             arrayR["result"]["items"][`${index}`]["snippet"]["title"];
 
-          let option = document.createElement("option") as HTMLOptionElement;
+          let option = $$.make("option") as HTMLOptionElement;
           option.appendChild(document.createTextNode(`${arrayVidname[index]}`));
           option.setAttribute("value", index);
-          let Selectbox = document.querySelector(
+          let Selectbox = $$.query(
             ".SelectId"
           ) as HTMLInputElement;
           Selectbox.appendChild(option);
-          let selectid = document.getElementById(
+          let selectid = $$.id(
             "selectId"
           ) as HTMLOptionElement;
           selectid.disabled = false;
@@ -200,8 +218,8 @@ function GitPushDescription(
   arrayVidname,
   target
 ) {
-  console.log(arrayVidname[SelectValue]);
-  console.log(SelectValue);
+  $$.log(arrayVidname[SelectValue]);
+  $$.log(SelectValue);
   let Title = "";
   if (HashTags != "") {
     Title = arrayVidname[SelectValue] + " " + HashTags;
@@ -213,8 +231,8 @@ function GitPushDescription(
     Tags.push("VOD");
   }
   if (localization != "") {
-    let res = document.getElementById(`LocaleDesc-${target}`) as HTMLElement;
-    let res2 = document.getElementById(
+    let res = $$.id(`LocaleDesc-${target}`) as HTMLElement;
+    let res2 = $$.id(
       `LocaleDescTitle-${target}`
     ) as HTMLInputElement;
     let LocalDesc = res.innerHTML;
@@ -257,7 +275,7 @@ function GitPushDescription(
           .then(
             function (response: Response) {
               // Handle the results here (response.result has the parsed body).
-              console.log("Response", response);
+              $$.log("Response", response);
               // show success by the yt button
               // or show error
             },
@@ -284,7 +302,7 @@ function GitPushDescription(
       .then(
         function (response: Response) {
           // Handle the results here (response.result has the parsed body).
-          console.log("Response", response);
+          $$.log("Response", response);
           // show success by the yt button
           // or show error
         },
@@ -316,7 +334,7 @@ gapi.load("client:auth2", function () {
 
 //#region Copy To Clipboard Event
 /** Copies specific text areas and makes eventhandler for copy btns */
-var Copy = document.querySelectorAll(".Copy");
+var Copy = $$.query_all(".Copy");
 for (let i = 0; i < Copy.length; i++) {
   Copy[i].addEventListener(
     "click",
@@ -341,7 +359,7 @@ function copyText(event): void {
     /* Alert the copied text */
     alert("Copied the text: " + StartTextareas[event.target.value].value);
   } else {
-    console.log("did not find any acceptable Textareas");
+    $$.log("did not find any acceptable Textareas");
   }
 }
 
@@ -349,7 +367,7 @@ function copyText(event): void {
 
 //#region Select Text Event
 // Makes Events for all Select btns and selects the correct text areas
-let Select = document.querySelectorAll(".Select");
+let Select = $$.query_all(".Select");
 for (let i = 0; i < Select.length; i++) {
   Select[i].addEventListener(
     "click",
@@ -369,19 +387,19 @@ function SelectText(event): void {
     /* Copy the text inside the text field */
     navigator.clipboard.writeText(StartTextareas[event.target.value].value);
   } else {
-    console.log("did not find any acceptable Textareas");
+    $$.log("did not find any acceptable Textareas");
   }
 }
 //#endregion
 
 //#region Updating Text Length Event
-let Textarea = document.querySelectorAll(
+let Textarea = $$.query_all(
   ".Charcounts"
 ) as NodeListOf<HTMLTextAreaElement>; // gets array of Textarea elements
 for (let i = 0; i < Textarea.length; i++) {
   Textarea[i].addEventListener("keyup", function (event) {
     let Charcount = CalcChars(event);
-    let p = document.querySelector(`#CharCount${i}`) as HTMLElement;
+    let p = $$.query(`#CharCount${i}`) as HTMLElement;
     p.textContent = Charcount;
 
     // test by regex on if it contains Illigal Chars
@@ -406,7 +424,7 @@ if (StartTextareas != null) {
     // removes textareas used for PHP and Javascript txt getting
     if (StartTextareas[i].hidden == false) {
       // removes textareas without a charcounter
-      let Pelement = document.getElementById(
+      let Pelement = $$.id(
         `CharCount${i}`
       ) as HTMLParagraphElement;
       Pelement.innerHTML = StartTextareas[i].textContent.length;
@@ -432,7 +450,7 @@ function CalcChars(event): any {
 
 // General / ALL
 //#region Show Hidden Text boxes Event
-let ShowHiddenText = document.getElementById("ShowSettings") as HTMLDivElement;
+let ShowHiddenText = $$.id("ShowSettings") as HTMLDivElement;
 if (ShowHiddenText != null) {
   ShowHiddenText.addEventListener("click", function () {
     let PasswordInputs = document.querySelectorAll(
@@ -448,10 +466,10 @@ if (ShowHiddenText != null) {
 //#endregion
 
 //#region Scroll To Top Event
-let ScrollTop = document.getElementById("ScrollTop") as HTMLElement;
+let ScrollTop = $$.id("ScrollTop") as HTMLElement;
 ScrollTop.addEventListener("click", function (event) {
   if (ScrollTop != null) {
-    let TopNav = document.getElementById("TopNav") as HTMLElement;
+    let TopNav = $$.id("TopNav") as HTMLElement;
     TopNav.scrollIntoView(true);
   }
 });
@@ -459,13 +477,13 @@ ScrollTop.addEventListener("click", function (event) {
 
 // Description Maker
 //#region Lock Event
-let Locked = document.getElementById("Locked") as HTMLElement;
+let Locked = $$.id("Locked") as HTMLElement;
 if (Locked != null) {
   Locked.addEventListener(
     "click",
     function () {
-      const Clear = document.getElementById("Clear") as HTMLButtonElement;
-      let LockedIcon = document.getElementById(
+      const Clear = $$.id("Clear") as HTMLButtonElement;
+      let LockedIcon = $$.id(
         "LockedIcon"
       ) as HTMLImageElement;
       if (Clear.disabled == true) {
@@ -483,7 +501,7 @@ if (Locked != null) {
 
 //#region Clear Event
 // Make btn event for Clearing button, only makes an alert
-const Clear = document.querySelector(".Clear") as HTMLElement;
+const Clear = $$.query(".Clear") as HTMLElement;
 if (Clear != null) {
   Clear.addEventListener(
     "click",

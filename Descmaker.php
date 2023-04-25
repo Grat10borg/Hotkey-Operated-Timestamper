@@ -94,8 +94,8 @@
     <!-- inporting of Javascript -->
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="CSS+SCSS/bootstrap/js/bootstrap.js"></script>
+    <script src="javascript/script+Youtube.js"></script> 
     <script src="javascript/TimestampSort.js"></script>
-    <script src="javascript/script+Youtube.js"></script>
 </body>
 
-</html>
+</html> 

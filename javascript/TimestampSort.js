@@ -1,16 +1,5 @@
 "use strict";
 let HotV = "V-1.0_beta";
-const $ = document;
-const $$ = {
-    dom: document,
-    id: $.getElementById.bind($),
-    class: $.getElementsByClassName.bind($),
-    make: $.createElement.bind($),
-    query: $.querySelector.bind($),
-    query_all: $.querySelectorAll.bind($),
-    log: console.log,
-};
-$$.log($$.id("TwitchKey")?.innerHTML);
 let TimestampTxt = $$.id("TimestampTxt");
 let PKey = $$.id("TwitchKey");
 let PClip = $$.id("ClipOffset");
@@ -385,11 +374,11 @@ function DomSet() {
     StreamDatesArr.reverse();
     RecordDatesArr.reverse();
     let SidebarDiv = $$.id("SideBar");
-    let nav = document.createElement("nav");
-    let ul = document.createElement("ul");
+    let nav = $$.make("nav");
+    let ul = $$.make("ul");
     if (DescArrS.length > 0) {
-        let liSeparate = document.createElement("li");
-        let aSeprate = document.createElement("a");
+        let liSeparate = $$.make("li");
+        let aSeprate = $$.make("a");
         aSeprate.classList.add("nav-link", "text-center");
         aSeprate.setAttribute("href", "#Stream");
         aSeprate.innerHTML = "# Streams";
@@ -397,8 +386,8 @@ function DomSet() {
         liSeparate.append(aSeprate);
         ul.append(liSeparate);
         for (let index = 0; index < DescArrS.length; index++) {
-            let li = document.createElement("li");
-            let a = document.createElement("a");
+            let li = $$.make("li");
+            let a = $$.make("a");
             a.innerHTML = `> - Stream - ${index + 1}`;
             a.setAttribute("href", `#Stream-${index}`);
             a.classList.add("nav-link", "text-center");
@@ -412,8 +401,8 @@ function DomSet() {
         $$.log("No stream Timestamps found");
     }
     if (DescArrR.length > 0) {
-        let liSeparate = document.createElement("li");
-        let aSeprate = document.createElement("a");
+        let liSeparate = $$.make("li");
+        let aSeprate = $$.make("a");
         aSeprate.classList.add("nav-link", "text-center");
         aSeprate.setAttribute("href", "#Record");
         aSeprate.innerHTML = "# Recordings";
@@ -421,8 +410,8 @@ function DomSet() {
         liSeparate.append(aSeprate);
         ul.append(liSeparate);
         for (let index = 0; index < DescArrR.length; index++) {
-            let li = document.createElement("li");
-            let a = document.createElement("a");
+            let li = $$.make("li");
+            let a = $$.make("a");
             a.innerHTML = `> - Record - ${index + 1}`;
             a.setAttribute("href", `#Record-${index}`);
             a.classList.add("nav-link", "text-center");
@@ -447,16 +436,16 @@ function DomSet() {
 function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID, CharCount_index) {
     var DescDiv = $$.id("DescriptionAreaDiv");
     for (let index = 0; index < DescArr.length; index++) {
-        let AcordDiv = document.createElement("div");
+        let AcordDiv = $$.make("div");
         AcordDiv.classList.add("accordion", "mt-4");
-        let AcordItem = document.createElement("div");
+        let AcordItem = $$.make("div");
         AcordItem.classList.add("accordion-item");
         AcordItem.setAttribute("id", `${string}-${index}`);
-        let AcordBody = document.createElement("div");
+        let AcordBody = $$.make("div");
         AcordBody.classList.add("accordion-body");
-        let h2 = document.createElement("h2");
+        let h2 = $$.make("h2");
         h2.classList.add("accordion-header");
-        let button = document.createElement("button");
+        let button = $$.make("button");
         button.classList.add("accordion-button", "btn", "collapsed");
         button.setAttribute("type", "button");
         button.setAttribute("data-bs-toggle", "collapse");
@@ -464,24 +453,24 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID
         button.setAttribute("aria-expanded", "false");
         button.setAttribute("aria-controls", `${IDname + index}`);
         button.setAttribute("id", `AcordBtn-${index}`);
-        let collapsedDiv = document.createElement("div");
+        let collapsedDiv = $$.make("div");
         collapsedDiv.classList.add("accordion-collapse", "collapse");
         collapsedDiv.setAttribute("id", `${IDname + index}`);
         collapsedDiv.setAttribute("data-bs-parent", `#accordion${index}`);
-        let CharDiv = document.createElement("div");
+        let CharDiv = $$.make("div");
         CharDiv.classList.add("d-flex", "justify-content-between");
-        let PNo = document.createElement("p");
+        let PNo = $$.make("p");
         PNo.setAttribute("id", `CharCount${CharCount_index}`);
         PNo.innerHTML = "CharCounter";
-        let h3 = document.createElement("h3");
+        let h3 = $$.make("h3");
         h3.innerHTML = `# Suggested Description`;
-        let LocalTextarea = document.createElement("textarea");
+        let LocalTextarea = $$.make("textarea");
         if (SettingsLocal != "") {
             LocalTextarea.classList.add("d-flex", "m-1", "res", "form-control", "Charcounts");
             LocalTextarea.innerHTML = LocalArr[index];
             LocalTextarea.setAttribute("id", `myLocalInput${index}`);
         }
-        let Textarea = document.createElement("textarea");
+        let Textarea = $$.make("textarea");
         Textarea.classList.add("d-flex", "m-1", "res", "form-control", "Textarea", "Charcounts");
         Textarea.innerHTML = DescArr[index];
         Textarea.setAttribute("id", `${TextAreaID}${index}`);
@@ -499,10 +488,10 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID
                     DatesArr[index] +
                     ` - ${string}`;
         }
-        let ButtonDiv = document.createElement("div");
-        let SelectBtn = document.createElement("button");
-        let CopyBtn = document.createElement("button");
-        let YoutubeBtn = document.createElement("button");
+        let ButtonDiv = $$.make("div");
+        let SelectBtn = $$.make("button");
+        let CopyBtn = $$.make("button");
+        let YoutubeBtn = $$.make("button");
         ButtonDiv.classList.add("my-3");
         YoutubeBtn.innerHTML = "Update YT Vid";
         CopyBtn.innerHTML = "Copy Text";
@@ -526,31 +515,31 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID
         AcordBody.append(ButtonDiv);
         CharCount_index++;
         if (SettingsLocal != "") {
-            let hr = document.createElement("hr");
-            let FontDiv = document.createElement("div");
+            let hr = $$.make("hr");
+            let FontDiv = $$.make("div");
             FontDiv.classList.add("d-flex", "justify-content-between");
-            let h3 = document.createElement("h3");
+            let h3 = $$.make("h3");
             h3.innerHTML = "# Suggested Description: (" + SettingsLocal + ")";
             h3.setAttribute("class", "my-2");
-            let PNo = document.createElement("p");
+            let PNo = $$.make("p");
             PNo.setAttribute("id", `CharCount${CharCount_index}`);
             PNo.innerHTML = "CharCounter";
-            let input = document.createElement("input");
+            let input = $$.make("input");
             input.classList.add("form-control", "p-3", "my-2");
             input.setAttribute("id", `${LocalID}Title-${index}`);
             input.setAttribute("placeholder", `title in locale language`);
             LocalTextarea.setAttribute("id", `${LocalID}${index}`);
-            let ButtonDivL = document.createElement("div");
+            let ButtonDivL = $$.make("div");
             ButtonDivL.classList.add("my-3");
-            let SelectLBtn = document.createElement("button");
+            let SelectLBtn = $$.make("button");
             SelectLBtn.innerHTML = "Select Text";
             SelectLBtn.classList.add("btn", "mx-1", "Select", "button");
             SelectLBtn.setAttribute("value", `${CharCount_index}`);
-            let CopyBtnL = document.createElement("button");
+            let CopyBtnL = $$.make("button");
             CopyBtnL.innerHTML = "Copy Text";
             CopyBtnL.classList.add("btn", "mx-1", "Copy", "button");
             CopyBtnL.setAttribute("value", `${CharCount_index}`);
-            let YoutubeBtnL = document.createElement("button");
+            let YoutubeBtnL = $$.make("button");
             YoutubeBtnL.innerHTML = "Update YT Vid";
             YoutubeBtnL.classList.add("btn", "mx-1", "Send", "button");
             YoutubeBtnL.setAttribute("id", "authbtn");

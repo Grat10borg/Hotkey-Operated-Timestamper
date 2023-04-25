@@ -1,11 +1,21 @@
 "use strict";
-let Pkey = document.getElementById("YTKey");
-let PClient = document.getElementById("YTClient");
-let PPluginName = document.getElementById("YTPluginName");
-let TextATags = document.getElementById("Tags");
-let HashTagsP = document.getElementById("Hashtags");
-let LocalziedYT = document.getElementById("Local");
-var auth = document.querySelector(".authUpload");
+const $ = document;
+const $$ = {
+    dom: document,
+    id: $.getElementById.bind($),
+    class: $.getElementsByClassName.bind($),
+    make: $.createElement.bind($),
+    query: $.querySelector.bind($),
+    query_all: $.querySelectorAll.bind($),
+    log: console.log,
+};
+let Pkey = $$.id("YTKey");
+let PClient = $$.id("YTClient");
+let PPluginName = $$.id("YTPluginName");
+let TextATags = $$.id("Tags");
+let HashTagsP = $$.id("Hashtags");
+let LocalziedYT = $$.id("Local");
+var auth = $$.query(".authUpload");
 var YclientId;
 var YApiKey;
 let YTPluginName;
@@ -16,21 +26,21 @@ if (PClient != null) {
     YclientId = PClient.innerHTML;
 }
 else {
-    console.log("Could Not get Youtube ClientId, You will not be able to Connect to Youtube");
+    $$.log("Could Not get Youtube ClientId, You will not be able to Connect to Youtube");
     auth.disabled = true;
 }
 if (Pkey != null) {
     YApiKey = Pkey.innerHTML;
 }
 else {
-    console.log("Could Not get Youtube ApiKey, you will not be able to Connect to Youtube");
+    $$.log("Could Not get Youtube ApiKey, you will not be able to Connect to Youtube");
     auth.disabled = true;
 }
 if (PPluginName != null) {
     YTPluginName = PPluginName.innerHTML;
 }
 else {
-    console.log("You didnt write the plugin name for your Google project in the settings, The Connect to Youtube button May or May Not work?");
+    $$.log("You didnt write the plugin name for your Google project in the settings, The Connect to Youtube button May or May Not work?");
 }
 if (TextATags != null) {
     Tags = TextATags.innerHTML.split("\n");
@@ -60,13 +70,13 @@ let StartTextareas = document.querySelectorAll(".Charcounts");
 auth.addEventListener("click", function (event) {
     authAllowDescChange().then(loadClientChannel()).then(GetVideoIds);
 }, true);
-var Send = document.querySelectorAll(".Send");
+var Send = $$.query_all(".Send");
 for (let i = 0; i < Send.length; i++) {
     Send[i].addEventListener("click", function (event) {
         if (StartTextareas != null) {
             StartTextareas[event.target.value].select();
             StartTextareas[event.target.value].setSelectionRange(0, 99999);
-            var select = document.querySelector(".SelectId");
+            var select = $$.query(".SelectId");
             GitPushDescription(StartTextareas[event.target.value].value, select.value, arrayIds, arrayVidname, event.target.value);
         }
         else {
@@ -79,7 +89,7 @@ function authAllowDescChange() {
         .getAuthInstance()
         .signIn({ scope: "https://www.googleapis.com/auth/youtube.force-ssl" })
         .then(function () {
-        console.log("Sign-in successful");
+        $$.log("Sign-in successful");
     }, function (err) {
         console.error("Error signing in", err);
     });
@@ -89,7 +99,7 @@ function loadClientChannel() {
     return gapi.client
         .load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
         .then(function () {
-        console.log("GAPI client loaded for API");
+        $$.log("GAPI client loaded for API");
     }, function (err) {
         console.error("Error loading GAPI client for API", err);
     });
@@ -110,12 +120,12 @@ function GetVideoIds() {
                 arrayR["result"]["items"][`${index}`]["id"]["videoId"];
             arrayVidname[index] =
                 arrayR["result"]["items"][`${index}`]["snippet"]["title"];
-            let option = document.createElement("option");
+            let option = $$.make("option");
             option.appendChild(document.createTextNode(`${arrayVidname[index]}`));
             option.setAttribute("value", index);
-            let Selectbox = document.querySelector(".SelectId");
+            let Selectbox = $$.query(".SelectId");
             Selectbox.appendChild(option);
-            let selectid = document.getElementById("selectId");
+            let selectid = $$.id("selectId");
             selectid.disabled = false;
         }
     }, function (err) {
@@ -124,8 +134,8 @@ function GetVideoIds() {
     });
 }
 function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname, target) {
-    console.log(arrayVidname[SelectValue]);
-    console.log(SelectValue);
+    $$.log(arrayVidname[SelectValue]);
+    $$.log(SelectValue);
     let Title = "";
     if (HashTags != "") {
         Title = arrayVidname[SelectValue] + " " + HashTags;
@@ -137,8 +147,8 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname, tar
         Tags.push("VOD");
     }
     if (localization != "") {
-        let res = document.getElementById(`LocaleDesc-${target}`);
-        let res2 = document.getElementById(`LocaleDescTitle-${target}`);
+        let res = $$.id(`LocaleDesc-${target}`);
+        let res2 = $$.id(`LocaleDescTitle-${target}`);
         let LocalDesc = res.innerHTML;
         let LocalTitle = res2.value;
         if (LocalTitle == "") {
@@ -173,7 +183,7 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname, tar
                     },
                 })
                     .then(function (response) {
-                    console.log("Response", response);
+                    $$.log("Response", response);
                 }, function (err) {
                     console.error("Execute error", err);
                 });
@@ -194,7 +204,7 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname, tar
             },
         })
             .then(function (response) {
-            console.log("Response", response);
+            $$.log("Response", response);
         }, function (err) {
             console.error("Execute error", err);
         });
@@ -210,7 +220,7 @@ gapi.load("client:auth2", function () {
         gapi.auth2.init({ client_id: YclientId, plugin_name: YTPluginName });
     }
 });
-var Copy = document.querySelectorAll(".Copy");
+var Copy = $$.query_all(".Copy");
 for (let i = 0; i < Copy.length; i++) {
     Copy[i].addEventListener("click", function (event) {
         copyText(event);
@@ -224,10 +234,10 @@ function copyText(event) {
         alert("Copied the text: " + StartTextareas[event.target.value].value);
     }
     else {
-        console.log("did not find any acceptable Textareas");
+        $$.log("did not find any acceptable Textareas");
     }
 }
-let Select = document.querySelectorAll(".Select");
+let Select = $$.query_all(".Select");
 for (let i = 0; i < Select.length; i++) {
     Select[i].addEventListener("click", function (event) {
         SelectText(event);
@@ -240,14 +250,14 @@ function SelectText(event) {
         navigator.clipboard.writeText(StartTextareas[event.target.value].value);
     }
     else {
-        console.log("did not find any acceptable Textareas");
+        $$.log("did not find any acceptable Textareas");
     }
 }
-let Textarea = document.querySelectorAll(".Charcounts");
+let Textarea = $$.query_all(".Charcounts");
 for (let i = 0; i < Textarea.length; i++) {
     Textarea[i].addEventListener("keyup", function (event) {
         let Charcount = CalcChars(event);
-        let p = document.querySelector(`#CharCount${i}`);
+        let p = $$.query(`#CharCount${i}`);
         p.textContent = Charcount;
         if (Charcount > 5000) {
             p.setAttribute("class", "CharaRed");
@@ -263,7 +273,7 @@ for (let i = 0; i < Textarea.length; i++) {
 if (StartTextareas != null) {
     for (let i = 0; i < StartTextareas.length; i++) {
         if (StartTextareas[i].hidden == false) {
-            let Pelement = document.getElementById(`CharCount${i}`);
+            let Pelement = $$.id(`CharCount${i}`);
             Pelement.innerHTML = StartTextareas[i].textContent.length;
             if (StartTextareas[i].textContent.length > 5000) {
                 Pelement.setAttribute("class", "CharaRed");
@@ -281,7 +291,7 @@ function CalcChars(event) {
     let string = event.target.value;
     return string.length;
 }
-let ShowHiddenText = document.getElementById("ShowSettings");
+let ShowHiddenText = $$.id("ShowSettings");
 if (ShowHiddenText != null) {
     ShowHiddenText.addEventListener("click", function () {
         let PasswordInputs = document.querySelectorAll('[type="password"]');
@@ -292,18 +302,18 @@ if (ShowHiddenText != null) {
         }
     });
 }
-let ScrollTop = document.getElementById("ScrollTop");
+let ScrollTop = $$.id("ScrollTop");
 ScrollTop.addEventListener("click", function (event) {
     if (ScrollTop != null) {
-        let TopNav = document.getElementById("TopNav");
+        let TopNav = $$.id("TopNav");
         TopNav.scrollIntoView(true);
     }
 });
-let Locked = document.getElementById("Locked");
+let Locked = $$.id("Locked");
 if (Locked != null) {
     Locked.addEventListener("click", function () {
-        const Clear = document.getElementById("Clear");
-        let LockedIcon = document.getElementById("LockedIcon");
+        const Clear = $$.id("Clear");
+        let LockedIcon = $$.id("LockedIcon");
         if (Clear.disabled == true) {
             Clear.disabled = false;
             LockedIcon.src = "img\\Icons\\UnlockedIcon.png";
@@ -314,7 +324,7 @@ if (Locked != null) {
         }
     }, true);
 }
-const Clear = document.querySelector(".Clear");
+const Clear = $$.query(".Clear");
 if (Clear != null) {
     Clear.addEventListener("click", function () {
         alert("Clearing Timestamps");

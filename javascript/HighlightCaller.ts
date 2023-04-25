@@ -1,12 +1,9 @@
 //#region Import Export, doesnt work yet
-
-let PBeforeDesc = document.getElementById("BeforeDesc") as HTMLInputElement;
-let PAfterDesc = document.getElementById("AfterDesc") as HTMLInputElement;
-let PTKey = document.getElementById("TwitchKey") as HTMLElement;
-let PLBeforeDesc = document.getElementById(
-  "LocalBeforeDesc"
-) as HTMLInputElement;
-let PLAfterDesc = document.getElementById("LocalAfterDesc") as HTMLInputElement;
+let PBeforeDesc = $$.id("BeforeDesc") as HTMLInputElement;
+let PAfterDesc = $$.id("AfterDesc") as HTMLInputElement;
+let PTKey = $$.id("TwitchKey") as HTMLElement;
+let PLBeforeDesc = $$.id("LocalBeforeDesc") as HTMLInputElement;
+let PLAfterDesc = $$.id("LocalAfterDesc") as HTMLInputElement;
 
 // Settings
 let BeforeDesc = PBeforeDesc.innerHTML;
@@ -24,8 +21,8 @@ validateTToken();
 // Getting Form Data
 // Make btn event for Clearing button, only makes an alert
 var Id: string;
-var form = document.querySelector("#HighlighForm") as any;
-var ErrorDiv = document.getElementById("ErrorDiv") as HTMLElement;
+var form = $$.query("#HighlighForm") as any;
+var ErrorDiv = $$.id("ErrorDiv") as HTMLElement;
 form.addEventListener(
   "submit",
   async function (event: any) {
@@ -35,7 +32,7 @@ form.addEventListener(
     if (Startdate == "Invalid Date") {
       Startdate = new Date();
       Startdate.setDate(Startdate.getDate() - 90);
-      console.log("start date was not given, getting clips from 90 days ago");
+      $$.log("start date was not given, getting clips from 90 days ago");
     }
     let endDate = new Date(form.endDate.value) as any; // changes to string later too
     let game_id = form.SelectGame.options[form.SelectGame.selectedIndex].value;
@@ -50,13 +47,13 @@ form.addEventListener(
     try {
       Startdate = Startdate.toISOString();
     } catch (error) {
-      console.log("The Set Date Value was Not allowed");
-      console.log(error);
+      $$.log("The Set Date Value was Not allowed");
+      $$.log(error);
     }
     // Makes sure the End Date always is a Aproved Date
     if (endDate == "Invalid Date") {
       endDate = new Date(); // make end date be Today right now, clips wont be in the future anyways
-      console.log("End Date not selected Defaulting to Todays Date");
+      $$.log("End Date not selected Defaulting to Todays Date");
       endDate = endDate.toISOString();
     } else {
       endDate = endDate.toISOString();
@@ -67,7 +64,7 @@ form.addEventListener(
     let ClipResp = await HttpCaller(
       `https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${Startdate}&ended_at=${endDate}`
     );
-    console.log(ClipResp);
+    $$.log(ClipResp);
     ClipSorter(ClipResp, game_id, viewCount);
     //#endregion
   },
@@ -79,12 +76,12 @@ form.addEventListener(
 // Twitch Api Handling
 
 //#region ChannelSelect Eventhandler
-let ChannelSelect = document.querySelector("#SelectChannel") as any;
+let ChannelSelect = $$.query("#SelectChannel") as any;
 ChannelSelect.addEventListener("change", async function () {
   //#region Getting channel ID
   let StreamerName = ChannelSelect.options[ChannelSelect.selectedIndex].value;
   if (StreamerName != "none") {
-    console.log("Searching for " + StreamerName); // en
+    $$.log("Searching for " + StreamerName); // en
     ErrorDiv.innerHTML = ""; // clear errors
     let UserResp = await HttpCaller(
       `https://api.twitch.tv/helix/users?login=${StreamerName}`
@@ -109,7 +106,7 @@ ChannelSelect.addEventListener("change", async function () {
     let httpcall = "https://api.twitch.tv/helix/games?"; // cannot handle more then 100 ids at one time
     let index = 0;
     GameIds.forEach((Gameid) => {
-      //console.log(Gameid);
+      //$$.log(Gameid);
       if (index == 0) {
         httpcall = httpcall + "id=" + Gameid;
       } else {
@@ -122,24 +119,24 @@ ChannelSelect.addEventListener("change", async function () {
     //#region Getting Games from Selected Channel and Placing it on Website.
     let SelectGameResp = await HttpCaller(httpcall);
     // getting select box
-    let selectboxG = document.getElementById("SelectGame") as HTMLInputElement;
+    let selectboxG = $$.id("SelectGame") as HTMLInputElement;
 
     while (selectboxG.firstChild) {
       // remove old data
       selectboxG.firstChild.remove();
     }
     // Updating Game Select box with game name and ids
-    let optionNone = document.createElement("option");
+    let optionNone = $$.make("option");
     optionNone.setAttribute("value", "None");
-    optionNone.append(document.createTextNode("Any Game Id"));
+    optionNone.append($$.make("Any Game Id"));
     selectboxG.appendChild(optionNone);
     for (let index = 0; index < SelectGameResp["data"].length; index++) {
       let gameid = SelectGameResp["data"][index]["id"];
       let gamename = SelectGameResp["data"][index]["name"];
 
-      let optionsG = document.createElement("option");
+      let optionsG = $$.make("option");
       optionsG.setAttribute("value", gameid);
-      optionsG.append(document.createTextNode(gamename));
+      optionsG.append($$.make(gamename));
       selectboxG.appendChild(optionsG);
     }
     selectboxG.disabled = false;
@@ -203,35 +200,35 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 
   let sortcliped = Array();
   for (let index = 0; index < datesort.length; index++) {
-    //console.log(datesort[index]);
+    //$$.log(datesort[index]);
     for (let index2 = 0; index2 < arrclips.length; index2++) {
-      //console.log(arrclips[index2]["created_at"].indexOf(datesort[index]));
+      //$$.log(arrclips[index2]["created_at"].indexOf(datesort[index]));
       if (arrclips[index2]["created_at"].indexOf(datesort[index]) == 0) {
-        // console.log(arrclips[index2]["created_at"] + " Was equal to " + datesort[index]);
+        // $$.log(arrclips[index2]["created_at"] + " Was equal to " + datesort[index]);
         sortcliped[index] = arrclips[index2];
         continue; // stops loop when clip was found
       } else {
       } // nada
     }
   }
-  console.log(sortcliped);
+  $$.log(sortcliped);
   //#endregion
 
   //#region Set in Data
   let textNode = document.createTextNode(
     `‣ Found: ${sortcliped.length} Clips, Thats ${toTime(duration)} of content!`
   );
-  let insertP = document.createElement("p") as HTMLElement;
+  let insertP = $$.make("p") as HTMLElement;
   insertP.appendChild(textNode);
-  let DataP = document.querySelector("#DataP") as HTMLElement;
+  let DataP = $$.query("#DataP") as HTMLElement;
   DataP.textContent =
     "you did it! good job, heres the data from the query(s) you did ヾ(•ω•`)o";
-  let DataDiv = document.querySelector("#DataDiv") as HTMLElement;
+  let DataDiv = $$.query("#DataDiv") as HTMLElement;
   DataDiv.appendChild(insertP);
   //#endregion
 
   //#region Set in Links
-  let textAreaDiv = document.querySelector("#Linksarea") as HTMLElement;
+  let textAreaDiv = $$.query("#Linksarea") as HTMLElement;
 
   let clipCredit = new Set(); // holds credit for clips
 
@@ -239,7 +236,7 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   duration = 0;
 
   let localmode = false;
-  let locale = document.getElementById("Local") as HTMLElement;
+  let locale = $$.id("Local") as HTMLElement;
   if (locale != null) {
     if (locale.innerHTML != "" && locale.innerHTML != "none") {
       localmode = true;
@@ -254,7 +251,7 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   // locale version of description
   let LocaleText = "" as string;
   if (localmode == true) {
-    let LocaleBeforeDesc = document.getElementById(
+    let LocaleBeforeDesc = $$.id(
       "LocalBeforeDesc"
     ) as HTMLElement;
     LocaleText = LocaleText + LocaleBeforeDesc.innerHTML + "\n\n";
@@ -281,10 +278,10 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     // Link Area
 
     // initializing
-    let rowdiv = document.createElement("div");
-    let button = document.createElement("button");
-    let a = document.createElement("a");
-    let p = document.createElement("p");
+    let rowdiv = $$.make("div");
+    let button = $$.make("button");
+    let a = $$.make("a");
+    let p = $$.make("p");
 
     // set classes
     rowdiv.classList.add("row", "m-2", "ps-0");
@@ -318,18 +315,18 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     textAreaDiv.append(rowdiv);
   }
   // Add event handler for watching clips with button clicks
-  let ClipBtns = document.querySelectorAll(".ClipBtn");
+  let ClipBtns = $$.query_all(".ClipBtn");
   for (let i = 0; i < ClipBtns.length; i++) {
     ClipBtns[i].addEventListener(
       "click",
       function (event: any) {
-        console.log(event.target.value);
+        $$.log(event.target.value);
         let Id = event.target.value.split("-");
-        console.log(Id);
-        let Link = document.getElementById(
+        $$.log(Id);
+        let Link = $$.id(
           `Clip-${Id[1]}`
         ) as HTMLAnchorElement;
-        console.log(Link);
+        $$.log(Link);
         IframClipBuilder(Link.href);
       },
       true
@@ -355,14 +352,14 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   text = text.slice(0, text.length - 1);
   text = text + "\n\n" + AfterDesc;
   // finished description change
-  let Desc = document.querySelector("#myInput0") as HTMLInputElement;
+  let Desc = $$.query("#myInput0") as HTMLInputElement;
   Desc.textContent = text;
   if (localmode == true) {
     let LocalAfterDesc = PLAfterDesc.innerHTML;
     LocaleText = LocaleText.slice(0, text.length - 1);
     LocaleText = LocaleText + "\n\n" + LocalAfterDesc;
 
-    let localDesc = document.querySelector(
+    let localDesc = $$.query(
       "#LocalDescription"
     ) as HTMLInputElement;
     localDesc.textContent = LocaleText;
@@ -372,7 +369,7 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 
   //#region Text Counters Set in
   let Charcount = text.length;
-  let p = document.querySelector(`#CharCount0`) as HTMLElement; // needs to be html element
+  let p = $$.query(`#CharCount0`) as HTMLElement; // needs to be html element
   p.textContent = `${Charcount}`;
   if (Charcount > 5000) {
     // timestamps likely wont work, and its over the Maximum the youtube description can handle
@@ -387,7 +384,7 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 
   if (localmode == true) {
     let Charcount = LocaleText.length;
-    let p = document.querySelector(`#CharCount1`) as HTMLElement; // needs to be html element
+    let p = $$.query(`#CharCount1`) as HTMLElement; // needs to be html element
     p.textContent = `${Charcount}`;
     if (Charcount > 5000) {
       // timestamps likely wont work, and its over the Maximum the youtube description can handle
@@ -403,12 +400,12 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   //#endregion
 
   // Making Acordian Accessible
-  let accorddesc = document.querySelector("#accordDesc") as HTMLInputElement;
+  let accorddesc = $$.query("#accordDesc") as HTMLInputElement;
   accorddesc.disabled = false;
-  let accordLink = document.querySelector("#accordLink") as HTMLInputElement;
+  let accordLink = $$.query("#accordLink") as HTMLInputElement;
   accordLink.disabled = false;
   if (localmode == true) {
-    let accordLocal = document.querySelector(
+    let accordLocal = $$.query(
       "#accordLocalDesc"
     ) as HTMLInputElement;
     accordLocal.disabled = false;
@@ -419,10 +416,10 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 //#region IframeClipBuilder(IframeId: string) // Accepts Any Link to A Twitch Clip
 // ran when you click submit. sets an Iframe on the website
 function IframClipBuilder(ClipLink: string) {
-  let divPlayer = document.getElementById("IframePlayerLater") as HTMLElement;
-  let menuDiv = document.getElementById("MenuLogoDiv") as HTMLElement;
+  let divPlayer = $$.id("IframePlayerLater") as HTMLElement;
+  let menuDiv = $$.id("MenuLogoDiv") as HTMLElement;
   let slug = ClipLink.split("/");
-  let Iframe = document.createElement("iframe");
+  let Iframe = $$.make("iframe");
   Iframe.setAttribute(
     "src",
     `https://clips.twitch.tv/embed?clip=${slug[3]}&parent=localhost&autoplay=true&muted=true`
@@ -438,7 +435,7 @@ function IframClipBuilder(ClipLink: string) {
   divPlayer.append(Iframe);
 
   // download button
-  //let downloadbtn = document.createElement("button") as HTMLElement;
+  //let downloadbtn = $$.make("button") as HTMLElement;
   divPlayer.scrollIntoView(); // move view upto player
 }
 //#endregion
@@ -451,8 +448,8 @@ function IframClipBuilder(ClipLink: string) {
 //#region validateToken() Validates Token if sucessful returns 1 if not 0
 // Calls the Twitch api with Out App Acess Token and returns a ClientId and tells us if the App Acess Token is Valid or Not
 async function validateTToken() {
-  console.log("Your AccessToken: " + TappAcess);
-  let p = document.getElementById("AccessTokenTime") as HTMLElement;
+  $$.log("Your AccessToken: " + TappAcess);
+  let p = $$.id("AccessTokenTime") as HTMLElement;
   if (TappAcess != undefined && TappAcess != "" && TappAcess != null) {
     await fetch("https://id.twitch.tv/oauth2/validate", {
       headers: {
@@ -463,26 +460,26 @@ async function validateTToken() {
       .then((resp) => {
         if (resp.status) {
           if (resp.status == 401) {
-            console.log(
+            $$.log(
               "This token ('" +
                 TappAcess +
                 "') is invalid (" +
                 resp.message +
                 ").. The Submit Button has been Disabled. you cannot use H.O.T: Highlighter without a Token! _(._. )>"
             );
-            let Submitbtn = document.getElementById(
+            let Submitbtn = $$.id(
               "Submit"
             ) as HTMLInputElement;
             Submitbtn.disabled = true;
             p.innerHTML = `• Your Token is invalid, try to follow H.O.T wiki for help!.`;
             return 0;
           }
-          console.log("Unexpected output with a status");
+          $$.log("Unexpected output with a status");
           return 0;
         }
         if (resp.client_id) {
           client_id = resp.client_id;
-          console.log("Token Validated Sucessfully");
+          $$.log("Token Validated Sucessfully");
           let Time = new Date(resp.expires_in * 1000);
           let TimeStrDash = Time.toISOString().split("-");
           let TimeStrT = TimeStrDash[2].split("T");
@@ -492,12 +489,12 @@ async function validateTToken() {
           p.innerHTML = `• Current Token Will Expire In: <br> ${TimeString}.`;
           return 1;
         }
-        console.log("unexpected Output");
+        $$.log("unexpected Output");
         p.innerHTML = `• Your Token returned an unforseen result?.`;
         return 0;
       })
       .catch((err) => {
-        console.log(err);
+        $$.log(err);
         return 0;
       });
     return 1;
@@ -522,7 +519,7 @@ async function HttpCaller(HttpCall: string) {
     })
     .catch((err) => {
       // Print Error if any. And return 0
-      console.log(err);
+      $$.log(err);
       return err;
     });
   return respon;
@@ -534,27 +531,27 @@ async function HttpCaller(HttpCall: string) {
 function toTime(seconds: any) {
   let date = new Date(); // find out why it prints timestamps like "12:12:26" remove the 12 // Fixed
   date.setHours(0, 0, 0); // sets date to 00:00:00
-  //console.log(date);
+  //$$.log(date);
   date.setSeconds(seconds); // adds secounds making it into a timestamp
-  let dateText = date.toString(); // cuts timestamp out // effectively the same that gets printed when you do console.log(date);
+  let dateText = date.toString(); // cuts timestamp out // effectively the same that gets printed when you do $$.log(date);
   dateText = dateText.substring(16, 25);
-  //console.log(dateText);
+  //$$.log(dateText);
   let arrayD = dateText.split(":");
-  //console.log(arrayD);
-  //console.log(dateText);
+  //$$.log(arrayD);
+  //$$.log(dateText);
 
   // if first hour value is 0
   if (arrayD[0][0] == "0") {
-    //console.log("in [0][0]");
+    //$$.log("in [0][0]");
     // if secound hour value is 0
     if (arrayD[0][1]) {
-      //console.log("in [0][1]");
+      //$$.log("in [0][1]");
       // if first minute value is 0
       if (arrayD[1][0] == "0") {
-        //console.log("in [1][0]");
+        //$$.log("in [1][0]");
         // if second minute value is 0
         if (arrayD[1][1] == "0") {
-          //console.log("in [1][1]");
+          //$$.log("in [1][1]");
           // a 0:30 large timestamp
           dateText = "0:" + arrayD[2];
         } else {
@@ -579,8 +576,8 @@ function toTime(seconds: any) {
 
 //#region ErrorMsg() Makes an error message taking MSG, SystemMsg, Color of Warning
 function ErrorMsg(Msg: string, systemMsg: any, color: string) {
-  let H4 = document.createElement("h4");
-  let p = document.createElement("p");
+  let H4 = $$.make("h4");
+  let p = $$.make("p");
   H4.classList.add(`${color}`);
   p.classList.add(`${color}`);
   H4.innerHTML = Msg;
