@@ -15,46 +15,39 @@ const $$ = {
   log: console.log,
 }
 
-
 // gets ID from settings file embeded by PHP
-let Pkey = $$.id("YTKey") as HTMLElement;
-let PClient = $$.id("YTClient") as HTMLElement;
-let PPluginName = $$.id("YTPluginName") as HTMLElement;
+// @ts-expect-error
+$$.log(config.YOUTUBE_APIKEY);
+
 let TextATags = $$.id("Tags") as HTMLElement;
 let HashTagsP = $$.id("Hashtags") as HTMLElement;
-let LocalziedYT = $$.id("Local") as HTMLElement;
 
 var auth = $$.query(".authUpload") as HTMLInputElement;
 
-var YclientId: string;
-var YApiKey: string;
-let YTPluginName: string;
 let Tags: Array<string>;
 let HashTags: string;
 let localization: string;
 //#region  Test if Data is Useable
-if (PClient != null) {
-  YclientId = PClient.innerHTML;
-} else {
+//@ts-expect-error
+if (config.YOUTUBE_CLIENT_ID == null || config.YOUTUBE_CLIENT_ID == "") {
   $$.log(
     "Could Not get Youtube ClientId, You will not be able to Connect to Youtube"
   );
   auth.disabled = true;
 }
-if (Pkey != null) {
-  YApiKey = Pkey.innerHTML;
-} else {
+// @ts-expect-error
+if (config.YOUTUBE_APIKEY == null || config.YOUTUBE_APIKEY == "") {
   $$.log(
     "Could Not get Youtube ApiKey, you will not be able to Connect to Youtube"
   );
   auth.disabled = true;
 }
-if (PPluginName != null) {
-  YTPluginName = PPluginName.innerHTML;
-} else {
+// @ts-expect-error
+if (config.PLUGINNAME == null || config.PLUGINNAME == "") {
   $$.log(
     "You didnt write the plugin name for your Google project in the settings, The Connect to Youtube button May or May Not work?"
   );
+  auth.disabled = true;
 }
 
 // Non "Bad" Errors Aka Self Fixable
@@ -68,11 +61,15 @@ if (HashTagsP != null) {
 } else {
   HashTags = "";
 }
-if (LocalziedYT != null) {
-  localization = LocalziedYT.innerHTML;
+
+// @ts-expect-error
+if (config.LOCALIZE_ON != null || config.LOCALIZE_ON != "") {
+  // @ts-expect-error
+  localization = config.LOCALIZE_ON;
 } else {
   localization = "";
 }
+
 //#endregion
 let localizationDesc = ""; // also show localized descripton alongside general one.
 let localizationTitle = ""; // make an input field for Localzied title
@@ -153,7 +150,8 @@ function authAllowDescChange() {
 }
 
 function loadClientChannel() {
-  gapi.client.setApiKey(YApiKey);
+  //@ts-expect-error
+  gapi.client.setApiKey(config.YOUTUBE_APIKEY);
   return gapi.client
     .load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
     .then(
@@ -317,14 +315,21 @@ function GitPushDescription(
 //#region GapiLoad with our YTClient ID
 gapi.load("client:auth2", function () {
   if (
-    YclientId != "" &&
-    YTPluginName != "" &&
-    YclientId != null &&
-    YTPluginName != null &&
-    YclientId != undefined &&
-    YTPluginName != undefined
+  //@ts-expect-error
+    config.YOUTUBE_CLIENT_ID != "" &&
+    //@ts-expect-error
+    config.PLUGINNAME != "" &&
+    //@ts-expect-error
+    config.YOUTUBE_CLIENT_ID != null &&
+    //@ts-expect-error
+    config.PLUGINNAME != null &&
+    //@ts-expect-error
+    config.YOUTUBE_CLIENT_ID != undefined &&
+    //@ts-expect-error
+    config.PLUGINNAME != undefined
   ) {
-    gapi.auth2.init({ client_id: YclientId, plugin_name: YTPluginName });
+    //@ts-expect-error
+    gapi.auth2.init({ client_id: config.YOUTUBE_CLIENT_ID, plugin_name: config.PLUGINNAME });
   }
 });
 //#endregion

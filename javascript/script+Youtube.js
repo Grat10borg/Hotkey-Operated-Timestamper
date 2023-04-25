@@ -9,6 +9,7 @@ const $$ = {
     query_all: $.querySelectorAll.bind($),
     log: console.log,
 };
+$$.log(config.YOUTUBE_APIKEY);
 let Pkey = $$.id("YTKey");
 let PClient = $$.id("YTClient");
 let PPluginName = $$.id("YTPluginName");
