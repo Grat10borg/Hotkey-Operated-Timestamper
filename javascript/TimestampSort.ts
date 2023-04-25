@@ -8,6 +8,7 @@ const $$ = {
 
   // document methods
   id: $.getElementById.bind($),
+  class: $.getElementsByClassName.bind($),
   make: $.createElement.bind($),
   query: $.querySelector.bind($),
   query_all: $.querySelectorAll.bind($),
@@ -118,7 +119,7 @@ if (RawTxt != undefined && RawTxt != "" && RawTxt != null) {
 
 // Twitch Clip Needs A Big Clean up.
 //#region TwitchClip gets twitch clips for your description when clicked
-let TwitchClip = document.getElementById("TwitchClip") as HTMLInputElement;
+let TwitchClip = $$.id("TwitchClip") as HTMLInputElement;
 
 TwitchClip.addEventListener("click", async function (event: any) {
   if (TwitchConnected == true) {
@@ -133,7 +134,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
 
     // getting acordbuttons & local timestamps.
     for (let index = 0; index < StreamDatesArr.length; index++) {
-      AcorBtns.push(document.getElementById(`AcordBtn-${index}`));
+      AcorBtns.push($$.id(`AcordBtn-${index}`));
     }
     for (let index = 0; index < AcorBtns.length; index++) {
       let Timestamps = AcorBtns[index].innerHTML.split(" ");
@@ -414,10 +415,10 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
   // Set in All the timestamps correctly
 
   // Getting More Txts from PHP and ./Texts
-  let res = document.getElementById("BeforeDesc") as HTMLInputElement;
-  let res1 = document.getElementById("AfterDesc") as HTMLInputElement;
-  let res2 = document.getElementById("LocalBeforeDesc") as HTMLInputElement;
-  let res3 = document.getElementById("LocalAfterDesc") as HTMLInputElement;
+  let res = $$.id("BeforeDesc") as HTMLInputElement;
+  let res1 = $$.id("AfterDesc") as HTMLInputElement;
+  let res2 = $$.id("LocalBeforeDesc") as HTMLInputElement;
+  let res3 = $$.id("LocalAfterDesc") as HTMLInputElement;
 
   let BeforeDesc = res.innerHTML;
   let AfterDesc = res1.innerHTML;
@@ -520,7 +521,7 @@ function DomSet() {
   StreamDatesArr.reverse();
   RecordDatesArr.reverse();
   // Update Sidebar
-  let SidebarDiv = document.getElementById("SideBar") as HTMLElement;
+  let SidebarDiv = $$.id("SideBar") as HTMLElement;
   let nav = document.createElement("nav");
   let ul = document.createElement("ul");
   if (DescArrS.length > 0) {
@@ -624,7 +625,7 @@ function SetIns(
   TextAreaID: string,
   CharCount_index: number
 ) {
-  var DescDiv = document.getElementById(
+  var DescDiv = $$.id(
     "DescriptionAreaDiv"
   ) as HTMLInputElement;
   for (let index = 0; index < DescArr.length; index++) {
@@ -976,7 +977,7 @@ async function validateToken() {
           AclientId = resp.client_id;
           TwitchConnected = true;
           $$.log("Token Validated Sucessfully");
-          let p = document.getElementById("AccessTokenTime") as HTMLElement;
+          let p = $$.id("AccessTokenTime") as HTMLElement;
           let Time = new Date(resp.expires_in * 1000);
           let TimeStrDash = Time.toISOString().split("-");
           let TimeStrT = TimeStrDash[2].split("T");
@@ -1113,11 +1114,11 @@ function GetClipVODOffsetFromDate(StreamDate:string, ClipedDate: String) {
 
 // Replaces the descriptions of the textareas
 async function DescriptionReplace(TimestampsArr: Array<string>, Index: number, localprint: boolean) {
-  let Desc = document.getElementsByClassName(`Charcounts`) as any;
+  let Desc = $$.class(`Charcounts`) as any;
   if (localprint == true) {
     var LNewDesc = ""; // Finished Description Var
-    let res = document.getElementById("LocalBeforeDesc") as HTMLInputElement;
-    let res1 = document.getElementById("LocalAfterDesc") as HTMLInputElement;
+    let res = $$.id("LocalBeforeDesc") as HTMLInputElement;
+    let res1 = $$.id("LocalAfterDesc") as HTMLInputElement;
 
     let BeforeDescL = res.innerHTML;
     let AfterDescL = res1.innerHTML;
@@ -1135,8 +1136,8 @@ async function DescriptionReplace(TimestampsArr: Array<string>, Index: number, l
     LNewDesc = "";
   } else {
     var NewDesc = ""; // Finished Description Var
-    let res = document.getElementById("BeforeDesc") as HTMLInputElement;
-    let res1 = document.getElementById("AfterDesc") as HTMLInputElement;
+    let res = $$.id("BeforeDesc") as HTMLInputElement;
+    let res1 = $$.id("AfterDesc") as HTMLInputElement;
 
     let BeforeDesc = res.innerHTML;
     let AfterDesc = res1.innerHTML;

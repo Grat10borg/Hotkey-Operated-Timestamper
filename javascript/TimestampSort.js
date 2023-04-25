@@ -4,6 +4,7 @@ const $ = document;
 const $$ = {
     dom: document,
     id: $.getElementById.bind($),
+    class: $.getElementsByClassName.bind($),
     make: $.createElement.bind($),
     query: $.querySelector.bind($),
     query_all: $.querySelectorAll.bind($),
@@ -76,25 +77,25 @@ if (RawTxt != undefined && RawTxt != "" && RawTxt != null) {
             if (DomSet() == 1) {
             }
             else {
-                console.log("Failed Placing Things in the Websites");
+                $$.log("Failed Placing Things in the Websites");
             }
         }
         else {
-            console.log("Error Creating Description");
+            $$.log("Error Creating Description");
         }
     }
     else {
-        console.log("Error Sorting Timestamps");
+        $$.log("Error Sorting Timestamps");
     }
 }
-let TwitchClip = document.getElementById("TwitchClip");
+let TwitchClip = $$.id("TwitchClip");
 TwitchClip.addEventListener("click", async function (event) {
     if (TwitchConnected == true) {
         let UserIdResp = await HttpCalling(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
         let AcorBtns = Array();
         let StreamedDate = Array();
         for (let index = 0; index < StreamDatesArr.length; index++) {
-            AcorBtns.push(document.getElementById(`AcordBtn-${index}`));
+            AcorBtns.push($$.id(`AcordBtn-${index}`));
         }
         for (let index = 0; index < AcorBtns.length; index++) {
             let Timestamps = AcorBtns[index].innerHTML.split(" ");
@@ -189,12 +190,12 @@ TwitchClip.addEventListener("click", async function (event) {
                 ChangeAcordButtonNames(MultidimClipResps, StreamsStreamed, AcorBtns);
             }
             else {
-                console.log("Getting clips for streams without VODs");
+                $$.log("Getting clips for streams without VODs");
             }
         }
     }
     else {
-        console.log("Failed to Validate Token Try Again");
+        $$.log("Failed to Validate Token Try Again");
         validateToken();
     }
 });
@@ -295,10 +296,10 @@ function CutOuts(RawTxt) {
     }
 }
 function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
-    let res = document.getElementById("BeforeDesc");
-    let res1 = document.getElementById("AfterDesc");
-    let res2 = document.getElementById("LocalBeforeDesc");
-    let res3 = document.getElementById("LocalAfterDesc");
+    let res = $$.id("BeforeDesc");
+    let res1 = $$.id("AfterDesc");
+    let res2 = $$.id("LocalBeforeDesc");
+    let res3 = $$.id("LocalAfterDesc");
     let BeforeDesc = res.innerHTML;
     let AfterDesc = res1.innerHTML;
     let LocalBeforeDesc;
@@ -372,7 +373,7 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
         return 1;
     }
     else {
-        console.log("Both Stream and Recording Arrays returned Nothing.");
+        $$.log("Both Stream and Recording Arrays returned Nothing.");
         return 0;
     }
 }
@@ -383,7 +384,7 @@ function DomSet() {
     LocalDescArrR.reverse();
     StreamDatesArr.reverse();
     RecordDatesArr.reverse();
-    let SidebarDiv = document.getElementById("SideBar");
+    let SidebarDiv = $$.id("SideBar");
     let nav = document.createElement("nav");
     let ul = document.createElement("ul");
     if (DescArrS.length > 0) {
@@ -408,7 +409,7 @@ function DomSet() {
         SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo", LocalDescArrS, "LocaleDesc-", "streamtextarr", 0);
     }
     else if (DescArrS.length < 0) {
-        console.log("No stream Timestamps found");
+        $$.log("No stream Timestamps found");
     }
     if (DescArrR.length > 0) {
         let liSeparate = document.createElement("li");
@@ -437,14 +438,14 @@ function DomSet() {
         }
     }
     else {
-        console.log("No recording Timestamps found");
+        $$.log("No recording Timestamps found");
     }
     nav.append(ul);
     SidebarDiv.append(nav);
     return 1;
 }
 function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID, CharCount_index) {
-    var DescDiv = document.getElementById("DescriptionAreaDiv");
+    var DescDiv = $$.id("DescriptionAreaDiv");
     for (let index = 0; index < DescArr.length; index++) {
         let AcordDiv = document.createElement("div");
         AcordDiv.classList.add("accordion", "mt-4");
@@ -694,17 +695,17 @@ async function validateToken() {
             .then((resp) => {
             if (resp.status) {
                 if (resp.status == 401) {
-                    console.log("This token is invalid ... " + resp.message);
+                    $$.log("This token is invalid ... " + resp.message);
                     return 0;
                 }
-                console.log("Unexpected output with a status");
+                $$.log("Unexpected output with a status");
                 return 0;
             }
             if (resp.client_id) {
                 AclientId = resp.client_id;
                 TwitchConnected = true;
-                console.log("Token Validated Sucessfully");
-                let p = document.getElementById("AccessTokenTime");
+                $$.log("Token Validated Sucessfully");
+                let p = $$.id("AccessTokenTime");
                 let Time = new Date(resp.expires_in * 1000);
                 let TimeStrDash = Time.toISOString().split("-");
                 let TimeStrT = TimeStrDash[2].split("T");
@@ -712,11 +713,11 @@ async function validateToken() {
                 p.innerHTML = `• Current Token Will Expire In: <br> ${TimeString}.`;
                 return 1;
             }
-            console.log("unexpected Output");
+            $$.log("unexpected Output");
             return 0;
         })
             .catch((err) => {
-            console.log(err);
+            $$.log(err);
             return 0;
         });
         return 1;
@@ -737,7 +738,7 @@ async function HttpCalling(HttpCall) {
         return respon;
     })
         .catch((err) => {
-        console.log(err);
+        $$.log(err);
         return err;
     });
     return respon;
@@ -810,11 +811,11 @@ function GetClipVODOffsetFromDate(StreamDate, ClipedDate) {
     return SectoTimestamp(secounds);
 }
 async function DescriptionReplace(TimestampsArr, Index, localprint) {
-    let Desc = document.getElementsByClassName(`Charcounts`);
+    let Desc = $$.class(`Charcounts`);
     if (localprint == true) {
         var LNewDesc = "";
-        let res = document.getElementById("LocalBeforeDesc");
-        let res1 = document.getElementById("LocalAfterDesc");
+        let res = $$.id("LocalBeforeDesc");
+        let res1 = $$.id("LocalAfterDesc");
         let BeforeDescL = res.innerHTML;
         let AfterDescL = res1.innerHTML;
         let resArray = TimestampsArr;
@@ -830,8 +831,8 @@ async function DescriptionReplace(TimestampsArr, Index, localprint) {
     }
     else {
         var NewDesc = "";
-        let res = document.getElementById("BeforeDesc");
-        let res1 = document.getElementById("AfterDesc");
+        let res = $$.id("BeforeDesc");
+        let res1 = $$.id("AfterDesc");
         let BeforeDesc = res.innerHTML;
         let AfterDesc = res1.innerHTML;
         let resArray = TimestampsArr;
