@@ -1,14 +1,12 @@
 //#region Import Export, doesnt work yet
 let PBeforeDesc = $$.id("BeforeDesc") as HTMLInputElement;
 let PAfterDesc = $$.id("AfterDesc") as HTMLInputElement;
-let PTKey = $$.id("TwitchKey") as HTMLElement;
 let PLBeforeDesc = $$.id("LocalBeforeDesc") as HTMLInputElement;
 let PLAfterDesc = $$.id("LocalAfterDesc") as HTMLInputElement;
 
 // Settings
 let BeforeDesc = PBeforeDesc.innerHTML;
 let AfterDesc = PAfterDesc.innerHTML;
-var TappAcess = PTKey.innerHTML;
 
 // Asigned later
 let UserId = "";
@@ -442,18 +440,21 @@ function IframClipBuilder(ClipLink: string) {
 
 // Small functions
 
-//#region ValidateToken, Validates the TappAcess Token and then calls fetchUser()
+//#region ValidateToken, Validates the Twitch Token and then calls fetchUser()
 
 // needs a VALID Twitch App Auth Token
 //#region validateToken() Validates Token if sucessful returns 1 if not 0
 // Calls the Twitch api with Out App Acess Token and returns a ClientId and tells us if the App Acess Token is Valid or Not
 async function validateTToken() {
-  $$.log("Your AccessToken: " + TappAcess);
+  //@ts-expect-error
+  $$.log("Your AccessToken: " + config.TWITCH_API_TOKEN);
   let p = $$.id("AccessTokenTime") as HTMLElement;
-  if (TappAcess != undefined && TappAcess != "" && TappAcess != null) {
+  // @ts-expect-error
+  if (config.TWITCH_API_TOKEN != undefined && config.TWITCH_API_TOKEN != "" && config.TWITCH_API_TOKEN != null) {
     await fetch("https://id.twitch.tv/oauth2/validate", {
       headers: {
-        Authorization: "Bearer " + TappAcess,
+        // @ts-expect-error
+        Authorization: "Bearer " + config.TWITCH_API_TOKEN,
       },
     })
       .then((resp) => resp.json())
@@ -462,7 +463,8 @@ async function validateTToken() {
           if (resp.status == 401) {
             $$.log(
               "This token ('" +
-                TappAcess +
+              // @ts-expect-error
+              config.TWITCH_API_TOKEN +
                 "') is invalid (" +
                 resp.message +
                 ").. The Submit Button has been Disabled. you cannot use H.O.T: Highlighter without a Token! _(._. )>"
@@ -508,7 +510,8 @@ async function validateTToken() {
 async function HttpCaller(HttpCall: string) {
   const respon = await fetch(`${HttpCall}`, {
     headers: {
-      Authorization: "Bearer " + TappAcess,
+      // @ts-expect-error
+      Authorization: "Bearer " + config.TWITCH_API_TOKEN,
       "Client-ID": client_id,
     },
   })

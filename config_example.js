@@ -19,5 +19,5 @@ let config = {
 
     // Extra configs
     CLIP_OFFSET : "27",
-    HASHTAGS : ""
+    HASHTAGS : "#VOD #Video-On-Demand"
 }

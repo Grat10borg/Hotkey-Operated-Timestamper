@@ -15,10 +15,7 @@ const $$ = {
   log: console.log,
 }
 
-// gets ID from settings file embeded by PHP
-// @ts-expect-error
-$$.log(config.YOUTUBE_APIKEY);
-
+// gets settings file embeded by PHP
 let TextATags = $$.id("Tags") as HTMLElement;
 let HashTagsP = $$.id("Hashtags") as HTMLElement;
 

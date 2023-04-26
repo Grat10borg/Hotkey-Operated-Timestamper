@@ -1,12 +1,10 @@
 "use strict";
 let PBeforeDesc = $$.id("BeforeDesc");
 let PAfterDesc = $$.id("AfterDesc");
-let PTKey = $$.id("TwitchKey");
 let PLBeforeDesc = $$.id("LocalBeforeDesc");
 let PLAfterDesc = $$.id("LocalAfterDesc");
 let BeforeDesc = PBeforeDesc.innerHTML;
 let AfterDesc = PAfterDesc.innerHTML;
-var TappAcess = PTKey.innerHTML;
 let UserId = "";
 let client_id = "";
 validateTToken();
@@ -295,12 +293,12 @@ function IframClipBuilder(ClipLink) {
     divPlayer.scrollIntoView();
 }
 async function validateTToken() {
-    $$.log("Your AccessToken: " + TappAcess);
+    $$.log("Your AccessToken: " + config.TWITCH_API_TOKEN);
     let p = $$.id("AccessTokenTime");
-    if (TappAcess != undefined && TappAcess != "" && TappAcess != null) {
+    if (config.TWITCH_API_TOKEN != undefined && config.TWITCH_API_TOKEN != "" && config.TWITCH_API_TOKEN != null) {
         await fetch("https://id.twitch.tv/oauth2/validate", {
             headers: {
-                Authorization: "Bearer " + TappAcess,
+                Authorization: "Bearer " + config.TWITCH_API_TOKEN,
             },
         })
             .then((resp) => resp.json())
@@ -308,7 +306,7 @@ async function validateTToken() {
             if (resp.status) {
                 if (resp.status == 401) {
                     $$.log("This token ('" +
-                        TappAcess +
+                        config.TWITCH_API_TOKEN +
                         "') is invalid (" +
                         resp.message +
                         ").. The Submit Button has been Disabled. you cannot use H.O.T: Highlighter without a Token! _(._. )>");
@@ -347,7 +345,7 @@ async function validateTToken() {
 async function HttpCaller(HttpCall) {
     const respon = await fetch(`${HttpCall}`, {
         headers: {
-            Authorization: "Bearer " + TappAcess,
+            Authorization: "Bearer " + config.TWITCH_API_TOKEN,
             "Client-ID": client_id,
         },
     })

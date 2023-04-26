@@ -9,39 +9,23 @@ const $$ = {
     query_all: $.querySelectorAll.bind($),
     log: console.log,
 };
-$$.log(config.YOUTUBE_APIKEY);
-let Pkey = $$.id("YTKey");
-let PClient = $$.id("YTClient");
-let PPluginName = $$.id("YTPluginName");
 let TextATags = $$.id("Tags");
 let HashTagsP = $$.id("Hashtags");
-let LocalziedYT = $$.id("Local");
 var auth = $$.query(".authUpload");
-var YclientId;
-var YApiKey;
-let YTPluginName;
 let Tags;
 let HashTags;
 let localization;
-if (PClient != null) {
-    YclientId = PClient.innerHTML;
-}
-else {
+if (config.YOUTUBE_CLIENT_ID == null || config.YOUTUBE_CLIENT_ID == "") {
     $$.log("Could Not get Youtube ClientId, You will not be able to Connect to Youtube");
     auth.disabled = true;
 }
-if (Pkey != null) {
-    YApiKey = Pkey.innerHTML;
-}
-else {
+if (config.YOUTUBE_APIKEY == null || config.YOUTUBE_APIKEY == "") {
     $$.log("Could Not get Youtube ApiKey, you will not be able to Connect to Youtube");
     auth.disabled = true;
 }
-if (PPluginName != null) {
-    YTPluginName = PPluginName.innerHTML;
-}
-else {
+if (config.PLUGINNAME == null || config.PLUGINNAME == "") {
     $$.log("You didnt write the plugin name for your Google project in the settings, The Connect to Youtube button May or May Not work?");
+    auth.disabled = true;
 }
 if (TextATags != null) {
     Tags = TextATags.innerHTML.split("\n");
@@ -55,8 +39,8 @@ if (HashTagsP != null) {
 else {
     HashTags = "";
 }
-if (LocalziedYT != null) {
-    localization = LocalziedYT.innerHTML;
+if (config.LOCALIZE_ON != null || config.LOCALIZE_ON != "") {
+    localization = config.LOCALIZE_ON;
 }
 else {
     localization = "";
@@ -96,7 +80,7 @@ function authAllowDescChange() {
     });
 }
 function loadClientChannel() {
-    gapi.client.setApiKey(YApiKey);
+    gapi.client.setApiKey(config.YOUTUBE_APIKEY);
     return gapi.client
         .load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
         .then(function () {
@@ -212,13 +196,13 @@ function GitPushDescription(selectText, SelectValue, arrayIds, arrayVidname, tar
     }
 }
 gapi.load("client:auth2", function () {
-    if (YclientId != "" &&
-        YTPluginName != "" &&
-        YclientId != null &&
-        YTPluginName != null &&
-        YclientId != undefined &&
-        YTPluginName != undefined) {
-        gapi.auth2.init({ client_id: YclientId, plugin_name: YTPluginName });
+    if (config.YOUTUBE_CLIENT_ID != "" &&
+        config.PLUGINNAME != "" &&
+        config.YOUTUBE_CLIENT_ID != null &&
+        config.PLUGINNAME != null &&
+        config.YOUTUBE_CLIENT_ID != undefined &&
+        config.PLUGINNAME != undefined) {
+        gapi.auth2.init({ client_id: config.YOUTUBE_CLIENT_ID, plugin_name: config.PLUGINNAME });
     }
 });
 var Copy = $$.query_all(".Copy");

@@ -8,7 +8,6 @@ let Plocal = $$.id("Local");
 let RawTxt;
 var AppAcessToken;
 let Clipoffset;
-let StreamerName;
 var SettingsLocal;
 if (TimestampTxt != null) {
     RawTxt = TimestampTxt.innerHTML;
@@ -31,10 +30,7 @@ else {
     $$.log("you didnt set a ClipOffset, H.O.T has defaulted to 26 seconds of offset.");
     Clipoffset = 26;
 }
-if (PLogin != null) {
-    StreamerName = PLogin.innerHTML;
-}
-else {
+if (config.TWITCH_LOGIN == null || config.TWITCH_LOGIN == "") {
     $$.log("you didnt set a TwitchLoginName, you will not be able to use Clip-Stamps");
     let TwitchClipbtn = $$.id("TwitchClip");
     TwitchClipbtn.disabled = true;
@@ -80,7 +76,7 @@ if (RawTxt != undefined && RawTxt != "" && RawTxt != null) {
 let TwitchClip = $$.id("TwitchClip");
 TwitchClip.addEventListener("click", async function (event) {
     if (TwitchConnected == true) {
-        let UserIdResp = await HttpCalling(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
+        let UserIdResp = await HttpCalling(`https://api.twitch.tv/helix/users?login=${config.TWITCH_LOGIN}`);
         let AcorBtns = Array();
         let StreamedDate = Array();
         for (let index = 0; index < StreamDatesArr.length; index++) {
@@ -172,7 +168,7 @@ TwitchClip.addEventListener("click", async function (event) {
                 }
                 DescriptionReplace(CompleteTimestampArr, textareaPrint, false);
                 textareaPrint++;
-                if (SettingsLocal != false && SettingsLocal != "false") {
+                if (config.LOCALIZE_ON != false && config.LOCALIZE_ON != "false") {
                     DescriptionReplace(CompleteTimestampArr, textareaPrint, true);
                     textareaPrint++;
                 }
@@ -299,7 +295,7 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
     if (MultiDimStreamArr.length > -1) {
         for (let index = 0; index < MultiDimStreamArr.length; index++) {
             let resArray = MultiDimStreamArr[index];
-            if (SettingsLocal != "") {
+            if (config.LOCALIZE_ON != false) {
                 LocalBeforeDesc = res2.innerHTML;
                 LocalAfterDesc = res3.innerHTML;
                 LocalDescript = LocalBeforeDesc + "\n\n";
@@ -331,7 +327,7 @@ function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
     if (MultiDimRecordArr.length > -1) {
         for (let index = 0; index < MultiDimRecordArr.length; index++) {
             let resArray = MultiDimRecordArr[index];
-            if (SettingsLocal != "") {
+            if (config.LOCALIZE_ON != false) {
                 LocalBeforeDesc = res2.innerHTML;
                 LocalAfterDesc = res3.innerHTML;
                 LocalDescript = LocalBeforeDesc + "\n\n";
@@ -419,7 +415,7 @@ function DomSet() {
             li.append(a);
             ul.append(li);
         }
-        if (SettingsLocal == "") {
+        if (config.LOCALIZE_ON == false) {
             SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo", LocalDescArrR, "recordLocalInput", "recordInput", DescArrS.length);
         }
         else {
@@ -465,7 +461,7 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID
         let h3 = $$.make("h3");
         h3.innerHTML = `# Suggested Description`;
         let LocalTextarea = $$.make("textarea");
-        if (SettingsLocal != "") {
+        if (config.LOCALIZE_ON == true) {
             LocalTextarea.classList.add("d-flex", "m-1", "res", "form-control", "Charcounts");
             LocalTextarea.innerHTML = LocalArr[index];
             LocalTextarea.setAttribute("id", `myLocalInput${index}`);
@@ -740,8 +736,7 @@ async function GetClipsFromDate(StreamedDate, StreamerID) {
     let resp = await HttpCalling(http2);
     let Clips = Array();
     for (let i = 0; i < resp["data"].length; i++) {
-        if (resp["data"][i]["creator_name"].toLowerCase() ==
-            StreamerName.toLowerCase()) {
+        if (resp["data"][i]["creator_name"].toLowerCase() == config.TWITCH_LOGIN.toLowerCase()) {
             Clips.push(resp["data"][i]);
         }
         else {
