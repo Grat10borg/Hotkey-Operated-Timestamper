@@ -319,7 +319,6 @@ gapi.load("client:auth2", function () {
 //#region Copy To Clipboard Event
 /** Copies specific text areas and makes eventhandler for copy btns */
 var Copy = $$.query_all(".Copy");
-console.log(Copy);
 for (let i = 0; i < Copy.length; i++) {
   Copy[i].addEventListener(
     "click",

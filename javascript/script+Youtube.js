@@ -196,7 +196,6 @@ gapi.load("client:auth2", function () {
     }
 });
 var Copy = $$.query_all(".Copy");
-console.log(Copy);
 for (let i = 0; i < Copy.length; i++) {
     Copy[i].addEventListener("click", function (event) {
         copyText(event);

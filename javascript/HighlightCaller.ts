@@ -1,12 +1,24 @@
-//#region Import Export, doesnt work yet
-let PBeforeDesc = $$.id("BeforeDesc") as HTMLInputElement;
-let PAfterDesc = $$.id("AfterDesc") as HTMLInputElement;
-let PLBeforeDesc = $$.id("LocalBeforeDesc") as HTMLInputElement;
-let PLAfterDesc = $$.id("LocalAfterDesc") as HTMLInputElement;
-
 // Settings
-let BeforeDesc = PBeforeDesc.innerHTML;
-let AfterDesc = PAfterDesc.innerHTML;
+// remove later when config file can have this and still work..
+async function fetchTEXT(Url:string, self: any) {
+  await fetch(Url)
+  .then(response => response.text())
+  .then((txt) => {
+    //console.log(txt);
+    self = txt;
+    //return txt;
+  })
+}
+
+//let BeforeDesc = $$.txt("Texts/BeforeTimestamps.txt") as any;
+let AfterDesc;
+let LocalAfterDesc;
+let LocaleBeforeDesc;
+AfterDesc = fetchTEXT("Texts/AfterTimestamps.txt", AfterDesc) as any;
+LocalAfterDesc = fetchTEXT("Texts/LocaleAfterTimestamps.txt", LocalAfterDesc) as any;
+LocaleBeforeDesc = fetchTEXT("Texts/LocaleBeforeTimestamps.txt", LocaleBeforeDesc) as any;
+console.log(LocaleBeforeDesc);
+
 
 // Asigned later
 let UserId = "";
@@ -126,7 +138,7 @@ ChannelSelect.addEventListener("change", async function () {
     // Updating Game Select box with game name and ids
     let optionNone = $$.make("option");
     optionNone.setAttribute("value", "None");
-    optionNone.append($$.make("Any Game Id"));
+    optionNone.append($.createTextNode("Any Game Id"));
     selectboxG.appendChild(optionNone);
     for (let index = 0; index < SelectGameResp["data"].length; index++) {
       let gameid = SelectGameResp["data"][index]["id"];
@@ -134,7 +146,7 @@ ChannelSelect.addEventListener("change", async function () {
 
       let optionsG = $$.make("option");
       optionsG.setAttribute("value", gameid);
-      optionsG.append($$.make(gamename));
+      optionsG.append($.createTextNode(gamename));
       selectboxG.appendChild(optionsG);
     }
     selectboxG.disabled = false;
@@ -148,7 +160,7 @@ ChannelSelect.addEventListener("change", async function () {
 //#region sorts clips from the response and then prints it into the textareas on the page
 
 // sorts clips out from specified values
-function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
+async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   //#region Sorting Clip Response data by viewcount + game_id + tests if they're in correct order by date.
   var arrclips = Array();
   let duration = 0;
@@ -245,14 +257,15 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 
   // Making Description
   let text = ""; // initialzes vars for getting duration
+  let BeforeDesc;
+  BeforeDesc = await fetchTEXT("Texts/BeforeTimestamps.txt", BeforeDesc) as any;
+  console.log(BeforeDesc);
   text = text + BeforeDesc + "\n\n"; // adds the description
   // locale version of description
   let LocaleText = "" as string;
   if (localmode == true) {
-    let LocaleBeforeDesc = $$.id(
-      "LocalBeforeDesc"
-    ) as HTMLElement;
-    LocaleText = LocaleText + LocaleBeforeDesc.innerHTML + "\n\n";
+
+    LocaleText = LocaleText + LocaleBeforeDesc + "\n\n";
   }
 
   textAreaDiv.innerHTML = ""; // removes ALL previous links
@@ -353,7 +366,7 @@ function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   let Desc = $$.query("#myInput0") as HTMLInputElement;
   Desc.textContent = text;
   if (localmode == true) {
-    let LocalAfterDesc = PLAfterDesc.innerHTML;
+
     LocaleText = LocaleText.slice(0, text.length - 1);
     LocaleText = LocaleText + "\n\n" + LocalAfterDesc;
 

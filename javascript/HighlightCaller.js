@@ -1,10 +1,18 @@
 "use strict";
-let PBeforeDesc = $$.id("BeforeDesc");
-let PAfterDesc = $$.id("AfterDesc");
-let PLBeforeDesc = $$.id("LocalBeforeDesc");
-let PLAfterDesc = $$.id("LocalAfterDesc");
-let BeforeDesc = PBeforeDesc.innerHTML;
-let AfterDesc = PAfterDesc.innerHTML;
+async function fetchTEXT(Url, self) {
+    await fetch(Url)
+        .then(response => response.text())
+        .then((txt) => {
+        self = txt;
+    });
+}
+let AfterDesc;
+let LocalAfterDesc;
+let LocaleBeforeDesc;
+AfterDesc = fetchTEXT("Texts/AfterTimestamps.txt", AfterDesc);
+LocalAfterDesc = fetchTEXT("Texts/LocaleAfterTimestamps.txt", LocalAfterDesc);
+LocaleBeforeDesc = fetchTEXT("Texts/LocaleBeforeTimestamps.txt", LocaleBeforeDesc);
+console.log(LocaleBeforeDesc);
 let UserId = "";
 let client_id = "";
 validateTToken();
@@ -78,20 +86,20 @@ ChannelSelect.addEventListener("change", async function () {
         }
         let optionNone = $$.make("option");
         optionNone.setAttribute("value", "None");
-        optionNone.append($$.make("Any Game Id"));
+        optionNone.append($.createTextNode("Any Game Id"));
         selectboxG.appendChild(optionNone);
         for (let index = 0; index < SelectGameResp["data"].length; index++) {
             let gameid = SelectGameResp["data"][index]["id"];
             let gamename = SelectGameResp["data"][index]["name"];
             let optionsG = $$.make("option");
             optionsG.setAttribute("value", gameid);
-            optionsG.append($$.make(gamename));
+            optionsG.append($.createTextNode(gamename));
             selectboxG.appendChild(optionsG);
         }
         selectboxG.disabled = false;
     }
 });
-function ClipSorter(Clips, game_id, viewCount) {
+async function ClipSorter(Clips, game_id, viewCount) {
     var arrclips = Array();
     let duration = 0;
     let j = 0;
@@ -163,11 +171,13 @@ function ClipSorter(Clips, game_id, viewCount) {
         localmode = false;
     }
     let text = "";
+    let BeforeDesc;
+    BeforeDesc = await fetchTEXT("Texts/BeforeTimestamps.txt", BeforeDesc);
+    console.log(BeforeDesc);
     text = text + BeforeDesc + "\n\n";
     let LocaleText = "";
     if (localmode == true) {
-        let LocaleBeforeDesc = $$.id("LocalBeforeDesc");
-        LocaleText = LocaleText + LocaleBeforeDesc.innerHTML + "\n\n";
+        LocaleText = LocaleText + LocaleBeforeDesc + "\n\n";
     }
     textAreaDiv.innerHTML = "";
     for (let i = 0; i < sortcliped.length; i++) {
@@ -234,7 +244,6 @@ function ClipSorter(Clips, game_id, viewCount) {
     let Desc = $$.query("#myInput0");
     Desc.textContent = text;
     if (localmode == true) {
-        let LocalAfterDesc = PLAfterDesc.innerHTML;
         LocaleText = LocaleText.slice(0, text.length - 1);
         LocaleText = LocaleText + "\n\n" + LocalAfterDesc;
         let localDesc = $$.query("#LocalDescription");
