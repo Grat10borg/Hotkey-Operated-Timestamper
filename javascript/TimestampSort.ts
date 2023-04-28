@@ -37,7 +37,6 @@ if (PClip != null) {
   );
   Clipoffset = 26;
 }
-// @ts-expect-error
 if (config.TWITCH_LOGIN == null || config.TWITCH_LOGIN == "") {
   $$.log(
     "you didnt set a TwitchLoginName, you will not be able to use Clip-Stamps"
@@ -107,7 +106,6 @@ TwitchClip.addEventListener("click", async function (event: any) {
   if (TwitchConnected == true) {
     // Calling API to get ID of streamer with this name
     let UserIdResp = await HttpCalling(
-      // @ts-expect-error
       `https://api.twitch.tv/helix/users?login=${config.TWITCH_LOGIN}`
     );
 
@@ -418,7 +416,6 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
     // if has Values
     for (let index = 0; index < MultiDimStreamArr.length; index++) {
       let resArray = MultiDimStreamArr[index];
-      // @ts-expect-error
       if (config.LOCALIZE_ON != false) {
         LocalBeforeDesc = res2.innerHTML;
         LocalAfterDesc = res3.innerHTML;
@@ -453,7 +450,6 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
     // if has Values
     for (let index = 0; index < MultiDimRecordArr.length; index++) {
       let resArray = MultiDimRecordArr[index];
-      // @ts-expect-error
       if (config.LOCALIZE_ON != false) {
         LocalBeforeDesc = res2.innerHTML;
         LocalAfterDesc = res3.innerHTML;
@@ -562,7 +558,6 @@ function DomSet() {
       ul.append(li);
     }
     // If LocalMode is on it will double the amount of textareas and charcounters since now both a tranlated and original description is made!
-    // @ts-expect-error
     if (config.LOCALIZE_ON == false) {
       SetIns(
         DescArrR,
@@ -657,7 +652,6 @@ function SetIns(
     // Text Area for Description
 
     let LocalTextarea = $$.make("textarea");
-    // @ts-expect-error
     if (config.LOCALIZE_ON == true) {
       LocalTextarea.classList.add(
         "d-flex",
@@ -1026,7 +1020,6 @@ async function GetClipsFromDate(StreamedDate: string, StreamerID: string) {
   let Clips = Array();
   for (let i = 0; i < resp["data"].length; i++) {
     if (
-      // @ts-expect-error
       resp["data"][i]["creator_name"].toLowerCase() == config.TWITCH_LOGIN.toLowerCase()
     ) {
       Clips.push(resp["data"][i]);

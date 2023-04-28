@@ -1,20 +1,4 @@
 
-// Shorthand Dom versions
-const $ = document;
-const $$ = {
-  dom: document,
-
-  // document methods
-  id: $.getElementById.bind($),
-  class: $.getElementsByClassName.bind($),
-  make: $.createElement.bind($),
-  query: $.querySelector.bind($),
-  query_all: $.querySelectorAll.bind($),
-
-  // just here to help me out when working.
-  log: console.log,
-}
-
 // gets settings file embeded by PHP
 let TextATags = $$.id("Tags") as HTMLElement;
 let HashTagsP = $$.id("Hashtags") as HTMLElement;
@@ -25,21 +9,21 @@ let Tags: Array<string>;
 let HashTags: string;
 let localization: string;
 //#region  Test if Data is Useable
-//@ts-expect-error
+
 if (config.YOUTUBE_CLIENT_ID == null || config.YOUTUBE_CLIENT_ID == "") {
   $$.log(
     "Could Not get Youtube ClientId, You will not be able to Connect to Youtube"
   );
   auth.disabled = true;
 }
-// @ts-expect-error
+
 if (config.YOUTUBE_APIKEY == null || config.YOUTUBE_APIKEY == "") {
   $$.log(
     "Could Not get Youtube ApiKey, you will not be able to Connect to Youtube"
   );
   auth.disabled = true;
 }
-// @ts-expect-error
+
 if (config.PLUGINNAME == null || config.PLUGINNAME == "") {
   $$.log(
     "You didnt write the plugin name for your Google project in the settings, The Connect to Youtube button May or May Not work?"
@@ -59,7 +43,6 @@ if (HashTagsP != null) {
   HashTags = "";
 }
 
-// @ts-expect-error
 if (config.LOCALIZE_ON != null || config.LOCALIZE_ON != "") {
   // @ts-expect-error
   localization = config.LOCALIZE_ON;
@@ -77,7 +60,7 @@ var optionValue = 0;
 var gapi: any;
 
 // ALL the text areas on the page.
-let StartTextareas: any = document.querySelectorAll(
+let StartTextareas: any = $$.query_all(
   ".Charcounts"
 ) as NodeListOf<HTMLTextAreaElement>;
 
@@ -147,7 +130,6 @@ function authAllowDescChange() {
 }
 
 function loadClientChannel() {
-  //@ts-expect-error
   gapi.client.setApiKey(config.YOUTUBE_APIKEY);
   return gapi.client
     .load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
@@ -312,20 +294,20 @@ function GitPushDescription(
 //#region GapiLoad with our YTClient ID
 gapi.load("client:auth2", function () {
   if (
-  //@ts-expect-error
+
     config.YOUTUBE_CLIENT_ID != "" &&
-    //@ts-expect-error
+  
     config.PLUGINNAME != "" &&
-    //@ts-expect-error
+
     config.YOUTUBE_CLIENT_ID != null &&
-    //@ts-expect-error
+
     config.PLUGINNAME != null &&
-    //@ts-expect-error
+
     config.YOUTUBE_CLIENT_ID != undefined &&
-    //@ts-expect-error
+
     config.PLUGINNAME != undefined
   ) {
-    //@ts-expect-error
+
     gapi.auth2.init({ client_id: config.YOUTUBE_CLIENT_ID, plugin_name: config.PLUGINNAME });
   }
 });
@@ -337,6 +319,7 @@ gapi.load("client:auth2", function () {
 //#region Copy To Clipboard Event
 /** Copies specific text areas and makes eventhandler for copy btns */
 var Copy = $$.query_all(".Copy");
+console.log(Copy);
 for (let i = 0; i < Copy.length; i++) {
   Copy[i].addEventListener(
     "click",
@@ -455,7 +438,7 @@ function CalcChars(event): any {
 let ShowHiddenText = $$.id("ShowSettings") as HTMLDivElement;
 if (ShowHiddenText != null) {
   ShowHiddenText.addEventListener("click", function () {
-    let PasswordInputs = document.querySelectorAll(
+    let PasswordInputs = $$.query_all(
       '[type="password"]'
     ) as NodeListOf<HTMLInputElement>;
     if (PasswordInputs != null) {

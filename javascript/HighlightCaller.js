@@ -208,7 +208,7 @@ function ClipSorter(Clips, game_id, viewCount) {
         rowdiv.append(p);
         textAreaDiv.append(rowdiv);
     }
-    let ClipBtns = $$.query_all(".ClipBtn");
+    let ClipBtns = $.querySelectorAll(".ClipBtn");
     for (let i = 0; i < ClipBtns.length; i++) {
         ClipBtns[i].addEventListener("click", function (event) {
             $$.log(event.target.value);

@@ -1,14 +1,4 @@
 "use strict";
-const $ = document;
-const $$ = {
-    dom: document,
-    id: $.getElementById.bind($),
-    class: $.getElementsByClassName.bind($),
-    make: $.createElement.bind($),
-    query: $.querySelector.bind($),
-    query_all: $.querySelectorAll.bind($),
-    log: console.log,
-};
 let TextATags = $$.id("Tags");
 let HashTagsP = $$.id("Hashtags");
 var auth = $$.query(".authUpload");
@@ -51,7 +41,7 @@ var arrayIds = Array();
 var arrayVidname = Array();
 var optionValue = 0;
 var gapi;
-let StartTextareas = document.querySelectorAll(".Charcounts");
+let StartTextareas = $$.query_all(".Charcounts");
 auth.addEventListener("click", function (event) {
     authAllowDescChange().then(loadClientChannel()).then(GetVideoIds);
 }, true);
@@ -206,6 +196,7 @@ gapi.load("client:auth2", function () {
     }
 });
 var Copy = $$.query_all(".Copy");
+console.log(Copy);
 for (let i = 0; i < Copy.length; i++) {
     Copy[i].addEventListener("click", function (event) {
         copyText(event);
@@ -279,7 +270,7 @@ function CalcChars(event) {
 let ShowHiddenText = $$.id("ShowSettings");
 if (ShowHiddenText != null) {
     ShowHiddenText.addEventListener("click", function () {
-        let PasswordInputs = document.querySelectorAll('[type="password"]');
+        let PasswordInputs = $$.query_all('[type="password"]');
         if (PasswordInputs != null) {
             PasswordInputs.forEach((Input) => {
                 Input.type = "text";
