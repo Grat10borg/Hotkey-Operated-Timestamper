@@ -1,18 +1,4 @@
 "use strict";
-async function fetchTEXT(Url, self) {
-    await fetch(Url)
-        .then(response => response.text())
-        .then((txt) => {
-        self = txt;
-    });
-}
-let AfterDesc;
-let LocalAfterDesc;
-let LocaleBeforeDesc;
-AfterDesc = fetchTEXT("Texts/AfterTimestamps.txt", AfterDesc);
-LocalAfterDesc = fetchTEXT("Texts/LocaleAfterTimestamps.txt", LocalAfterDesc);
-LocaleBeforeDesc = fetchTEXT("Texts/LocaleBeforeTimestamps.txt", LocaleBeforeDesc);
-console.log(LocaleBeforeDesc);
 let UserId = "";
 let client_id = "";
 validateTToken();
@@ -171,12 +157,11 @@ async function ClipSorter(Clips, game_id, viewCount) {
         localmode = false;
     }
     let text = "";
-    let BeforeDesc;
-    BeforeDesc = await fetchTEXT("Texts/BeforeTimestamps.txt", BeforeDesc);
-    console.log(BeforeDesc);
+    let BeforeDesc = await $$.txt("Texts/BeforeTimestamps.txt");
     text = text + BeforeDesc + "\n\n";
     let LocaleText = "";
     if (localmode == true) {
+        let LocaleBeforeDesc = await $$.txt("Texts/LocaleBeforeTimestamps.txt");
         LocaleText = LocaleText + LocaleBeforeDesc + "\n\n";
     }
     textAreaDiv.innerHTML = "";
@@ -239,11 +224,13 @@ async function ClipSorter(Clips, game_id, viewCount) {
             LocaleText = LocaleText + ` ${element},`;
         }
     });
+    let AfterDesc = await $$.txt("Texts/AfterTimestamps.txt");
     text = text.slice(0, text.length - 1);
     text = text + "\n\n" + AfterDesc;
     let Desc = $$.query("#myInput0");
     Desc.textContent = text;
     if (localmode == true) {
+        let LocalAfterDesc = await $$.txt("Texts/LocaleAfterTimestamps.txt");
         LocaleText = LocaleText.slice(0, text.length - 1);
         LocaleText = LocaleText + "\n\n" + LocalAfterDesc;
         let localDesc = $$.query("#LocalDescription");

@@ -1,25 +1,4 @@
 // Settings
-// remove later when config file can have this and still work..
-async function fetchTEXT(Url:string, self: any) {
-  await fetch(Url)
-  .then(response => response.text())
-  .then((txt) => {
-    //console.log(txt);
-    self = txt;
-    //return txt;
-  })
-}
-
-//let BeforeDesc = $$.txt("Texts/BeforeTimestamps.txt") as any;
-let AfterDesc;
-let LocalAfterDesc;
-let LocaleBeforeDesc;
-AfterDesc = fetchTEXT("Texts/AfterTimestamps.txt", AfterDesc) as any;
-LocalAfterDesc = fetchTEXT("Texts/LocaleAfterTimestamps.txt", LocalAfterDesc) as any;
-LocaleBeforeDesc = fetchTEXT("Texts/LocaleBeforeTimestamps.txt", LocaleBeforeDesc) as any;
-console.log(LocaleBeforeDesc);
-
-
 // Asigned later
 let UserId = "";
 let client_id = "";
@@ -257,14 +236,12 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 
   // Making Description
   let text = ""; // initialzes vars for getting duration
-  let BeforeDesc;
-  BeforeDesc = await fetchTEXT("Texts/BeforeTimestamps.txt", BeforeDesc) as any;
-  console.log(BeforeDesc);
+  let BeforeDesc = await $$.txt("Texts/BeforeTimestamps.txt") as string;
   text = text + BeforeDesc + "\n\n"; // adds the description
   // locale version of description
   let LocaleText = "" as string;
   if (localmode == true) {
-
+    let LocaleBeforeDesc = await $$.txt("Texts/LocaleBeforeTimestamps.txt") as string;
     LocaleText = LocaleText + LocaleBeforeDesc + "\n\n";
   }
 
@@ -360,13 +337,14 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     }
   });
 
+  let AfterDesc = await $$.txt("Texts/AfterTimestamps.txt") as string;
   text = text.slice(0, text.length - 1);
   text = text + "\n\n" + AfterDesc;
   // finished description change
   let Desc = $$.query("#myInput0") as HTMLInputElement;
   Desc.textContent = text;
   if (localmode == true) {
-
+    let LocalAfterDesc = await $$.txt("Texts/LocaleAfterTimestamps.txt") as any;
     LocaleText = LocaleText.slice(0, text.length - 1);
     LocaleText = LocaleText + "\n\n" + LocalAfterDesc;
 
