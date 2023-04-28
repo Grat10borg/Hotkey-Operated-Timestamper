@@ -28,15 +28,33 @@
 // Shorthand Dom versions
 // const $ = document;
 // const $$ = {
-//   dom: document,
+// dom: document,
 
-//   // document methods
-//   id: $.getElementById.bind($),
-//   class: $.getElementsByClassName.bind($),
-//   make: $.createElement.bind($),
-//   query: $.querySelector.bind($),
-//   query_all: $.querySelectorAll.bind($),
+// // document methods
+// id: $.getElementById.bind($),
+// class: $.getElementsByClassName.bind($),
+// make: $.createElement.bind($),
+// query: $.querySelector.bind($),
+// query_all: $.querySelectorAll.bind($),
+// txt: fetchTXT.bind($),
 
-//   // just here to help me out when working.
-//   log: console.log,
+// // just here to help me out when working.
+// log: console.log,
+// } 
+
+// // a little wonky but the response promise did not want to play along..
+// async function fetchTXT(Url:string) {
+//   await fetch(Url)
+//   .then(response => response.text())
+//   .then((txt) => {    
+//     //return txt;
+//     let textarea = $$.make("textarea");
+//     textarea.textContent = txt;
+//     textarea.id = Url;
+//     textarea.hidden = true;
+//     $.body.append(textarea);
+//   })
+//   let text = $$.id(Url).innerHTML;
+//   $$.id(Url).outerHTML = ""; // remove textarea again
+//   return text;
 // }

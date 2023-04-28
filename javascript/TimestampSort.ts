@@ -74,6 +74,7 @@ validateToken();
 if (RawTxt != undefined && RawTxt != "" && RawTxt != null) {
   if (CutOuts(RawTxt) == 1) {
     // Runs CutOuts and if successful run next Method in line
+    //@ts-expect-error
     if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
       // Runs SetOps if sucessful run next Method in line
       // Set in Data to Webpage
@@ -393,19 +394,13 @@ function CutOuts(RawTxt: string) {
 // Input : Clean timestamps made by CutOuts()
 // Outputs: a Finished Description only missing Clip names
 // returns 1 if sucessful and 0 if failed
-function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
+async function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
   // Set in All the timestamps correctly
+  let BeforeDesc = await $$.txt("Texts/BeforeTimestamps.txt") as string;
+  let AfterDesc = await $$.txt("Texts/AfterTimestamps.txt") as string;
+  let LocalBeforeDesc = await $$.txt("Texts/LocaleBeforeTimestamps.txt") as string;
+  let LocalAfterDesc = await $$.txt("Texts/LocaleAfterTimestamps.txt") as string;
 
-  // Getting More Txts from PHP and ./Texts
-  let res = $$.id("BeforeDesc") as HTMLInputElement;
-  let res1 = $$.id("AfterDesc") as HTMLInputElement;
-  let res2 = $$.id("LocalBeforeDesc") as HTMLInputElement;
-  let res3 = $$.id("LocalAfterDesc") as HTMLInputElement;
-
-  let BeforeDesc = res.innerHTML;
-  let AfterDesc = res1.innerHTML;
-  let LocalBeforeDesc: string;
-  let LocalAfterDesc: string;
   let success = false;
   var Description = ""; // Finished Description Var
   var LocalDescript = ""; // finished description in another language
@@ -417,8 +412,7 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
     for (let index = 0; index < MultiDimStreamArr.length; index++) {
       let resArray = MultiDimStreamArr[index];
       if (config.LOCALIZE_ON != false) {
-        LocalBeforeDesc = res2.innerHTML;
-        LocalAfterDesc = res3.innerHTML;
+       
         LocalDescript = LocalBeforeDesc + "\n\n";
         LocalDescript =
           LocalDescript +
@@ -451,8 +445,8 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
     for (let index = 0; index < MultiDimRecordArr.length; index++) {
       let resArray = MultiDimRecordArr[index];
       if (config.LOCALIZE_ON != false) {
-        LocalBeforeDesc = res2.innerHTML;
-        LocalAfterDesc = res3.innerHTML;
+        // LocalBeforeDesc = LocalBeforeDesc;
+        // LocalAfterDesc = LocalAfterDesc;
         LocalDescript = LocalBeforeDesc + "\n\n";
         LocalDescript =
           LocalDescript + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
@@ -479,11 +473,11 @@ function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
     success = true;
   }
   if (success == true) {
-    return 1;
+    //return 1;
   } else {
     // error message
-    $$.log("Both Stream and Recording Arrays returned Nothing.");
-    return 0;
+    // $$.log("Both Stream and Recording Arrays returned Nothing.");
+    // return 0;
   }
 }
 //#endregion
