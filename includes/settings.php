@@ -30,7 +30,7 @@ if(file_exists("Texts\Settings.txt")) {
     $Localazation = $Settings[17];
 }
 else {
-    $error = "Fatal ERROR could not find Settings.txt at Texts\Settings.txt";
+   echo $error = "Fatal ERROR could not find Settings.txt at Texts\Settings.txt";
 }
 
 // testing if filepaths returns okay, and if set values are okay

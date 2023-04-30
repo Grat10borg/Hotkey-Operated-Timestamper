@@ -438,7 +438,7 @@ function IframClipBuilder(ClipLink: string) {
 // Calls the Twitch api with Out App Acess Token and returns a ClientId and tells us if the App Acess Token is Valid or Not
 async function validateTToken() {
 
-  $$.log("Your AccessToken: " + config.TWITCH_API_TOKEN);
+  //$$.log("Your AccessToken: " + config.TWITCH_API_TOKEN);
   let p = $$.id("AccessTokenTime") as HTMLElement;
 
   if (config.TWITCH_API_TOKEN != undefined && config.TWITCH_API_TOKEN != "" && config.TWITCH_API_TOKEN != null) {

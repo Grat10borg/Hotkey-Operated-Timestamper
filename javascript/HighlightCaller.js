@@ -289,7 +289,6 @@ function IframClipBuilder(ClipLink) {
     divPlayer.scrollIntoView();
 }
 async function validateTToken() {
-    $$.log("Your AccessToken: " + config.TWITCH_API_TOKEN);
     let p = $$.id("AccessTokenTime");
     if (config.TWITCH_API_TOKEN != undefined && config.TWITCH_API_TOKEN != "" && config.TWITCH_API_TOKEN != null) {
         await fetch("https://id.twitch.tv/oauth2/validate", {

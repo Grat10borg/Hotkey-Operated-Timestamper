@@ -4,38 +4,30 @@ let HotV = "V-1.0_beta"; // the version of H.o.t
 
 // Get these from Files in the future
 let TimestampTxt = $$.id("TimestampTxt") as HTMLInputElement;
-let PKey = $$.id("TwitchKey") as HTMLElement;
-let PClip = $$.id("ClipOffset") as HTMLElement;
-let PLogin = $$.id("TwitchLogin") as HTMLElement;
-let Plocal = $$.id("Local") as HTMLElement;
-// Settings
 let RawTxt;
+
+// Settings
 var AppAcessToken;
-let Clipoffset;
 var SettingsLocal;
 if (TimestampTxt != null) {
   RawTxt = TimestampTxt.innerHTML;
+  
 } else {
   $$.log(
     "Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!"
   );
 }
-if (PKey != null) {
-  AppAcessToken = PKey.innerHTML as string;
-} else {
+if (config.TWITCH_API_TOKEN == "" || config.TWITCH_API_TOKEN == null) {
   $$.log(
     "H.O.T could not get your TwitchKey, you will not be able to use Clip-Stamps"
   );
   let TwitchClipbtn = $$.id("TwitchClip") as HTMLInputElement;
   TwitchClipbtn.disabled = true;
 }
-if (PClip != null) {
-  Clipoffset = parseInt(PClip.innerHTML); // twitch default
-} else {
+if (config.CLIP_OFFSET == null) {
   $$.log(
-    "you didnt set a ClipOffset, H.O.T has defaulted to 26 seconds of offset."
+    "you didnt set a config.CLIP_OFFSET, H.O.T has defaulted to 26 seconds of offset."
   );
-  Clipoffset = 26;
 }
 if (config.TWITCH_LOGIN == null || config.TWITCH_LOGIN == "") {
   $$.log(
@@ -44,11 +36,12 @@ if (config.TWITCH_LOGIN == null || config.TWITCH_LOGIN == "") {
   let TwitchClipbtn = $$.id("TwitchClip") as HTMLInputElement;
   TwitchClipbtn.disabled = true;
 }
-if (Plocal != null) {
-  SettingsLocal = Plocal.innerHTML as string;
-} else {
+if (config.LOCALIZE_ON == false) {
   $$.log("LocalSettings not found Turning off Local Mode");
   SettingsLocal = "" as string;
+  //SettingsLocal = Plocal.innerHTML as string;
+} else {
+ 
 }
 
 // Asigned later
@@ -71,7 +64,7 @@ validateToken();
 //#endregion
 
 //#region Basic Setup H.O.T NON Twitch API
-if (RawTxt != undefined && RawTxt != "" && RawTxt != null) {
+if (config.INFOWRITER_ON == true) { // run if infowriter is installed.
   if (CutOuts(RawTxt) == 1) {
     // Runs CutOuts and if successful run next Method in line
     //@ts-expect-error
@@ -353,14 +346,14 @@ function CutOuts(RawTxt: string) {
       //$$.log("word passed 0:00:00 test:"+ Word);
       if (Word.match(/.*Record.*/i)) {
         let Timestamp =
-          "• " + to2Time(AddClipDelay(Word, Clipoffset)) + ` [ClipNo${ClipNo}]`;
+          "• " + to2Time(AddClipDelay(Word, config.CLIP_OFFSET)) + ` [ClipNo${ClipNo}]`;
         ClipNo++;
         RecordArr.push(Timestamp);
       }
       if (Word.match(/.*Stream.*/i)) {
         // 7:58:58 Stream Time Marker
         let Timestamp =
-          "• " + to2Time(AddClipDelay(Word, Clipoffset)) + ` [ClipNo${ClipNo}]`;
+          "• " + to2Time(AddClipDelay(Word, config.CLIP_OFFSET)) + ` [ClipNo${ClipNo}]`;
         ClipNo++;
         StreamArr.push(Timestamp);
       } else {
@@ -416,7 +409,7 @@ async function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) 
         LocalDescript = LocalBeforeDesc + "\n\n";
         LocalDescript =
           LocalDescript +
-          `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${Clipoffset})\n`;
+          `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${config.CLIP_OFFSET})\n`;
         for (let i = 0; i < resArray.length; i++) {
           let timestamp = resArray[i];
           LocalDescript = LocalDescript + timestamp + "\n";
@@ -429,7 +422,7 @@ async function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) 
       Description = BeforeDesc + "\n\n";
       Description =
         Description +
-        `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${Clipoffset})\n`;
+        `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${config.CLIP_OFFSET})\n`;
       for (let i = 0; i < resArray.length; i++) {
         let timestamp = resArray[i];
         Description = Description + timestamp + "\n";
@@ -473,11 +466,11 @@ async function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) 
     success = true;
   }
   if (success == true) {
-    //return 1;
+    return 1;
   } else {
     // error message
     // $$.log("Both Stream and Recording Arrays returned Nothing.");
-    // return 0;
+    return 0;
   }
 }
 //#endregion
@@ -518,7 +511,7 @@ function DomSet() {
       li.append(a);
       ul.append(li);
     }
-
+    console.log("in DOM SET");
     SetIns(
       DescArrS,
       StreamDatesArr,
@@ -600,6 +593,7 @@ function SetIns(
   TextAreaID: string,
   CharCount_index: number
 ) {
+  console.log("in Setins");
   var DescDiv = $$.id(
     "DescriptionAreaDiv"
   ) as HTMLInputElement;
@@ -721,12 +715,12 @@ function SetIns(
 
     CharCount_index++; // Counter for how many TextAreas there is.
 
-    if (SettingsLocal != "") {
+    if (config.LOCALIZE_ON == true) {
       let hr = $$.make("hr") as HTMLElement;
       let FontDiv = $$.make("div") as HTMLElement;
       FontDiv.classList.add("d-flex", "justify-content-between");
       let h3 = $$.make("h3") as HTMLElement;
-      h3.innerHTML = "# Suggested Description: (" + SettingsLocal + ")";
+      h3.innerHTML = "# Suggested Description: (" + config.LOCALIZE_LANGUAGE + ")";
       h3.setAttribute("class", "my-2");
       let PNo = $$.make("p");
       PNo.setAttribute("id", `CharCount${CharCount_index}`);
@@ -771,6 +765,7 @@ function SetIns(
       CharCount_index++;
     }
 
+    console.log(AcordDiv);
     // Final Appening
     collapsedDiv.append(AcordBody);
     AcordItem.append(collapsedDiv);
@@ -1128,5 +1123,4 @@ async function DescriptionReplace(TimestampsArr: Array<string>, Index: number, l
     NewDesc = "";
   }
 }
-
 //#endregion
