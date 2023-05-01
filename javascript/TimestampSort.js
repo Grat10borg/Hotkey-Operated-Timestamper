@@ -43,14 +43,10 @@ var StreamDatesRaw = new Array();
 validateToken();
 if (config.INFOWRITER_ON == true) {
     if (CutOuts(RawTxt) == 1) {
+        console.log("Cutouts");
         if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
             let stats = $$.id("Stats");
             stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
-            if (DomSet() == 1) {
-            }
-            else {
-                $$.log("Failed Placing Things in the Websites");
-            }
         }
         else {
             $$.log("Error Creating Description");
@@ -301,6 +297,7 @@ async function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
             }
             Description = Description + "\n" + AfterDesc;
             DescArrS.push(Description);
+            console.log(DescArrS);
             Description = "";
         }
         success = true;
@@ -334,13 +331,14 @@ async function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
         success = true;
     }
     if (success == true) {
-        return 1;
+        DomSet(DescArrS, DescArrR);
     }
     else {
         return 0;
     }
 }
-function DomSet() {
+function DomSet(DescArrS, DescArrR) {
+    console.log(DescArrS.length);
     DescArrS.reverse();
     DescArrR.reverse();
     LocalDescArrS.reverse();
@@ -372,7 +370,7 @@ function DomSet() {
         console.log("in DOM SET");
         SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo", LocalDescArrS, "LocaleDesc-", "streamtextarr", 0);
     }
-    else if (DescArrS.length < 0) {
+    else if (DescArrS.length < 0 || DescArrS.length == 0) {
         $$.log("No stream Timestamps found");
     }
     if (DescArrR.length > 0) {

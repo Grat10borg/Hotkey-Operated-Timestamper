@@ -21,7 +21,7 @@
 //     LOCALIZE_LANGUAGE: "da", // "da", "gb", "de" // Used in Youtube description uploading.
 
 //     // Extra configs
-//     CLIP_OFFSET : "27",
+//     CLIP_OFFSET : 27,
 //     HASHTAGS : "#Vtuber #VtuberEn #Davtuber"
 // }
 

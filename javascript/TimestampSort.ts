@@ -66,19 +66,22 @@ validateToken();
 //#region Basic Setup H.O.T NON Twitch API
 if (config.INFOWRITER_ON == true) { // run if infowriter is installed.
   if (CutOuts(RawTxt) == 1) {
+    console.log("Cutouts");
     // Runs CutOuts and if successful run next Method in line
     //@ts-expect-error
     if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
+      //console.log(MultiDimStreamArr);
       // Runs SetOps if sucessful run next Method in line
       // Set in Data to Webpage
       let stats = $$.id("Stats") as HTMLElement;
       stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
-      if (DomSet() == 1) {
-        // Domset needs to be ran before we call ValidateToken();
-      } else {
-        // Error logging
-        $$.log("Failed Placing Things in the Websites");
-      }
+      // if (DomSet(DescArrS, DescArrR) == 1) {
+      //   //console.log("Dom has been set");
+      //   // Domset needs to be ran before we call ValidateToken();
+      // } else {
+      //   // Error logging
+      //   $$.log("Failed Placing Things in the Websites");
+      // }
     } else {
       $$.log("Error Creating Description");
     }
@@ -429,6 +432,7 @@ async function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) 
       }
       Description = Description + "\n" + AfterDesc;
       DescArrS.push(Description);
+      console.log(DescArrS);
       Description = "";
     }
     success = true;
@@ -466,7 +470,8 @@ async function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) 
     success = true;
   }
   if (success == true) {
-    return 1;
+    DomSet(DescArrS, DescArrR);
+    //return 1;
   } else {
     // error message
     // $$.log("Both Stream and Recording Arrays returned Nothing.");
@@ -481,13 +486,15 @@ async function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) 
 // Outputs: a Working side bar, also calls SetIns()
 // returns Nothing
 
-function DomSet() {
+function DomSet(DescArrS, DescArrR) {
+  console.log(DescArrS.length);
   DescArrS.reverse(); // makes array be Newest First
   DescArrR.reverse();
   LocalDescArrS.reverse();
   LocalDescArrR.reverse();
   StreamDatesArr.reverse();
   RecordDatesArr.reverse();
+
   // Update Sidebar
   let SidebarDiv = $$.id("SideBar") as HTMLElement;
   let nav = $$.make("nav");
@@ -522,7 +529,7 @@ function DomSet() {
       "streamtextarr",
       0
     );
-  } else if (DescArrS.length < 0) {
+  } else if (DescArrS.length < 0 || DescArrS.length == 0) {
     $$.log("No stream Timestamps found");
   }
   if (DescArrR.length > 0) {
