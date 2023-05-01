@@ -65,29 +65,7 @@ validateToken();
 
 //#region Basic Setup H.O.T NON Twitch API
 if (config.INFOWRITER_ON == true) { // run if infowriter is installed.
-  if (CutOuts(RawTxt) == 1) {
-    console.log("Cutouts");
-    // Runs CutOuts and if successful run next Method in line
-    //@ts-expect-error
-    if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
-      //console.log(MultiDimStreamArr);
-      // Runs SetOps if sucessful run next Method in line
-      // Set in Data to Webpage
-      let stats = $$.id("Stats") as HTMLElement;
-      stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
-      // if (DomSet(DescArrS, DescArrR) == 1) {
-      //   //console.log("Dom has been set");
-      //   // Domset needs to be ran before we call ValidateToken();
-      // } else {
-      //   // Error logging
-      //   $$.log("Failed Placing Things in the Websites");
-      // }
-    } else {
-      $$.log("Error Creating Description");
-    }
-  } else {
-    $$.log("Error Sorting Timestamps");
-  }
+  CutOuts(RawTxt);
 }
 //#endregion
 
@@ -371,16 +349,17 @@ function CutOuts(RawTxt: string) {
     MultiDimStreamArr.length != null &&
     MultiDimStreamArr.length > 0
   ) {
-    return 1; // success
+    SetOps(MultiDimStreamArr, MultiDimRecordArr);
+    //return 1; // success
   } else if (
     typeof MultiDimRecordArr != "undefined" &&
     MultiDimRecordArr != null &&
     MultiDimRecordArr.length != null &&
     MultiDimRecordArr.length > 0
   ) {
-    return 1; // success
+    //return 1; // success
   } else {
-    return 0; // Error
+    //return 0; // Error
   }
 }
 //#endregion
@@ -400,6 +379,10 @@ async function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) 
   let success = false;
   var Description = ""; // Finished Description Var
   var LocalDescript = ""; // finished description in another language
+
+   // Set in Data to Webpage
+   let stats = $$.id("Stats") as HTMLElement;
+   stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
 
   // Makes a Working Description
   // If Not Null

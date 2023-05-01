@@ -42,19 +42,7 @@ var LocalDescArrR = new Array();
 var StreamDatesRaw = new Array();
 validateToken();
 if (config.INFOWRITER_ON == true) {
-    if (CutOuts(RawTxt) == 1) {
-        console.log("Cutouts");
-        if (SetOps(MultiDimStreamArr, MultiDimRecordArr)) {
-            let stats = $$.id("Stats");
-            stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
-        }
-        else {
-            $$.log("Error Creating Description");
-        }
-    }
-    else {
-        $$.log("Error Sorting Timestamps");
-    }
+    CutOuts(RawTxt);
 }
 let TwitchClip = $$.id("TwitchClip");
 TwitchClip.addEventListener("click", async function (event) {
@@ -251,16 +239,14 @@ function CutOuts(RawTxt) {
         MultiDimStreamArr != null &&
         MultiDimStreamArr.length != null &&
         MultiDimStreamArr.length > 0) {
-        return 1;
+        SetOps(MultiDimStreamArr, MultiDimRecordArr);
     }
     else if (typeof MultiDimRecordArr != "undefined" &&
         MultiDimRecordArr != null &&
         MultiDimRecordArr.length != null &&
         MultiDimRecordArr.length > 0) {
-        return 1;
     }
     else {
-        return 0;
     }
 }
 async function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
@@ -271,6 +257,8 @@ async function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
     let success = false;
     var Description = "";
     var LocalDescript = "";
+    let stats = $$.id("Stats");
+    stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
     if (MultiDimStreamArr.length > -1) {
         for (let index = 0; index < MultiDimStreamArr.length; index++) {
             let resArray = MultiDimStreamArr[index];
