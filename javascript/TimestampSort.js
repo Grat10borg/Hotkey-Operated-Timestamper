@@ -285,7 +285,6 @@ async function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
             }
             Description = Description + "\n" + AfterDesc;
             DescArrS.push(Description);
-            console.log(DescArrS);
             Description = "";
         }
         success = true;
@@ -354,7 +353,6 @@ function DomSet(DescArrS, DescArrR) {
             li.append(a);
             ul.append(li);
         }
-        console.log("in DOM SET");
         SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo", LocalDescArrS, "LocaleDesc-", "streamtextarr", 0);
     }
     else if (DescArrS.length < 0 || DescArrS.length == 0) {
@@ -394,7 +392,6 @@ function DomSet(DescArrS, DescArrR) {
     return 1;
 }
 function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID, CharCount_index) {
-    console.log("in Setins");
     var DescDiv = $$.id("DescriptionAreaDiv");
     for (let index = 0; index < DescArr.length; index++) {
         let AcordDiv = $$.make("div");
@@ -634,12 +631,12 @@ function parseISOString(Isostring) {
     return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
 }
 async function validateToken() {
-    if (AppAcessToken != undefined &&
-        AppAcessToken != "" &&
-        AppAcessToken != null) {
+    if (config.TWITCH_API_TOKEN != undefined &&
+        config.TWITCH_API_TOKEN != "" &&
+        config.TWITCH_API_TOKEN != null) {
         await fetch("https://id.twitch.tv/oauth2/validate", {
             headers: {
-                Authorization: "Bearer " + AppAcessToken,
+                Authorization: "Bearer " + config.TWITCH_API_TOKEN,
             },
         })
             .then((resp) => resp.json())
@@ -680,7 +677,7 @@ async function validateToken() {
 async function HttpCalling(HttpCall) {
     const respon = await fetch(`${HttpCall}`, {
         headers: {
-            Authorization: "Bearer " + AppAcessToken,
+            Authorization: "Bearer " + config.TWITCH_API_TOKEN,
             "Client-ID": AclientId,
         },
     })

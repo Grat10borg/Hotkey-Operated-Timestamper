@@ -415,7 +415,7 @@ async function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) 
       }
       Description = Description + "\n" + AfterDesc;
       DescArrS.push(Description);
-      console.log(DescArrS);
+      //console.log(DescArrS);
       Description = "";
     }
     success = true;
@@ -501,7 +501,7 @@ function DomSet(DescArrS, DescArrR) {
       li.append(a);
       ul.append(li);
     }
-    console.log("in DOM SET");
+    //console.log("in DOM SET");
     SetIns(
       DescArrS,
       StreamDatesArr,
@@ -583,7 +583,7 @@ function SetIns(
   TextAreaID: string,
   CharCount_index: number
 ) {
-  console.log("in Setins");
+  //console.log("in Setins");
   var DescDiv = $$.id(
     "DescriptionAreaDiv"
   ) as HTMLInputElement;
@@ -916,13 +916,13 @@ function parseISOString(Isostring) {
 // Calls the Twitch api with Out App Acess Token and returns a ClientId and tells us if the App Acess Token is Valid or Not
 async function validateToken() {
   if (
-    AppAcessToken != undefined &&
-    AppAcessToken != "" &&
-    AppAcessToken != null
+    config.TWITCH_API_TOKEN != undefined &&
+    config.TWITCH_API_TOKEN != "" &&
+    config.TWITCH_API_TOKEN != null
   ) {
     await fetch("https://id.twitch.tv/oauth2/validate", {
       headers: {
-        Authorization: "Bearer " + AppAcessToken,
+        Authorization: "Bearer " + config.TWITCH_API_TOKEN,
       },
     })
       .then((resp) => resp.json())
@@ -969,7 +969,7 @@ async function validateToken() {
 async function HttpCalling(HttpCall: string) {
   const respon = await fetch(`${HttpCall}`, {
     headers: {
-      Authorization: "Bearer " + AppAcessToken,
+      Authorization: "Bearer " + config.TWITCH_API_TOKEN,
       "Client-ID": AclientId, // can also use Tclient_id. !! comment out Tclient if not being used !!
     },
   })
