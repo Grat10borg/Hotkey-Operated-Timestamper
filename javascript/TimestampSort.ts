@@ -1,20 +1,8 @@
 // Misc
 let HotV = "V-1.0_beta"; // the version of H.o.t
 
-
-// Get these from Files in the future
-let TimestampTxt = $$.id("TimestampTxt") as HTMLInputElement;
-let RawTxt;
-
 // Settings
-if (TimestampTxt != null) {
-  RawTxt = TimestampTxt.innerHTML;
-  
-} else {
-  $$.log(
-    "Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!"
-  );
-}
+
 if (config.TWITCH_API_TOKEN == "" || config.TWITCH_API_TOKEN == null) {
 
 }
@@ -57,7 +45,7 @@ validateToken();
 
 //#region Basic Setup H.O.T NON Twitch API
 if (config.INFOWRITER_ON == true) { // run if infowriter is installed.
-  CutOuts(RawTxt);
+  CutOuts();
 }
 //#endregion
 
@@ -247,8 +235,11 @@ TwitchClip.addEventListener("click", async function (event: any) {
 // Outputs: Sets Data in Multidim-Stream/RecordArr with a clean set of Timestamps -
 // returns 1 if sucessful and 0 if failed
 //- with Scenes marked with their names and Clips marked
-function CutOuts(RawTxt: string) {
-  let RawTxtArr = RawTxt.split("\n"); // splits them by Spaces : EVENT:START, RECORDING, @, etc...
+async function CutOuts() {
+  let timestamps = await $$.txt("Texts/Timestamps.txt");
+  if(timestamps == "") $$.log("Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!");
+ 
+  let RawTxtArr = timestamps.split("\n"); // splits them by Spaces : EVENT:START, RECORDING, @, etc...
   let StreamArr = Array();
   let RecordArr = Array();
   var Catch = false as boolean; // catch is activated when nearing the end of the VOD/Stream. it tells it to stop/catch the varibles for now and place it in the arrays

@@ -1,13 +1,5 @@
 "use strict";
 let HotV = "V-1.0_beta";
-let TimestampTxt = $$.id("TimestampTxt");
-let RawTxt;
-if (TimestampTxt != null) {
-    RawTxt = TimestampTxt.innerHTML;
-}
-else {
-    $$.log("Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!");
-}
 if (config.TWITCH_API_TOKEN == "" || config.TWITCH_API_TOKEN == null) {
 }
 if (config.CLIP_OFFSET == null) {
@@ -36,7 +28,7 @@ var LocalDescArrR = new Array();
 var StreamDatesRaw = new Array();
 validateToken();
 if (config.INFOWRITER_ON == true) {
-    CutOuts(RawTxt);
+    CutOuts();
 }
 let TwitchClip = $$.id("TwitchClip");
 TwitchClip.addEventListener("click", async function (event) {
@@ -149,8 +141,11 @@ TwitchClip.addEventListener("click", async function (event) {
         validateToken();
     }
 });
-function CutOuts(RawTxt) {
-    let RawTxtArr = RawTxt.split("\n");
+async function CutOuts() {
+    let timestamps = await $$.txt("Texts/Timestamps.txt");
+    if (timestamps == "")
+        $$.log("Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!");
+    let RawTxtArr = timestamps.split("\n");
     let StreamArr = Array();
     let RecordArr = Array();
     var Catch = false;
