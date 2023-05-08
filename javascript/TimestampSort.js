@@ -326,7 +326,6 @@ async function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
     }
 }
 function DomSet(DescArrS, DescArrR) {
-    console.log(DescArrS.length);
     DescArrS.reverse();
     DescArrR.reverse();
     LocalDescArrS.reverse();
@@ -518,11 +517,11 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID
             AcordBody.append(ButtonDivL);
             CharCount_index++;
         }
-        console.log(AcordDiv);
         collapsedDiv.append(AcordBody);
         AcordItem.append(collapsedDiv);
         AcordDiv.append(AcordItem);
         DescDiv.append(AcordDiv);
+        $$.btnchar();
     }
 }
 function AddClipDelay(timestamp, Clipoffset) {

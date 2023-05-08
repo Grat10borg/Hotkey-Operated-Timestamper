@@ -470,7 +470,7 @@ async function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) 
 // returns Nothing
 
 function DomSet(DescArrS, DescArrR) {
-  console.log(DescArrS.length);
+  //console.log(DescArrS.length);
   DescArrS.reverse(); // makes array be Newest First
   DescArrR.reverse();
   LocalDescArrS.reverse();
@@ -755,12 +755,14 @@ function SetIns(
       CharCount_index++;
     }
 
-    console.log(AcordDiv);
+    //console.log(AcordDiv);
     // Final Appening
     collapsedDiv.append(AcordBody);
     AcordItem.append(collapsedDiv);
     AcordDiv.append(AcordItem);
     DescDiv.append(AcordDiv);
+
+    $$.btnchar(); // should run button & charcounter setup
   }
 }
 //#endregion
