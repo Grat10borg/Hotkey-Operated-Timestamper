@@ -2,8 +2,6 @@
 let HotV = "V-1.0_beta";
 let TimestampTxt = $$.id("TimestampTxt");
 let RawTxt;
-var AppAcessToken;
-var SettingsLocal;
 if (TimestampTxt != null) {
     RawTxt = TimestampTxt.innerHTML;
 }
@@ -11,9 +9,6 @@ else {
     $$.log("Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!");
 }
 if (config.TWITCH_API_TOKEN == "" || config.TWITCH_API_TOKEN == null) {
-    $$.log("H.O.T could not get your TwitchKey, you will not be able to use Clip-Stamps");
-    let TwitchClipbtn = $$.id("TwitchClip");
-    TwitchClipbtn.disabled = true;
 }
 if (config.CLIP_OFFSET == null) {
     $$.log("you didnt set a config.CLIP_OFFSET, H.O.T has defaulted to 26 seconds of offset.");
@@ -25,7 +20,6 @@ if (config.TWITCH_LOGIN == null || config.TWITCH_LOGIN == "") {
 }
 if (config.LOCALIZE_ON == false) {
     $$.log("LocalSettings not found Turning off Local Mode");
-    SettingsLocal = "";
 }
 else {
 }
@@ -671,6 +665,9 @@ async function validateToken() {
         return 1;
     }
     else {
+        $$.log("H.O.T could not get your TwitchKey, you will not be able to use Clip-Stamps");
+        let TwitchClipbtn = $$.id("TwitchClip");
+        TwitchClipbtn.disabled = true;
         return 0;
     }
 }
@@ -761,10 +758,8 @@ async function DescriptionReplace(TimestampsArr, Index, localprint) {
     let Desc = $$.class(`Charcounts`);
     if (localprint == true) {
         var LNewDesc = "";
-        let res = $$.id("LocalBeforeDesc");
-        let res1 = $$.id("LocalAfterDesc");
-        let BeforeDescL = res.innerHTML;
-        let AfterDescL = res1.innerHTML;
+        let BeforeDescL = await $$.txt("Texts/LocaleBeforeTimestamps.txt");
+        let AfterDescL = await $$.txt("Texts/LocaleAfterTimestamps.txt");
         let resArray = TimestampsArr;
         LNewDesc = BeforeDescL + "\n\n";
         LNewDesc = LNewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
@@ -778,10 +773,8 @@ async function DescriptionReplace(TimestampsArr, Index, localprint) {
     }
     else {
         var NewDesc = "";
-        let res = $$.id("BeforeDesc");
-        let res1 = $$.id("AfterDesc");
-        let BeforeDesc = res.innerHTML;
-        let AfterDesc = res1.innerHTML;
+        let BeforeDesc = await $$.txt("Texts/BeforeTimestamps.txt");
+        let AfterDesc = await $$.txt("Texts/AfterTimestamps.txt");
         let resArray = TimestampsArr;
         NewDesc = BeforeDesc + "\n\n";
         NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;

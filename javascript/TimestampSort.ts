@@ -7,8 +7,6 @@ let TimestampTxt = $$.id("TimestampTxt") as HTMLInputElement;
 let RawTxt;
 
 // Settings
-var AppAcessToken;
-var SettingsLocal;
 if (TimestampTxt != null) {
   RawTxt = TimestampTxt.innerHTML;
   
@@ -18,11 +16,7 @@ if (TimestampTxt != null) {
   );
 }
 if (config.TWITCH_API_TOKEN == "" || config.TWITCH_API_TOKEN == null) {
-  $$.log(
-    "H.O.T could not get your TwitchKey, you will not be able to use Clip-Stamps"
-  );
-  let TwitchClipbtn = $$.id("TwitchClip") as HTMLInputElement;
-  TwitchClipbtn.disabled = true;
+
 }
 if (config.CLIP_OFFSET == null) {
   $$.log(
@@ -38,8 +32,6 @@ if (config.TWITCH_LOGIN == null || config.TWITCH_LOGIN == "") {
 }
 if (config.LOCALIZE_ON == false) {
   $$.log("LocalSettings not found Turning off Local Mode");
-  SettingsLocal = "" as string;
-  //SettingsLocal = Plocal.innerHTML as string;
 } else {
  
 }
@@ -958,6 +950,11 @@ async function validateToken() {
       });
     return 1;
   } else {
+    $$.log(
+      "H.O.T could not get your TwitchKey, you will not be able to use Clip-Stamps"
+    );
+    let TwitchClipbtn = $$.id("TwitchClip") as HTMLInputElement;
+    TwitchClipbtn.disabled = true;
     return 0;
   }
 }
@@ -1078,11 +1075,9 @@ async function DescriptionReplace(TimestampsArr: Array<string>, Index: number, l
   let Desc = $$.class(`Charcounts`) as any;
   if (localprint == true) {
     var LNewDesc = ""; // Finished Description Var
-    let res = $$.id("LocalBeforeDesc") as HTMLInputElement;
-    let res1 = $$.id("LocalAfterDesc") as HTMLInputElement;
 
-    let BeforeDescL = res.innerHTML;
-    let AfterDescL = res1.innerHTML;
+    let BeforeDescL = await $$.txt("Texts/LocaleBeforeTimestamps.txt") as string;
+    let AfterDescL = await $$.txt("Texts/LocaleAfterTimestamps.txt") as string;
 
     let resArray = TimestampsArr;
 
@@ -1097,11 +1092,9 @@ async function DescriptionReplace(TimestampsArr: Array<string>, Index: number, l
     LNewDesc = "";
   } else {
     var NewDesc = ""; // Finished Description Var
-    let res = $$.id("BeforeDesc") as HTMLInputElement;
-    let res1 = $$.id("AfterDesc") as HTMLInputElement;
 
-    let BeforeDesc = res.innerHTML;
-    let AfterDesc = res1.innerHTML;
+    let BeforeDesc = await $$.txt("Texts/BeforeTimestamps.txt") as string;
+    let AfterDesc = await $$.txt("Texts/AfterTimestamps.txt") as string;
     let resArray = TimestampsArr;
 
     NewDesc = BeforeDesc + "\n\n";
