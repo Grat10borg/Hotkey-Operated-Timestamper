@@ -26,7 +26,6 @@ if (config.LOCALIZE_ON == false) {
 
 // Asigned later
 var AclientId = "" as string;
-var TwitchConnected = false; // tells if the Twitch HTTP calls should be called or not.
 
 var MultiDimStreamArr = Array(); // Holds Raw Data from txt
 var MultiDimRecordArr = Array(); // Holds Raw Data from txt
@@ -40,7 +39,8 @@ var LocalDescArrR = new Array();
 var StreamDatesRaw = new Array();
 
 //#region Token Validation.
-validateToken();
+//validateToken();
+$$.api_valid();
 //#endregion
 
 //#region Basic Setup H.O.T NON Twitch API
@@ -58,12 +58,12 @@ if (config.INFOWRITER_ON == true) { // run if infowriter is installed.
 let TwitchClip = $$.id("TwitchClip") as HTMLInputElement;
 
 TwitchClip.addEventListener("click", async function (event: any) {
-  if (TwitchConnected == true) {
+  if (config.TWITCH_ON == true) {
     // Calling API to get ID of streamer with this name
-    let UserIdResp = await HttpCalling(
-      `https://api.twitch.tv/helix/users?login=${config.TWITCH_LOGIN}`
+    let UserIdResp = await $$.api(
+      `https://api.twitch.tv/helix/users?login=${config.TWITCH_LOGIN}`,true
     );
-
+    $$.log(UserIdResp);
     //#region Getting Timestamp from Acord buttons
     let AcorBtns = Array();
     let StreamedDate = Array(); // date a stream took place local ver
@@ -79,8 +79,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
     //#endregion
     //#region Checking if there even is any VODS
     let VODcount = 0;
-    let UserVods = (await HttpCalling(
-      `https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`
+    let UserVods = (await $$.api(
+      `https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`, true
     )) as Array<string>;
     // counting VODs
     for (let index = 0; index < UserVods["data"].length; index++) {
@@ -217,7 +217,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
     // Found No Vods to get names from.
   } else {
     $$.log("Failed to Validate Token Try Again");
-    validateToken();
+    $$.api_valid();
   }
 });
 
@@ -894,88 +894,6 @@ function parseISOString(Isostring) {
 }
 //#endregion
 
-// needs a VALID Twitch App Auth Token
-//#region validateToken() Validates Token if sucessful returns 1 if not 0
-// Calls the Twitch api with Out App Acess Token and returns a ClientId and tells us if the App Acess Token is Valid or Not
-async function validateToken() {
-  if (
-    config.TWITCH_API_TOKEN != undefined &&
-    config.TWITCH_API_TOKEN != "" &&
-    config.TWITCH_API_TOKEN != null
-  ) {
-    await fetch("https://id.twitch.tv/oauth2/validate", {
-      headers: {
-        Authorization: "Bearer " + config.TWITCH_API_TOKEN,
-      },
-    })
-      .then((resp) => resp.json())
-      .then((resp) => {
-        if (resp.status) {
-          if (resp.status == 401) {
-            $$.log("This token is invalid ... " + resp.message);
-            return 0;
-          }
-          $$.log("Unexpected output with a status");
-          return 0;
-        }
-        if (resp.client_id) {
-          AclientId = resp.client_id;
-          TwitchConnected = true;
-          $$.log("Token Validated Sucessfully");
-          let p = $$.id("AccessTokenTime") as HTMLElement;
-          let Time = new Date(resp.expires_in * 1000);
-          let TimeStrDash = Time.toISOString().split("-");
-          let TimeStrT = TimeStrDash[2].split("T");
-          let TimeString = `${
-            parseInt(TimeStrDash[1].substring(1, 2)) - 1
-          } Month ${TimeStrT[0]} Days & ${TimeStrT[1].substring(0, 8)} Hours`;
-          p.innerHTML = `• Current Token Will Expire In: <br> ${TimeString}.`;
-          return 1;
-        }
-        $$.log("unexpected Output");
-        return 0;
-      })
-      .catch((err) => {
-        $$.log(err);
-        return 0;
-      });
-    return 1;
-  } else {
-    $$.log(
-      "H.O.T could not get your TwitchKey, you will not be able to use Clip-Stamps"
-    );
-    let TwitchClipbtn = $$.id("TwitchClip") as HTMLInputElement;
-    TwitchClipbtn.disabled = true;
-    return 0;
-  }
-}
-//#endregion
-
-//#region [async] HttpCaller(HttpCall) multipurpose HttpCaller calls the Httpcall returns The Response if Success if not: 0
-// This makes most calls, intead of a lot of differnt functions this does them instead.
-// TO find out what is called look where its called as the HTTPCALL would need to be sent over.
-async function HttpCalling(HttpCall: string) {
-  const respon = await fetch(`${HttpCall}`, {
-    headers: {
-      Authorization: "Bearer " + config.TWITCH_API_TOKEN,
-      "Client-ID": AclientId, // can also use Tclient_id. !! comment out Tclient if not being used !!
-    },
-  })
-    .then((respon) => respon.json())
-    .then((respon) => {
-      // Return Response on Success
-      return respon;
-    })
-    .catch((err) => {
-      // Print Error if any. And return 0
-      $$.log(err);
-      return err;
-    });
-  return respon;
-}
-//#endregion
-//#endregion
-
 //#region functions for ClipStamps
 // gets clips from a date plus 1 day forward, needs date and streamerID
 async function GetClipsFromDate(StreamedDate: string, StreamerID: string) {
@@ -983,7 +901,7 @@ async function GetClipsFromDate(StreamedDate: string, StreamerID: string) {
   let EndDate = new Date(StreamedDate); // gets whole day worth time. note: going over 24 hours stream time would be a problem.
   EndDate.setDate(EndDate.getDate() + 1);
   let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${StreamerID}&first=100&started_at=${StartDate.toISOString()}&ended_at=${EndDate.toISOString()}`;
-  let resp = await HttpCalling(http2);
+  let resp = await $$.api(http2,true);
 
   // Test if Clipper is the Streamer
   let Clips = Array();
@@ -1032,8 +950,8 @@ async function ChangeAcordButtonNames(
   index: number,
   AcordButtonArr: Array<HTMLElement>
 ) {
-  let gameresp = await HttpCalling(
-    `https://api.twitch.tv/helix/games?id=${Clips[0]["game_id"]}` // just picks the game of the first clips data.
+  let gameresp = await $$.api(
+    `https://api.twitch.tv/helix/games?id=${Clips[0]["game_id"]}`,true // just picks the game of the first clips data.
   );
   if (index % 2) {
     AcordButtonArr[index].innerHTML =

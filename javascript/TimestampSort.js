@@ -16,7 +16,6 @@ if (config.LOCALIZE_ON == false) {
 else {
 }
 var AclientId = "";
-var TwitchConnected = false;
 var MultiDimStreamArr = Array();
 var MultiDimRecordArr = Array();
 var StreamDatesArr = Array();
@@ -26,14 +25,15 @@ var LocalDescArrS = new Array();
 var DescArrR = new Array();
 var LocalDescArrR = new Array();
 var StreamDatesRaw = new Array();
-validateToken();
+$$.api_valid();
 if (config.INFOWRITER_ON == true) {
     CutOuts();
 }
 let TwitchClip = $$.id("TwitchClip");
 TwitchClip.addEventListener("click", async function (event) {
-    if (TwitchConnected == true) {
-        let UserIdResp = await HttpCalling(`https://api.twitch.tv/helix/users?login=${config.TWITCH_LOGIN}`);
+    if (config.TWITCH_ON == true) {
+        let UserIdResp = await $$.api(`https://api.twitch.tv/helix/users?login=${config.TWITCH_LOGIN}`, true);
+        $$.log(UserIdResp);
         let AcorBtns = Array();
         let StreamedDate = Array();
         for (let index = 0; index < StreamDatesArr.length; index++) {
@@ -44,7 +44,7 @@ TwitchClip.addEventListener("click", async function (event) {
             StreamedDate.push(Timestamps[5] + "T" + Timestamps[6] + ".000Z");
         }
         let VODcount = 0;
-        let UserVods = (await HttpCalling(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`));
+        let UserVods = (await $$.api(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`, true));
         for (let index = 0; index < UserVods["data"].length; index++) {
             if (UserVods["data"][index]["type"] != "highlight") {
                 VODcount++;
@@ -138,7 +138,7 @@ TwitchClip.addEventListener("click", async function (event) {
     }
     else {
         $$.log("Failed to Validate Token Try Again");
-        validateToken();
+        $$.api_valid();
     }
 });
 async function CutOuts() {
@@ -619,76 +619,12 @@ function parseISOString(Isostring) {
     var b = Isostring.split(/\D+/);
     return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
 }
-async function validateToken() {
-    if (config.TWITCH_API_TOKEN != undefined &&
-        config.TWITCH_API_TOKEN != "" &&
-        config.TWITCH_API_TOKEN != null) {
-        await fetch("https://id.twitch.tv/oauth2/validate", {
-            headers: {
-                Authorization: "Bearer " + config.TWITCH_API_TOKEN,
-            },
-        })
-            .then((resp) => resp.json())
-            .then((resp) => {
-            if (resp.status) {
-                if (resp.status == 401) {
-                    $$.log("This token is invalid ... " + resp.message);
-                    return 0;
-                }
-                $$.log("Unexpected output with a status");
-                return 0;
-            }
-            if (resp.client_id) {
-                AclientId = resp.client_id;
-                TwitchConnected = true;
-                $$.log("Token Validated Sucessfully");
-                let p = $$.id("AccessTokenTime");
-                let Time = new Date(resp.expires_in * 1000);
-                let TimeStrDash = Time.toISOString().split("-");
-                let TimeStrT = TimeStrDash[2].split("T");
-                let TimeString = `${parseInt(TimeStrDash[1].substring(1, 2)) - 1} Month ${TimeStrT[0]} Days & ${TimeStrT[1].substring(0, 8)} Hours`;
-                p.innerHTML = `• Current Token Will Expire In: <br> ${TimeString}.`;
-                return 1;
-            }
-            $$.log("unexpected Output");
-            return 0;
-        })
-            .catch((err) => {
-            $$.log(err);
-            return 0;
-        });
-        return 1;
-    }
-    else {
-        $$.log("H.O.T could not get your TwitchKey, you will not be able to use Clip-Stamps");
-        let TwitchClipbtn = $$.id("TwitchClip");
-        TwitchClipbtn.disabled = true;
-        return 0;
-    }
-}
-async function HttpCalling(HttpCall) {
-    const respon = await fetch(`${HttpCall}`, {
-        headers: {
-            Authorization: "Bearer " + config.TWITCH_API_TOKEN,
-            "Client-ID": AclientId,
-        },
-    })
-        .then((respon) => respon.json())
-        .then((respon) => {
-        return respon;
-    })
-        .catch((err) => {
-        $$.log(err);
-        return err;
-    });
-    return respon;
-}
 async function GetClipsFromDate(StreamedDate, StreamerID) {
     let StartDate = new Date(StreamedDate);
     let EndDate = new Date(StreamedDate);
     EndDate.setDate(EndDate.getDate() + 1);
     let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${StreamerID}&first=100&started_at=${StartDate.toISOString()}&ended_at=${EndDate.toISOString()}`;
-    let resp = await HttpCalling(http2);
+    let resp = await $$.api(http2, true);
     let Clips = Array();
     for (let i = 0; i < resp["data"].length; i++) {
         if (resp["data"][i]["creator_name"].toLowerCase() == config.TWITCH_LOGIN.toLowerCase()) {
@@ -724,7 +660,7 @@ function SortClips(Clips, GetClipDates) {
     }
 }
 async function ChangeAcordButtonNames(Clips, index, AcordButtonArr) {
-    let gameresp = await HttpCalling(`https://api.twitch.tv/helix/games?id=${Clips[0]["game_id"]}`);
+    let gameresp = await $$.api(`https://api.twitch.tv/helix/games?id=${Clips[0]["game_id"]}`, true);
     if (index % 2) {
         AcordButtonArr[index].innerHTML =
             "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
