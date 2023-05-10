@@ -14,12 +14,17 @@ query_all: $.querySelectorAll.bind($),
 // custome methods bellow this
 txt: fetchTXT.bind($), //async
 btnchar: AddBTNCharcounters.bind($),
+api_valid: validateTwitchToken.bind($),
+api: ApiCall.bind($),
 
 // just here to help me out when working.
 log: console.log,
 } 
 
 // // Code methods custome
+let TwitchClientID: string = ""; // contains the clientID used for api calls.
+
+//#region 
 
 // a little wonky but the response promise did not want to play along..
 async function fetchTXT(Url:string) {
@@ -110,3 +115,101 @@ function AddBTNCharcounters() {
     Clear.addEventListener("click",function () {alert("Clearing Timestamps");window.location.href = "clear.php";},true);
   }
 }
+
+// Validates token for Twitch api use.
+async function validateTwitchToken() {
+  let p = $$.id("AccessTokenTime") as HTMLElement;
+
+  if (config.TWITCH_API_TOKEN != undefined && config.TWITCH_API_TOKEN != "" && config.TWITCH_API_TOKEN != null) {
+    await fetch("https://id.twitch.tv/oauth2/validate", {
+      headers: {Authorization: "Bearer " + config.TWITCH_API_TOKEN,},}).then((resp) => resp.json()).then((resp) => {
+        if (resp.status) {
+          if (resp.status == 401) {
+            alert("This token ('" +config.TWITCH_API_TOKEN+"') is invalid (" +resp.message +")!");
+            console.log("[INVALID TOKEN]: Try making a new token, or setting [TWITCH_ON] to false in the config.js file!");
+            let Submitbtn = $$.id("Submit") as HTMLInputElement;
+            Submitbtn.disabled = true;
+            p.innerHTML = `• Your Token is invalid, try to follow H.O.T wiki for help!.`;
+            return 0;
+          }
+          alert("Unexpected response while validating token, check console for info.. (っ °Д °;)っ");
+          $$.log("[Unexpected Token Output]");
+          $$.log(resp.status);
+          return 0;
+        }
+        if (resp.client_id) {
+          TwitchClientID = resp.client_id; // save clientID for other api calls that need them..
+          $$.log("[TOKEN VALIDATED]: Token Validated Sucessfully");
+          let Time = new Date(resp.expires_in * 1000);
+          let TimeStrDash = Time.toISOString().split("-");
+          let TimeStrT = TimeStrDash[2].split("T");
+          let TimeString = `${
+            parseInt(TimeStrDash[1].substring(1, 2)) - 1
+          } Month ${TimeStrT[0]} Days & ${TimeStrT[1].substring(0, 8)} Hours`;
+          p.innerHTML = `• Current Token Will Expire In: <br> ${TimeString}.`;
+          return 1;
+        }
+        $$.log("[TOKEN UNEXPECTED OUTCOME] unexpected Output");
+        $$.log(resp.status);
+        p.innerHTML = `• Your Token returned an unforseen result?. check console for info.`;
+        return 0;
+      })
+      .catch((err) => {
+        $$.log(err);
+        return 0;
+      });
+    return 1;
+  } else {
+    p.innerHTML = `• Could not get you Twitchkey, try looking in config.js`;
+    $$.log("H.O.T could not get your TwitchKey, you will not be able to use Clip-Stamps");
+    let TwitchClipbtn = $$.id("TwitchClip") as HTMLInputElement;
+    if(TwitchClipbtn != null) TwitchClipbtn.disabled = true;
+    return 0;
+  }
+}
+
+// Calls Twitch API or another API if turned on
+async function ApiCall(HttpCall: string, Twitch: boolean) {
+  console.log(HttpCall);
+  if(Twitch == true) {
+    const respon = await fetch(`${HttpCall}`, {
+      headers: {
+        Authorization: "Bearer " + config.TWITCH_API_TOKEN,
+        "Client-ID": TwitchClientID,
+      },
+    })
+      .then((respon) => respon.json())
+      .then((respon) => {
+        // Return Response on Success
+        return respon;
+      })
+      .catch((err) => {
+        // Print Error if any. And return 0
+        $$.log(err);
+          console.log(err);
+        return err;
+      });
+      console.log(respon);
+    return respon;
+  }
+  else { // if not getting from Twitch API
+    const respon = await fetch(`${HttpCall}`, {
+      headers: {
+        // headers here i guess?
+      },
+    })
+      .then((respon) => respon.json())
+      .then((respon) => {
+        // Return Response on Success
+        return respon;
+      })
+      .catch((err) => {
+        // Print Error if any. And return 0
+        $$.log(err);
+        return err;
+      });
+    return respon;
+  }
+}
+
+//#endregion

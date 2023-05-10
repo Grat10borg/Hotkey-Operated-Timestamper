@@ -9,8 +9,11 @@ const $$ = {
     query_all: $.querySelectorAll.bind($),
     txt: fetchTXT.bind($),
     btnchar: AddBTNCharcounters.bind($),
+    api_valid: validateTwitchToken.bind($),
+    api: ApiCall.bind($),
     log: console.log,
 };
+let TwitchClientID = "";
 async function fetchTXT(Url) {
     await fetch(Url)
         .then(response => response.text())
@@ -87,5 +90,91 @@ function AddBTNCharcounters() {
     }
     if (Clear != null) {
         Clear.addEventListener("click", function () { alert("Clearing Timestamps"); window.location.href = "clear.php"; }, true);
+    }
+}
+async function validateTwitchToken() {
+    let p = $$.id("AccessTokenTime");
+    if (config.TWITCH_API_TOKEN != undefined && config.TWITCH_API_TOKEN != "" && config.TWITCH_API_TOKEN != null) {
+        await fetch("https://id.twitch.tv/oauth2/validate", {
+            headers: { Authorization: "Bearer " + config.TWITCH_API_TOKEN, },
+        }).then((resp) => resp.json()).then((resp) => {
+            if (resp.status) {
+                if (resp.status == 401) {
+                    alert("This token ('" + config.TWITCH_API_TOKEN + "') is invalid (" + resp.message + ")!");
+                    console.log("[INVALID TOKEN]: Try making a new token, or setting [TWITCH_ON] to false in the config.js file!");
+                    let Submitbtn = $$.id("Submit");
+                    Submitbtn.disabled = true;
+                    p.innerHTML = `• Your Token is invalid, try to follow H.O.T wiki for help!.`;
+                    return 0;
+                }
+                alert("Unexpected response while validating token, check console for info.. (っ °Д °;)っ");
+                $$.log("[Unexpected Token Output]");
+                $$.log(resp.status);
+                return 0;
+            }
+            if (resp.client_id) {
+                TwitchClientID = resp.client_id;
+                $$.log("[TOKEN VALIDATED]: Token Validated Sucessfully");
+                let Time = new Date(resp.expires_in * 1000);
+                let TimeStrDash = Time.toISOString().split("-");
+                let TimeStrT = TimeStrDash[2].split("T");
+                let TimeString = `${parseInt(TimeStrDash[1].substring(1, 2)) - 1} Month ${TimeStrT[0]} Days & ${TimeStrT[1].substring(0, 8)} Hours`;
+                p.innerHTML = `• Current Token Will Expire In: <br> ${TimeString}.`;
+                return 1;
+            }
+            $$.log("[TOKEN UNEXPECTED OUTCOME] unexpected Output");
+            $$.log(resp.status);
+            p.innerHTML = `• Your Token returned an unforseen result?. check console for info.`;
+            return 0;
+        })
+            .catch((err) => {
+            $$.log(err);
+            return 0;
+        });
+        return 1;
+    }
+    else {
+        p.innerHTML = `• Could not get you Twitchkey, try looking in config.js`;
+        $$.log("H.O.T could not get your TwitchKey, you will not be able to use Clip-Stamps");
+        let TwitchClipbtn = $$.id("TwitchClip");
+        if (TwitchClipbtn != null)
+            TwitchClipbtn.disabled = true;
+        return 0;
+    }
+}
+async function ApiCall(HttpCall, Twitch) {
+    console.log(HttpCall);
+    if (Twitch == true) {
+        const respon = await fetch(`${HttpCall}`, {
+            headers: {
+                Authorization: "Bearer " + config.TWITCH_API_TOKEN,
+                "Client-ID": TwitchClientID,
+            },
+        })
+            .then((respon) => respon.json())
+            .then((respon) => {
+            return respon;
+        })
+            .catch((err) => {
+            $$.log(err);
+            console.log(err);
+            return err;
+        });
+        console.log(respon);
+        return respon;
+    }
+    else {
+        const respon = await fetch(`${HttpCall}`, {
+            headers: {},
+        })
+            .then((respon) => respon.json())
+            .then((respon) => {
+            return respon;
+        })
+            .catch((err) => {
+            $$.log(err);
+            return err;
+        });
+        return respon;
     }
 }
