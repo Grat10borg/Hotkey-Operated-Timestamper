@@ -143,7 +143,6 @@ async function validateTwitchToken() {
     }
 }
 async function ApiCall(HttpCall, Twitch) {
-    console.log(HttpCall);
     if (Twitch == true) {
         const respon = await fetch(`${HttpCall}`, {
             headers: {
@@ -157,10 +156,8 @@ async function ApiCall(HttpCall, Twitch) {
         })
             .catch((err) => {
             $$.log(err);
-            console.log(err);
             return err;
         });
-        console.log(respon);
         return respon;
     }
     else {

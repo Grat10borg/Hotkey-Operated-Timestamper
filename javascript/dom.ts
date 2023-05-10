@@ -170,7 +170,6 @@ async function validateTwitchToken() {
 
 // Calls Twitch API or another API if turned on
 async function ApiCall(HttpCall: string, Twitch: boolean) {
-  console.log(HttpCall);
   if(Twitch == true) {
     const respon = await fetch(`${HttpCall}`, {
       headers: {
@@ -186,10 +185,8 @@ async function ApiCall(HttpCall: string, Twitch: boolean) {
       .catch((err) => {
         // Print Error if any. And return 0
         $$.log(err);
-          console.log(err);
         return err;
       });
-      console.log(respon);
     return respon;
   }
   else { // if not getting from Twitch API
