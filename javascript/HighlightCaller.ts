@@ -2,7 +2,8 @@
 // Asigned later
 let UserId = "";
 let client_id = "";
-validateTToken();
+//validateTToken();
+$$.api_valid(); // validates twitch API
 $$.btnchar(); // set up buttons on page
 // Website Data Handling
 
@@ -51,8 +52,8 @@ form.addEventListener(
     //#endregion
 
     //#region HTTPCalling Fitting Clips, Then calls Clip Sorter
-    let ClipResp = await HttpCaller(
-      `https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${Startdate}&ended_at=${endDate}`
+    let ClipResp = await $$.api(
+      `https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${Startdate}&ended_at=${endDate}`,true
     );
     $$.log(ClipResp);
     ClipSorter(ClipResp, game_id, viewCount);
@@ -73,8 +74,8 @@ ChannelSelect.addEventListener("change", async function () {
   if (StreamerName != "none") {
     $$.log("Searching for " + StreamerName); // en
     ErrorDiv.innerHTML = ""; // clear errors
-    let UserResp = await HttpCaller(
-      `https://api.twitch.tv/helix/users?login=${StreamerName}`
+    let UserResp = await $$.api(
+      `https://api.twitch.tv/helix/users?login=${StreamerName}`,true
     );
     UserId = UserResp["data"][0]["id"];
     //#endregion
@@ -83,8 +84,8 @@ ChannelSelect.addEventListener("change", async function () {
     let d = new Date();
     let RFCdato = new Date();
     RFCdato.setDate(RFCdato.getDate() - 90); // takes a month worth of clips
-    let GameResp = await HttpCaller(
-      `https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`
+    let GameResp = await $$.api(
+      `https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`,true
     );
     var GameIds = new Set(); // sets can only hold uniq values
     for (let index = 0; index < GameResp["data"].length; index++) {
@@ -107,7 +108,7 @@ ChannelSelect.addEventListener("change", async function () {
     //#endregion
 
     //#region Getting Games from Selected Channel and Placing it on Website.
-    let SelectGameResp = await HttpCaller(httpcall);
+    let SelectGameResp = await $$.api(httpcall,true);
     // getting select box
     let selectboxG = $$.id("SelectGame") as HTMLInputElement;
 

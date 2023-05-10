@@ -1,7 +1,7 @@
 "use strict";
 let UserId = "";
 let client_id = "";
-validateTToken();
+$$.api_valid();
 $$.btnchar();
 var Id;
 var form = $$.query("#HighlighForm");
@@ -35,7 +35,7 @@ form.addEventListener("submit", async function (event) {
     else {
         endDate = endDate.toISOString();
     }
-    let ClipResp = await HttpCaller(`https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${Startdate}&ended_at=${endDate}`);
+    let ClipResp = await $$.api(`https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${Startdate}&ended_at=${endDate}`, true);
     $$.log(ClipResp);
     ClipSorter(ClipResp, game_id, viewCount);
 }, true);
@@ -45,12 +45,12 @@ ChannelSelect.addEventListener("change", async function () {
     if (StreamerName != "none") {
         $$.log("Searching for " + StreamerName);
         ErrorDiv.innerHTML = "";
-        let UserResp = await HttpCaller(`https://api.twitch.tv/helix/users?login=${StreamerName}`);
+        let UserResp = await $$.api(`https://api.twitch.tv/helix/users?login=${StreamerName}`, true);
         UserId = UserResp["data"][0]["id"];
         let d = new Date();
         let RFCdato = new Date();
         RFCdato.setDate(RFCdato.getDate() - 90);
-        let GameResp = await HttpCaller(`https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`);
+        let GameResp = await $$.api(`https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`, true);
         var GameIds = new Set();
         for (let index = 0; index < GameResp["data"].length; index++) {
             GameIds.add(GameResp["data"][index]["game_id"]);
@@ -66,7 +66,7 @@ ChannelSelect.addEventListener("change", async function () {
             }
             index++;
         });
-        let SelectGameResp = await HttpCaller(httpcall);
+        let SelectGameResp = await $$.api(httpcall, true);
         let selectboxG = $$.id("SelectGame");
         while (selectboxG.firstChild) {
             selectboxG.firstChild.remove();
