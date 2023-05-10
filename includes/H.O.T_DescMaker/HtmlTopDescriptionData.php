@@ -57,7 +57,7 @@
                                     <p class="mb-5">you can change your settings <a href="Settings.php">Here</a></p>
                                     <div class="container">
                                         <div class="btn TimestampClear m-1 mb-4" id="ShowSettings">
-                                            <span><img class="imgIcon me-2" src="img/Icons/LockedIcon.png">Show private settings?</span>
+                                            <span><img id="ShowPrivateIcon" class="imgIcon me-2" src="img/Icons/LockedIcon.png">Show private settings?</span>
                                         </div>
                                         <div class="row">
                                             <div class="col m-auto">

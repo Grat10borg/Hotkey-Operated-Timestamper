@@ -74,6 +74,7 @@ function AddBTNCharcounters() {
     }
     if (ShowHiddenText != null) {
         ShowHiddenText.addEventListener("click", function () {
+            $$.id("ShowPrivateIcon").src = "img\\Icons\\UnlockedIcon.png";
             let PasswordInputs = $$.query_all('[type="password"]');
             if (PasswordInputs != null) {
                 PasswordInputs.forEach((Input) => { Input.type = "text"; });

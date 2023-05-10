@@ -95,6 +95,7 @@ function AddBTNCharcounters() {
   // Add Show HidenText event
   if (ShowHiddenText != null) {
   ShowHiddenText.addEventListener("click", function () {
+    $$.id("ShowPrivateIcon").src="img\\Icons\\UnlockedIcon.png";
     let PasswordInputs = $$.query_all('[type="password"]') as NodeListOf<HTMLInputElement>;
     if (PasswordInputs != null) {PasswordInputs.forEach((Input) => {Input.type = "text";});}
   });
