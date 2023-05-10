@@ -30,6 +30,9 @@ function AddBTNCharcounters() {
     let Select = $$.query_all(".Select");
     let Copy = $$.query_all(".Copy");
     let Clear = $$.query(".Clear");
+    let ScrollTop = $$.id("ScrollTop");
+    let ShowHiddenText = $$.id("ShowSettings");
+    let Locked = $$.id("Locked");
     for (let i = 0; i < Select.length; i++) {
         Select[i].addEventListener("click", function (event) {
             StartTextareas[event.target.value].select();
@@ -63,13 +66,26 @@ function AddBTNCharcounters() {
                 p.setAttribute("class", "CharaGreen");
         });
     }
+    if (ScrollTop != null) {
+        ScrollTop.addEventListener("click", function () { let TopNav = $$.id("TopNav"); TopNav.scrollIntoView(true); });
+    }
+    if (ShowHiddenText != null) {
+        ShowHiddenText.addEventListener("click", function () {
+            let PasswordInputs = $$.query_all('[type="password"]');
+            if (PasswordInputs != null) {
+                PasswordInputs.forEach((Input) => { Input.type = "text"; });
+            }
+        });
+    }
+    if (Locked != null) {
+        Locked.addEventListener("click", function () {
+            let Clear = $$.id("Clear");
+            let LockedIcon = $$.id("LockedIcon");
+            Clear.disabled = false;
+            LockedIcon.src = "img\\Icons\\UnlockedIcon.png";
+        }, true);
+    }
     if (Clear != null) {
         Clear.addEventListener("click", function () { alert("Clearing Timestamps"); window.location.href = "clear.php"; }, true);
     }
 }
-const fs = require('fs');
-let data = "Learning how to write in a file.";
-fs.writeFile('Output.txt', data, (err) => {
-    if (err)
-        throw err;
-});

@@ -2,6 +2,7 @@
 let UserId = "";
 let client_id = "";
 validateTToken();
+$$.btnchar();
 var Id;
 var form = $$.query("#HighlighForm");
 var ErrorDiv = $$.id("ErrorDiv");
@@ -202,6 +203,7 @@ async function ClipSorter(Clips, game_id, viewCount) {
         rowdiv.append(a);
         rowdiv.append(p);
         textAreaDiv.append(rowdiv);
+        $$.btnchar();
     }
     let ClipBtns = $.querySelectorAll(".ClipBtn");
     for (let i = 0; i < ClipBtns.length; i++) {

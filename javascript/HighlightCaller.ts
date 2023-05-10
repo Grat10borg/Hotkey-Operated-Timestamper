@@ -3,6 +3,7 @@
 let UserId = "";
 let client_id = "";
 validateTToken();
+$$.btnchar(); // set up buttons on page
 // Website Data Handling
 
 //#region Submit button form
@@ -301,6 +302,7 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     rowdiv.append(a);
     rowdiv.append(p);
     textAreaDiv.append(rowdiv);
+    $$.btnchar(); // re-set all items on page with new events.
   }
   // Add event handler for watching clips with button clicks
   let ClipBtns = $.querySelectorAll(".ClipBtn");

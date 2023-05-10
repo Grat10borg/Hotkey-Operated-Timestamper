@@ -44,8 +44,11 @@ function AddBTNCharcounters() {
   let StartTextareas = $$.query_all(".Charcounts") as NodeListOf<HTMLTextAreaElement>;
   let Select = $$.query_all(".Select") as NodeListOf<HTMLElement>;
   let Copy = $$.query_all(".Copy") as NodeListOf<HTMLElement>;
-  let Clear = $$.query(".Clear") as HTMLElement; // gets clear button if it's there
-
+  let Clear = $$.query(".Clear") as HTMLElement; 
+  let ScrollTop = $$.id("ScrollTop") as HTMLElement; 
+  let ShowHiddenText = $$.id("ShowSettings") as HTMLDivElement;
+  let Locked = $$.id("Locked") as HTMLElement;
+  
   // Add Selectbutton Events
   for (let i = 0; i < Select.length; i++) {
   Select[i].addEventListener("click", function (event: any) {
@@ -70,19 +73,39 @@ function AddBTNCharcounters() {
     if (StartTextareas[i].innerHTML.length > 5000)  p.setAttribute("class", "CharaRed");
     else if (StartTextareas[i].innerHTML.length > 3000) p.setAttribute("class", "CharaYellow");
     else p.setAttribute("class", "CharaGreen");
-    
     StartTextareas[i].addEventListener("keyup", function (event: any) {
     p.textContent = event.target.value.length;
-
-    // test by regex on if it contains Illigal Chars
-    
+    // ADD test by regex on if it contains Illigal Chars here 
     if (event.target.value.length > 5000) p.setAttribute("class", "CharaRed"); // timestamps likely wont work, and its over the Maximum the youtube description can handle
     else if (event.target.value.length > 3000) p.setAttribute("class", "CharaYellow"); // timestamps may stop working. thumbnails may also lose graphics at this/a bit under size too
     else p.setAttribute("class", "CharaGreen"); // become green, Prime Timestamp range.
     });
   }
 
-   // Add ClearButton event. (desc-maker only)
+  // Add ScrollBtn event
+  if(ScrollTop != null) {
+    ScrollTop.addEventListener("click", function() {let TopNav = $$.id("TopNav") as HTMLElement; TopNav.scrollIntoView(true);});
+  }
+
+  // Add Show HidenText event
+  if (ShowHiddenText != null) {
+  ShowHiddenText.addEventListener("click", function () {
+    let PasswordInputs = $$.query_all('[type="password"]') as NodeListOf<HTMLInputElement>;
+    if (PasswordInputs != null) {PasswordInputs.forEach((Input) => {Input.type = "text";});}
+  });
+  }
+
+  // Add Unlock clearbtn event
+  if (Locked != null) {
+    Locked.addEventListener("click",function () {
+     let Clear = $$.id("Clear") as HTMLButtonElement;
+     let LockedIcon = $$.id("LockedIcon") as HTMLImageElement;
+     Clear.disabled = false;
+     LockedIcon.src = "img\\Icons\\UnlockedIcon.png";
+      },true);
+  }
+
+  // Add ClearButton event. (desc-maker only)
   if (Clear != null) { // Make btn event for Clearing button, only makes an alert
     Clear.addEventListener("click",function () {alert("Clearing Timestamps");window.location.href = "clear.php";},true);
   }

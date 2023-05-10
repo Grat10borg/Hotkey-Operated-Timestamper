@@ -41,7 +41,6 @@
     <script src="javascript/dom.js"></script>
     <script src="config.js"></script>
     <script src="javascript/TimestampSort.js"></script>
-    <script src="javascript/script+Youtube.js"></script> 
 </body>
 
 </html> 
