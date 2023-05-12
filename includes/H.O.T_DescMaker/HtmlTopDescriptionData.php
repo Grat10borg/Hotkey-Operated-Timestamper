@@ -62,91 +62,67 @@
                                         <div class="row">
                                             <div class="col m-auto">
                                                 <p>Your Twitch APP AccessToken</p>
-                                                <?php
-                                                if (isset($TwitchApiKey)) {
-                                                    echo "<input value='$TwitchApiKey' disabled class='form-control p-3' type='password'/>";
-                                                } else {
-                                                    echo "<input class='form-control p-3' disabled placeholder='' type='password'/>";
-                                                }
-                                                ?>
+                                                <input id="TwitchTokenP" disabled class='form-control p-3' type='password'/>
                                             </div>
                                             <div class="col m-auto">
                                                 <p>Your Twitch Username</p>
-                                                <?php
-                                                if (isset($StreamerLogin)) {
-                                                    echo "<input value='$StreamerLogin' disabled class='form-control p-3' type='text' />";
-                                                } else {
-                                                    echo "<input class='form-control p-3' disabled type='text'/>";
-                                                }
-                                                ?>
+                                                <input id="TwitchLogin" disabled class='form-control p-3' type='text' />
                                             </div>
                                         </div>
                                         <div class="row mt-3">
-                                            <div class="col">
+                                            <!-- <div class="col">
                                                 <p>Your Youtube API key</p>
                                                 <?php
-                                                if (isset($YTClientID)) {
-                                                    echo "<input value='$YTClientID' disabled class='form-control p-3' placeholder='<Longstring of Random Letters>.apps.googleusercontent.com' name='YoutubeClientID' type='password' id='YTClientIn' />";
-                                                } else {
-                                                    echo "<input class='form-control p-3' placeholder='<Longstring of Random Letters>.apps.googleusercontent.com' name='YoutubeClientID' type='password' id='YTClientIn' />";
-                                                }
+                                                // if (isset($YTClientID)) {
+                                                //     echo "<input value='$YTClientID' disabled class='form-control p-3' placeholder='<Longstring of Random Letters>.apps.googleusercontent.com' name='YoutubeClientID' type='password' id='YTClientIn' />";
+                                                // } else {
+                                                //     echo "<input class='form-control p-3' placeholder='<Longstring of Random Letters>.apps.googleusercontent.com' name='YoutubeClientID' type='password' id='YTClientIn' />";
+                                                // }
                                                 ?>
                                             </div>
                                             <div class="col">
                                                 <p>Your Youtube AccessToken</p>
                                                 <?php
-                                                if (isset($YTAPIKey)) {
-                                                    echo "<input value='$YTAPIKey' disabled class='form-control p-3' placeholder='Something like: AIzaSyCq512yjXdQLtdUV3n7CzdIe78oDufRovU'  name='YoutubeApiKey' type='password' id='YTKeyIn' />";
-                                                } else {
-                                                    echo "<input class='form-control p-3' placeholder='Something like: AIzaSyCq512yjXdQLtdUV3n7CzdIe78oDufRovU'  name='YoutubeApiKey' type='password' id='YTKeyIn' />";
-                                                }
+                                                // if (isset($YTAPIKey)) {
+                                                //     echo "<input value='$YTAPIKey' disabled class='form-control p-3' placeholder='Something like: AIzaSyCq512yjXdQLtdUV3n7CzdIe78oDufRovU'  name='YoutubeApiKey' type='password' id='YTKeyIn' />";
+                                                // } else {
+                                                //     echo "<input class='form-control p-3' placeholder='Something like: AIzaSyCq512yjXdQLtdUV3n7CzdIe78oDufRovU'  name='YoutubeApiKey' type='password' id='YTKeyIn' />";
+                                                // }
                                                 ?>
-                                            </div>
+                                            </div> -->
                                         </div>
                                         <div class="row">
                                             <div class="col">
                                                 <p id="ClipOffsetP">Your ClipOffset</p>
-                                                <?php
-                                                if (isset($ClipsOffset)) {
-                                                    echo "<input value='$ClipsOffset' disabled class='form-control p-3' placeholder='26' name='ClipOffset' type='text' id='ClipOffsetIn' />";
-                                                } else {
-                                                    echo "<input class='form-control p-3' placeholder='26' name='ClipOffset' type='text' id='ClipOffsetIn' />";
-                                                }
-                                                ?>
+                                                <input id='ClipOffsetIn' disabled class='form-control p-3' placeholder='26' type='text' />
                                             </div>
                                             <div class="col">
                                                 <p>Your Timestamp.txt file path</p>
-                                                <?php
-                                                if (isset($Timestamp_path)) {
-                                                    echo "<input value='$Timestamp_path' disabled class='form-control p-3' placeholder='..\Folder\Timestamp.txt' name='TimestampPath' type='password' id='TimeSPathIn'/>";
-                                                } else {
-                                                    echo "<input class='form-control p-3' placeholder='..\Folder\Timestamp.txt' name='TimestampPath' type='password' id='TimeSPathIn'/>";
-                                                }
-                                                ?>
+                                                <input id='TimeSPathIn' disabled class='form-control p-3' placeholder='..\Folder\Timestamp.txt' type='password'/>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <!-- <div class="row">
                                             <div class="col">
                                                 <p>Your Hashtags after title</p>
                                                 <?php
-                                                if (isset($Hashtags)) {
-                                                    echo "<input value='$Hashtags' disabled class='form-control p-3' placeholder='VOD' name='Hashtags' type='text' id='HashtagsIn'/>";
-                                                } else {
-                                                    echo "<input class='form-control p-3' placeholder='VOD' name='Hashtags' type='text' id='HashtagsIn'/>";
-                                                }
+                                                // if (isset($Hashtags)) {
+                                                //     echo "<input value='$Hashtags' disabled class='form-control p-3' placeholder='VOD' name='Hashtags' type='text' id='HashtagsIn'/>";
+                                                // } else {
+                                                //     echo "<input class='form-control p-3' placeholder='VOD' name='Hashtags' type='text' id='HashtagsIn'/>";
+                                                // }
                                                 ?>
                                             </div>
                                             <div class="col">
                                                 <p>Localazation Description Key</p>
                                                 <?php
-                                                if (isset($Localazation)) {
-                                                    echo "<input value='$Localazation' disabled class='form-control p-3' placeholder='en' name='Localazation' type='text' id='LocalazationIn'/>";
-                                                } else {
-                                                    echo "<input class='form-control p-3' placeholder='VOD' name='Localazation' type='text' id='LocalazationIn'/>";
-                                                }
+                                                // if (isset($Localazation)) {
+                                                //     echo "<input value='$Localazation' disabled class='form-control p-3' placeholder='en' name='Localazation' type='text' id='LocalazationIn'/>";
+                                                // } else {
+                                                //     echo "<input class='form-control p-3' placeholder='VOD' name='Localazation' type='text' id='LocalazationIn'/>";
+                                                // }
                                                 ?>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <hr>
                                     <div>

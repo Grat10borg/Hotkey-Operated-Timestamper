@@ -1,14 +1,24 @@
 "use strict";
 let HotV = "V-1.0_beta";
-if (config.TWITCH_API_TOKEN == "" || config.TWITCH_API_TOKEN == null) {
+if (config.TWITCH_API_TOKEN != "" || config.TWITCH_API_TOKEN != null) {
+    let input = $$.id("TwitchTokenP");
+    input.value = config.TWITCH_API_TOKEN;
 }
 if (config.CLIP_OFFSET == null) {
     $$.log("you didnt set a config.CLIP_OFFSET, H.O.T has defaulted to 26 seconds of offset.");
+}
+else {
+    let input = $$.id("ClipOffsetIn");
+    input.value = config.CLIP_OFFSET;
 }
 if (config.TWITCH_LOGIN == null || config.TWITCH_LOGIN == "") {
     $$.log("you didnt set a TwitchLoginName, you will not be able to use Clip-Stamps");
     let TwitchClipbtn = $$.id("TwitchClip");
     TwitchClipbtn.disabled = true;
+}
+else {
+    let input = $$.id("TwitchLogin");
+    input.value = config.TWITCH_LOGIN;
 }
 if (config.LOCALIZE_ON == false) {
     $$.log("LocalSettings not found Turning off Local Mode");
@@ -18,6 +28,8 @@ else {
 if (config.TIMESTAMP_PATH != null && config.TIMESTAMP_PATH != "") {
     let p = $$.id("TimestampPath");
     p.innerHTML = "• currently getting timestamps from: " + config.TIMESTAMP_PATH;
+    let input = $$.id("TimeSPathIn");
+    input.value = config.TIMESTAMP_PATH;
 }
 var AclientId = "";
 var MultiDimStreamArr = Array();

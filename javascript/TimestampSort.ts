@@ -3,13 +3,18 @@ let HotV = "V-1.0_beta"; // the version of H.o.t
 
 // Settings
 
-if (config.TWITCH_API_TOKEN == "" || config.TWITCH_API_TOKEN == null) {
-
+if (config.TWITCH_API_TOKEN != "" || config.TWITCH_API_TOKEN != null) {
+  let input = $$.id("TwitchTokenP") as HTMLInputElement;
+  input.value=config.TWITCH_API_TOKEN;
 }
 if (config.CLIP_OFFSET == null) {
   $$.log(
     "you didnt set a config.CLIP_OFFSET, H.O.T has defaulted to 26 seconds of offset."
   );
+}
+else {
+  let input = $$.id("ClipOffsetIn") as any;
+  input.value=config.CLIP_OFFSET;
 }
 if (config.TWITCH_LOGIN == null || config.TWITCH_LOGIN == "") {
   $$.log(
@@ -17,6 +22,10 @@ if (config.TWITCH_LOGIN == null || config.TWITCH_LOGIN == "") {
   );
   let TwitchClipbtn = $$.id("TwitchClip") as HTMLInputElement;
   TwitchClipbtn.disabled = true;
+}
+else {
+  let input = $$.id("TwitchLogin") as HTMLInputElement;
+  input.value=config.TWITCH_LOGIN;
 }
 if (config.LOCALIZE_ON == false) {
   $$.log("LocalSettings not found Turning off Local Mode");
@@ -27,6 +36,8 @@ if (config.LOCALIZE_ON == false) {
 if(config.TIMESTAMP_PATH != null && config.TIMESTAMP_PATH != "") {
   let p = $$.id("TimestampPath") as HTMLParagraphElement;
   p.innerHTML="• currently getting timestamps from: " + config.TIMESTAMP_PATH;
+  let input = $$.id("TimeSPathIn") as HTMLInputElement;
+  input.value=config.TIMESTAMP_PATH;
 }
 
 // Asigned later

@@ -111,13 +111,7 @@
                                                 <div class="col m-auto">
                                                     <div>
                                                         <p><img class="imgIcon" src="img\Icons\TwitchIcon.png"> | Your Twitch APP AccessToken </p>
-                                                        <?php
-                                                        if (isset($TwitchApiKey)) {
-                                                            echo "<input value='$TwitchApiKey' disabled class='form-control p-3' type='password'/>";
-                                                        } else {
-                                                            echo "<input class='form-control p-3' disabled placeholder='' type='password'/>";
-                                                        }
-                                                        ?>
+                                                        <input id="TwitchAccessToken" disabled class='form-control p-3' type='password'/>
                                                         <p class="text-secondary mt-2" id="AccessTokenTime"></p>
                                                     </div>
                                                 </div>

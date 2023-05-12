@@ -19,6 +19,11 @@ for (let index = 0; index < config.HIGHLIGHTER_CHANNELS.length; index++) {
   SelectChannel.append(option);
 }
 
+if(config.TWITCH_API_TOKEN != "" && config.TWITCH_API_TOKEN != null) {
+  let input = $$.id("TwitchAccessToken") as HTMLInputElement;
+  input.value=config.TIMESTAMP_PATH;
+}
+
 //#region Submit button form
 
 // Getting Form Data
