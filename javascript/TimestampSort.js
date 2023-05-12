@@ -142,7 +142,7 @@ TwitchClip.addEventListener("click", async function (event) {
     }
 });
 async function CutOuts() {
-    let timestamps = await $$.txt("Texts/Timestamps.txt");
+    let timestamps = await $$.txt(config.TIMESTAMP_PATH);
     if (timestamps == "")
         $$.log("Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!");
     let RawTxtArr = timestamps.split("\n");
@@ -239,10 +239,10 @@ async function CutOuts() {
     }
 }
 async function SetOps(MultiDimStreamArr, MultiDimRecordArr) {
-    let BeforeDesc = await $$.txt("Texts/BeforeTimestamps.txt");
-    let AfterDesc = await $$.txt("Texts/AfterTimestamps.txt");
-    let LocalBeforeDesc = await $$.txt("Texts/LocaleBeforeTimestamps.txt");
-    let LocalAfterDesc = await $$.txt("Texts/LocaleAfterTimestamps.txt");
+    let BeforeDesc = await $$.txt(config.DESCRIPTION_MAKER_BEFORE_TIMESTAMPS);
+    let AfterDesc = await $$.txt(config.DESCRIPTION_MAKER_AFTER_TIMESTAMPS);
+    let LocalBeforeDesc = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_BEFORE_TIMESTAMPS);
+    let LocalAfterDesc = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_AFTER_TIMESTAMPS);
     let success = false;
     var Description = "";
     var LocalDescript = "";
@@ -689,8 +689,8 @@ async function DescriptionReplace(TimestampsArr, Index, localprint) {
     let Desc = $$.class(`Charcounts`);
     if (localprint == true) {
         var LNewDesc = "";
-        let BeforeDescL = await $$.txt("Texts/LocaleBeforeTimestamps.txt");
-        let AfterDescL = await $$.txt("Texts/LocaleAfterTimestamps.txt");
+        let BeforeDescL = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_BEFORE_TIMESTAMPS);
+        let AfterDescL = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_AFTER_TIMESTAMPS);
         let resArray = TimestampsArr;
         LNewDesc = BeforeDescL + "\n\n";
         LNewDesc = LNewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
@@ -704,8 +704,8 @@ async function DescriptionReplace(TimestampsArr, Index, localprint) {
     }
     else {
         var NewDesc = "";
-        let BeforeDesc = await $$.txt("Texts/BeforeTimestamps.txt");
-        let AfterDesc = await $$.txt("Texts/AfterTimestamps.txt");
+        let BeforeDesc = await $$.txt(config.DESCRIPTION_MAKER_BEFORE_TIMESTAMPS);
+        let AfterDesc = await $$.txt(config.DESCRIPTION_MAKER_AFTER_TIMESTAMPS);
         let resArray = TimestampsArr;
         NewDesc = BeforeDesc + "\n\n";
         NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;

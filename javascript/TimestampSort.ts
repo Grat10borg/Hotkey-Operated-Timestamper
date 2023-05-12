@@ -236,7 +236,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
 // returns 1 if sucessful and 0 if failed
 //- with Scenes marked with their names and Clips marked
 async function CutOuts() {
-  let timestamps = await $$.txt("Texts/Timestamps.txt");
+  let timestamps = await $$.txt(config.TIMESTAMP_PATH);
   if(timestamps == "") $$.log("Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!");
  
   let RawTxtArr = timestamps.split("\n"); // splits them by Spaces : EVENT:START, RECORDING, @, etc...
@@ -354,10 +354,10 @@ async function CutOuts() {
 // returns 1 if sucessful and 0 if failed
 async function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
   // Set in All the timestamps correctly
-  let BeforeDesc = await $$.txt("Texts/BeforeTimestamps.txt") as string;
-  let AfterDesc = await $$.txt("Texts/AfterTimestamps.txt") as string;
-  let LocalBeforeDesc = await $$.txt("Texts/LocaleBeforeTimestamps.txt") as string;
-  let LocalAfterDesc = await $$.txt("Texts/LocaleAfterTimestamps.txt") as string;
+  let BeforeDesc = await $$.txt(config.DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
+  let AfterDesc = await $$.txt(config.DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
+  let LocalBeforeDesc = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
+  let LocalAfterDesc = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
 
   let success = false;
   var Description = ""; // Finished Description Var
@@ -985,8 +985,8 @@ async function DescriptionReplace(TimestampsArr: Array<string>, Index: number, l
   if (localprint == true) {
     var LNewDesc = ""; // Finished Description Var
 
-    let BeforeDescL = await $$.txt("Texts/LocaleBeforeTimestamps.txt") as string;
-    let AfterDescL = await $$.txt("Texts/LocaleAfterTimestamps.txt") as string;
+    let BeforeDescL = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
+    let AfterDescL = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
 
     let resArray = TimestampsArr;
 
@@ -1002,8 +1002,8 @@ async function DescriptionReplace(TimestampsArr: Array<string>, Index: number, l
   } else {
     var NewDesc = ""; // Finished Description Var
 
-    let BeforeDesc = await $$.txt("Texts/BeforeTimestamps.txt") as string;
-    let AfterDesc = await $$.txt("Texts/AfterTimestamps.txt") as string;
+    let BeforeDesc = await $$.txt(config.DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
+    let AfterDesc = await $$.txt(config.DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
     let resArray = TimestampsArr;
 
     NewDesc = BeforeDesc + "\n\n";
