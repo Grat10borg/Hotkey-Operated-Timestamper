@@ -238,12 +238,12 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 
   // Making Description
   let text = ""; // initialzes vars for getting duration
-  let BeforeDesc = await $$.txt("Texts/BeforeTimestamps.txt") as string;
+  let BeforeDesc = await $$.txt(config.HIGHLIGHTER_BEFORE_TIMESTAMPS) as string;
   text = text + BeforeDesc + "\n\n"; // adds the description
   // locale version of description
   let LocaleText = "" as string;
   if (localmode == true) {
-    let LocaleBeforeDesc = await $$.txt("Texts/LocaleBeforeTimestamps.txt") as string;
+    let LocaleBeforeDesc = await $$.txt(config.LOCAL_HIGHLIGHTER_BEFORE_TIMESTAMPS) as string;
     LocaleText = LocaleText + LocaleBeforeDesc + "\n\n";
   }
 
@@ -340,14 +340,14 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     }
   });
 
-  let AfterDesc = await $$.txt("Texts/AfterTimestamps.txt") as string;
+  let AfterDesc = await $$.txt(config.HIGHLIGHTER_AFTER_TIMESTAMPS) as string;
   text = text.slice(0, text.length - 1);
   text = text + "\n\n" + AfterDesc;
   // finished description change
   let Desc = $$.query("#myInput0") as HTMLInputElement;
   Desc.textContent = text;
   if (localmode == true) {
-    let LocalAfterDesc = await $$.txt("Texts/LocaleAfterTimestamps.txt") as any;
+    let LocalAfterDesc = await $$.txt(config.LOCAL_HIGHLIGHTER_AFTER_TIMESTAMPS) as any;
     LocaleText = LocaleText.slice(0, text.length - 1);
     LocaleText = LocaleText + "\n\n" + LocalAfterDesc;
 
