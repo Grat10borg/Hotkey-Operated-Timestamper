@@ -147,35 +147,25 @@ async function ClipSorter(Clips, game_id, viewCount) {
     let clipCredit = new Set();
     let x = 0;
     duration = 0;
-    let localmode = false;
-    let locale = $$.id("Local");
-    if (locale != null) {
-        if (locale.innerHTML != "" && locale.innerHTML != "none") {
-            localmode = true;
-        }
-    }
-    else {
-        localmode = false;
-    }
     let text = "";
-    let BeforeDesc = await $$.txt("Texts/BeforeTimestamps.txt");
+    let BeforeDesc = await $$.txt(config.HIGHLIGHTER_BEFORE_TIMESTAMPS);
     text = text + BeforeDesc + "\n\n";
     let LocaleText = "";
-    if (localmode == true) {
-        let LocaleBeforeDesc = await $$.txt("Texts/LocaleBeforeTimestamps.txt");
+    if (config.LOCALIZE_ON == true) {
+        let LocaleBeforeDesc = await $$.txt(config.LOCAL_HIGHLIGHTER_BEFORE_TIMESTAMPS);
         LocaleText = LocaleText + LocaleBeforeDesc + "\n\n";
     }
     textAreaDiv.innerHTML = "";
     for (let i = 0; i < sortcliped.length; i++) {
         if (i == 0) {
             text = text + `• 0:00 ${sortcliped[i]["title"]}\n`;
-            if (localmode == true) {
+            if (config.LOCALIZE_ON == true) {
                 LocaleText = LocaleText + `• 0:00 ${sortcliped[i]["title"]}\n`;
             }
         }
         else {
             text = text + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
-            if (localmode == true) {
+            if (config.LOCALIZE_ON == true) {
                 LocaleText =
                     LocaleText + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
             }
@@ -217,22 +207,22 @@ async function ClipSorter(Clips, game_id, viewCount) {
         }, true);
     }
     text = text + "Clips by:";
-    if (localmode == true) {
+    if (config.LOCALIZE_ON == true) {
         LocaleText = LocaleText + "Clips by:";
     }
     clipCredit.forEach((element) => {
         text = text + ` ${element},`;
-        if (localmode == true) {
+        if (config.LOCALIZE_ON == true) {
             LocaleText = LocaleText + ` ${element},`;
         }
     });
-    let AfterDesc = await $$.txt("Texts/AfterTimestamps.txt");
+    let AfterDesc = await $$.txt(config.HIGHLIGHTER_AFTER_TIMESTAMPS);
     text = text.slice(0, text.length - 1);
     text = text + "\n\n" + AfterDesc;
     let Desc = $$.query("#myInput0");
     Desc.textContent = text;
-    if (localmode == true) {
-        let LocalAfterDesc = await $$.txt("Texts/LocaleAfterTimestamps.txt");
+    if (config.LOCALIZE_ON == true) {
+        let LocalAfterDesc = await $$.txt(config.LOCAL_HIGHLIGHTER_AFTER_TIMESTAMPS);
         LocaleText = LocaleText.slice(0, text.length - 1);
         LocaleText = LocaleText + "\n\n" + LocalAfterDesc;
         let localDesc = $$.query("#LocalDescription");
@@ -250,7 +240,7 @@ async function ClipSorter(Clips, game_id, viewCount) {
     else {
         p.setAttribute("class", "CharaGreen");
     }
-    if (localmode == true) {
+    if (config.LOCALIZE_ON == true) {
         let Charcount = LocaleText.length;
         let p = $$.query(`#CharCount1`);
         p.textContent = `${Charcount}`;
@@ -268,7 +258,7 @@ async function ClipSorter(Clips, game_id, viewCount) {
     accorddesc.disabled = false;
     let accordLink = $$.query("#accordLink");
     accordLink.disabled = false;
-    if (localmode == true) {
+    if (config.LOCALIZE_ON == true) {
         let accordLocal = $$.query("#accordLocalDesc");
         accordLocal.disabled = false;
     }

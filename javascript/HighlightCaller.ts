@@ -226,23 +226,13 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   let x = 0;
   duration = 0;
 
-  let localmode = false;
-  let locale = $$.id("Local") as HTMLElement;
-  if (locale != null) {
-    if (locale.innerHTML != "" && locale.innerHTML != "none") {
-      localmode = true;
-    }
-  } else {
-    localmode = false;
-  }
-
   // Making Description
   let text = ""; // initialzes vars for getting duration
   let BeforeDesc = await $$.txt(config.HIGHLIGHTER_BEFORE_TIMESTAMPS) as string;
   text = text + BeforeDesc + "\n\n"; // adds the description
   // locale version of description
   let LocaleText = "" as string;
-  if (localmode == true) {
+  if (config.LOCALIZE_ON == true) {
     let LocaleBeforeDesc = await $$.txt(config.LOCAL_HIGHLIGHTER_BEFORE_TIMESTAMPS) as string;
     LocaleText = LocaleText + LocaleBeforeDesc + "\n\n";
   }
@@ -252,12 +242,12 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     // duration getter, + highlight description maker
     if (i == 0) {
       text = text + `• 0:00 ${sortcliped[i]["title"]}\n`; // makes start chapter for youtube description
-      if (localmode == true) {
+      if (config.LOCALIZE_ON == true) {
         LocaleText = LocaleText + `• 0:00 ${sortcliped[i]["title"]}\n`;
       }
     } else {
       text = text + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
-      if (localmode == true) {
+      if (config.LOCALIZE_ON == true) {
         LocaleText =
           LocaleText + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
       }
@@ -329,13 +319,13 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   //#region Description Making
   // Make Description for Would be Hightligt
   text = text + "Clips by:";
-  if (localmode == true) {
+  if (config.LOCALIZE_ON == true) {
     LocaleText = LocaleText + "Clips by:";
   }
   clipCredit.forEach((element) => {
     // note: clipcredit is a Set it only holds unique values
     text = text + ` ${element},`;
-    if (localmode == true) {
+    if (config.LOCALIZE_ON == true) {
       LocaleText = LocaleText + ` ${element},`;
     }
   });
@@ -346,7 +336,7 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   // finished description change
   let Desc = $$.query("#myInput0") as HTMLInputElement;
   Desc.textContent = text;
-  if (localmode == true) {
+  if (config.LOCALIZE_ON == true) {
     let LocalAfterDesc = await $$.txt(config.LOCAL_HIGHLIGHTER_AFTER_TIMESTAMPS) as any;
     LocaleText = LocaleText.slice(0, text.length - 1);
     LocaleText = LocaleText + "\n\n" + LocalAfterDesc;
@@ -374,7 +364,7 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     p.setAttribute("class", "CharaGreen");
   }
 
-  if (localmode == true) {
+  if (config.LOCALIZE_ON == true) {
     let Charcount = LocaleText.length;
     let p = $$.query(`#CharCount1`) as HTMLElement; // needs to be html element
     p.textContent = `${Charcount}`;
@@ -396,7 +386,7 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   accorddesc.disabled = false;
   let accordLink = $$.query("#accordLink") as HTMLInputElement;
   accordLink.disabled = false;
-  if (localmode == true) {
+  if (config.LOCALIZE_ON == true) {
     let accordLocal = $$.query(
       "#accordLocalDesc"
     ) as HTMLInputElement;

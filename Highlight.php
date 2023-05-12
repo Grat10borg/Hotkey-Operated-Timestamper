@@ -8,41 +8,6 @@
 <?php
 include "includes/settings.php";
 include "includes/ArrayMaker.php";
-
-// if ($BeforeDesc != "") {
-//     AddArrTextArea($BeforeDesc, "BeforeDesc");
-// } // Text placed before any timestamps
-// if ($AfterDesc != "") {
-//     AddArrTextArea($AfterDesc, "AfterDesc");
-// } // Text placed after any timestamps.
-if ($Localazation != "") {
-    AddP($Localazation, "Local");
-    if ($LocalAfterDesc != "") {
-        AddArrTextArea($LocalAfterDesc, "LocalAfterDesc");
-    }
-    if ($LocalBeforeDesc != "") {
-        AddArrTextArea($LocalBeforeDesc, "LocalBeforeDesc");
-    }
-}
-
-//AddArrTextArea($Tag, "Tags");
-
-// Api keys, Settings 
-// if ($TwitchApiKey != "") {
-//     AddP($TwitchApiKey, "TwitchKey");
-// }
-// if ($YTClientID != "") {
-//     AddP($YTClientID, "YTClient");
-// }
-// if ($YTAPIKey != "") {
-//     AddP($YTAPIKey, "YTKey");
-// }
-// if ($PluginName != "") {
-//     AddP($PluginName, "YTPluginName");
-// }
-// if ($Hashtags != "") {
-//     AddP($Hashtags, "Hashtags");
-// }
 ?>
 
 <body>
