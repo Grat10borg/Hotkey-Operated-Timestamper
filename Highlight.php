@@ -2,14 +2,24 @@
 <html lang="en">
 <head>
     <?php include "includes/html/HtmlDoc.php";?>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="CSS+SCSS/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="CSS+SCSS/style.css" type="text/css">
     <link rel="shortcut icon" href="img\HOT_Icon.ico"/>
     <title>H.O.T: Highlighter 🎬</title>
 </head>
 <?php
-include "includes/settings.php";
-include "includes/ArrayMaker.php";
+//include "includes/settings.php";
+//include "includes/ArrayMaker.php";
 ?>
-
 <body>
     <!-- <div class="fixed-bottom">
         <div class="align-self-end">
@@ -28,16 +38,8 @@ include "includes/ArrayMaker.php";
                 <form class="" id="HighlighForm">
                     <div class="row p-2 m-2 mt-3 rounded">
                         <label for="SelectGame">Channel</label>
-                        <select name="SelectChannel" id="SelectChannel" class="form-select form-select-sm my-2" aria-label=".form-select-sm example">
-                            <!-- <option selected>Choose a Channel via Memory</option> -->
-                            <?php
-                            sort($History); // sorts channels alphabeticelly 
-                            echo "<option class='SelectOption' value='none'>Please Choose a Channel</option>";
-                            foreach ($History as $Channels) {
-                                echo "<option class='SelectOption' value='$Channels'>$Channels</option>";
-                            }
-                            ?>
-                        </select>
+                        <!-- import of quick search channels from javascript -->
+                        <select name="SelectChannel" id="SelectChannel" class="form-select form-select-sm my-2" aria-label=".form-select-sm example"></select>
                     </div>
                     <div class="row p-2 m-2 mt-3 rounded">
                         <label for="SelectGame" class="">Catagory</label>

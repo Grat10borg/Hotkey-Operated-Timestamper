@@ -15,6 +15,10 @@ if (config.LOCALIZE_ON == false) {
 }
 else {
 }
+if (config.TIMESTAMP_PATH != null && config.TIMESTAMP_PATH != "") {
+    let p = $$.id("TimestampPath");
+    p.innerHTML = "• currently getting timestamps from: " + config.TIMESTAMP_PATH;
+}
 var AclientId = "";
 var MultiDimStreamArr = Array();
 var MultiDimRecordArr = Array();

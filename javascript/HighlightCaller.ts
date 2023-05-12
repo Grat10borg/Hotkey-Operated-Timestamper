@@ -7,6 +7,18 @@ $$.api_valid(); // validates twitch API
 $$.btnchar(); // set up buttons on page
 // Website Data Handling
 
+
+// Set in Highlighter quick search channels.
+let SelectChannel = $$.id("SelectChannel") as HTMLSelectElement;
+for (let index = 0; index < config.HIGHLIGHTER_CHANNELS.length; index++) {
+  const channel = config.HIGHLIGHTER_CHANNELS[index];
+  let option = $$.make("option"); 
+  option.class='SelectOption'; 
+  option.value=channel; 
+  option.innerHTML=channel;
+  SelectChannel.append(option);
+}
+
 //#region Submit button form
 
 // Getting Form Data

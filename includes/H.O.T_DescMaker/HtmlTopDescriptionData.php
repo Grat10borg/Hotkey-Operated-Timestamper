@@ -34,7 +34,7 @@
                             <p id="Stats">Found No Streams, and No Recordings</p>
                             <p id="AccessTokenTime"></p>
                             <div class="row">
-                                <p>• currently getting timestamps from: <?php echo $Timestamp_path ?></p>
+                                <p id="TimestampPath">• currently getting timestamps from: [...]</p>
                                 <div class="py-2">
                                     <a id="Locked" class="py-2 btn TimestampClear"><img id="LockedIcon" class="imgIcon" src="img\Icons\LockedIcon.png"></a>
                                     <!-- <a class="py-2 px-5 Clear btn TimestampClear" href="clear.php">Clear Timestamps? | <img class="imgIcon" src="img\Icons\TimestampTXTIcon.png"></a> -->

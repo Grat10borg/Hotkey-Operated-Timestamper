@@ -3,6 +3,15 @@ let UserId = "";
 let client_id = "";
 $$.api_valid();
 $$.btnchar();
+let SelectChannel = $$.id("SelectChannel");
+for (let index = 0; index < config.HIGHLIGHTER_CHANNELS.length; index++) {
+    const channel = config.HIGHLIGHTER_CHANNELS[index];
+    let option = $$.make("option");
+    option.class = 'SelectOption';
+    option.value = channel;
+    option.innerHTML = channel;
+    SelectChannel.append(option);
+}
 var Id;
 var form = $$.query("#HighlighForm");
 var ErrorDiv = $$.id("ErrorDiv");

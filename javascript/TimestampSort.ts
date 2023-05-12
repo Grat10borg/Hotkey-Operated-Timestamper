@@ -24,6 +24,11 @@ if (config.LOCALIZE_ON == false) {
  
 }
 
+if(config.TIMESTAMP_PATH != null && config.TIMESTAMP_PATH != "") {
+  let p = $$.id("TimestampPath") as HTMLParagraphElement;
+  p.innerHTML="• currently getting timestamps from: " + config.TIMESTAMP_PATH;
+}
+
 // Asigned later
 var AclientId = "" as string;
 
