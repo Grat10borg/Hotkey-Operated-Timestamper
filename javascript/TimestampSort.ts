@@ -34,6 +34,8 @@ if(config.TIMESTAMP_PATH !== null && config.TIMESTAMP_PATH !== "") {
   p.innerHTML="• currently getting timestamps from: " + config.TIMESTAMP_PATH;
   let input = $$.id("TimeSPathIn") as HTMLInputElement;
   input.value=config.TIMESTAMP_PATH;
+  let clearpath = $$.id("Filepath") as HTMLInputElement;
+  clearpath.value=config.TIMESTAMP_PATH;
 }
 
 // Asigned later
@@ -50,15 +52,10 @@ var LocalDescArrR = new Array();
 
 var StreamDatesRaw = new Array();
 
-//#region Token Validation.
-//validateToken();
 $$.api_valid();
-//#endregion
 
 //#region Basic Setup H.O.T NON Twitch API
 if (config.INFOWRITER_ON == true) { // run if infowriter is installed.
-  //CutOuts();
-
   InfoWriterMakeTimestamps()
 }
 //#endregion
@@ -242,7 +239,6 @@ TwitchClip.addEventListener("click", async function (event: any) {
 //#endregion
 
 // Large Functions
-
 async function InfoWriterMakeTimestamps() {
   //test if empty.
   let InfowriterTxt = await $$.txt(config.TIMESTAMP_PATH);

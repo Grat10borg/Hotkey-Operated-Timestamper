@@ -17,16 +17,16 @@
     <title>H.O.T -> Clear Timestamps 💿</title>
 </head>
 <?php 
-include "includes/settings.php";
+//include "includes/settings.php";
 ?>
 <body>
     <main class="container background">
         <div class="m-5 p-5 mt-0">    
     <?php  
-    echo "<h3> $Timestamp_path has been cleared </h3>";
-    if (file_exists($Timestamp_path)) {
+    echo "<h3>"; echo $_POST["filepath"]; echo "has been cleared </h3>";
+    if (file_exists($_POST["filepath"])) {
         // clear Timestamps from the clear timestamp button
-        file_put_contents($Timestamp_path, "");
+        file_put_contents($_POST["filepath"], "");
     }
     ?>
     <p>You can close H.O.T down now <img class="imgIcon" src="img\HOT_Icon.png"></p>

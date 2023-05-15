@@ -38,7 +38,11 @@
                                 <div class="py-2">
                                     <a id="Locked" class="py-2 btn TimestampClear"><img id="LockedIcon" class="imgIcon" src="img\Icons\LockedIcon.png"></a>
                                     <!-- <a class="py-2 px-5 Clear btn TimestampClear" href="clear.php">Clear Timestamps? | <img class="imgIcon" src="img\Icons\TimestampTXTIcon.png"></a> -->
-                                    <button id="Clear" class="py-2 px-5 Clear btn TimestampClear" disabled>Clear Timestamps? | <img class="imgIcon" src="img\Icons\TimestampTXTIcon.png"></button>
+                                    <form action="clear.php" method="post">
+                                        <input name="filepath" id="Filepath" hidden type="text" value="">
+                                        <input name="submit" type="submit" id="Clear" class="py-2 px-5 Clear btn TimestampClear" disabled>Clear Timestamps? | <img class="imgIcon" src="img\Icons\TimestampTXTIcon.png">
+                                    </form>
+                                    
                                 </div>
                             </div>
                         </div>
