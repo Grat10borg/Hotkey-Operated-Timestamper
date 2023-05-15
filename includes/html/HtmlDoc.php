@@ -1,1 +1,1 @@
-<?php $version = "1.0"; // changes the displayed version num all over the program ?>
+<?php $version = "0.1_beta"; // changes the displayed version num all over the program ?>

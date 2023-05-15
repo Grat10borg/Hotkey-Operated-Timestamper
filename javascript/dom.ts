@@ -113,7 +113,7 @@ function AddBTNCharcounters() {
 
   // Add ClearButton event. (desc-maker only)
   if (Clear != null) { // Make btn event for Clearing button, only makes an alert
-    //Clear.addEventListener("click",function () {alert("Clearing Timestamps");window.location.href = "clear.php";},true);
+    Clear.addEventListener("click",function () {window.location.href = "clear.php";},true);
   }
 }
 

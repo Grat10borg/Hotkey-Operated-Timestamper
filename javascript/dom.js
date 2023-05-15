@@ -90,6 +90,7 @@ function AddBTNCharcounters() {
         }, true);
     }
     if (Clear != null) {
+        Clear.addEventListener("click", function () { window.location.href = "clear.php"; }, true);
     }
 }
 async function validateTwitchToken() {

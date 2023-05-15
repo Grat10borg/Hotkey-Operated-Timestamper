@@ -23,7 +23,7 @@
     <main class="container background">
         <div class="m-5 p-5 mt-0">    
     <?php  
-    echo "<h3>"; echo $_POST["filepath"]; echo "has been cleared </h3>";
+    echo "<h3>"; echo $_POST["filepath"]; echo " has been cleared </h3>";
     if (file_exists($_POST["filepath"])) {
         // clear Timestamps from the clear timestamp button
         file_put_contents($_POST["filepath"], "");

@@ -17,9 +17,6 @@
     <title>H.O.T: Description Maker 📃</title>
 </head>
 <body>
-    <?php
-    //include "includes/settings.php"; // general vars things you can change is imported here, like the file root for the txt!
-    ?>
     <main class="container background">
         <div class="row">
             <?php include "includes/html/Navbar.php" ?>
