@@ -7,11 +7,7 @@ if (config.TWITCH_API_TOKEN != "" || config.TWITCH_API_TOKEN != null) {
   let input = $$.id("TwitchTokenP") as HTMLInputElement;
   input.value=config.TWITCH_API_TOKEN;
 }
-if (config.CLIP_OFFSET == null) {
-  $$.log(
-    "you didnt set a config.CLIP_OFFSET, H.O.T has defaulted to 26 seconds of offset."
-  );
-}
+if (config.CLIP_OFFSET == null) $$.log("you didnt set a config.CLIP_OFFSET, H.O.T has defaulted to 26 seconds of offset.");
 else {
   let input = $$.id("ClipOffsetIn") as any;
   input.value=config.CLIP_OFFSET;
@@ -33,7 +29,7 @@ if (config.LOCALIZE_ON == false) {
  
 }
 
-if(config.TIMESTAMP_PATH != null && config.TIMESTAMP_PATH != "") {
+if(config.TIMESTAMP_PATH !== null && config.TIMESTAMP_PATH !== "") {
   let p = $$.id("TimestampPath") as HTMLParagraphElement;
   p.innerHTML="• currently getting timestamps from: " + config.TIMESTAMP_PATH;
   let input = $$.id("TimeSPathIn") as HTMLInputElement;
@@ -61,7 +57,9 @@ $$.api_valid();
 
 //#region Basic Setup H.O.T NON Twitch API
 if (config.INFOWRITER_ON == true) { // run if infowriter is installed.
-  CutOuts();
+  //CutOuts();
+
+  InfoWriterMakeTimestamps()
 }
 //#endregion
 
@@ -245,187 +243,142 @@ TwitchClip.addEventListener("click", async function (event: any) {
 
 // Large Functions
 
-//#region CutOuts: Function Removes NonUsefull data from RawTxt Data
-// makes a Clean Version Timestamp version from the Raw txt
-// Input : A Timestamp Txt Made by the StreamReader Plugin for OBS:
-// Outputs: Sets Data in Multidim-Stream/RecordArr with a clean set of Timestamps -
-// returns 1 if sucessful and 0 if failed
-//- with Scenes marked with their names and Clips marked
-async function CutOuts() {
-  let timestamps = await $$.txt(config.TIMESTAMP_PATH);
-  if(timestamps == "") $$.log("Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!");
- 
-  let RawTxtArr = timestamps.split("\n"); // splits them by Spaces : EVENT:START, RECORDING, @, etc...
-  let StreamArr = Array();
-  let RecordArr = Array();
-  var Catch = false as boolean; // catch is activated when nearing the end of the VOD/Stream. it tells it to stop/catch the varibles for now and place it in the arrays
-  var LineScene = "" as String;
-  // maybe remove ClipNo later
-  let ClipNo = 0 as number;
-  let xs = 0; // x Stream
-  let xr = 0; // x Recording
-  for (let index = 0; index < RawTxtArr.length; index++) {
-    let Word = RawTxtArr[index]; // effectively a Foreach loop but without javascripts weird foreach loops
-    if (Word.match(/EVENT:START.*/i)) {
-      if (Word.match(/.*Record.*/i)) {
-        let resarr = Word.split(" ");
-        RecordDatesArr.push(resarr[3] + " " + resarr[4]);
-      } else if (Word.match(/.*Stream.*/i)) {
-        let resarr = Word.split(" ");
-        StreamDatesArr.push(resarr[3] + " " + resarr[4]);
+async function InfoWriterMakeTimestamps() {
+  //test if empty.
+  let InfowriterTxt = await $$.txt(config.TIMESTAMP_PATH);
+  if(InfowriterTxt && InfowriterTxt !== "") {
+    $$.log(InfowriterTxt);
+
+    let TxtLine = InfowriterTxt.split("\n"); // splits them by Enters : EVENT:START, RECORDING, @, etc...
+    let StreamArr = Array();
+    let RecordArr = Array();
+    var Catch = false as boolean; // catch is activated when nearing the end of the VOD/Stream. it tells it to stop/catch the varibles for now and place it in the arrays
+    var LineScene = "" as String;
+    // maybe remove ClipNo later
+    let ClipNo = 0 as number;
+    let xs = 0; // x Stream
+    let xr = 0; // x Recording
+
+    //#region REGEX function filtering the Infowriter text file
+    for (let index = 0; index < TxtLine.length; index++) {
+      if (TxtLine[index].match(/EVENT:START.*/i)) {
+        let EventStart = TxtLine[index].split(" ");
+        if (TxtLine[index].match(/.*Record.*/i)) RecordDatesArr.push(EventStart[3] + " " + EventStart[4]);
+        else if (TxtLine[index].match(/.*Stream.*/i)) StreamDatesArr.push(EventStart[3] + " " + EventStart[4]);
+        continue;
       }
-      continue;
-    }
-    if (Word.match(/EVENT:STOP.*/i)) {
-      //$$.log("In Event Stop: " + Word); // enters
-      // add what ever array into multidim array
-      if (typeof StreamArr !== "undefined") {
-        if (StreamArr.length != 0) {
-          StreamArr.unshift("▸ 0:00 Start");
-          MultiDimStreamArr[xs] = StreamArr;
-          xs++;
-        }
-      }
-      if (typeof RecordArr !== "undefined") {
-        if (RecordArr.length != 0) {
-          RecordArr.unshift("▸ 0:00 Start");
-          MultiDimRecordArr[xr] = RecordArr;
-          xr++;
-        }
-      }
-      StreamArr = []; // clear array for new rerun
-      RecordArr = []; // clear array for new rerun
-      ClipNo = 0; // resets clip counter
-      continue;
-    }
-    if (Word.match(/EVENT:SCENE.*/i)) {
-      let resarr = Word.split(" ");
-      LineScene = resarr[3]; // BRB, PLAYING, OUTRO, etc
-      Catch = true; // marks next Record & Stream timestamp as a Scene Timestamp
-      continue;
-    }
-    if (Catch == true) {
-      if (to2Time(Word) != "0:00") {
-        // if empty
-        if (Word.match(/\d:\d\d:\d\d\s.*/i)) {
-          // if its a timestamp
-          if (Word.match(/.*Record.*/i)) {
-            // if "Record" is in the timestamp
-            let Timestamp = "▸ " + to2Time(Word) + " " + LineScene;
-            RecordArr.push(Timestamp); // should place this at the end of the array
+      if (TxtLine[index].match(/EVENT:STOP.*/i)) { // add what ever array into multidim array
+        if (typeof StreamArr !== "undefined") {
+          if (StreamArr.length != 0) {
+            StreamArr.unshift("▸ 0:00 Start");
+            MultiDimStreamArr[xs] = StreamArr;
+            xs++;
           }
-          if (Word.match(/.*Stream.*/i)) {
-            let Timestamp = "▸ " + to2Time(Word) + " " + LineScene;
-            StreamArr.push(Timestamp); // should place this at the end of the array
-            Catch = false;
+        }
+        if (typeof RecordArr !== "undefined") {
+          if (RecordArr.length != 0) {
+            RecordArr.unshift("▸ 0:00 Start");
+            MultiDimRecordArr[xr] = RecordArr;
+            xr++;
           }
+        }
+        StreamArr = []; // clear array for new rerun
+        RecordArr = []; // clear array for new rerun
+        ClipNo = 0; // resets clip counter
+        continue;
+      }
+      if (TxtLine[index].match(/EVENT:SCENE.*/i)) {
+        let resarr = TxtLine[index].split(" ");
+        LineScene = resarr[3]; // BRB, PLAYING, OUTRO, etc
+        Catch = true; // marks next Record & Stream timestamp as a Scene Timestamp
+        continue;
+      }
+      if (Catch == true) {
+        if (to2Time(TxtLine[index]) != "0:00") {          // if empty
+          if (TxtLine[index].match(/\d:\d\d:\d\d\s.*/i)) {// if its a timestamp 
+            if (TxtLine[index].match(/.*Record.*/i)) {// if "Record" is in the timestamp
+              let Timestamp = "▸ " + to2Time(TxtLine[index]) + " " + LineScene;
+              RecordArr.push(Timestamp); 
+            }
+            if (TxtLine[index].match(/.*Stream.*/i)) {
+              let Timestamp = "▸ " + to2Time(TxtLine[index]) + " " + LineScene;
+              StreamArr.push(Timestamp);
+              Catch = false;
+            }
+            continue;
+          }
+        }
+      } else if (TxtLine[index].search(/0:00:00.*/i) != 0) {
+        if (TxtLine[index].match(/.*Record.*/i)) {
+          let Timestamp ="• " + to2Time(AddClipDelay(TxtLine[index], config.CLIP_OFFSET)) + ` [ClipNo${ClipNo}]`;
+          RecordArr.push(Timestamp);
+          ClipNo++;
+        }
+        if (TxtLine[index].match(/.*Stream.*/i)) {
+          // 7:58:58 Stream Time Marker
+          let Timestamp ="• " + to2Time(AddClipDelay(TxtLine[index], config.CLIP_OFFSET)) + ` [ClipNo${ClipNo}]`;
+          StreamArr.push(Timestamp);
+          ClipNo++;
+        } else {
           continue;
         }
       }
-    } else if (Word.search(/0:00:00.*/i) != 0) {
-      //$$.log("word passed 0:00:00 test:"+ Word);
-      if (Word.match(/.*Record.*/i)) {
-        let Timestamp =
-          "• " + to2Time(AddClipDelay(Word, config.CLIP_OFFSET)) + ` [ClipNo${ClipNo}]`;
-        ClipNo++;
-        RecordArr.push(Timestamp);
-      }
-      if (Word.match(/.*Stream.*/i)) {
-        // 7:58:58 Stream Time Marker
-        let Timestamp =
-          "• " + to2Time(AddClipDelay(Word, config.CLIP_OFFSET)) + ` [ClipNo${ClipNo}]`;
-        ClipNo++;
-        StreamArr.push(Timestamp);
-      } else {
-        continue;
-      }
     }
-  }
-  // test if success
-  if (
-    typeof MultiDimStreamArr != "undefined" &&
-    MultiDimStreamArr != null &&
-    MultiDimStreamArr.length != null &&
-    MultiDimStreamArr.length > 0
-  ) {
-    SetOps(MultiDimStreamArr, MultiDimRecordArr);
-    //return 1; // success
-  } else if (
-    typeof MultiDimRecordArr != "undefined" &&
-    MultiDimRecordArr != null &&
-    MultiDimRecordArr.length != null &&
-    MultiDimRecordArr.length > 0
-  ) {
-    //return 1; // success
-  } else {
-    //return 0; // Error
-  }
-}
-//#endregion
+    // Set in Data to Webpage
+    let stats = $$.id("Stats") as HTMLElement;
+    stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
+    //#endregion
+    //if (MultiDimStreamArr && MultiDimRecordArr) SetOps(MultiDimStreamArr, MultiDimRecordArr);
 
-//#region SetOps: Function Sorts the clean timestamps into a description
-// Makes: a Description from PHP Txts and clean timestamps
-// Input : Clean timestamps made by CutOuts()
-// Outputs: a Finished Description only missing Clip names
-// returns 1 if sucessful and 0 if failed
-async function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) {
-  // Set in All the timestamps correctly
-  let BeforeDesc = await $$.txt(config.DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
-  let AfterDesc = await $$.txt(config.DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
-  let LocalBeforeDesc = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
-  let LocalAfterDesc = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
+    // Set in All the timestamps correctly
+    let BeforeDesc = await $$.txt(config.DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
+    let AfterDesc = await $$.txt(config.DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
+    let LocalBeforeDesc = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
+    let LocalAfterDesc = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
 
-  let success = false;
-  var Description = ""; // Finished Description Var
-  var LocalDescript = ""; // finished description in another language
-
-   // Set in Data to Webpage
-   let stats = $$.id("Stats") as HTMLElement;
-   stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
-
+    
   // Makes a Working Description
   // If Not Null
   if (MultiDimStreamArr.length > -1) {
-    // if has Values
-    for (let index = 0; index < MultiDimStreamArr.length; index++) {
-      let resArray = MultiDimStreamArr[index];
-      if (config.LOCALIZE_ON != false) {
-       
-        LocalDescript = LocalBeforeDesc + "\n\n";
-        LocalDescript =
-          LocalDescript +
-          `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${config.CLIP_OFFSET})\n`;
-        for (let i = 0; i < resArray.length; i++) {
-          let timestamp = resArray[i];
-          LocalDescript = LocalDescript + timestamp + "\n";
-        }
-        LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
-        LocalDescArrS.push(LocalDescript);
-        LocalDescript = "";
-      }
+      for (let index = 0; index < MultiDimStreamArr.length; index++) {
+        var Description = ""; // Finished Description Var
+        var LocalDescript = ""; // finished description in another language
+        let resArray = MultiDimStreamArr[index];
+        if (config.LOCALIZE_ON != false) {
+          
+          LocalDescript = LocalBeforeDesc + "\n\n";
+          LocalDescript =
+            LocalDescript +
+           `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${config.CLIP_OFFSET})\n`;
+         for (let i = 0; i < resArray.length; i++) {
+           let timestamp = resArray[i];
+           LocalDescript = LocalDescript + timestamp + "\n";
+         }
+          LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
+           LocalDescArrS.push(LocalDescript);
+          LocalDescript = "";
+       }
 
-      Description = BeforeDesc + "\n\n";
-      Description =
-        Description +
-        `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${config.CLIP_OFFSET})\n`;
-      for (let i = 0; i < resArray.length; i++) {
-        let timestamp = resArray[i];
-        Description = Description + timestamp + "\n";
-      }
-      Description = Description + "\n" + AfterDesc;
-      DescArrS.push(Description);
-      //console.log(DescArrS);
-      Description = "";
+       Description = BeforeDesc + "\n\n";
+       Description =
+          Description +
+          `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${config.CLIP_OFFSET})\n`;
+       for (let i = 0; i < resArray.length; i++) {
+         let timestamp = resArray[i];
+         Description = Description + timestamp + "\n";
+        }
+        Description = Description + "\n" + AfterDesc;
+        DescArrS.push(Description);
+      console.log(DescArrS);
     }
-    success = true;
   }
   if (MultiDimRecordArr.length > -1) {
     // if has Values
     for (let index = 0; index < MultiDimRecordArr.length; index++) {
+      var Description = ""; // Finished Description Var
+      var LocalDescript = ""; // finished description in another language
       let resArray = MultiDimRecordArr[index];
       if (config.LOCALIZE_ON != false) {
-        // LocalBeforeDesc = LocalBeforeDesc;
-        // LocalAfterDesc = LocalAfterDesc;
         LocalDescript = LocalBeforeDesc + "\n\n";
         LocalDescript =
           LocalDescript + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
@@ -447,20 +400,14 @@ async function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) 
       }
       Description = Description + "\n" + AfterDesc;
       DescArrR.push(Description);
-      Description = "";
     }
-    success = true;
   }
-  if (success == true) {
-    DomSet(DescArrS, DescArrR);
-    //return 1;
-  } else {
-    // error message
-    // $$.log("Both Stream and Recording Arrays returned Nothing.");
-    return 0;
+
+  // Set in Descriptions on page
+  DomSet(DescArrS, DescArrR);
   }
+  else $$.log("Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!")
 }
-//#endregion
 
 //#region DomSet: Sorts Arrays and Calls SetIns() also sorts data and makes Sidebar content on the webpage
 // makes: The sidebar content,
@@ -469,6 +416,7 @@ async function SetOps(MultiDimStreamArr: string[], MultiDimRecordArr: string[]) 
 // returns Nothing
 
 function DomSet(DescArrS, DescArrR) {
+  console.log("in dom set");
   //console.log(DescArrS.length);
   DescArrS.reverse(); // makes array be Newest First
   DescArrR.reverse();
