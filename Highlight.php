@@ -238,7 +238,7 @@
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="javascript/dom.js"></script>
     <script src="config.js"></script>
-    <script src="javascript/HighlightCaller.js"></script>
+    <script src="javascript/Highlighter.js"></script>
     <script src="CSS+SCSS/bootstrap/js/bootstrap.js"></script>
 </body>
 

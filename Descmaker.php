@@ -51,7 +51,7 @@
     <script src="CSS+SCSS/bootstrap/js/bootstrap.js"></script>
     <script src="javascript/dom.js"></script>
     <script src="config.js"></script>
-    <script src="javascript/TimestampSort.js"></script>
+    <script src="javascript/DescriptionMaker.js"></script>
 </body>
 
 </html> 

@@ -40,9 +40,8 @@
                                     <!-- <a class="py-2 px-5 Clear btn TimestampClear" href="clear.php">Clear Timestamps? | <img class="imgIcon" src="img\Icons\TimestampTXTIcon.png"></a> -->
                                     <form action="clear.php" method="post">
                                         <input name="filepath" id="Filepath" hidden type="text" value="">
-                                        <input name="submit" type="submit" id="Clear" class="py-2 px-5 Clear btn TimestampClear" disabled>Clear Timestamps? | <img class="imgIcon" src="img\Icons\TimestampTXTIcon.png">
+                                        <input name="submit" type="submit" id="Clear" class="py-2 px-5 Clear btn TimestampClear" disabled value="Clear Timestamps?">
                                     </form>
-                                    
                                 </div>
                             </div>
                         </div>
