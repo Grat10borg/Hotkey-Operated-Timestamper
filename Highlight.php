@@ -105,7 +105,7 @@
                                             <h3># Settings</h3>
                                             <p class="mb-2">you can change your settings <a href="Settings.php">Here</a></p>
                                             <div class="btn TimestampClear m-1 mb-4" id="ShowSettings">
-                                                <span><img class="imgIcon me-2" src="img/Icons/LockedIcon.png">Show private settings?</span>
+                                                <span><img class="imgIcon me-2" src="img/Icons/LockedIcon.png" id="ShowPrivateIcon">Show private settings?</span>
                                             </div>
                                             <div class="row align-items-top">
                                                 <div class="col m-auto">
