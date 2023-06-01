@@ -10,14 +10,14 @@ $$.btnchar(); // set up buttons on page
 
 // Set in Highlighter quick search channels.
 let SelectChannel = $$.id("SelectChannel") as HTMLSelectElement;
-for (let index = 0; index < config.HIGHLIGHTER_CHANNELS.length; index++) {
-  const channel = config.HIGHLIGHTER_CHANNELS[index];
-  let option = $$.make("option"); 
-  option.class='SelectOption'; 
-  option.value=channel; 
-  option.innerHTML=channel;
-  SelectChannel.append(option);
-}
+// for (let index = 0; index < config.HIGHLIGHTER_CHANNELS.length; index++) {
+//   const channel = config.HIGHLIGHTER_CHANNELS[index];
+//   let option = $$.make("option"); 
+//   option.class='SelectOption'; 
+//   option.value=channel; 
+//   option.innerHTML=channel;
+//   SelectChannel.append(option);
+// }
 
 if(config.TWITCH_API_TOKEN != "" && config.TWITCH_API_TOKEN != null) {
   let input = $$.id("TwitchAccessToken") as HTMLInputElement;
