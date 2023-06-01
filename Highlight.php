@@ -39,7 +39,14 @@
                     <div class="row p-2 m-2 mt-3 rounded">
                         <label for="SelectGame">Channel</label>
                         <!-- import of quick search channels from javascript -->
+                        <div class="d-flex">
+                        <input checked type="radio" id="useHistory" name="Search" value="useHistory" class="me-3">
                         <select name="SelectChannel" id="SelectChannel" class="form-select form-select-sm my-2" aria-label=".form-select-sm example"></select>
+                        </div>
+                        <div class="d-flex">
+                        <input type="radio" id="useSearch" name="Search" value="useSearch" class="me-3">
+                        <input disabled type="text"  name="InputChannel" id="InputChannel"  class="form-control form-control-sm my-2" aria-label=".form-select-sm example">
+                        </div>
                     </div>
                     <div class="row p-2 m-2 mt-3 rounded">
                         <label for="SelectGame" class="">Catagory</label>

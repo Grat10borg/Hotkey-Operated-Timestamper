@@ -24,6 +24,20 @@ if(config.TWITCH_API_TOKEN != "" && config.TWITCH_API_TOKEN != null) {
   input.value=config.TIMESTAMP_PATH;
 }
 
+//#region enable or disable searchbar
+let SearchHistory = $$.id("useHistory") as HTMLElement;
+let SearchBar = $$.id("useSearch") as HTMLElement;
+SearchHistory.addEventListener("click", function () {
+  $$.id("SelectChannel").disabled=false;
+  $$.id("InputChannel").disabled=true;
+},true);
+SearchBar.addEventListener("click", function () {
+  $$.id("SelectChannel").disabled=true;
+  $$.id("InputChannel").disabled=false;
+},true);
+//#endregion
+
+
 //#region Submit button form
 
 // Getting Form Data
@@ -83,7 +97,76 @@ form.addEventListener(
 
 // Twitch Api Handling
 
-//#region ChannelSelect Eventhandler
+//#region ChannelSelect & ChannelSearch Eventhandler
+var SearchInput = $$.id("InputChannel") as HTMLInputElement;
+SearchInput.addEventListener("keyup", async function () {
+  //#region Getting channel ID
+  let StreamerName = SearchInput.value;
+  if (StreamerName != "none") {
+    $$.log("Searching for " + StreamerName); // en
+    ErrorDiv.innerHTML = ""; // clear errors
+    let UserResp = await $$.api(
+      `https://api.twitch.tv/helix/users?login=${StreamerName}`,true
+    );
+    UserId = UserResp["data"][0]["id"];
+    //#endregion
+
+    //#region Getting GameNames From Clips
+    let d = new Date();
+    let RFCdato = new Date();
+    RFCdato.setDate(RFCdato.getDate() - 90); // takes a month worth of clips
+    let GameResp = await $$.api(
+      `https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`,true
+    );
+    var GameIds = new Set(); // sets can only hold uniq values
+    for (let index = 0; index < GameResp["data"].length; index++) {
+      GameIds.add(GameResp["data"][index]["game_id"]);
+    }
+    //#endregion
+
+    //#region Getting GameIDs From GameNames
+    let httpcall = "https://api.twitch.tv/helix/games?"; // cannot handle more then 100 ids at one time
+    let index = 0;
+    GameIds.forEach((Gameid) => {
+      //$$.log(Gameid);
+      if (index == 0) {
+        httpcall = httpcall + "id=" + Gameid;
+      } else {
+        httpcall = httpcall + "&id=" + Gameid;
+      }
+      index++;
+    });
+    //#endregion
+
+    //#region Getting Games from Selected Channel and Placing it on Website.
+    let SelectGameResp = await $$.api(httpcall,true);
+    // getting select box
+    let selectboxG = $$.id("SelectGame") as HTMLInputElement;
+
+    while (selectboxG.firstChild) {
+      // remove old data
+      selectboxG.firstChild.remove();
+    }
+    // Updating Game Select box with game name and ids
+    let optionNone = $$.make("option");
+    optionNone.setAttribute("value", "None");
+    optionNone.append($.createTextNode("Any Game Id"));
+    selectboxG.appendChild(optionNone);
+    for (let index = 0; index < SelectGameResp["data"].length; index++) {
+      let gameid = SelectGameResp["data"][index]["id"];
+      let gamename = SelectGameResp["data"][index]["name"];
+
+      let optionsG = $$.make("option");
+      optionsG.setAttribute("value", gameid);
+      optionsG.append($.createTextNode(gamename));
+      selectboxG.appendChild(optionsG);
+    }
+    selectboxG.disabled = false;
+    //#endregion
+  }
+});
+//#endregion
+
 let ChannelSelect = $$.query("#SelectChannel") as any;
 ChannelSelect.addEventListener("change", async function () {
   //#region Getting channel ID

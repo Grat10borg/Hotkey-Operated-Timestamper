@@ -16,6 +16,16 @@ if (config.TWITCH_API_TOKEN != "" && config.TWITCH_API_TOKEN != null) {
     let input = $$.id("TwitchAccessToken");
     input.value = config.TIMESTAMP_PATH;
 }
+let SearchHistory = $$.id("useHistory");
+let SearchBar = $$.id("useSearch");
+SearchHistory.addEventListener("click", function () {
+    $$.id("SelectChannel").disabled = false;
+    $$.id("InputChannel").disabled = true;
+}, true);
+SearchBar.addEventListener("click", function () {
+    $$.id("SelectChannel").disabled = true;
+    $$.id("InputChannel").disabled = false;
+}, true);
 var Id;
 var form = $$.query("#HighlighForm");
 var ErrorDiv = $$.id("ErrorDiv");

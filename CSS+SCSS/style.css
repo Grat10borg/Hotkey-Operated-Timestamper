@@ -4,19 +4,15 @@ html {
   /* Handle */
   /* Handle on hover */
 }
-
 html ::-webkit-scrollbar {
   width: 10px;
 }
-
 html ::-webkit-scrollbar-thumb {
   background: #464b8c;
 }
-
 html ::-webkit-scrollbar-track {
   background: #293268;
 }
-
 html ::-webkit-scrollbar-thumb:hover {
   background: #00aaa5;
 }
@@ -29,19 +25,15 @@ body {
   /* Handle */
   /* Handle on hover */
 }
-
 body ::-webkit-scrollbar {
   width: 8px;
 }
-
 body ::-webkit-scrollbar-thumb {
   background: #909edd;
 }
-
 body ::-webkit-scrollbar-track {
   background: #61699a;
 }
-
 body ::-webkit-scrollbar-thumb:hover {
   background: #27d3cb;
 }
@@ -83,6 +75,10 @@ textarea {
   height: 12em !important;
 }
 
+.form-floating > .form-control:not(:-moz-placeholder-shown) {
+  padding-top: 1%;
+}
+
 .form-floating > .form-control:focus,
 .form-floating > .form-control:not(:placeholder-shown) {
   padding-top: 1%;
@@ -102,7 +98,6 @@ textarea {
 .form-control:focus {
   border-color: #27d3cb;
   border-width: 3px;
-  -webkit-box-shadow: none;
   box-shadow: none;
 }
 
@@ -129,16 +124,13 @@ textarea {
   padding-top: 5px;
   padding-bottom: 5px;
 }
-
 .topbar a {
   font-size: large;
   color: #f0f0f0;
 }
-
 .topbar a:hover {
   color: #f0f0f0;
 }
-
 .topbar ul {
   list-style: none;
   margin: 0%;
@@ -148,40 +140,32 @@ textarea {
 .sidebar {
   background-color: #293268;
 }
-
 .sidebar label {
   color: #f0f0f0;
 }
-
 .sidebar ul {
   list-style: none;
   padding: 0%;
   margin: 0%;
 }
-
 .sidebar ul li {
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: #6b74b2;
 }
-
 .sidebar ul li a {
   color: #f0f0f0;
 }
-
 .sidebar ul li a:hover {
   color: #c1d9f2;
 }
-
 .sidebar ul li:nth-child(odd) {
   background-color: #7d85ba;
 }
-
 .sidebar ul .RecordStreamli {
   margin-bottom: 15px;
   background-color: #909edd;
 }
-
 .sidebar ul .RecordStreamli:nth-child(odd) {
   margin-bottom: 15px;
   background-color: #909edd;
@@ -189,31 +173,19 @@ textarea {
 
 .imgHOTLogo {
   max-width: 250px;
-  -ms-interpolation-mode: nearest-neighbor;
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: -moz-crisp-edges;
-      image-rendering: -o-pixelated;
-      image-rendering: pixelated;
+  image-rendering: pixelated;
 }
 
 .imgIcon {
   display: inline-block;
   width: 32px !important;
-  -ms-interpolation-mode: nearest-neighbor;
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: -moz-crisp-edges;
-      image-rendering: -o-pixelated;
-      image-rendering: pixelated;
+  image-rendering: pixelated;
 }
 
 .imgIconSmall {
   display: inline-block;
   width: 16px !important;
-  -ms-interpolation-mode: nearest-neighbor;
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: -moz-crisp-edges;
-      image-rendering: -o-pixelated;
-      image-rendering: pixelated;
+  image-rendering: pixelated;
 }
 
 a .imgIcon:hover {
@@ -253,28 +225,25 @@ a .imgIcon:hover {
 }
 
 .imgPixel {
-  -ms-interpolation-mode: nearest-neighbor;
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: -moz-crisp-edges;
-      image-rendering: -o-pixelated;
-      image-rendering: pixelated;
+  image-rendering: pixelated;
 }
 
 .errorImg {
   width: 100px;
-  -ms-interpolation-mode: nearest-neighbor;
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: -moz-crisp-edges;
-      image-rendering: -o-pixelated;
-      image-rendering: pixelated;
+  image-rendering: pixelated;
 }
 
 #HighlighForm div {
   background-color: #6b74b2;
 }
-
+#HighlighForm div div {
+  background-color: inherit;
+}
 #HighlighForm div:nth-child(odd) {
   background-color: #7d85ba;
+}
+#HighlighForm div:nth-child(odd) div {
+  background-color: inherit;
 }
 
 #IframePlayerLater {
@@ -310,28 +279,22 @@ a .imgIcon:hover {
 .Linkbg:nth-child(odd) {
   background-color: #dae0e9;
 }
-
 .Linkbg:nth-child(odd) .ClipLink {
   color: #dd3745;
 }
-
 .Linkbg:nth-child(odd) .ClipLink:hover {
   color: #a52639;
 }
-
 .Linkbg:nth-child(odd) .ClipLink:visited {
   color: #5d2f8c;
 }
-
 .Linkbg:nth-child(odd) .ClipLink:visited:hover {
   color: #431e66;
 }
-
 .Linkbg:nth-child(odd) .ClipBtn {
   background-color: #00aaa5;
   color: #f0f0f0;
 }
-
 .Linkbg:nth-child(odd) .ClipBtn:hover {
   background-color: #007672;
   color: #f0f0f0;
@@ -358,5 +321,4 @@ a .imgIcon:hover {
   margin: auto;
   display: block;
   text-align: center;
-}
-/*# sourceMappingURL=style.css.map */
+}/*# sourceMappingURL=style.css.map */

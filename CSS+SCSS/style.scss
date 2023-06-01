@@ -238,9 +238,15 @@ a{
 {
   div {
     background-color: #6b74b2; 
+    div{
+      background-color: inherit;
+    }
   }
   div:nth-child(odd) {
     background-color: #7d85ba;
+    div{
+      background-color: inherit;
+    }
   }
 }
 
