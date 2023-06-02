@@ -21,10 +21,16 @@ let SearchBar = $$.id("useSearch");
 SearchHistory.addEventListener("click", function () {
     $$.id("SelectChannel").disabled = false;
     $$.id("InputChannel").disabled = true;
+    Userfind($$.id("SelectChannel").options[$$.id("SelectChannel").selectedIndex].value);
 }, true);
 SearchBar.addEventListener("click", function () {
     $$.id("SelectChannel").disabled = true;
     $$.id("InputChannel").disabled = false;
+    $$.log("in Searchbar radio trigger");
+    $$.log($$.id("InputChannel").value);
+    if ($$.id("InputChannel").value.length > 5) {
+        Userfind($$.id("InputChannel").value);
+    }
 }, true);
 var Id;
 var form = $$.query("#HighlighForm");
@@ -65,104 +71,70 @@ form.addEventListener("submit", async function (event) {
 var SearchInput = $$.id("InputChannel");
 SearchInput.addEventListener("keyup", async function () {
     if (SearchInput.value.length > 5) {
-        let StreamerName = SearchInput.value;
-        if (StreamerName != "none") {
-            $$.log("Searching for " + StreamerName);
-            ErrorDiv.innerHTML = "";
-            let UserResp = await $$.api(`https://api.twitch.tv/helix/users?login=${StreamerName}`, true);
-            if (UserResp["data"].length != 0) {
-                UserId = UserResp["data"][0]["id"];
-                let d = new Date();
-                let RFCdato = new Date();
-                RFCdato.setDate(RFCdato.getDate() - 90);
-                let GameResp = await $$.api(`https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`, true);
-                if (GameResp["data"].length != 0) {
-                    $$.log(SearchInput.value + " is searchable");
-                    var GameIds = new Set();
-                    for (let index = 0; index < GameResp["data"].length; index++) {
-                        GameIds.add(GameResp["data"][index]["game_id"]);
-                    }
-                    let httpcall = "https://api.twitch.tv/helix/games?";
-                    let index = 0;
-                    GameIds.forEach((Gameid) => {
-                        if (index == 0) {
-                            httpcall = httpcall + "id=" + Gameid;
-                        }
-                        else {
-                            httpcall = httpcall + "&id=" + Gameid;
-                        }
-                        index++;
-                    });
-                    let SelectGameResp = await $$.api(httpcall, true);
-                    let selectboxG = $$.id("SelectGame");
-                    while (selectboxG.firstChild) {
-                        selectboxG.firstChild.remove();
-                    }
-                    let optionNone = $$.make("option");
-                    optionNone.setAttribute("value", "None");
-                    optionNone.append($.createTextNode("Any Game Id"));
-                    selectboxG.appendChild(optionNone);
-                    for (let index = 0; index < SelectGameResp["data"].length; index++) {
-                        let gameid = SelectGameResp["data"][index]["id"];
-                        let gamename = SelectGameResp["data"][index]["name"];
-                        let optionsG = $$.make("option");
-                        optionsG.setAttribute("value", gameid);
-                        optionsG.append($.createTextNode(gamename));
-                        selectboxG.appendChild(optionsG);
-                    }
-                    selectboxG.disabled = false;
-                }
-            }
-        }
+        Userfind(SearchInput.value);
     }
 });
 let ChannelSelect = $$.query("#SelectChannel");
 ChannelSelect.addEventListener("change", async function () {
     let StreamerName = ChannelSelect.options[ChannelSelect.selectedIndex].value;
     if (StreamerName != "none") {
-        $$.log("Searching for " + StreamerName);
-        ErrorDiv.innerHTML = "";
-        let UserResp = await $$.api(`https://api.twitch.tv/helix/users?login=${StreamerName}`, true);
-        UserId = UserResp["data"][0]["id"];
-        let d = new Date();
-        let RFCdato = new Date();
-        RFCdato.setDate(RFCdato.getDate() - 90);
-        let GameResp = await $$.api(`https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`, true);
-        var GameIds = new Set();
-        for (let index = 0; index < GameResp["data"].length; index++) {
-            GameIds.add(GameResp["data"][index]["game_id"]);
-        }
-        let httpcall = "https://api.twitch.tv/helix/games?";
-        let index = 0;
-        GameIds.forEach((Gameid) => {
-            if (index == 0) {
-                httpcall = httpcall + "id=" + Gameid;
-            }
-            else {
-                httpcall = httpcall + "&id=" + Gameid;
-            }
-            index++;
-        });
-        let SelectGameResp = await $$.api(httpcall, true);
-        let selectboxG = $$.id("SelectGame");
-        while (selectboxG.firstChild) {
-            selectboxG.firstChild.remove();
-        }
-        let optionNone = $$.make("option");
-        optionNone.setAttribute("value", "None");
-        optionNone.append($.createTextNode("Any Game Id"));
-        selectboxG.appendChild(optionNone);
-        for (let index = 0; index < SelectGameResp["data"].length; index++) {
-            let gameid = SelectGameResp["data"][index]["id"];
-            let gamename = SelectGameResp["data"][index]["name"];
-            let optionsG = $$.make("option");
-            optionsG.setAttribute("value", gameid);
-            optionsG.append($.createTextNode(gamename));
-            selectboxG.appendChild(optionsG);
-        }
-        selectboxG.disabled = false;
+        Userfind(ChannelSelect.options[ChannelSelect.selectedIndex].value);
     }
 });
+async function Userfind(TwitchLogin) {
+    if (TwitchLogin != "none" && TwitchLogin != "") {
+        $$.log("Searching for " + TwitchLogin);
+        ErrorDiv.innerHTML = "";
+        let UserResp = await $$.api(`https://api.twitch.tv/helix/users?login=${TwitchLogin}`, true);
+        if (UserResp["data"].length == 0) {
+            $$.log("User Not Found");
+            return;
+        }
+        else {
+            UserId = UserResp["data"][0]["id"];
+            let d = new Date();
+            let RFCdato = new Date();
+            RFCdato.setDate(RFCdato.getDate() - 90);
+            let GameResp = await $$.api(`https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`, true);
+            if (GameResp["data"].length != 0) {
+                $$.log(TwitchLogin + " is searchable!");
+                var GameIds = new Set();
+                for (let index = 0; index < GameResp["data"].length; index++) {
+                    GameIds.add(GameResp["data"][index]["game_id"]);
+                }
+                let httpcall = "https://api.twitch.tv/helix/games?";
+                let index = 0;
+                GameIds.forEach((Gameid) => {
+                    if (index == 0) {
+                        httpcall = httpcall + "id=" + Gameid;
+                    }
+                    else {
+                        httpcall = httpcall + "&id=" + Gameid;
+                    }
+                    index++;
+                });
+                let SelectGameResp = await $$.api(httpcall, true);
+                let selectboxG = $$.id("SelectGame");
+                while (selectboxG.firstChild) {
+                    selectboxG.firstChild.remove();
+                }
+                let optionNone = $$.make("option");
+                optionNone.setAttribute("value", "None");
+                optionNone.append($.createTextNode("Any Game Id"));
+                selectboxG.appendChild(optionNone);
+                for (let index = 0; index < SelectGameResp["data"].length; index++) {
+                    let gameid = SelectGameResp["data"][index]["id"];
+                    let gamename = SelectGameResp["data"][index]["name"];
+                    let optionsG = $$.make("option");
+                    optionsG.setAttribute("value", gameid);
+                    optionsG.append($.createTextNode(gamename));
+                    selectboxG.appendChild(optionsG);
+                }
+                selectboxG.disabled = false;
+            }
+        }
+    }
+}
 async function ClipSorter(Clips, game_id, viewCount) {
     var arrclips = Array();
     let duration = 0;
