@@ -37,7 +37,7 @@ SearchHistory.addEventListener("click", function () {
 SearchBar.addEventListener("click", function () {
   $$.id("SelectChannel").disabled=true;
   $$.id("InputChannel").disabled=false;
-  
+
   if ($$.id("InputChannel").value.length > 5) {
     Userfind($$.id("InputChannel").value);
   }
@@ -65,6 +65,9 @@ form.addEventListener(
     }
     let endDate = new Date(form.endDate.value) as any; // changes to string later too
     let game_id = form.SelectGame.options[form.SelectGame.selectedIndex].value;
+    if (game_id == "") {
+      game_id = "None";
+    }
     let viewCount = form.viewcount.value;
     if (viewCount == "") {
       viewCount = 1;
@@ -200,7 +203,6 @@ async function Userfind(TwitchLogin:string) {
   }
 }
 
-
 //#region sorts clips from the response and then prints it into the textareas on the page
 
 // sorts clips out from specified values
@@ -258,14 +260,24 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     for (let index2 = 0; index2 < arrclips.length; index2++) {
       //$$.log(arrclips[index2]["created_at"].indexOf(datesort[index]));
       if (arrclips[index2]["created_at"].indexOf(datesort[index]) == 0) {
-        // $$.log(arrclips[index2]["created_at"] + " Was equal to " + datesort[index]);
         sortcliped[index] = arrclips[index2];
         continue; // stops loop when clip was found
-      } else {
-      } // nada
+      } 
     }
   }
   $$.log(sortcliped);
+
+  if (config.HIGHLIGHT_SORTING == "DateReverse") {
+    sortcliped.reverse();
+  }
+  else if (config.HIGHLIGHT_SORTING == "Random") {
+    for (var i = sortcliped.length - 1; i > 0; i--) {
+      var b = Math.floor(Math.random() * (i + 1));
+      var temp = sortcliped[i];
+      sortcliped[i] = sortcliped[b];
+      sortcliped[b] = temp;
+  }
+  }
   //#endregion
 
   //#region Set in Data

@@ -26,8 +26,6 @@ SearchHistory.addEventListener("click", function () {
 SearchBar.addEventListener("click", function () {
     $$.id("SelectChannel").disabled = true;
     $$.id("InputChannel").disabled = false;
-    $$.log("in Searchbar radio trigger");
-    $$.log($$.id("InputChannel").value);
     if ($$.id("InputChannel").value.length > 5) {
         Userfind($$.id("InputChannel").value);
     }
@@ -45,6 +43,9 @@ form.addEventListener("submit", async function (event) {
     }
     let endDate = new Date(form.endDate.value);
     let game_id = form.SelectGame.options[form.SelectGame.selectedIndex].value;
+    if (game_id == "") {
+        game_id = "None";
+    }
     let viewCount = form.viewcount.value;
     if (viewCount == "") {
         viewCount = 1;
@@ -179,11 +180,20 @@ async function ClipSorter(Clips, game_id, viewCount) {
                 sortcliped[index] = arrclips[index2];
                 continue;
             }
-            else {
-            }
         }
     }
     $$.log(sortcliped);
+    if (config.HIGHLIGHT_SORTING == "DateReverse") {
+        sortcliped.reverse();
+    }
+    else if (config.HIGHLIGHT_SORTING == "Random") {
+        for (var i = sortcliped.length - 1; i > 0; i--) {
+            var b = Math.floor(Math.random() * (i + 1));
+            var temp = sortcliped[i];
+            sortcliped[i] = sortcliped[b];
+            sortcliped[b] = temp;
+        }
+    }
     let textNode = document.createTextNode(`‣ Found: ${sortcliped.length} Clips, Thats ${toTime(duration)} of content!`);
     let insertP = $$.make("p");
     insertP.appendChild(textNode);
