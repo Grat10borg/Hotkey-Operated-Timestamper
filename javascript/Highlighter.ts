@@ -1,103 +1,111 @@
-// Settings
-// Asigned later
-let UserId = "";
+// settings
+// asigned later
+let userid = "";
 let client_id = "";
-//validateTToken();
-$$.api_valid(); // validates twitch API
+//validatettoken();
+$$.api_valid(); // validates twitch api
 $$.btnchar(); // set up buttons on page
-// Website Data Handling
+// website data handling
 
 
-// Set in Highlighter quick search channels.
-let SelectChannel = $$.id("SelectChannel") as HTMLSelectElement;
-for (let index = 0; index < config.HIGHLIGHTER_CHANNELS.length; index++) {
+// set in highlighter quick search channels.
+let selectchannel = $$.id("selectchannel") as HTMLSelectElement;
+for (let index = 0; index < config.HIGHLIGHTER_CHANNELS.length;
+index++) {
   const channel = config.HIGHLIGHTER_CHANNELS[index];
   let option = $$.make("option"); 
-  option.class='SelectOption'; 
+  option.class='selectoption'; 
   option.value=channel; 
-  option.innerHTML=channel;
-  SelectChannel.append(option);
+  option.innerhtml=channel;
+  selectchannel.append(option);
 }
 
 if(config.TWITCH_API_TOKEN != "" && config.TWITCH_API_TOKEN != null) {
-  let input = $$.id("TwitchAccessToken") as HTMLInputElement;
+  let input = $$.id("twitchaccesstoken") as HTMLInputElement;
   input.value=config.TIMESTAMP_PATH;
 }
 
 //#region enable or disable searchbar
-let SearchHistory = $$.id("useHistory") as HTMLElement;
-let SearchBar = $$.id("useSearch") as HTMLElement;
-SearchHistory.addEventListener("click", function () {
-  $$.id("SelectChannel").disabled=false;
-  $$.id("InputChannel").disabled=true;
+let searchhistory = $$.id("usehistory") as any;
+let searchbar = $$.id("usesearch") as any;
+searchhistory.addEventListener("click", function () {
+  $$.id("selectchannel").disabled=false;
+  $$.id("inputchannel").disabled=true;
   
-  Userfind($$.id("SelectChannel").options[$$.id("SelectChannel").selectedIndex].value);
+  userfind($$.id("selectchannel").options[
+  $$.id("selectchannel").selectedindex].value);
 },true);
 
-SearchBar.addEventListener("click", function () {
-  $$.id("SelectChannel").disabled=true;
-  $$.id("InputChannel").disabled=false;
+searchbar.addEventListener("click", function () {
+  $$.id("selectchannel").disabled=true;
+  $$.id("inputchannel").disabled=false;
 
-  if ($$.id("InputChannel").value.length > 5) {
-    Userfind($$.id("InputChannel").value);
+  if ($$.id("inputchannel").value.length > 5) {
+    userfind($$.id("inputchannel").value);
   }
 },true);
 //#endregion
 
 
-//#region Submit button form
+//#region submit button form
 
-// Getting Form Data
-// Make btn event for Clearing button, only makes an alert
-var Id: string;
-var form = $$.query("#HighlighForm") as any;
-var ErrorDiv = $$.id("ErrorDiv") as HTMLElement;
+// getting form data
+// make btn event for clearing button, only makes an alert
+var id: string;
+var form = $$.query("#highlighform") as any;
+var errordiv = $$.id("errordiv") as any;
 form.addEventListener(
   "submit",
   async function (event: any) {
-    event.preventDefault();
-    //#region Setting of Start and End Date and Viewcount
-    let Startdate = new Date(form.date.value) as any; // changes to string later
-    if (Startdate == "Invalid Date") {
-      Startdate = new Date();
-      Startdate.setDate(Startdate.getDate() - 90);
+    event.preventdefault();
+    //#region setting of start and end date and viewcount
+    let startdate = new Date(form.date.value) as any; 
+    // changes to string later
+    if (startdate == "invalid date") {
+      startdate = new Date();
+      startdate.setdate(startdate.getdate() - 90);
       $$.log("start date was not given, getting clips from 90 days ago");
     }
-    let endDate = new Date(form.endDate.value) as any; // changes to string later too
-    let game_id = form.SelectGame.options[form.SelectGame.selectedIndex].value;
+    let enddate = new Date(form.enddate.value) as any;
+    // changes to string later too
+    let game_id = form.selectgame.options[
+    form.selectgame.selectedindex].value;
     if (game_id == "") {
-      game_id = "None";
+      game_id = "none";
     }
-    let viewCount = form.viewcount.value;
-    if (viewCount == "") {
-      viewCount = 1;
+    let viewcount = form.viewcount.value;
+    if (viewcount == "") {
+      viewcount = 1;
     }
     //#endregion
 
-    //#region Testing if Values are Valid
-    // Tests if start date is an aproved date, else print error
+    //#region testing if values are valid
+    // tests if start date is an aproved date, else print error
     try {
-      Startdate = Startdate.toISOString();
+      startdate = startdate.toisostring();
     } catch (error) {
-      $$.log("The Set Date Value was Not allowed");
+      $$.log("the set date value was not allowed");
       $$.log(error);
     }
-    // Makes sure the End Date always is a Aproved Date
-    if (endDate == "Invalid Date") {
-      endDate = new Date(); // make end date be Today right now, clips wont be in the future anyways
-      $$.log("End Date not selected Defaulting to Todays Date");
-      endDate = endDate.toISOString();
+    // makes sure the end date always is a aproved date
+    if (enddate == "invalid date") {
+      enddate = new Date();
+      // make end date be today right now, clips wont be in the future
+      // anyways
+      $$.log("end date not selected defaulting to todays date");
+      enddate = enddate.toisostring();
     } else {
-      endDate = endDate.toISOString();
+      enddate = enddate.toisostring();
     }
     //#endregion
 
-    //#region HTTPCalling Fitting Clips, Then calls Clip Sorter
-    let ClipResp = await $$.api(
-      `https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${Startdate}&ended_at=${endDate}`,true
-    );
-    $$.log(ClipResp);
-    ClipSorter(ClipResp, game_id, viewCount);
+    //#region httpcalling fitting clips, then calls clip sorter
+    let clipresp = await $$.api(
+      `https://api.twitch.tv/helix/clips?broadcaster_id=`
+    +`${userid}&first=100&started_at=${startdate}&ended_at=${enddate}`
+    ,true);
+    $$.log(clipresp);
+    clipsorter(clipresp, game_id, viewcount);
     //#endregion
   },
   true
@@ -105,136 +113,150 @@ form.addEventListener(
 
 //#endregion
 
-// Twitch Api Handling
+// twitch api handling
 
-//#region ChannelSelect & ChannelSearch Eventhandler
-var SearchInput = $$.id("InputChannel") as HTMLInputElement;
-SearchInput.addEventListener("keyup", async function () {
-  if (SearchInput.value.length > 5) {
-    Userfind(SearchInput.value);
+//#region channelselect & channelsearch eventhandler
+var searchinput = $$.id("inputchannel") as HTMLInputElement;
+searchinput.addEventListener("keyup", async function () {
+  if (searchinput.value.length > 5) {
+    userfind(searchinput.value);
   }
 });
 //#endregion
 
-let ChannelSelect = $$.query("#SelectChannel") as any;
-ChannelSelect.addEventListener("change", async function () {
-  //#region Getting channel ID
-  let StreamerName = ChannelSelect.options[ChannelSelect.selectedIndex].value;
-  if (StreamerName != "none") {
-    Userfind(ChannelSelect.options[ChannelSelect.selectedIndex].value);
+let channelselect = $$.query("#selectchannel") as any;
+channelselect.addEventListener("change", async function () {
+  //#region getting channel id
+let streamername = channelselect.options[
+channelselect.selectedindex].value;
+  if (streamername != "none") {
+    userfind(channelselect.options[channelselect.selectedindex].value);
   }
 });
 //#endregion
 
-// Large functions
+// large functions
 
-async function Userfind(TwitchLogin:string) {
-   //#region Getting channel ID
-   if (TwitchLogin != "none" && TwitchLogin != "") {
-     $$.log("Searching for " + TwitchLogin); // en
-     ErrorDiv.innerHTML = ""; // clear errors
-     let UserResp = await $$.api(
-       `https://api.twitch.tv/helix/users?login=${TwitchLogin}`,true
+async function userfind(twitchlogin:string) {
+   //#region getting channel id
+   if (twitchlogin != "none" && twitchlogin != "") {
+     $$.log("searching for " + twitchlogin); // en
+     errordiv.innerhtml = ""; // clear errors
+     let userresp = await $$.api(
+       `https://api.twitch.tv/helix/users?login=${twitchlogin}`,true
      );
-     if (UserResp["data"].length == 0) {
-      $$.log("User Not Found");
+     if (userresp["data"].length == 0) {
+      $$.log("user not found");
       return;
      }
      else  {
-      UserId = UserResp["data"][0]["id"];
+      userid = userresp["data"][0]["id"];
       //#endregion
   
-      //#region Getting GameNames From Clips
+      //#region getting gamenames from clips
       let d = new Date();
-      let RFCdato = new Date();
-      RFCdato.setDate(RFCdato.getDate() - 90); // takes a month worth of clips
-      let GameResp = await $$.api(
-        `https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`,true
+      let rfcdato = new Date();
+      rfcdato.setDate(rfcdato.getDate() - 90); 
+      // takes a month worth of clips
+      let gameresp = await $$.api(
+        `https://api.twitch.tv/helix/clips?broadcaster_id=`+
+	`${userid}&first=100&started_at=${rfcdato.toISOString()}`+
+	`&ended_at=${d.toISOString()}`,true
       );
-      if (GameResp["data"].length != 0) {
-        $$.log(TwitchLogin + " is searchable!");
-        var GameIds = new Set(); // sets can only hold uniq values
-        for (let index = 0; index < GameResp["data"].length; index++) {
-          GameIds.add(GameResp["data"][index]["game_id"]);
+      if (gameresp["data"].length != 0) {
+        $$.log(twitchlogin + " is searchable!");
+        var gameids = new Set(); 
+	// sets can only hold uniq values
+        for (let index = 0; index < gameresp["data"].length; index++) {
+          gameids.add(gameresp["data"][index]["game_id"]);
         }
         //#endregion
     
-        //#region Getting GameIDs From GameNames
-        let httpcall = "https://api.twitch.tv/helix/games?"; // cannot handle more then 100 ids at one time
+        //#region getting gameids from gamenames
+        let httpcall = "https://api.twitch.tv/helix/games?"; 
+	// cannot handle more then 100 ids at one time
         let index = 0;
-        GameIds.forEach((Gameid) => {
-          //$$.log(Gameid);
+        gameids.forEach((gameid) => {
+          //$$.log(gameid);
           if (index == 0) {
-            httpcall = httpcall + "id=" + Gameid;
+            httpcall = httpcall + "id=" + gameid;
           } else {
-            httpcall = httpcall + "&id=" + Gameid;
+            httpcall = httpcall + "&id=" + gameid;
           }
           index++;
         });
         //#endregion
     
-        //#region Getting Games from Selected Channel and Placing it on Website.
-        let SelectGameResp = await $$.api(httpcall,true);
+	//#region getting games from selected channel and placing it on
+	//website.
+        let selectgameresp = await $$.api(httpcall,true);
         // getting select box
-        let selectboxG = $$.id("SelectGame") as HTMLInputElement;
+        let selectboxg = $$.id("selectgame") as HTMLSelectElement;
     
-        while (selectboxG.firstChild) {
+        while (selectboxg.firstChild) {
           // remove old data
-          selectboxG.firstChild.remove();
+          selectboxg.firstChild.remove();
         }
-        // Updating Game Select box with game name and ids
-        let optionNone = $$.make("option");
-        optionNone.setAttribute("value", "None");
-        optionNone.append($.createTextNode("Any Game Id"));
-        selectboxG.appendChild(optionNone);
-        for (let index = 0; index < SelectGameResp["data"].length; index++) {
-          let gameid = SelectGameResp["data"][index]["id"];
-          let gamename = SelectGameResp["data"][index]["name"];
+        // updating game select box with game name and ids
+        let optionnone = $$.make("option");
+        optionnone.setattribute("value", "none");
+        optionnone.append($.createTextNode("any game id"));
+        selectboxg.appendChild(optionnone);
+        for (let index = 0; index < selectgameresp["data"].length; 
+	index++) {
+          let gameid = selectgameresp["data"][index]["id"];
+          let gamename = selectgameresp["data"][index]["name"];
     
-          let optionsG = $$.make("option");
-          optionsG.setAttribute("value", gameid);
-          optionsG.append($.createTextNode(gamename));
-          selectboxG.appendChild(optionsG);
+          let optionsg = $$.make("option");
+          optionsg.setattribute("value", gameid);
+          optionsg.append($.createTextNode(gamename));
+          selectboxg.appendChild(optionsg);
         }
-        selectboxG.disabled = false;
+        selectboxg.disabled = false;
         //#endregion
       }
      }
   }
 }
 
-//#region sorts clips from the response and then prints it into the textareas on the page
+//#region sorts clips from the response and then prints it into the
+//textareas on the page
 
 // sorts clips out from specified values
-async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
-  //#region Sorting Clip Response data by viewcount + game_id + tests if they're in correct order by date.
+async function clipsorter(clips: Response, game_id: string, 
+			  viewcount: number) {
+  //#region sorting clip response data by viewcount + game_id + tests if
+  //they're in correct order by date.
   var arrclips = Array();
   let duration = 0;
   let j = 0;
-  for (let i = 0; i < Clips["data"]["length"]; i++) {
-    var clip = Clips["data"][i];
-    if (game_id == "None") {
-      if (clip["view_count"] > viewCount) {
+  for (let i = 0; i < clips["data"]["length"]; i++) {
+    var clip = clips["data"][i];
+    if (game_id == "none") {
+      if (clip["view_count"] > viewcount) {
         // get clip with correct amount of views
-        arrclips[j] = Clips["data"][i];
-        duration = duration + clip["duration"]; // gets the Full duration of all the queried clips
+        arrclips[j] = clips["data"][i];
+        duration = duration + clip["duration"]; 
+	// gets the full duration of all the queried clips
         j++;
       }
     } else {
       if (clip["game_id"] == game_id) {
         // gets the game with the fitting game id
         // does work
-        if (clip["view_count"] > viewCount) {
+        if (clip["view_count"] > viewcount) {
           // get clip with correct amount of views
-          arrclips[j] = Clips["data"][i];
-          duration = duration + clip["duration"]; // gets the Full duration of all the queried clips
+          arrclips[j] = clips["data"][i];
+          duration = duration + clip["duration"]; 
+	  // gets the full duration of all the queried clips
           j++;
         }
       }
     }
   }
 
-  // even though the api normally gives you the clips in the right order (SOMETIMES), this is for those few times it doesnt
+  // even though the api normally gives you the clips in the right order
+  // (sometimes), this is for those few times it doesnt
 
   // date sorting
 
@@ -243,23 +265,26 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     datemsec[index] = Date.parse(`${arrclips[index]["created_at"]}`);
   }
   datemsec.sort(function (a, b) {
-    // Correctly sorted array, in parsed date
+    // correctly sorted array, in parsed date
     return a - b; // sort the larger value
   });
   let datesort = Array();
   for (let index = 0; index < datemsec.length; index++) {
     let d = new Date(datemsec[index]);
     let s = d.toISOString();
-    let a = s.split(".000"); // for some reason makes extra milisecond values that the twichapi Does not have
-    datesort[index] = a[0] + a[1]; // makes correctly sorted Date in IsoDate format
+    let a = s.split(".000"); 
+    // for some reason makes extra milisecond values that the twichapi
+    // does not have
+    datesort[index] = a[0] + a[1]; 
+    // makes correctly sorted date in isodate format
   }
 
   let sortcliped = Array();
   for (let index = 0; index < datesort.length; index++) {
     //$$.log(datesort[index]);
     for (let index2 = 0; index2 < arrclips.length; index2++) {
-      //$$.log(arrclips[index2]["created_at"].indexOf(datesort[index]));
-      if (arrclips[index2]["created_at"].indexOf(datesort[index]) == 0) {
+      //$$.log(arrclips[index2]["created_at"].indexof(datesort[index]));
+      if (arrclips[index2]["created_at"].indexof(datesort[index]) == 0) {
         sortcliped[index] = arrclips[index2];
         continue; // stops loop when clip was found
       } 
@@ -267,10 +292,10 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   }
   $$.log(sortcliped);
 
-  if (config.HIGHLIGHT_SORTING == "DateReverse") {
+  if (config.HIGHLIGHT_SORTING == "datereverse") {
     sortcliped.reverse();
   }
-  else if (config.HIGHLIGHT_SORTING == "Random") {
+  else if (config.HIGHLIGHT_SORTING == "random") {
     for (var i = sortcliped.length - 1; i > 0; i--) {
       var b = Math.floor(Math.random() * (i + 1));
       var temp = sortcliped[i];
@@ -280,57 +305,62 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
   }
   //#endregion
 
-  //#region Set in Data
-  let textNode = document.createTextNode(
-    `‣ Found: ${sortcliped.length} Clips, Thats ${toTime(duration)} of content!`
+  //#region set in data
+  let textnode = document.createTextNode(
+    `‣ found: ${sortcliped.length} clips`+
+    `, thats ${toTime(duration)} of content!`
   );
-  let insertP = $$.make("p") as HTMLElement;
-  insertP.appendChild(textNode);
-  let DataP = $$.query("#DataP") as HTMLElement;
-  DataP.textContent =
-    "you did it! good job, heres the data from the query(s) you did ヾ(•ω•`)o";
-  let DataDiv = $$.query("#DataDiv") as HTMLElement;
-  DataDiv.appendChild(insertP);
+  let insertp = $$.make("p") as HTMLParagraphElement;
+  insertp.appendChild(textnode);
+  let datap = $$.query("#datap") as HTMLParagraphElement;
+  datap.textContent =
+	"you did it! good job, heres the data from the" 
+	+"query(s) you did ヾ(•ω•`)o";
+  let datadiv = $$.query("#datadiv") as HTMLDivElement;
+  datadiv.appendChild(insertp);
   //#endregion
 
-  //#region Set in Links
-  let textAreaDiv = $$.query("#Linksarea") as HTMLElement;
+  //#region set in links
+  let textareadiv = $$.query("#linksarea") as HTMLDivElement;
 
-  let clipCredit = new Set(); // holds credit for clips
+  let clipcredit = new Set(); // holds credit for clips
 
   let x = 0;
   duration = 0;
 
-  // Making Description
+  // making description
   let text = ""; // initialzes vars for getting duration
-  let BeforeDesc = await $$.txt(config.HIGHLIGHTER_BEFORE_TIMESTAMPS) as string;
-  text = text + BeforeDesc + "\n\n"; // adds the description
+  let beforedesc = await 
+  $$.txt(config.HIGHLIGHTER_BEFORE_TIMESTAMPS) as string;
+  text = text + beforedesc + "\n\n"; // adds the description
   // locale version of description
-  let LocaleText = "" as string;
+  let localetext = "" as string;
   if (config.LOCALIZE_ON == true) {
-    let LocaleBeforeDesc = await $$.txt(config.LOCAL_HIGHLIGHTER_BEFORE_TIMESTAMPS) as string;
-    LocaleText = LocaleText + LocaleBeforeDesc + "\n\n";
+    let localebeforedesc = await 
+    $$.txt(config.LOCAL_HIGHLIGHTER_BEFORE_TIMESTAMPS) as string;
+    localetext = localetext + localebeforedesc + "\n\n";
   }
 
-  textAreaDiv.innerHTML = ""; // removes ALL previous links
+  textareadiv.innerHTML = ""; // removes all previous links
   for (let i = 0; i < sortcliped.length; i++) {
     // duration getter, + highlight description maker
     if (i == 0) {
-      text = text + `• 0:00 ${sortcliped[i]["title"]}\n`; // makes start chapter for youtube description
+      text = text + `• 0:00 ${sortcliped[i]["title"]}\n`; 
+      // makes start chapter for youtube description
       if (config.LOCALIZE_ON == true) {
-        LocaleText = LocaleText + `• 0:00 ${sortcliped[i]["title"]}\n`;
+        localetext = localetext + `• 0:00 ${sortcliped[i]["title"]}\n`;
       }
     } else {
       text = text + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
       if (config.LOCALIZE_ON == true) {
-        LocaleText =
-          LocaleText + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
+        localetext =
+      localetext + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
       }
     }
     duration = duration + sortcliped[i]["duration"];
-    clipCredit.add(sortcliped[i]["creator_name"]);
+    clipcredit.add(sortcliped[i]["creator_name"]);
 
-    // Link Area
+    // link area
 
     // initializing
     let rowdiv = $$.make("div");
@@ -339,24 +369,25 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     let p = $$.make("p");
 
     // set classes
-    rowdiv.classList.add("row", "m-2", "ps-0");
-    rowdiv.classList.add("Linkbg");
+    rowdiv.classlist.add("row", "m-2", "ps-0");
+    rowdiv.classlist.add("linkbg");
     // if (i % 2 == 0) {
-    //   // adds a slightly darker background every Other link
+    //   // adds a slightly darker background every other link
 
     // }
-    button.classList.add("col-3", "p-1", "btn", "ClipBtn");
-    button.setAttribute("value", `Btn-${i}`);
-    button.setAttribute("href", "#IframePlayerLater");
-    a.classList.add("col-6", "ClipLink"); // uses cool styling
-    a.setAttribute("id", `Clip-${i}`);
-    a.setAttribute("target", "_blank"); // opens in new tab
-    a.setAttribute("href", sortcliped[i]["url"]); // sets anchor
-    p.classList.add("col-3", "text-center");
+    button.classlist.add("col-3", "p-1", "btn", "clipbtn");
+    button.setattribute("value", `btn-${i}`);
+    button.setattribute("href", "#iframeplayerlater");
+    a.classlist.add("col-6", "cliplink"); // uses cool styling
+    a.setattribute("id", `clip-${i}`);
+    a.setattribute("target", "_blank"); // opens in new tab
+    a.setattribute("href", sortcliped[i]["url"]); // sets anchor
+    p.classlist.add("col-3", "text-center");
 
     // set text
-    button.textContent = "Play Clip →";
-    a.text = ` ‣ Clip ${i + 1} - '${sortcliped[i]["title"]}'`; // sets text
+    button.textcontent = "play clip →";
+    a.text = ` ‣ clip ${i + 1} - '${sortcliped[i]["title"]}'`; 
+    // sets text
     p.append(
       document.createTextNode(
         `${sortcliped[i]["duration"]} sec/s (${toTime(duration)}in all)`
@@ -367,23 +398,23 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
     rowdiv.append(button);
     rowdiv.append(a);
     rowdiv.append(p);
-    textAreaDiv.append(rowdiv);
+    textareadiv.append(rowdiv);
     $$.btnchar(); // re-set all items on page with new events.
   }
-  // Add event handler for watching clips with button clicks
-  let ClipBtns = $.querySelectorAll(".ClipBtn");
-  for (let i = 0; i < ClipBtns.length; i++) {
-    ClipBtns[i].addEventListener(
+  // add event handler for watching clips with button clicks
+  let clipbtns = $.querySelectorAll(".clipbtn");
+  for (let i = 0; i < clipbtns.length; i++) {
+    clipbtns[i].addEventListener(
       "click",
       function (event: any) {
         $$.log(event.target.value);
-        let Id = event.target.value.split("-");
-        $$.log(Id);
-        let Link = $$.id(
-          `Clip-${Id[1]}`
+        let id = event.target.value.split("-");
+        $$.log(id);
+        let link = $$.id(
+          `clip-${id[1]}`
         ) as HTMLAnchorElement;
-        $$.log(Link);
-        IframClipBuilder(Link.href);
+        $$.log(link);
+        IframClipBuilder(link.href);
       },
       true
     );
@@ -391,63 +422,71 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 
   //#endregion
 
-  //#region Description Making
-  // Make Description for Would be Hightligt
-  text = text + "Clips by:";
+  //#region description making
+  // make description for would be hightligt
+  text = text + "clips by:";
   if (config.LOCALIZE_ON == true) {
-    LocaleText = LocaleText + "Clips by:";
+    localetext = localetext + "clips by:";
   }
-  clipCredit.forEach((element) => {
-    // note: clipcredit is a Set it only holds unique values
+  clipcredit.forEach((element) => {
+    // note: clipcredit is a set it only holds unique values
     text = text + ` ${element},`;
     if (config.LOCALIZE_ON == true) {
-      LocaleText = LocaleText + ` ${element},`;
+      localetext = localetext + ` ${element},`;
     }
   });
 
-  let AfterDesc = await $$.txt(config.HIGHLIGHTER_AFTER_TIMESTAMPS) as string;
+  let afterdesc = await 
+  $$.txt(config.HIGHLIGHTER_AFTER_TIMESTAMPS) as string;
   text = text.slice(0, text.length - 1);
-  text = text + "\n\n" + AfterDesc;
+  text = text + "\n\n" + afterdesc;
   // finished description change
-  let Desc = $$.query("#myInput0") as HTMLInputElement;
-  Desc.textContent = text;
+  let desc = $$.query("#myinput0") as any;
+  desc.textcontent = text;
   if (config.LOCALIZE_ON == true) {
-    let LocalAfterDesc = await $$.txt(config.LOCAL_HIGHLIGHTER_AFTER_TIMESTAMPS) as any;
-    LocaleText = LocaleText.slice(0, text.length - 1);
-    LocaleText = LocaleText + "\n\n" + LocalAfterDesc;
+    let localafterdesc = await 
+    $$.txt(config.LOCAL_HIGHLIGHTER_AFTER_TIMESTAMPS) as any;
+    localetext = localetext.slice(0, text.length - 1);
+    localetext = localetext + "\n\n" + localafterdesc;
 
-    let localDesc = $$.query(
-      "#LocalDescription"
-    ) as HTMLInputElement;
-    localDesc.textContent = LocaleText;
+    let localdesc = $$.query(
+      "#localdescription"
+    ) as any;
+    localdesc.textcontent = localetext;
   }
 
   //#endregion
 
-  //#region Text Counters Set in
-  let Charcount = text.length;
-  let p = $$.query(`#CharCount0`) as HTMLElement; // needs to be html element
-  p.textContent = `${Charcount}`;
-  if (Charcount > 5000) {
-    // timestamps likely wont work, and its over the Maximum the youtube description can handle
-    p.setAttribute("class", "CharaRed");
-  } else if (Charcount > 3000) {
-    // timestamps may stop working. thumbnails may also lose graphics at this/a bit under size too
-    p.setAttribute("class", "CharaYellow");
+  //#region text counters set in
+  let charcount = text.length;
+  let p = $$.query(`#charcount0`) as any;
+  // needs to be html element
+  p.textcontent = `${charcount}`;
+  if (charcount > 5000) {
+    // timestamps likely wont work, and its over the maximum the youtube
+	  // description can handle
+    p.setattribute("class", "charared");
+  } else if (charcount > 3000) {
+    // timestamps may stop working. thumbnails may also lose graphics at
+	  // this/a bit under size too
+    p.setattribute("class", "charayellow");
   } else {
-    // become green, Prime Timestamp range.
-    p.setAttribute("class", "CharaGreen");
+    // become green, prime timestamp range.
+    p.setattribute("class", "charagreen");
   }
 
   if (config.LOCALIZE_ON == true) {
-    let Charcount = LocaleText.length;
-    let p = $$.query(`#CharCount1`) as HTMLElement; // needs to be html element
-    p.textContent = `${Charcount}`;
-    if (Charcount > 5000) {
-      // timestamps likely wont work, and its over the Maximum the youtube description can handle
+    let charcount = localetext.length;
+    let p = $$.query(`#charcount1`) as any;
+    // needs to be html element
+    p.textcontent = `${charcount}`;
+    if (charcount > 5000) {
+      // timestamps likely wont work, and its over the maximum the
+	    // youtube description can handle
       p.setAttribute("class", "CharaRed");
-    } else if (Charcount > 3000) {
-      // timestamps may stop working. thumbnails may also lose graphics at this/a bit under size too
+    } else if (charcount > 3000) {
+      // timestamps may stop working. thumbnails may also lose graphics
+	    // at this/a bit under size too
       p.setAttribute("class", "CharaYellow");
     } else {
       // become green, Prime Timestamp range.
@@ -470,7 +509,8 @@ async function ClipSorter(Clips: Response, game_id: string, viewCount: number) {
 }
 //#endregion
 
-//#region IframeClipBuilder(IframeId: string) // Accepts Any Link to A Twitch Clip
+//#region IframeClipBuilder(IframeId: string) // Accepts Any Link to A
+//Twitch Clip
 // ran when you click submit. sets an Iframe on the website
 function IframClipBuilder(ClipLink: string) {
   let divPlayer = $$.id("IframePlayerLater") as HTMLElement;
@@ -479,7 +519,8 @@ function IframClipBuilder(ClipLink: string) {
   let Iframe = $$.make("iframe");
   Iframe.setAttribute(
     "src",
-    `https://clips.twitch.tv/embed?clip=${slug[3]}&parent=localhost&autoplay=true&muted=true`
+    `https://clips.twitch.tv/embed?clip=${slug[3]}`+
+    `&parent=localhost&autoplay=true&muted=true`
   );
   Iframe.setAttribute("frameborder", "0");
   Iframe.setAttribute("allowfullscreen", "true");
@@ -499,14 +540,19 @@ function IframClipBuilder(ClipLink: string) {
 
 // Small functions
 
-//#region toTime function, makes a timestamp that will work in the youtube description
+//#region toTime function, makes a timestamp that will work in the
+//youtube description
 // converts the time into minutes and hours from seconds
 function toTime(seconds: any) {
-  let date = new Date(); // find out why it prints timestamps like "12:12:26" remove the 12 // Fixed
+  let date = new Date(); 
+  // find out why it prints timestamps like "12:12:26" remove the 12 //
+  // Fixed
   date.setHours(0, 0, 0); // sets date to 00:00:00
   //$$.log(date);
   date.setSeconds(seconds); // adds secounds making it into a timestamp
-  let dateText = date.toString(); // cuts timestamp out // effectively the same that gets printed when you do $$.log(date);
+  let dateText = date.toString(); 
+  // cuts timestamp out // effectively the same that gets printed when
+  // you do $$.log(date);
   dateText = dateText.substring(16, 25);
   //$$.log(dateText);
   let arrayD = dateText.split(":");
@@ -547,7 +593,8 @@ function toTime(seconds: any) {
 }
 //#endregion
 
-//#region ErrorMsg() Makes an error message taking MSG, SystemMsg, Color of Warning
+//#region ErrorMsg() Makes an error message taking MSG, SystemMsg, Color
+//of Warning
 function ErrorMsg(Msg: string, systemMsg: any, color: string) {
   let H4 = $$.make("h4");
   let p = $$.make("p");
@@ -555,7 +602,7 @@ function ErrorMsg(Msg: string, systemMsg: any, color: string) {
   p.classList.add(`${color}`);
   H4.innerHTML = Msg;
   p.innerText = systemMsg;
-  ErrorDiv.append(H4);
-  ErrorDiv.append(p);
+  errordiv.append(H4);
+  errordiv.append(p);
 }
 //#endregion

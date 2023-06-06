@@ -1,309 +1,314 @@
 "use strict";
-let UserId = "";
+let userid = "";
 let client_id = "";
 $$.api_valid();
 $$.btnchar();
-let SelectChannel = $$.id("SelectChannel");
-for (let index = 0; index < config.HIGHLIGHTER_CHANNELS.length; index++) {
-    const channel = config.HIGHLIGHTER_CHANNELS[index];
+let selectchannel = $$.id("selectchannel");
+for (let index = 0; index < config.highlighter_channels.length; index++) {
+    const channel = config.highlighter_channels[index];
     let option = $$.make("option");
-    option.class = 'SelectOption';
+    option.class = 'selectoption';
     option.value = channel;
-    option.innerHTML = channel;
-    SelectChannel.append(option);
+    option.innerhtml = channel;
+    selectchannel.append(option);
 }
-if (config.TWITCH_API_TOKEN != "" && config.TWITCH_API_TOKEN != null) {
-    let input = $$.id("TwitchAccessToken");
-    input.value = config.TIMESTAMP_PATH;
+if (config.twitch_api_token != "" && config.twitch_api_token != null) {
+    let input = $$.id("twitchaccesstoken");
+    input.value = config.timestamp_path;
 }
-let SearchHistory = $$.id("useHistory");
-let SearchBar = $$.id("useSearch");
-SearchHistory.addEventListener("click", function () {
-    $$.id("SelectChannel").disabled = false;
-    $$.id("InputChannel").disabled = true;
-    Userfind($$.id("SelectChannel").options[$$.id("SelectChannel").selectedIndex].value);
+let searchhistory = $$.id("usehistory");
+let searchbar = $$.id("usesearch");
+searchhistory.addeventlistener("click", function () {
+    $$.id("selectchannel").disabled = false;
+    $$.id("inputchannel").disabled = true;
+    userfind($$.id("selectchannel").options[$$.id("selectchannel").selectedindex].value);
 }, true);
-SearchBar.addEventListener("click", function () {
-    $$.id("SelectChannel").disabled = true;
-    $$.id("InputChannel").disabled = false;
-    if ($$.id("InputChannel").value.length > 5) {
-        Userfind($$.id("InputChannel").value);
+searchbar.addeventlistener("click", function () {
+    $$.id("selectchannel").disabled = true;
+    $$.id("inputchannel").disabled = false;
+    if ($$.id("inputchannel").value.length > 5) {
+        userfind($$.id("inputchannel").value);
     }
 }, true);
-var Id;
-var form = $$.query("#HighlighForm");
-var ErrorDiv = $$.id("ErrorDiv");
-form.addEventListener("submit", async function (event) {
-    event.preventDefault();
-    let Startdate = new Date(form.date.value);
-    if (Startdate == "Invalid Date") {
-        Startdate = new Date();
-        Startdate.setDate(Startdate.getDate() - 90);
+var id;
+var form = $$.query("#highlighform");
+var errordiv = $$.id("errordiv");
+form.addeventlistener("submit", async function (event) {
+    event.preventdefault();
+    let startdate = new date(form.date.value);
+    if (startdate == "invalid date") {
+        startdate = new date();
+        startdate.setdate(startdate.getdate() - 90);
         $$.log("start date was not given, getting clips from 90 days ago");
     }
-    let endDate = new Date(form.endDate.value);
-    let game_id = form.SelectGame.options[form.SelectGame.selectedIndex].value;
+    let enddate = new date(form.enddate.value);
+    let game_id = form.selectgame.options[form.selectgame.selectedindex].value;
     if (game_id == "") {
-        game_id = "None";
+        game_id = "none";
     }
-    let viewCount = form.viewcount.value;
-    if (viewCount == "") {
-        viewCount = 1;
+    let viewcount = form.viewcount.value;
+    if (viewcount == "") {
+        viewcount = 1;
     }
     try {
-        Startdate = Startdate.toISOString();
+        startdate = startdate.toisostring();
     }
     catch (error) {
-        $$.log("The Set Date Value was Not allowed");
+        $$.log("the set date value was not allowed");
         $$.log(error);
     }
-    if (endDate == "Invalid Date") {
-        endDate = new Date();
-        $$.log("End Date not selected Defaulting to Todays Date");
-        endDate = endDate.toISOString();
+    if (enddate == "invalid date") {
+        enddate = new date();
+        $$.log("end date not selected defaulting to todays date");
+        enddate = enddate.toisostring();
     }
     else {
-        endDate = endDate.toISOString();
+        enddate = enddate.toisostring();
     }
-    let ClipResp = await $$.api(`https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${Startdate}&ended_at=${endDate}`, true);
-    $$.log(ClipResp);
-    ClipSorter(ClipResp, game_id, viewCount);
+    let clipresp = await $$.api(`https://api.twitch.tv/helix/clips?broadcaster_id=`
+        + `${userid}&first=100&started_at=${startdate}&ended_at=${enddate}`, true);
+    $$.log(clipresp);
+    clipsorter(clipresp, game_id, viewcount);
 }, true);
-var SearchInput = $$.id("InputChannel");
-SearchInput.addEventListener("keyup", async function () {
-    if (SearchInput.value.length > 5) {
-        Userfind(SearchInput.value);
+var searchinput = $$.id("inputchannel");
+searchinput.addeventlistener("keyup", async function () {
+    if (searchinput.value.length > 5) {
+        userfind(searchinput.value);
     }
 });
-let ChannelSelect = $$.query("#SelectChannel");
-ChannelSelect.addEventListener("change", async function () {
-    let StreamerName = ChannelSelect.options[ChannelSelect.selectedIndex].value;
-    if (StreamerName != "none") {
-        Userfind(ChannelSelect.options[ChannelSelect.selectedIndex].value);
+let channelselect = $$.query("#selectchannel");
+channelselect.addeventlistener("change", async function () {
+    let streamername = channelselect.options[channelselect.selectedindex].value;
+    if (streamername != "none") {
+        userfind(channelselect.options[channelselect.selectedindex].value);
     }
 });
-async function Userfind(TwitchLogin) {
-    if (TwitchLogin != "none" && TwitchLogin != "") {
-        $$.log("Searching for " + TwitchLogin);
-        ErrorDiv.innerHTML = "";
-        let UserResp = await $$.api(`https://api.twitch.tv/helix/users?login=${TwitchLogin}`, true);
-        if (UserResp["data"].length == 0) {
-            $$.log("User Not Found");
+async function userfind(twitchlogin) {
+    if (twitchlogin != "none" && twitchlogin != "") {
+        $$.log("searching for " + twitchlogin);
+        errordiv.innerhtml = "";
+        let userresp = await $$.api(`https://api.twitch.tv/helix/users?login=${twitchlogin}`, true);
+        if (userresp["data"].length == 0) {
+            $$.log("user not found");
             return;
         }
         else {
-            UserId = UserResp["data"][0]["id"];
-            let d = new Date();
-            let RFCdato = new Date();
-            RFCdato.setDate(RFCdato.getDate() - 90);
-            let GameResp = await $$.api(`https://api.twitch.tv/helix/clips?broadcaster_id=${UserId}&first=100&started_at=${RFCdato.toISOString()}&ended_at=${d.toISOString()}`, true);
-            if (GameResp["data"].length != 0) {
-                $$.log(TwitchLogin + " is searchable!");
-                var GameIds = new Set();
-                for (let index = 0; index < GameResp["data"].length; index++) {
-                    GameIds.add(GameResp["data"][index]["game_id"]);
+            userid = userresp["data"][0]["id"];
+            let d = new date();
+            let rfcdato = new date();
+            rfcdato.setdate(rfcdato.getdate() - 90);
+            let gameresp = await $$.api(`https://api.twitch.tv/helix/clips?broadcaster_id=` +
+                `${userid}&first=100&started_at=${rfcdato.toisostring()}` +
+                `&ended_at=${d.toisostring()}`, true);
+            if (gameresp["data"].length != 0) {
+                $$.log(twitchlogin + " is searchable!");
+                var gameids = new set();
+                for (let index = 0; index < gameresp["data"].length; index++) {
+                    gameids.add(gameresp["data"][index]["game_id"]);
                 }
                 let httpcall = "https://api.twitch.tv/helix/games?";
                 let index = 0;
-                GameIds.forEach((Gameid) => {
+                gameids.foreach((gameid) => {
                     if (index == 0) {
-                        httpcall = httpcall + "id=" + Gameid;
+                        httpcall = httpcall + "id=" + gameid;
                     }
                     else {
-                        httpcall = httpcall + "&id=" + Gameid;
+                        httpcall = httpcall + "&id=" + gameid;
                     }
                     index++;
                 });
-                let SelectGameResp = await $$.api(httpcall, true);
-                let selectboxG = $$.id("SelectGame");
-                while (selectboxG.firstChild) {
-                    selectboxG.firstChild.remove();
+                let selectgameresp = await $$.api(httpcall, true);
+                let selectboxg = $$.id("selectgame");
+                while (selectboxg.firstchild) {
+                    selectboxg.firstchild.remove();
                 }
-                let optionNone = $$.make("option");
-                optionNone.setAttribute("value", "None");
-                optionNone.append($.createTextNode("Any Game Id"));
-                selectboxG.appendChild(optionNone);
-                for (let index = 0; index < SelectGameResp["data"].length; index++) {
-                    let gameid = SelectGameResp["data"][index]["id"];
-                    let gamename = SelectGameResp["data"][index]["name"];
-                    let optionsG = $$.make("option");
-                    optionsG.setAttribute("value", gameid);
-                    optionsG.append($.createTextNode(gamename));
-                    selectboxG.appendChild(optionsG);
+                let optionnone = $$.make("option");
+                optionnone.setattribute("value", "none");
+                optionnone.append($.createtextnode("any game id"));
+                selectboxg.appendchild(optionnone);
+                for (let index = 0; index < selectgameresp["data"].length; index++) {
+                    let gameid = selectgameresp["data"][index]["id"];
+                    let gamename = selectgameresp["data"][index]["name"];
+                    let optionsg = $$.make("option");
+                    optionsg.setattribute("value", gameid);
+                    optionsg.append($.createtextnode(gamename));
+                    selectboxg.appendchild(optionsg);
                 }
-                selectboxG.disabled = false;
+                selectboxg.disabled = false;
             }
         }
     }
 }
-async function ClipSorter(Clips, game_id, viewCount) {
-    var arrclips = Array();
+async function clipsorter(clips, game_id, viewcount) {
+    var arrclips = array();
     let duration = 0;
     let j = 0;
-    for (let i = 0; i < Clips["data"]["length"]; i++) {
-        var clip = Clips["data"][i];
-        if (game_id == "None") {
-            if (clip["view_count"] > viewCount) {
-                arrclips[j] = Clips["data"][i];
+    for (let i = 0; i < clips["data"]["length"]; i++) {
+        var clip = clips["data"][i];
+        if (game_id == "none") {
+            if (clip["view_count"] > viewcount) {
+                arrclips[j] = clips["data"][i];
                 duration = duration + clip["duration"];
                 j++;
             }
         }
         else {
             if (clip["game_id"] == game_id) {
-                if (clip["view_count"] > viewCount) {
-                    arrclips[j] = Clips["data"][i];
+                if (clip["view_count"] > viewcount) {
+                    arrclips[j] = clips["data"][i];
                     duration = duration + clip["duration"];
                     j++;
                 }
             }
         }
     }
-    let datemsec = Array();
+    let datemsec = array();
     for (let index = 0; index < arrclips.length; index++) {
-        datemsec[index] = Date.parse(`${arrclips[index]["created_at"]}`);
+        datemsec[index] = date.parse(`${arrclips[index]["created_at"]}`);
     }
     datemsec.sort(function (a, b) {
         return a - b;
     });
-    let datesort = Array();
+    let datesort = array();
     for (let index = 0; index < datemsec.length; index++) {
-        let d = new Date(datemsec[index]);
-        let s = d.toISOString();
+        let d = new date(datemsec[index]);
+        let s = d.toisostring();
         let a = s.split(".000");
         datesort[index] = a[0] + a[1];
     }
-    let sortcliped = Array();
+    let sortcliped = array();
     for (let index = 0; index < datesort.length; index++) {
         for (let index2 = 0; index2 < arrclips.length; index2++) {
-            if (arrclips[index2]["created_at"].indexOf(datesort[index]) == 0) {
+            if (arrclips[index2]["created_at"].indexof(datesort[index]) == 0) {
                 sortcliped[index] = arrclips[index2];
                 continue;
             }
         }
     }
     $$.log(sortcliped);
-    if (config.HIGHLIGHT_SORTING == "DateReverse") {
+    if (config.highlight_sorting == "datereverse") {
         sortcliped.reverse();
     }
-    else if (config.HIGHLIGHT_SORTING == "Random") {
+    else if (config.highlight_sorting == "random") {
         for (var i = sortcliped.length - 1; i > 0; i--) {
-            var b = Math.floor(Math.random() * (i + 1));
+            var b = math.floor(math.random() * (i + 1));
             var temp = sortcliped[i];
             sortcliped[i] = sortcliped[b];
             sortcliped[b] = temp;
         }
     }
-    let textNode = document.createTextNode(`‣ Found: ${sortcliped.length} Clips, Thats ${toTime(duration)} of content!`);
-    let insertP = $$.make("p");
-    insertP.appendChild(textNode);
-    let DataP = $$.query("#DataP");
-    DataP.textContent =
-        "you did it! good job, heres the data from the query(s) you did ヾ(•ω•`)o";
-    let DataDiv = $$.query("#DataDiv");
-    DataDiv.appendChild(insertP);
-    let textAreaDiv = $$.query("#Linksarea");
-    let clipCredit = new Set();
+    let textnode = document.createtextnode(`‣ found: ${sortcliped.length} clips` +
+        `, thats ${totime(duration)} of content!`);
+    let insertp = $$.make("p");
+    insertp.appendchild(textnode);
+    let datap = $$.query("#datap");
+    datap.textcontent =
+        "you did it! good job, heres the data from the"
+            + "query(s) you did ヾ(•ω•`)o";
+    let datadiv = $$.query("#datadiv");
+    datadiv.appendchild(insertp);
+    let textareadiv = $$.query("#linksarea");
+    let clipcredit = new set();
     let x = 0;
     duration = 0;
     let text = "";
-    let BeforeDesc = await $$.txt(config.HIGHLIGHTER_BEFORE_TIMESTAMPS);
-    text = text + BeforeDesc + "\n\n";
-    let LocaleText = "";
-    if (config.LOCALIZE_ON == true) {
-        let LocaleBeforeDesc = await $$.txt(config.LOCAL_HIGHLIGHTER_BEFORE_TIMESTAMPS);
-        LocaleText = LocaleText + LocaleBeforeDesc + "\n\n";
+    let beforedesc = await $$.txt(config.highlighter_before_timestamps);
+    text = text + beforedesc + "\n\n";
+    let localetext = "";
+    if (config.localize_on == true) {
+        let localebeforedesc = await $$.txt(config.local_highlighter_before_timestamps);
+        localetext = localetext + localebeforedesc + "\n\n";
     }
-    textAreaDiv.innerHTML = "";
+    textareadiv.innerhtml = "";
     for (let i = 0; i < sortcliped.length; i++) {
         if (i == 0) {
             text = text + `• 0:00 ${sortcliped[i]["title"]}\n`;
-            if (config.LOCALIZE_ON == true) {
-                LocaleText = LocaleText + `• 0:00 ${sortcliped[i]["title"]}\n`;
+            if (config.localize_on == true) {
+                localetext = localetext + `• 0:00 ${sortcliped[i]["title"]}\n`;
             }
         }
         else {
-            text = text + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
-            if (config.LOCALIZE_ON == true) {
-                LocaleText =
-                    LocaleText + `• ${toTime(duration)} ${sortcliped[i]["title"]}\n`;
+            text = text + `• ${totime(duration)} ${sortcliped[i]["title"]}\n`;
+            if (config.localize_on == true) {
+                localetext =
+                    localetext + `• ${totime(duration)} ${sortcliped[i]["title"]}\n`;
             }
         }
         duration = duration + sortcliped[i]["duration"];
-        clipCredit.add(sortcliped[i]["creator_name"]);
+        clipcredit.add(sortcliped[i]["creator_name"]);
         let rowdiv = $$.make("div");
         let button = $$.make("button");
         let a = $$.make("a");
         let p = $$.make("p");
-        rowdiv.classList.add("row", "m-2", "ps-0");
-        rowdiv.classList.add("Linkbg");
-        button.classList.add("col-3", "p-1", "btn", "ClipBtn");
-        button.setAttribute("value", `Btn-${i}`);
-        button.setAttribute("href", "#IframePlayerLater");
-        a.classList.add("col-6", "ClipLink");
-        a.setAttribute("id", `Clip-${i}`);
-        a.setAttribute("target", "_blank");
-        a.setAttribute("href", sortcliped[i]["url"]);
-        p.classList.add("col-3", "text-center");
-        button.textContent = "Play Clip →";
-        a.text = ` ‣ Clip ${i + 1} - '${sortcliped[i]["title"]}'`;
-        p.append(document.createTextNode(`${sortcliped[i]["duration"]} sec/s (${toTime(duration)}in all)`));
+        rowdiv.classlist.add("row", "m-2", "ps-0");
+        rowdiv.classlist.add("linkbg");
+        button.classlist.add("col-3", "p-1", "btn", "clipbtn");
+        button.setattribute("value", `btn-${i}`);
+        button.setattribute("href", "#iframeplayerlater");
+        a.classlist.add("col-6", "cliplink");
+        a.setattribute("id", `clip-${i}`);
+        a.setattribute("target", "_blank");
+        a.setattribute("href", sortcliped[i]["url"]);
+        p.classlist.add("col-3", "text-center");
+        button.textcontent = "play clip →";
+        a.text = ` ‣ clip ${i + 1} - '${sortcliped[i]["title"]}'`;
+        p.append(document.createtextnode(`${sortcliped[i]["duration"]} sec/s (${totime(duration)}in all)`));
         rowdiv.append(button);
         rowdiv.append(a);
         rowdiv.append(p);
-        textAreaDiv.append(rowdiv);
+        textareadiv.append(rowdiv);
         $$.btnchar();
     }
-    let ClipBtns = $.querySelectorAll(".ClipBtn");
-    for (let i = 0; i < ClipBtns.length; i++) {
-        ClipBtns[i].addEventListener("click", function (event) {
+    let clipbtns = $.queryselectorall(".clipbtn");
+    for (let i = 0; i < clipbtns.length; i++) {
+        clipbtns[i].addeventlistener("click", function (event) {
             $$.log(event.target.value);
-            let Id = event.target.value.split("-");
-            $$.log(Id);
-            let Link = $$.id(`Clip-${Id[1]}`);
-            $$.log(Link);
-            IframClipBuilder(Link.href);
+            let id = event.target.value.split("-");
+            $$.log(id);
+            let link = $$.id(`clip-${id[1]}`);
+            $$.log(link);
+            iframclipbuilder(link.href);
         }, true);
     }
-    text = text + "Clips by:";
-    if (config.LOCALIZE_ON == true) {
-        LocaleText = LocaleText + "Clips by:";
+    text = text + "clips by:";
+    if (config.localize_on == true) {
+        localetext = localetext + "clips by:";
     }
-    clipCredit.forEach((element) => {
+    clipcredit.foreach((element) => {
         text = text + ` ${element},`;
-        if (config.LOCALIZE_ON == true) {
-            LocaleText = LocaleText + ` ${element},`;
+        if (config.localize_on == true) {
+            localetext = localetext + ` ${element},`;
         }
     });
-    let AfterDesc = await $$.txt(config.HIGHLIGHTER_AFTER_TIMESTAMPS);
+    let afterdesc = await $$.txt(config.highlighter_after_timestamps);
     text = text.slice(0, text.length - 1);
-    text = text + "\n\n" + AfterDesc;
-    let Desc = $$.query("#myInput0");
-    Desc.textContent = text;
-    if (config.LOCALIZE_ON == true) {
-        let LocalAfterDesc = await $$.txt(config.LOCAL_HIGHLIGHTER_AFTER_TIMESTAMPS);
-        LocaleText = LocaleText.slice(0, text.length - 1);
-        LocaleText = LocaleText + "\n\n" + LocalAfterDesc;
-        let localDesc = $$.query("#LocalDescription");
-        localDesc.textContent = LocaleText;
+    text = text + "\n\n" + afterdesc;
+    let desc = $$.query("#myinput0");
+    desc.textcontent = text;
+    if (config.localize_on == true) {
+        let localafterdesc = await $$.txt(config.local_highlighter_after_timestamps);
+        localetext = localetext.slice(0, text.length - 1);
+        localetext = localetext + "\n\n" + localafterdesc;
+        let localdesc = $$.query("#localdescription");
+        localdesc.textcontent = localetext;
     }
-    let Charcount = text.length;
-    let p = $$.query(`#CharCount0`);
-    p.textContent = `${Charcount}`;
-    if (Charcount > 5000) {
-        p.setAttribute("class", "CharaRed");
+    let charcount = text.length;
+    let p = $$.query(`#charcount0`);
+    p.textcontent = `${charcount}`;
+    if (charcount > 5000) {
+        p.setattribute("class", "charared");
     }
-    else if (Charcount > 3000) {
-        p.setAttribute("class", "CharaYellow");
+    else if (charcount > 3000) {
+        p.setattribute("class", "charayellow");
     }
     else {
-        p.setAttribute("class", "CharaGreen");
+        p.setattribute("class", "charagreen");
     }
-    if (config.LOCALIZE_ON == true) {
-        let Charcount = LocaleText.length;
-        let p = $$.query(`#CharCount1`);
-        p.textContent = `${Charcount}`;
-        if (Charcount > 5000) {
+    if (config.localize_on == true) {
+        let charcount = localetext.length;
+        let p = $$.query(`#charcount1`);
+        p.textcontent = `${charcount}`;
+        if (charcount > 5000) {
             p.setAttribute("class", "CharaRed");
         }
         else if (Charcount > 3000) {
@@ -327,7 +332,8 @@ function IframClipBuilder(ClipLink) {
     let menuDiv = $$.id("MenuLogoDiv");
     let slug = ClipLink.split("/");
     let Iframe = $$.make("iframe");
-    Iframe.setAttribute("src", `https://clips.twitch.tv/embed?clip=${slug[3]}&parent=localhost&autoplay=true&muted=true`);
+    Iframe.setAttribute("src", `https://clips.twitch.tv/embed?clip=${slug[3]}` +
+        `&parent=localhost&autoplay=true&muted=true`);
     Iframe.setAttribute("frameborder", "0");
     Iframe.setAttribute("allowfullscreen", "true");
     Iframe.setAttribute("scrolling", "no");

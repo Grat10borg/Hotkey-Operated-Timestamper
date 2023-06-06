@@ -2,15 +2,19 @@
 <html lang="en">
 <head>
     <?php include "includes/html/HtmlDoc.php";?>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
+    <link 
+href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" 
+rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link 
+href="https://fonts.googleapis.com/css2?family=VT323&display=swap" 
+rel="stylesheet">
     <link href="CSS+SCSS/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="CSS+SCSS/style.css" type="text/css">
     <link rel="shortcut icon" href="img\HOT_Icon.ico"/>
@@ -24,23 +28,26 @@
         </div>
         <div class="row">
             <!-- Side bar -->
-            <div class="col-2 ms-3 mt-3 sidebar justify-content-center rounded-top" id="SideBar"></div>
+	    <div class="col-2 ms-3 mt-3 sidebar 
+	justify-content-center rounded-top" id="SideBar"></div>
             <div class="col mt-3 maindatabar">
-                <div class="row-10 m-3 mt-5 pt-5 justify-content-around">
-                    <!-- contains the huge images in the middle of the screen plus the Data bar and the Options bar -->
-                    <?php include "includes/H.O.T_DescMaker/HtmlTopDescriptionData.php"; ?>
+              <div class="row-10 m-3 mt-5 pt-5 justify-content-around">
+		    <!-- contains the huge images in the middle of the 
+		       screen plus the Data bar and the Options bar -->
+<?php include "includes/H.O.T_DescMaker/HtmlTopDescriptionData.php"; ?>
                 </div>
                 <div>
-                    <!-- printer of the Clip and descptions in the Textareas -->
-                    <div class="form-floating my-3 border-bottom border-secondary pb-5" id="DescriptionAreaDiv"></div>
+           <!-- printer of the Clip and descptions in the Textareas -->
+		    <div class="form-floating my-3 border-bottom 
+	          border-secondary pb-5" id="DescriptionAreaDiv"></div>
                 </div>
             </div>
         </div>
         <!-- Second row -->
         <div class="row">
-            <a class="ms-3 col-2 sidebar btn HighSubmit" id="ScrollTop">To Top ↑</a>
+	    <a class="ms-3 col-2 sidebar btn 
+            HighSubmit" id="ScrollTop">To Top ↑</a>
         </div>
-
         <?php include "includes\html\Footer.php" ?>
     </main>
     <!-- inporting of Javascript -->

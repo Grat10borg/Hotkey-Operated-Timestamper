@@ -7,15 +7,17 @@ if (config.TWITCH_API_TOKEN != "" || config.TWITCH_API_TOKEN != null) {
   let input = $$.id("TwitchTokenP") as HTMLInputElement;
   input.value=config.TWITCH_API_TOKEN;
 }
-if (config.CLIP_OFFSET == null) $$.log("you didnt set a config.CLIP_OFFSET, H.O.T has defaulted to 26 seconds of offset.");
+if (config.CLIP_OFFSET == null) $$.log(
+"you didnt set a config.CLIP_OFFSET, H.O.T has defaulted to 26 seconds"+ 
+"of offset.");
 else {
   let input = $$.id("ClipOffsetIn") as any;
   input.value=config.CLIP_OFFSET;
 }
 if (config.TWITCH_LOGIN == null || config.TWITCH_LOGIN == "") {
-  $$.log(
-    "you didnt set a TwitchLoginName, you will not be able to use Clip-Stamps"
-  );
+$$.log(
+"you didnt set a TwitchLoginName, you will not be able to use" +
+"Clip-Stamps");
   let TwitchClipbtn = $$.id("TwitchClip") as HTMLInputElement;
   TwitchClipbtn.disabled = true;
 }
@@ -31,7 +33,8 @@ if (config.LOCALIZE_ON == false) {
 
 if(config.TIMESTAMP_PATH !== null && config.TIMESTAMP_PATH !== "") {
   let p = $$.id("TimestampPath") as HTMLParagraphElement;
-  p.innerHTML="• currently getting timestamps from: " + config.TIMESTAMP_PATH;
+  p.innerHTML="• currently getting timestamps from: " 
+  + config.TIMESTAMP_PATH;
   let input = $$.id("TimeSPathIn") as HTMLInputElement;
   input.value=config.TIMESTAMP_PATH;
   let clearpath = $$.id("Filepath") as HTMLInputElement;
@@ -43,11 +46,15 @@ var AclientId = "" as string;
 
 var MultiDimStreamArr = Array(); // Holds Raw Data from txt
 var MultiDimRecordArr = Array(); // Holds Raw Data from txt
-var StreamDatesArr = Array(); // Holds data for when a stream was streamed
-var RecordDatesArr = Array(); // Holds data for when a Recording was recorded
-var DescArrS = new Array(); // holds all the Finished Stream descriptions
+var StreamDatesArr = Array(); 
+// Holds data for when a stream was streamed
+var RecordDatesArr = Array(); 
+// Holds data for when a Recording was recorded
+var DescArrS = new Array(); 
+// holds all the Finished Stream descriptions
 var LocalDescArrS = new Array();
-var DescArrR = new Array(); // holds all the Finished Recording descriptions
+var DescArrR = new Array(); 
+// holds all the Finished Recording descriptions
 var LocalDescArrR = new Array();
 
 var StreamDatesRaw = new Array();
@@ -91,8 +98,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
     //#region Checking if there even is any VODS
     let VODcount = 0;
     let UserVods = (await $$.api(
-      `https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`, true
-    )) as Array<string>;
+`https://api.twitch.tv/helix/videos?user_id=`+
+`${UserIdResp["data"][0]["id"]}`, true)) as Array<string>;
     // counting VODs
     for (let index = 0; index < UserVods["data"].length; index++) {
       if (UserVods["data"][index]["type"] != "highlight") {
@@ -101,7 +108,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
     }
     //#endregion
     let textareaPrint = 0 as number;
-    for (let StreamsStreamed = 0; StreamsStreamed < StreamedDate.length; StreamsStreamed++) {
+    for (let StreamsStreamed = 0; StreamsStreamed <
+    StreamedDate.length; StreamsStreamed++) {
       
     if (VODcount != 0 || VODcount != null) {
       let res = AcorBtns[StreamsStreamed].innerHTML.split(" ");
@@ -116,7 +124,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
       let LocalSceneShift = Array();
       let LocalSceneTime = Array();
 
-      // get Clip Offset but should also get Start Creative or Scene shift timestamps.
+      // get Clip Offset but should also get Start Creative or Scene
+      // shift timestamps.
       //#region Getting Local Scene Shift timestamps
       // get Local Timestamps for scenes
       let LocalSceneShifttemp = Array();
@@ -124,7 +133,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
       for (let V = 0; V < MultiDimStreamArr[StreamsStreamed].length; V++) {
         let res = MultiDimStreamArr[StreamsStreamed];
         if (res == undefined) {
-          // for some reason keeps running into indexes it doesnt have? this fixes it but MAyyyy be not the best fix
+	  // for some reason keeps running into indexes it doesnt have?
+		// this fixes it but MAyyyy be not the best fix
           continue;
         } else {
           for (let i = 0; i < res.length; i++) {
@@ -167,7 +177,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
       TimestampArr = LocalSceneShifttemp.concat(TimestampTwitch);
 
       // sort timestamps into correct sorting
-      // fun fact the indexes are named: Q,T,Pie,u because thats what u are :)
+      // fun fact the indexes are named: Q,T,Pie,u because thats what u
+      // are :)
       //#region Making Timestamps into Dates and sorting them.
       let SortTime = Array();
       for (let q = 0; q < TimestampArr.length; q++) {
@@ -183,7 +194,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
         let TestHour = T[4].split(":");
         let Timestamp;
         if (TestHour[0][0] == "0") {
-          Timestamp = to2Time(T[4].substring(1)); // skips >0<0:20:40 of the timestamp
+          Timestamp = to2Time(T[4].substring(1));
+	  // skips >0<0:20:40 of the timestamp
           Timestamps.push(Timestamp);
         } else {
           // keeps extra hour placement for 24 hour timestamps.
@@ -193,7 +205,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
       }
       //#endregion
       let CompleteTimestampArr = Array();
-      //#region finding the correct indexs for titles and completing the sorting
+      //#region finding the correct indexs for titles and completing the
+      //sorting
       // for each til we find the correct index
       for (let Pie = 0; Pie < Timestamps.length; Pie++) {
         let Reg = new RegExp(Timestamps[Pie] + ".*");
@@ -206,7 +219,8 @@ TwitchClip.addEventListener("click", async function (event: any) {
       }
       //#endregion
 
-      // Creates both a local (if enabled) and normal description and replaces the correct index of description.
+      // Creates both a local (if enabled) and normal description and
+      // replaces the correct index of description.
       DescriptionReplace(CompleteTimestampArr, textareaPrint, false);
       textareaPrint++;
       // @ts-expect-error
@@ -245,10 +259,14 @@ async function InfoWriterMakeTimestamps() {
   if(InfowriterTxt && InfowriterTxt !== "") {
     $$.log(InfowriterTxt);
 
-    let TxtLine = InfowriterTxt.split("\n"); // splits them by Enters : EVENT:START, RECORDING, @, etc...
+    let TxtLine = InfowriterTxt.split("\n"); 
+   // splits them by Enters : EVENT:START, RECORDING, @, etc...
     let StreamArr = Array();
     let RecordArr = Array();
-    var Catch = false as boolean; // catch is activated when nearing the end of the VOD/Stream. it tells it to stop/catch the varibles for now and place it in the arrays
+    var Catch = false as boolean; 
+    // catch is activated when nearing the end of the VOD/Stream. it
+    // tells it to stop/catch the varibles for now and place it in the
+    // arrays
     var LineScene = "" as String;
     // maybe remove ClipNo later
     let ClipNo = 0 as number;
@@ -259,11 +277,14 @@ async function InfoWriterMakeTimestamps() {
     for (let index = 0; index < TxtLine.length; index++) {
       if (TxtLine[index].match(/EVENT:START.*/i)) {
         let EventStart = TxtLine[index].split(" ");
-        if (TxtLine[index].match(/.*Record.*/i)) RecordDatesArr.push(EventStart[3] + " " + EventStart[4]);
-        else if (TxtLine[index].match(/.*Stream.*/i)) StreamDatesArr.push(EventStart[3] + " " + EventStart[4]);
+        if (TxtLine[index].match(/.*Record.*/i)) 
+	RecordDatesArr.push(EventStart[3] + " " + EventStart[4]);
+        else if (TxtLine[index].match(/.*Stream.*/i)) 
+	StreamDatesArr.push(EventStart[3] + " " + EventStart[4]);
         continue;
       }
-      if (TxtLine[index].match(/EVENT:STOP.*/i)) { // add what ever array into multidim array
+      if (TxtLine[index].match(/EVENT:STOP.*/i)) { 
+	// add what ever array into multidim array
         if (typeof StreamArr !== "undefined") {
           if (StreamArr.length != 0) {
             StreamArr.unshift("▸ 0:00 Start");
@@ -286,18 +307,23 @@ async function InfoWriterMakeTimestamps() {
       if (TxtLine[index].match(/EVENT:SCENE.*/i)) {
         let resarr = TxtLine[index].split(" ");
         LineScene = resarr[3]; // BRB, PLAYING, OUTRO, etc
-        Catch = true; // marks next Record & Stream timestamp as a Scene Timestamp
+        Catch = true;
+	// marks next Record & Stream timestamp as a Scene Timestamp
         continue;
       }
       if (Catch == true) {
         if (to2Time(TxtLine[index]) != "0:00") {          // if empty
-          if (TxtLine[index].match(/\d:\d\d:\d\d\s.*/i)) {// if its a timestamp 
-            if (TxtLine[index].match(/.*Record.*/i)) {// if "Record" is in the timestamp
-              let Timestamp = "▸ " + to2Time(TxtLine[index]) + " " + LineScene;
+          if (TxtLine[index].match(/\d:\d\d:\d\d\s.*/i)) {
+	     // if its a timestamp 
+            if (TxtLine[index].match(/.*Record.*/i)) {
+		// if "Record" is in the timestamp
+              let Timestamp = "▸ " + to2Time(TxtLine[index]) 
+	      + " " + LineScene;
               RecordArr.push(Timestamp); 
             }
             if (TxtLine[index].match(/.*Stream.*/i)) {
-              let Timestamp = "▸ " + to2Time(TxtLine[index]) + " " + LineScene;
+              let Timestamp = "▸ " + to2Time(TxtLine[index])
+	      + " " + LineScene;
               StreamArr.push(Timestamp);
               Catch = false;
             }
@@ -306,13 +332,15 @@ async function InfoWriterMakeTimestamps() {
         }
       } else if (TxtLine[index].search(/0:00:00.*/i) != 0) {
         if (TxtLine[index].match(/.*Record.*/i)) {
-          let Timestamp ="• " + to2Time(AddClipDelay(TxtLine[index], config.CLIP_OFFSET)) + ` [ClipNo${ClipNo}]`;
+          let Timestamp ="• " + to2Time(AddClipDelay(TxtLine[index], 
+	  config.CLIP_OFFSET)) + ` [ClipNo${ClipNo}]`;
           RecordArr.push(Timestamp);
           ClipNo++;
         }
         if (TxtLine[index].match(/.*Stream.*/i)) {
           // 7:58:58 Stream Time Marker
-          let Timestamp ="• " + to2Time(AddClipDelay(TxtLine[index], config.CLIP_OFFSET)) + ` [ClipNo${ClipNo}]`;
+          let Timestamp ="• " + to2Time(AddClipDelay(TxtLine[index],
+	  config.CLIP_OFFSET)) + ` [ClipNo${ClipNo}]`;
           StreamArr.push(Timestamp);
           ClipNo++;
         } else {
@@ -322,15 +350,21 @@ async function InfoWriterMakeTimestamps() {
     }
     // Set in Data to Webpage
     let stats = $$.id("Stats") as HTMLElement;
-    stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
+    stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams,`+
+    `and ${MultiDimRecordArr.length} Recordings`;
     //#endregion
-    //if (MultiDimStreamArr && MultiDimRecordArr) SetOps(MultiDimStreamArr, MultiDimRecordArr);
+    //if (MultiDimStreamArr && MultiDimRecordArr) 
+    //SetOps(MultiDimStreamArr, MultiDimRecordArr);
 
     // Set in All the timestamps correctly
-    let BeforeDesc = await $$.txt(config.DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
-    let AfterDesc = await $$.txt(config.DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
-    let LocalBeforeDesc = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
-    let LocalAfterDesc = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
+    let BeforeDesc = await 
+    $$.txt(config.DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
+    let AfterDesc = await 
+    $$.txt(config.DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
+    let LocalBeforeDesc = await 
+    $$.txt(config.LOCAL_DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
+    let LocalAfterDesc = await 
+    $$.txt(config.LOCAL_DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
 
     
   // Makes a Working Description
@@ -338,14 +372,16 @@ async function InfoWriterMakeTimestamps() {
   if (MultiDimStreamArr.length > -1) {
       for (let index = 0; index < MultiDimStreamArr.length; index++) {
         var Description = ""; // Finished Description Var
-        var LocalDescript = ""; // finished description in another language
+        var LocalDescript = ""; 
+	// finished description in another language
         let resArray = MultiDimStreamArr[index];
         if (config.LOCALIZE_ON != false) {
           
           LocalDescript = LocalBeforeDesc + "\n\n";
           LocalDescript =
             LocalDescript +
-           `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${config.CLIP_OFFSET})\n`;
+           `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}`
+	  +`\n(Clips are Offset by -${config.CLIP_OFFSET})\n`;
          for (let i = 0; i < resArray.length; i++) {
            let timestamp = resArray[i];
            LocalDescript = LocalDescript + timestamp + "\n";
@@ -358,7 +394,8 @@ async function InfoWriterMakeTimestamps() {
        Description = BeforeDesc + "\n\n";
        Description =
           Description +
-          `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${config.CLIP_OFFSET})\n`;
+          `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}`+
+	  `\n(Clips are Offset by -${config.CLIP_OFFSET})\n`;
        for (let i = 0; i < resArray.length; i++) {
          let timestamp = resArray[i];
          Description = Description + timestamp + "\n";
@@ -372,12 +409,13 @@ async function InfoWriterMakeTimestamps() {
     // if has Values
     for (let index = 0; index < MultiDimRecordArr.length; index++) {
       var Description = ""; // Finished Description Var
-      var LocalDescript = ""; // finished description in another language
+      var LocalDescript = ""; 
+      // finished description in another language
       let resArray = MultiDimRecordArr[index];
       if (config.LOCALIZE_ON != false) {
         LocalDescript = LocalBeforeDesc + "\n\n";
         LocalDescript =
-          LocalDescript + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+    LocalDescript + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
         for (let i = 0; i < resArray.length; i++) {
           let timestamp = resArray[i];
           LocalDescript = LocalDescript + timestamp + "\n";
@@ -389,7 +427,7 @@ async function InfoWriterMakeTimestamps() {
 
       Description = BeforeDesc + "\n\n";
       Description =
-        Description + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+      Description + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
       for (let i = 0; i < resArray.length; i++) {
         let timestamp = resArray[i];
         Description = Description + timestamp + "\n";
@@ -402,10 +440,12 @@ async function InfoWriterMakeTimestamps() {
   // Set in Descriptions on page
   DomSet(DescArrS, DescArrR);
   }
-  else $$.log("Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!")
+  else $$.log("Your Timestamp.Txt was not found!," 
+  +" check if the filepath is correct or if it doesnt have data in it!")
 }
 
-//#region DomSet: Sorts Arrays and Calls SetIns() also sorts data and makes Sidebar content on the webpage
+//#region DomSet: Sorts Arrays and Calls SetIns() also 
+//sorts data and makes Sidebar content on the webpage
 // makes: The sidebar content,
 // Input: Nothing
 // Outputs: a Working side bar, also calls SetIns()
@@ -477,7 +517,9 @@ function DomSet(DescArrS, DescArrR) {
       li.append(a);
       ul.append(li);
     }
-    // If LocalMode is on it will double the amount of textareas and charcounters since now both a tranlated and original description is made!
+    // If LocalMode is on it will double the amount of textareas and
+    // charcounters since now both a tranlated and original description
+    // is made!
     if (config.LOCALIZE_ON == false) {
       SetIns(
         DescArrR,
@@ -510,9 +552,10 @@ function DomSet(DescArrS, DescArrR) {
 }
 //#endregion
 
-//#region SetIns: Function Takes Arrays and Sets them into the Webpage does not sort.
-// makes: The Acordions for Streams or Recordings on the page by setting them in
-// Input: A sorted Timestamp array, Date Array, and a String with the name of the array content.
+//#region SetIns: Function Takes Arrays and Sets them into the Webpage
+//does not sort.  makes: The Acordions for Streams or Recordings on the
+//page by setting them in Input: A sorted Timestamp array, Date Array,
+//and a String with the name of the array content.
 // Outputs: Nothing, Void;
 // returns Nothing
 
@@ -598,13 +641,13 @@ function SetIns(
     Textarea.setAttribute("id", `${TextAreaID}${index}`);
     if (index % 2) {
       button.innerHTML =
-        "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
+"<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
         "| " +
         DatesArr[index] +
         ` - ${string}`;
     } else {
       button.innerHTML =
-        "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
+"<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
         "| " +
         DatesArr[index] +
         ` - ${string}`;
@@ -653,7 +696,8 @@ function SetIns(
       let FontDiv = $$.make("div") as HTMLElement;
       FontDiv.classList.add("d-flex", "justify-content-between");
       let h3 = $$.make("h3") as HTMLElement;
-      h3.innerHTML = "# Suggested Description: (" + config.LOCALIZE_LANGUAGE + ")";
+      h3.innerHTML = "# Suggested Description: (" 
+      + config.LOCALIZE_LANGUAGE + ")";
       h3.setAttribute("class", "my-2");
       let PNo = $$.make("p");
       PNo.setAttribute("id", `CharCount${CharCount_index}`);
@@ -713,7 +757,8 @@ function SetIns(
 // Small Functions
 //#region V Small Functions V
 
-//#region AddClipDelay: Function Adds ClipDelay to 0:07:30 like timestamps
+//#region AddClipDelay: Function Adds ClipDelay to 0:07:30 like
+//timestamps
 // Adds Clip Delay to a timestamp
 function AddClipDelay(timestamp: any, Clipoffset: number) {
   // input: 0:07:28 Stream Time Marker
@@ -761,7 +806,8 @@ function AddClipDelay(timestamp: any, Clipoffset: number) {
 }
 //#endregion
 
-//#region to2Time: Function Shortens a Timestamp and removes non usefull infomation
+//#region to2Time: Function Shortens a Timestamp and removes non usefull
+//infomation
 function to2Time(timestamp: string) {
   // input: 0:07:28 Stream Time Marker OR 0:07:28
   // outputs: 7:28 (a perfect format timestamp)
@@ -781,18 +827,24 @@ function to2Time(timestamp: string) {
       return DigitA[1] + ":" + DigitA[2];
     }
   } else {
-    return res[0]; // returns values like  8:07:28, 24:03:53. does not touch timestamp
+    return res[0];
+    // returns values like  8:07:28, 24:03:53. does not touch timestamp
   }
 }
 //#endregion
 
-//#region SectoTimestamp function, makes a timestamp that will work in the youtube description
+//#region SectoTimestamp function, makes a timestamp that will work in
+//the youtube description
 // converts the time into minutes and hours from seconds
 function SectoTimestamp(seconds: any) {
-  let date = new Date(); // find out why it prints timestamps like "12:12:26" remove the 12 // Fixed
+  let date = new Date(); 
+  // find out why it prints timestamps like "12:12:26" remove the 12 //
+  // Fixed
   date.setHours(0, 0, 0); // sets date to 00:00:00
   date.setSeconds(seconds); // adds secounds making it into a timestamp
-  let dateText = date.toString(); // cuts timestamp out // effectively the same that gets printed when you do $$.log(date);
+  let dateText = date.toString();
+  // cuts timestamp out // effectively the same that gets printed when
+  // you do $$.log(date);
   dateText = dateText.substring(16, 25);
   let DigitA = dateText.split(":"); // *8*, *07*, *28*
   if (DigitA[0] == "00") {
@@ -813,13 +865,16 @@ function SectoTimestamp(seconds: any) {
       // removes stuff like 08:07:28
       return DigitA[0][1] + ":" + DigitA[1] + ":" + DigitA[2];
     } else {
-      return dateText; // returns values like  8:07:28, 24:03:53. does not touch timestamp
+      return dateText; 
+      // returns values like  8:07:28, 24:03:53. does not touch
+      // timestamp
     }
   }
 }
 //#endregion
 
-//#region TimestampToDate(Timestamp String) converts a 1:09:24 timestamp into a date time
+//#region TimestampToDate(Timestamp String) converts a 1:09:24 timestamp
+//into a date time
 function TimestampToDate(timestamp: string) {
   //1:09:24
   let T = Array();
@@ -847,7 +902,8 @@ function ErrorMessage(string, Err) {
 }
 //#endregion
 
-//#region parseISOString(Isostring) turns an iso String of a date into a Date object.
+//#region parseISOString(Isostring) turns an iso String of a date into a
+//Date object.
 function parseISOString(Isostring) {
   var b = Isostring.split(/\D+/);
   return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
@@ -856,18 +912,25 @@ function parseISOString(Isostring) {
 
 //#region functions for ClipStamps
 // gets clips from a date plus 1 day forward, needs date and streamerID
-async function GetClipsFromDate(StreamedDate: string, StreamerID: string) {
-  let StartDate = new Date(StreamedDate); // starting date set to stream start time.
-  let EndDate = new Date(StreamedDate); // gets whole day worth time. note: going over 24 hours stream time would be a problem.
+async function GetClipsFromDate(StreamedDate: string, 
+StreamerID: string) {
+  let StartDate = new Date(StreamedDate);
+  // starting date set to stream start time.
+  let EndDate = new Date(StreamedDate); 
+  // gets whole day worth time. note: going over 24 hours stream time
+  // would be a problem.
   EndDate.setDate(EndDate.getDate() + 1);
-  let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${StreamerID}&first=100&started_at=${StartDate.toISOString()}&ended_at=${EndDate.toISOString()}`;
+  let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=$`+
+  `{StreamerID}&first=100&started_at=${StartDate.toISOString()}`+
+  `&ended_at=${EndDate.toISOString()}`;
   let resp = await $$.api(http2,true);
 
   // Test if Clipper is the Streamer
   let Clips = Array();
   for (let i = 0; i < resp["data"].length; i++) {
     if (
-      resp["data"][i]["creator_name"].toLowerCase() == config.TWITCH_LOGIN.toLowerCase()
+      resp["data"][i]["creator_name"].toLowerCase() == 
+      config.TWITCH_LOGIN.toLowerCase()
     ) {
       Clips.push(resp["data"][i]);
     } else {
@@ -891,7 +954,8 @@ function SortClips(Clips: Array<string>, GetClipDates: boolean) {
   for (let q = 0; q < ClipsDateArr.length; q++) {
     for (let y = 0; y < Clips.length; y++) {
       // 11 elements in one array
-      let Date = parseISOString(Clips[y]["created_at"].toString()); // Clip Unsorted Dates
+      let Date = parseISOString(Clips[y]["created_at"].toString());
+      // Clip Unsorted Dates
       if (ClipsDateArr[q].toString() == Date.toString()) {
         SortedClips.push(Clips[y]);
       }
@@ -911,28 +975,33 @@ async function ChangeAcordButtonNames(
   AcordButtonArr: Array<HTMLElement>
 ) {
   let gameresp = await $$.api(
-    `https://api.twitch.tv/helix/games?id=${Clips[0]["game_id"]}`,true // just picks the game of the first clips data.
+    `https://api.twitch.tv/helix/games?id=${Clips[0]["game_id"]}`,true
+    // just picks the game of the first clips data.
   );
   if (index % 2) {
     AcordButtonArr[index].innerHTML =
-      "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
+ "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
       "| " +
       StreamDatesArr[index] +
-      ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${Clips.length} Clips`;
-  } else {
-    AcordButtonArr[index].innerHTML =
-      "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
-      "| " +
-      StreamDatesArr[index] +
-      ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${Clips.length} Clips`;
+` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${Clips.length}`+
+`Clips`;
+  }
+else {
+AcordButtonArr[index].innerHTML =
+"<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
+"| " +StreamDatesArr[index] +
+` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${Clips.length}`+
+`Clips`;
   }
 }
 
-// Calcs how many seconds into the vod a clip was made, effectively making the Twitch VODOffset without the need for the api
+// Calcs how many seconds into the vod a clip was made, effectively
+// making the Twitch VODOffset without the need for the api
 function GetClipVODOffsetFromDate(StreamDate:string, ClipedDate: String) {
   let StreamDateTime = parseISOString(StreamDate) as Date;
   let ClipDateTime = parseISOString(ClipedDate) as Date;
-  var secounds = (StreamDateTime.getTime() - ClipDateTime.getTime()) / 1000 as any;
+  var secounds = (StreamDateTime.getTime() - 
+  ClipDateTime.getTime()) / 1000 as any;
   if(secounds < 0){
     secounds = Math.abs(secounds);
   }
@@ -940,18 +1009,21 @@ function GetClipVODOffsetFromDate(StreamDate:string, ClipedDate: String) {
 }
 
 // Replaces the descriptions of the textareas
-async function DescriptionReplace(TimestampsArr: Array<string>, Index: number, localprint: boolean) {
+async function DescriptionReplace(TimestampsArr: Array<string>, 
+Index: number, localprint: boolean) {
   let Desc = $$.class(`Charcounts`) as any;
   if (localprint == true) {
     var LNewDesc = ""; // Finished Description Var
 
-    let BeforeDescL = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
-    let AfterDescL = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
+    let BeforeDescL = await 
+    $$.txt(config.LOCAL_DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
+    let AfterDescL = await 
+    $$.txt(config.LOCAL_DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
 
     let resArray = TimestampsArr;
 
     LNewDesc = BeforeDescL + "\n\n";
-    LNewDesc = LNewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+LNewDesc = LNewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
     for (let i = 0; i < resArray.length; i++) {
       let timestamp = resArray[i];
       LNewDesc = LNewDesc + timestamp + "\n";
@@ -962,12 +1034,14 @@ async function DescriptionReplace(TimestampsArr: Array<string>, Index: number, l
   } else {
     var NewDesc = ""; // Finished Description Var
 
-    let BeforeDesc = await $$.txt(config.DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
-    let AfterDesc = await $$.txt(config.DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
+    let BeforeDesc = await
+    $$.txt(config.DESCRIPTION_MAKER_BEFORE_TIMESTAMPS) as string;
+    let AfterDesc = await 
+    $$.txt(config.DESCRIPTION_MAKER_AFTER_TIMESTAMPS) as string;
     let resArray = TimestampsArr;
 
     NewDesc = BeforeDesc + "\n\n";
-    NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
+NewDesc = NewDesc + `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}\n`;
     for (let i = 0; i < resArray.length; i++) {
       let timestamp = resArray[i];
       NewDesc = NewDesc + timestamp + "\n";

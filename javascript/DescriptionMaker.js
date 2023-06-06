@@ -5,13 +5,15 @@ if (config.TWITCH_API_TOKEN != "" || config.TWITCH_API_TOKEN != null) {
     input.value = config.TWITCH_API_TOKEN;
 }
 if (config.CLIP_OFFSET == null)
-    $$.log("you didnt set a config.CLIP_OFFSET, H.O.T has defaulted to 26 seconds of offset.");
+    $$.log("you didnt set a config.CLIP_OFFSET, H.O.T has defaulted to 26 seconds" +
+        "of offset.");
 else {
     let input = $$.id("ClipOffsetIn");
     input.value = config.CLIP_OFFSET;
 }
 if (config.TWITCH_LOGIN == null || config.TWITCH_LOGIN == "") {
-    $$.log("you didnt set a TwitchLoginName, you will not be able to use Clip-Stamps");
+    $$.log("you didnt set a TwitchLoginName, you will not be able to use" +
+        "Clip-Stamps");
     let TwitchClipbtn = $$.id("TwitchClip");
     TwitchClipbtn.disabled = true;
 }
@@ -26,7 +28,8 @@ else {
 }
 if (config.TIMESTAMP_PATH !== null && config.TIMESTAMP_PATH !== "") {
     let p = $$.id("TimestampPath");
-    p.innerHTML = "• currently getting timestamps from: " + config.TIMESTAMP_PATH;
+    p.innerHTML = "• currently getting timestamps from: "
+        + config.TIMESTAMP_PATH;
     let input = $$.id("TimeSPathIn");
     input.value = config.TIMESTAMP_PATH;
     let clearpath = $$.id("Filepath");
@@ -61,14 +64,16 @@ TwitchClip.addEventListener("click", async function (event) {
             StreamedDate.push(Timestamps[5] + "T" + Timestamps[6] + ".000Z");
         }
         let VODcount = 0;
-        let UserVods = (await $$.api(`https://api.twitch.tv/helix/videos?user_id=${UserIdResp["data"][0]["id"]}`, true));
+        let UserVods = (await $$.api(`https://api.twitch.tv/helix/videos?user_id=` +
+            `${UserIdResp["data"][0]["id"]}`, true));
         for (let index = 0; index < UserVods["data"].length; index++) {
             if (UserVods["data"][index]["type"] != "highlight") {
                 VODcount++;
             }
         }
         let textareaPrint = 0;
-        for (let StreamsStreamed = 0; StreamsStreamed < StreamedDate.length; StreamsStreamed++) {
+        for (let StreamsStreamed = 0; StreamsStreamed <
+            StreamedDate.length; StreamsStreamed++) {
             if (VODcount != 0 || VODcount != null) {
                 let res = AcorBtns[StreamsStreamed].innerHTML.split(" ");
                 var MultidimClipResps = SortClips(await GetClipsFromDate(res[5], UserIdResp["data"][0]["id"]), false);
@@ -209,11 +214,13 @@ async function InfoWriterMakeTimestamps() {
                 if (to2Time(TxtLine[index]) != "0:00") {
                     if (TxtLine[index].match(/\d:\d\d:\d\d\s.*/i)) {
                         if (TxtLine[index].match(/.*Record.*/i)) {
-                            let Timestamp = "▸ " + to2Time(TxtLine[index]) + " " + LineScene;
+                            let Timestamp = "▸ " + to2Time(TxtLine[index])
+                                + " " + LineScene;
                             RecordArr.push(Timestamp);
                         }
                         if (TxtLine[index].match(/.*Stream.*/i)) {
-                            let Timestamp = "▸ " + to2Time(TxtLine[index]) + " " + LineScene;
+                            let Timestamp = "▸ " + to2Time(TxtLine[index])
+                                + " " + LineScene;
                             StreamArr.push(Timestamp);
                             Catch = false;
                         }
@@ -238,7 +245,8 @@ async function InfoWriterMakeTimestamps() {
             }
         }
         let stats = $$.id("Stats");
-        stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams, and ${MultiDimRecordArr.length} Recordings`;
+        stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams,` +
+            `and ${MultiDimRecordArr.length} Recordings`;
         let BeforeDesc = await $$.txt(config.DESCRIPTION_MAKER_BEFORE_TIMESTAMPS);
         let AfterDesc = await $$.txt(config.DESCRIPTION_MAKER_AFTER_TIMESTAMPS);
         let LocalBeforeDesc = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_BEFORE_TIMESTAMPS);
@@ -252,7 +260,8 @@ async function InfoWriterMakeTimestamps() {
                     LocalDescript = LocalBeforeDesc + "\n\n";
                     LocalDescript =
                         LocalDescript +
-                            `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${config.CLIP_OFFSET})\n`;
+                            `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}`
+                            + `\n(Clips are Offset by -${config.CLIP_OFFSET})\n`;
                     for (let i = 0; i < resArray.length; i++) {
                         let timestamp = resArray[i];
                         LocalDescript = LocalDescript + timestamp + "\n";
@@ -264,7 +273,8 @@ async function InfoWriterMakeTimestamps() {
                 Description = BeforeDesc + "\n\n";
                 Description =
                     Description +
-                        `Hotkey, Operated, Time-stamper (H.O.T) ${HotV} \n(Clips are Offset by -${config.CLIP_OFFSET})\n`;
+                        `Hotkey, Operated, Time-stamper (H.O.T) ${HotV}` +
+                        `\n(Clips are Offset by -${config.CLIP_OFFSET})\n`;
                 for (let i = 0; i < resArray.length; i++) {
                     let timestamp = resArray[i];
                     Description = Description + timestamp + "\n";
@@ -305,7 +315,8 @@ async function InfoWriterMakeTimestamps() {
         DomSet(DescArrS, DescArrR);
     }
     else
-        $$.log("Your Timestamp.Txt was not found!, check if the filepath is correct or if it doesnt have data in it!");
+        $$.log("Your Timestamp.Txt was not found!,"
+            + " check if the filepath is correct or if it doesnt have data in it!");
 }
 function DomSet(DescArrS, DescArrR) {
     console.log("in dom set");
@@ -461,7 +472,8 @@ function SetIns(DescArr, DatesArr, string, IDname, LocalArr, LocalID, TextAreaID
             let FontDiv = $$.make("div");
             FontDiv.classList.add("d-flex", "justify-content-between");
             let h3 = $$.make("h3");
-            h3.innerHTML = "# Suggested Description: (" + config.LOCALIZE_LANGUAGE + ")";
+            h3.innerHTML = "# Suggested Description: ("
+                + config.LOCALIZE_LANGUAGE + ")";
             h3.setAttribute("class", "my-2");
             let PNo = $$.make("p");
             PNo.setAttribute("id", `CharCount${CharCount_index}`);
@@ -618,11 +630,14 @@ async function GetClipsFromDate(StreamedDate, StreamerID) {
     let StartDate = new Date(StreamedDate);
     let EndDate = new Date(StreamedDate);
     EndDate.setDate(EndDate.getDate() + 1);
-    let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=${StreamerID}&first=100&started_at=${StartDate.toISOString()}&ended_at=${EndDate.toISOString()}`;
+    let http2 = `https://api.twitch.tv/helix/clips?broadcaster_id=$` +
+        `{StreamerID}&first=100&started_at=${StartDate.toISOString()}` +
+        `&ended_at=${EndDate.toISOString()}`;
     let resp = await $$.api(http2, true);
     let Clips = Array();
     for (let i = 0; i < resp["data"].length; i++) {
-        if (resp["data"][i]["creator_name"].toLowerCase() == config.TWITCH_LOGIN.toLowerCase()) {
+        if (resp["data"][i]["creator_name"].toLowerCase() ==
+            config.TWITCH_LOGIN.toLowerCase()) {
             Clips.push(resp["data"][i]);
         }
         else {
@@ -661,20 +676,22 @@ async function ChangeAcordButtonNames(Clips, index, AcordButtonArr) {
             "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
                 "| " +
                 StreamDatesArr[index] +
-                ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${Clips.length} Clips`;
+                ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${Clips.length}` +
+                `Clips`;
     }
     else {
         AcordButtonArr[index].innerHTML =
             "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
-                "| " +
-                StreamDatesArr[index] +
-                ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${Clips.length} Clips`;
+                "| " + StreamDatesArr[index] +
+                ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${Clips.length}` +
+                `Clips`;
     }
 }
 function GetClipVODOffsetFromDate(StreamDate, ClipedDate) {
     let StreamDateTime = parseISOString(StreamDate);
     let ClipDateTime = parseISOString(ClipedDate);
-    var secounds = (StreamDateTime.getTime() - ClipDateTime.getTime()) / 1000;
+    var secounds = (StreamDateTime.getTime() -
+        ClipDateTime.getTime()) / 1000;
     if (secounds < 0) {
         secounds = Math.abs(secounds);
     }
