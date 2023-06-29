@@ -1,7 +1,9 @@
 // settings
 // asigned later
-let userid = "";
-let client_id = "";
+const twitch = {
+	userid : "" as string,
+	//client_id : "" as string,
+}
 //validatettoken();
 $$.api_valid(); // validates twitch api
 $$.btnchar(); // set up buttons on page
@@ -9,39 +11,39 @@ $$.btnchar(); // set up buttons on page
 
 
 // set in highlighter quick search channels.
-let selectchannel = $$.id("selectchannel") as HTMLSelectElement;
+let selectchannel = $$.id("SelectChannel") as HTMLSelectElement;
 for (let index = 0; index < config.HIGHLIGHTER_CHANNELS.length;
 index++) {
   const channel = config.HIGHLIGHTER_CHANNELS[index];
   let option = $$.make("option"); 
   option.class='selectoption'; 
-  option.value=channel; 
+  option.value=channel;
   option.innerhtml=channel;
   selectchannel.append(option);
 }
 
 if(config.TWITCH_API_TOKEN != "" && config.TWITCH_API_TOKEN != null) {
-  let input = $$.id("twitchaccesstoken") as HTMLInputElement;
+  let input = $$.id("TwitchAccessToken") as HTMLInputElement;
   input.value=config.TIMESTAMP_PATH;
 }
 
 //#region enable or disable searchbar
-let searchhistory = $$.id("usehistory") as any;
-let searchbar = $$.id("usesearch") as any;
+let searchhistory = $$.id("useHistory") as any;
+let searchbar = $$.id("useSearch") as any;
 searchhistory.addEventListener("click", function () {
-  $$.id("selectchannel").disabled=false;
-  $$.id("inputchannel").disabled=true;
+  $$.id("SelectChannel").disabled=false;
+  $$.id("InputChannel").disabled=true;
   
-  userfind($$.id("selectchannel").options[
-  $$.id("selectchannel").selectedindex].value);
+  userfind($$.id("SelectChannel").options[
+  $$.id("SelectChannel").selectedindex].value);
 },true);
 
 searchbar.addEventListener("click", function () {
-  $$.id("selectchannel").disabled=true;
-  $$.id("inputchannel").disabled=false;
+  $$.id("SelectChannel").disabled=true;
+  $$.id("InputChannel").disabled=false;
 
-  if ($$.id("inputchannel").value.length > 5) {
-    userfind($$.id("inputchannel").value);
+  if ($$.id("InputChannel").value.length > 5) {
+    userfind($$.id("InputChannel").value);
   }
 },true);
 //#endregion
@@ -52,7 +54,7 @@ searchbar.addEventListener("click", function () {
 // getting form data
 // make btn event for clearing button, only makes an alert
 var id: string;
-var form = $$.query("#highlighform") as any;
+var form = $$.query("#HighlighForm") as any;
 var errordiv = $$.id("errordiv") as any;
 form.addEventListener(
   "submit",
@@ -102,7 +104,7 @@ form.addEventListener(
     //#region httpcalling fitting clips, then calls clip sorter
     let clipresp = await $$.api(
       `https://api.twitch.tv/helix/clips?broadcaster_id=`
-    +`${userid}&first=100&started_at=${startdate}&ended_at=${enddate}`
+    +`${twitch.userid}&first=100&started_at=${startdate}&ended_at=${enddate}`
     ,true);
     $$.log(clipresp);
     clipsorter(clipresp, game_id, viewcount);
@@ -116,7 +118,7 @@ form.addEventListener(
 // twitch api handling
 
 //#region channelselect & channelsearch eventhandler
-var searchinput = $$.id("inputchannel") as HTMLInputElement;
+var searchinput = $$.id("InputChannel") as HTMLInputElement;
 searchinput.addEventListener("keyup", async function () {
   if (searchinput.value.length > 5) {
     userfind(searchinput.value);
@@ -124,7 +126,7 @@ searchinput.addEventListener("keyup", async function () {
 });
 //#endregion
 
-let channelselect = $$.query("#selectchannel") as any;
+let channelselect = $$.query("#SelectChannel") as any;
 channelselect.addEventListener("change", async function () {
   //#region getting channel id
 let streamername = channelselect.options[
@@ -150,7 +152,7 @@ async function userfind(twitchlogin:string) {
       return;
      }
      else  {
-      userid = userresp["data"][0]["id"];
+      twitch.userid = userresp["data"][0]["id"];
       //#endregion
   
       //#region getting gamenames from clips
@@ -160,7 +162,7 @@ async function userfind(twitchlogin:string) {
       // takes a month worth of clips
       let gameresp = await $$.api(
         `https://api.twitch.tv/helix/clips?broadcaster_id=`+
-	`${userid}&first=100&started_at=${rfcdato.toISOString()}`+
+	`${twitch.userid}&first=100&started_at=${rfcdato.toISOString()}`+
 	`&ended_at=${d.toISOString()}`,true
       );
       if (gameresp["data"].length != 0) {
@@ -178,7 +180,7 @@ async function userfind(twitchlogin:string) {
         let index = 0;
         gameids.forEach((gameid) => {
           //$$.log(gameid);
-          if (index == 0) {
+          if (index == 0) {selectchannel
             httpcall = httpcall + "id=" + gameid;
           } else {
             httpcall = httpcall + "&id=" + gameid;
@@ -191,7 +193,7 @@ async function userfind(twitchlogin:string) {
 	//website.
         let selectgameresp = await $$.api(httpcall,true);
         // getting select box
-        let selectboxg = $$.id("selectgame") as HTMLSelectElement;
+        let selectboxg = $$.id("SelectGame") as HTMLSelectElement;
     
         while (selectboxg.firstChild) {
           // remove old data

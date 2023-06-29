@@ -42,22 +42,33 @@ if(config.TIMESTAMP_PATH !== null && config.TIMESTAMP_PATH !== "") {
 }
 
 // Asigned later
-var AclientId = "" as string;
+let skeleton = {
+	stream: [] as Array<any>,
+	record: [] as Array<any>,
+}
 
-var MultiDimStreamArr = Array(); // Holds Raw Data from txt
-var MultiDimRecordArr = Array(); // Holds Raw Data from txt
-var StreamDatesArr = Array(); 
-// Holds data for when a stream was streamed
-var RecordDatesArr = Array(); 
-// Holds data for when a Recording was recorded
-var DescArrS = new Array(); 
-// holds all the Finished Stream descriptions
-var LocalDescArrS = new Array();
-var DescArrR = new Array(); 
-// holds all the Finished Recording descriptions
-var LocalDescArrR = new Array();
 
-var StreamDatesRaw = new Array();
+var description_arrays = {
+ 	desc: {...skeleton}, // holds Record & Stream Desc
+	local: {...skeleton}, // same as desc: but with local language
+  dates: {...skeleton}, // contains dates of streams/records
+	multi_dim: {...skeleton}, // raw data from txt
+		
+	MultiDimStreamArr : Array(), // Holds Raw Data from txt
+	MultiDimRecordArr : Array(), // Holds Raw Data from txt
+	StreamDatesArr : Array(), 
+	// Holds data for when a stream was streamed
+	RecordDatesArr : Array(), 
+	// Holds data for when a Recording was recorded
+	DescArrS : new Array(), 
+	// holds all the Finished Stream descriptions
+	LocalDescArrS : new Array(),
+	DescArrR : new Array(), 
+	// holds all the Finished Recording descriptions
+	LocalDescArrR : new Array(),
+
+	StreamDatesRaw : new Array(),
+}
 
 $$.api_valid();
 
@@ -87,7 +98,7 @@ TwitchClip.addEventListener("click", async function (event: any) {
     let StreamedDate = Array(); // date a stream took place local ver
 
     // getting acordbuttons & local timestamps.
-    for (let index = 0; index < StreamDatesArr.length; index++) {
+    for (let index = 0; index < description_arrays.dates.stream.length; index++) {
       AcorBtns.push($$.id(`AcordBtn-${index}`));
     }
     for (let index = 0; index < AcorBtns.length; index++) {
@@ -130,8 +141,9 @@ TwitchClip.addEventListener("click", async function (event: any) {
       // get Local Timestamps for scenes
       let LocalSceneShifttemp = Array();
       //let LocalSceneTimetemp = Array();
-      for (let V = 0; V < MultiDimStreamArr[StreamsStreamed].length; V++) {
-        let res = MultiDimStreamArr[StreamsStreamed];
+      for (let V = 0; V < description_arrays.multi_dim.stream[
+	StreamsStreamed].length; V++) {
+        let res = description_arrays.multi_dim.stream[StreamsStreamed];
         if (res == undefined) {
 	  // for some reason keeps running into indexes it doesnt have?
 		// this fixes it but MAyyyy be not the best fix
@@ -278,9 +290,9 @@ async function InfoWriterMakeTimestamps() {
       if (TxtLine[index].match(/EVENT:START.*/i)) {
         let EventStart = TxtLine[index].split(" ");
         if (TxtLine[index].match(/.*Record.*/i)) 
-	RecordDatesArr.push(EventStart[3] + " " + EventStart[4]);
+	description_arrays.dates.record.push(EventStart[3] + " " + EventStart[4]);
         else if (TxtLine[index].match(/.*Stream.*/i)) 
-	StreamDatesArr.push(EventStart[3] + " " + EventStart[4]);
+	description_arrays.dates.stream.push(EventStart[3] + " " + EventStart[4]);
         continue;
       }
       if (TxtLine[index].match(/EVENT:STOP.*/i)) { 
@@ -288,14 +300,14 @@ async function InfoWriterMakeTimestamps() {
         if (typeof StreamArr !== "undefined") {
           if (StreamArr.length != 0) {
             StreamArr.unshift("▸ 0:00 Start");
-            MultiDimStreamArr[xs] = StreamArr;
+            description_arrays.multi_dim.stream[xs] = StreamArr;
             xs++;
           }
         }
         if (typeof RecordArr !== "undefined") {
           if (RecordArr.length != 0) {
             RecordArr.unshift("▸ 0:00 Start");
-            MultiDimRecordArr[xr] = RecordArr;
+            description_arrays.multi_dim.record[xr] = RecordArr;
             xr++;
           }
         }
@@ -350,11 +362,12 @@ async function InfoWriterMakeTimestamps() {
     }
     // Set in Data to Webpage
     let stats = $$.id("Stats") as HTMLElement;
-    stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams,`+
-    `and ${MultiDimRecordArr.length} Recordings`;
+    stats.innerHTML = `• Found ${
+    description_arrays.multi_dim.stream.length} Streams,`+
+    `and ${description_arrays.multi_dim.record.length} Recordings`;
     //#endregion
-    //if (MultiDimStreamArr && MultiDimRecordArr) 
-    //SetOps(MultiDimStreamArr, MultiDimRecordArr);
+    //if (description.MultiDimStreamArr && description.MultiDimRecordArr) 
+    //SetOps(MultiDimStreamArr, description.MultiDimRecordArr);
 
     // Set in All the timestamps correctly
     let BeforeDesc = await 
@@ -369,12 +382,13 @@ async function InfoWriterMakeTimestamps() {
     
   // Makes a Working Description
   // If Not Null
-  if (MultiDimStreamArr.length > -1) {
-      for (let index = 0; index < MultiDimStreamArr.length; index++) {
+  if (description_arrays.multi_dim.stream.length > -1) {
+      for (let index = 0; index < description_arrays.multi_dim.stream.length; index++) {
+        alert(description_arrays.multi_dim.stream.length);
         var Description = ""; // Finished Description Var
         var LocalDescript = ""; 
 	// finished description in another language
-        let resArray = MultiDimStreamArr[index];
+        let resArray = description_arrays.multi_dim.stream[index];
         if (config.LOCALIZE_ON != false) {
           
           LocalDescript = LocalBeforeDesc + "\n\n";
@@ -387,7 +401,7 @@ async function InfoWriterMakeTimestamps() {
            LocalDescript = LocalDescript + timestamp + "\n";
          }
           LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
-           LocalDescArrS.push(LocalDescript);
+           description_arrays.local.stream.push(LocalDescript);
           LocalDescript = "";
        }
 
@@ -401,17 +415,16 @@ async function InfoWriterMakeTimestamps() {
          Description = Description + timestamp + "\n";
         }
         Description = Description + "\n" + AfterDesc;
-        DescArrS.push(Description);
-      console.log(DescArrS);
+        description_arrays.desc.stream.push(Description);
     }
   }
-  if (MultiDimRecordArr.length > -1) {
+  if (description_arrays.multi_dim.record.length > -1) {
     // if has Values
-    for (let index = 0; index < MultiDimRecordArr.length; index++) {
+    for (let index = 0; index < description_arrays.multi_dim.record.length; index++) {
       var Description = ""; // Finished Description Var
       var LocalDescript = ""; 
       // finished description in another language
-      let resArray = MultiDimRecordArr[index];
+      let resArray = description_arrays.multi_dim.record[index];
       if (config.LOCALIZE_ON != false) {
         LocalDescript = LocalBeforeDesc + "\n\n";
         LocalDescript =
@@ -421,7 +434,7 @@ async function InfoWriterMakeTimestamps() {
           LocalDescript = LocalDescript + timestamp + "\n";
         }
         LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
-        LocalDescArrR.push(LocalDescript);
+        description_arrays.local.record.push(LocalDescript);
         LocalDescript = "";
       }
 
@@ -433,12 +446,13 @@ async function InfoWriterMakeTimestamps() {
         Description = Description + timestamp + "\n";
       }
       Description = Description + "\n" + AfterDesc;
-      DescArrR.push(Description);
+      description_arrays.desc.record.push(Description);
     }
   }
 
   // Set in Descriptions on page
-  DomSet(DescArrS, DescArrR);
+  DomSet(description_arrays.desc.stream, 
+  description_arrays.desc.record);
   }
   else $$.log("Your Timestamp.Txt was not found!," 
   +" check if the filepath is correct or if it doesnt have data in it!")
@@ -456,10 +470,10 @@ function DomSet(DescArrS, DescArrR) {
   //console.log(DescArrS.length);
   DescArrS.reverse(); // makes array be Newest First
   DescArrR.reverse();
-  LocalDescArrS.reverse();
-  LocalDescArrR.reverse();
-  StreamDatesArr.reverse();
-  RecordDatesArr.reverse();
+  description_arrays.local.stream.reverse();
+  description_arrays.local.record.reverse();
+  description_arrays.dates.stream.reverse();
+  description_arrays.dates.record.reverse();
 
   // Update Sidebar
   let SidebarDiv = $$.id("SideBar") as HTMLElement;
@@ -487,10 +501,10 @@ function DomSet(DescArrS, DescArrR) {
     //console.log("in DOM SET");
     SetIns(
       DescArrS,
-      StreamDatesArr,
+      description_arrays.dates.stream,
       "Stream",
       "StreamingNo",
-      LocalDescArrS,
+      description_arrays.local.stream,
       "LocaleDesc-",
       "streamtextarr",
       0
@@ -523,10 +537,10 @@ function DomSet(DescArrS, DescArrR) {
     if (config.LOCALIZE_ON == false) {
       SetIns(
         DescArrR,
-        RecordDatesArr,
+        description_arrays.dates.record,
         "Record",
         "RecordingNo",
-        LocalDescArrR,
+        description_arrays.local.record,
         "recordLocalInput",
         "recordInput",
         DescArrS.length
@@ -534,10 +548,10 @@ function DomSet(DescArrS, DescArrR) {
     } else {
       SetIns(
         DescArrR,
-        RecordDatesArr,
+        description_arrays.dates.record,
         "Record",
         "RecordingNo",
-        LocalDescArrR,
+        description_arrays.local.record,
         "recordLocalInput",
         "recordInput",
         DescArrS.length * 2
@@ -974,6 +988,7 @@ async function ChangeAcordButtonNames(
   index: number,
   AcordButtonArr: Array<HTMLElement>
 ) {
+ $$.log(Clips);
   let gameresp = await $$.api(
     `https://api.twitch.tv/helix/games?id=${Clips[0]["game_id"]}`,true
     // just picks the game of the first clips data.
@@ -982,14 +997,14 @@ async function ChangeAcordButtonNames(
     AcordButtonArr[index].innerHTML =
  "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
       "| " +
-      StreamDatesArr[index] +
+      description_arrays.dates.stream[index] +
 ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${Clips.length}`+
 `Clips`;
   }
 else {
 AcordButtonArr[index].innerHTML =
 "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
-"| " +StreamDatesArr[index] +
+"| " +description_arrays.dates.stream[index] +
 ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${Clips.length}`+
 `Clips`;
   }

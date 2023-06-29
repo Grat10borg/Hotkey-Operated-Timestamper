@@ -882,3 +882,91 @@ EVENT:STOP STREAM @ 2023-06-11 21:32:19 Stream Time Marker Reset to 0
 0:00:00 Record Time Marker (not recording)
 0:00:00 Stream Time Marker (not streaming)
 
+EVENT:START STREAM @ 2023-06-14 19:56:01
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2023-06-14 19:58:41
+0:00:00 Record Time Marker (not recording)
+0:02:40 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Prime - Vtuber @ 2023-06-14 19:58:51
+0:00:00 Record Time Marker (not recording)
+0:02:50 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2023-06-14 19:59:04
+0:00:00 Record Time Marker (not recording)
+0:03:03 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Prime - Vtuber @ 2023-06-14 20:17:34
+0:00:00 Record Time Marker (not recording)
+0:21:33 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2023-06-14 20:17:38
+0:00:00 Record Time Marker (not recording)
+0:21:37 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2023-06-14 21:43:07
+0:00:00 Record Time Marker (not recording)
+1:47:06 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2023-06-14 22:18:40
+0:00:00 Record Time Marker (not recording)
+2:22:39 Stream Time Marker
+
+EVENT:STOP STREAM @ 2023-06-14 22:19:41 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2023-06-16 19:29:42
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2023-06-16 19:34:03
+0:00:00 Record Time Marker (not recording)
+0:04:21 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2023-06-16 19:36:55
+0:00:00 Record Time Marker (not recording)
+0:07:14 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2023-06-16 20:20:39
+0:00:00 Record Time Marker (not recording)
+0:50:57 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2023-06-16 20:43:56
+0:00:00 Record Time Marker (not recording)
+1:14:14 Stream Time Marker
+
+EVENT:STOP STREAM @ 2023-06-16 20:45:35 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+
+EVENT:START STREAM @ 2023-06-18 19:37:55
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Playing: @ 2023-06-18 19:41:52
+0:00:00 Record Time Marker (not recording)
+0:03:57 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2023-06-18 19:47:42
+0:00:00 Record Time Marker (not recording)
+0:09:47 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2023-06-18 21:03:30
+0:00:00 Record Time Marker (not recording)
+1:25:35 Stream Time Marker
+
+HOTKEY:Timestamp placed here @ 2023-06-18 21:33:42
+0:00:00 Record Time Marker (not recording)
+1:55:47 Stream Time Marker
+
+EVENT:SCENE CHANGED TO Outro @ 2023-06-18 21:52:30
+0:00:00 Record Time Marker (not recording)
+2:14:35 Stream Time Marker
+
+EVENT:STOP STREAM @ 2023-06-18 21:54:08 Stream Time Marker Reset to 0
+0:00:00 Record Time Marker (not recording)
+0:00:00 Stream Time Marker (not streaming)
+

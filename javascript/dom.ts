@@ -188,6 +188,7 @@ async function ApiCall(HttpCall: string, Twitch: boolean) {
         $$.log(err);
         return err;
       });
+    console.log(respon);
     return respon;
   }
   else { // if not getting from Twitch API
