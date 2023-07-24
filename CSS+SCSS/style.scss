@@ -255,46 +255,46 @@ a{
 }
 
 
-.ClipLink {
+.cliplink {
   color: #ff6675;
 }
-.ClipLink:hover {
+.cliplink:hover {
   color: #b23c40;
 }
-.ClipLink:visited {
+.cliplink:visited {
   color: #854cbf;
 }
-.ClipLink:visited:hover {
+.cliplink:visited:hover {
   color: #431e66;
 }
-.ClipBtn {
+.clipbtn {
   background-color: #27d3cb;
   color: #f0f0f0;
 }
-.ClipBtn:hover {
+.clipbtn:hover {
   background-color: #009994;
   color: #f0f0f0;
 }
 // Every Other Element
-.Linkbg:nth-child(odd) {
+.linkbg:nth-child(odd) {
   background-color: #dae0e9;
-  .ClipLink {
+  .cliplink {
     color: #dd3745;
   }
-  .ClipLink:hover {
+  .cliplink:hover {
     color: #a52639;
   }
-  .ClipLink:visited {
+  .cliplink:visited {
     color: #5d2f8c;
   }
-  .ClipLink:visited:hover {
+  .cliplink:visited:hover {
     color: #431e66;
   }
-  .ClipBtn {
+  .clipbtn {
     background-color: #00aaa5;
     color: #f0f0f0;
   }
-  .ClipBtn:hover {
+  .clipbtn:hover {
     background-color: #007672;
     color: #f0f0f0;
   }

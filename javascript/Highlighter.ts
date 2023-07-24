@@ -9,39 +9,42 @@ $$.btnchar(); // set up buttons on page
 
 
 // set in highlighter quick search channels.
-let selectchannel = $$.id("selectchannel") as HTMLSelectElement;
+let selectchannel = $$.id("SelectChannel") as HTMLSelectElement;
 for (let index = 0; index < config.HIGHLIGHTER_CHANNELS.length;
 index++) {
   const channel = config.HIGHLIGHTER_CHANNELS[index];
   let option = $$.make("option"); 
   option.class='selectoption'; 
   option.value=channel; 
-  option.innerhtml=channel;
+  option.innerHTML=channel;
   selectchannel.append(option);
 }
 
 if(config.TWITCH_API_TOKEN != "" && config.TWITCH_API_TOKEN != null) {
-  let input = $$.id("twitchaccesstoken") as HTMLInputElement;
+  let input = $$.id("TwitchAccessToken") as HTMLInputElement;
   input.value=config.TIMESTAMP_PATH;
 }
 
 //#region enable or disable searchbar
-let searchhistory = $$.id("usehistory") as any;
-let searchbar = $$.id("usesearch") as any;
+let searchhistory = $$.id("useHistory") as any;
+let searchbar = $$.id("useSearch") as any;
 searchhistory.addEventListener("click", function () {
-  $$.id("selectchannel").disabled=false;
-  $$.id("inputchannel").disabled=true;
+  $$.id("SelectChannel").disabled=false;
+  $$.id("InputChannel").disabled=true;
   
-  userfind($$.id("selectchannel").options[
-  $$.id("selectchannel").selectedindex].value);
+  //userfind($$.id("SelectChannel").options[
+  //$$.id("SelectChannel").selectedindex].value);
+  let channelselect = $$.id("SelectChannel") as HTMLSelectElement;
+  userfind (channelselect.options[channelselect.selectedIndex].value);
+
 },true);
 
 searchbar.addEventListener("click", function () {
-  $$.id("selectchannel").disabled=true;
-  $$.id("inputchannel").disabled=false;
+  $$.id("SelectChannel").disabled=true;
+  $$.id("InputChannel").disabled=false;
 
-  if ($$.id("inputchannel").value.length > 5) {
-    userfind($$.id("inputchannel").value);
+  if ($$.id("InputChannel").value.length > 5) {
+    userfind($$.id("InputChannel").value);
   }
 },true);
 //#endregion
@@ -51,25 +54,25 @@ searchbar.addEventListener("click", function () {
 
 // getting form data
 // make btn event for clearing button, only makes an alert
-var id: string;
-var form = $$.query("#highlighform") as any;
-var errordiv = $$.id("errordiv") as any;
+var id : string;
+var form = $$.query("#HighlighForm") as any;
+var errordiv = $$.id("ErrorDiv") as any;
 form.addEventListener(
   "submit",
   async function (event: any) {
-    event.preventdefault();
+    event.preventDefault();
     //#region setting of start and end date and viewcount
     let startdate = new Date(form.date.value) as any; 
     // changes to string later
     if (startdate == "invalid date") {
       startdate = new Date();
-      startdate.setdate(startdate.getdate() - 90);
+      startdate.setDate(startdate.getdate() - 90);
       $$.log("start date was not given, getting clips from 90 days ago");
     }
-    let enddate = new Date(form.enddate.value) as any;
+    let enddate = new Date(form.endDate.value) as any;
     // changes to string later too
-    let game_id = form.selectgame.options[
-    form.selectgame.selectedindex].value;
+    let game_id = form.SelectGame.options[
+    form.SelectGame.selectedIndex].value;
     if (game_id == "") {
       game_id = "none";
     }
@@ -82,7 +85,7 @@ form.addEventListener(
     //#region testing if values are valid
     // tests if start date is an aproved date, else print error
     try {
-      startdate = startdate.toisostring();
+      startdate = startdate.toISOString();
     } catch (error) {
       $$.log("the set date value was not allowed");
       $$.log(error);
@@ -93,9 +96,9 @@ form.addEventListener(
       // make end date be today right now, clips wont be in the future
       // anyways
       $$.log("end date not selected defaulting to todays date");
-      enddate = enddate.toisostring();
+      enddate = enddate.toISOString();
     } else {
-      enddate = enddate.toisostring();
+      enddate = enddate.toISOString();
     }
     //#endregion
 
@@ -116,7 +119,7 @@ form.addEventListener(
 // twitch api handling
 
 //#region channelselect & channelsearch eventhandler
-var searchinput = $$.id("inputchannel") as HTMLInputElement;
+var searchinput = $$.id("InputChannel") as HTMLInputElement;
 searchinput.addEventListener("keyup", async function () {
   if (searchinput.value.length > 5) {
     userfind(searchinput.value);
@@ -124,13 +127,13 @@ searchinput.addEventListener("keyup", async function () {
 });
 //#endregion
 
-let channelselect = $$.query("#selectchannel") as any;
+let channelselect = $$.query("#SelectChannel") as any;
 channelselect.addEventListener("change", async function () {
   //#region getting channel id
 let streamername = channelselect.options[
-channelselect.selectedindex].value;
+channelselect.selectedIndex].value;
   if (streamername != "none") {
-    userfind(channelselect.options[channelselect.selectedindex].value);
+    userfind(channelselect.options[channelselect.selectedIndex].value);
   }
 });
 //#endregion
@@ -191,7 +194,7 @@ async function userfind(twitchlogin:string) {
 	//website.
         let selectgameresp = await $$.api(httpcall,true);
         // getting select box
-        let selectboxg = $$.id("selectgame") as HTMLSelectElement;
+        let selectboxg = $$.id("SelectGame") as HTMLSelectElement;
     
         while (selectboxg.firstChild) {
           // remove old data
@@ -199,7 +202,7 @@ async function userfind(twitchlogin:string) {
         }
         // updating game select box with game name and ids
         let optionnone = $$.make("option");
-        optionnone.setattribute("value", "none");
+        optionnone.setAttribute("value", "none");
         optionnone.append($.createTextNode("any game id"));
         selectboxg.appendChild(optionnone);
         for (let index = 0; index < selectgameresp["data"].length; 
@@ -208,7 +211,7 @@ async function userfind(twitchlogin:string) {
           let gamename = selectgameresp["data"][index]["name"];
     
           let optionsg = $$.make("option");
-          optionsg.setattribute("value", gameid);
+          optionsg.setAttribute("value", gameid);
           optionsg.append($.createTextNode(gamename));
           selectboxg.appendChild(optionsg);
         }
@@ -284,7 +287,7 @@ async function clipsorter(clips: Response, game_id: string,
     //$$.log(datesort[index]);
     for (let index2 = 0; index2 < arrclips.length; index2++) {
       //$$.log(arrclips[index2]["created_at"].indexof(datesort[index]));
-      if (arrclips[index2]["created_at"].indexof(datesort[index]) == 0) {
+      if (arrclips[index2]["created_at"].indexOf(datesort[index]) == 0) {
         sortcliped[index] = arrclips[index2];
         continue; // stops loop when clip was found
       } 
@@ -312,16 +315,16 @@ async function clipsorter(clips: Response, game_id: string,
   );
   let insertp = $$.make("p") as HTMLParagraphElement;
   insertp.appendChild(textnode);
-  let datap = $$.query("#datap") as HTMLParagraphElement;
+  let datap = $$.query("#DataP") as HTMLParagraphElement;
   datap.textContent =
 	"you did it! good job, heres the data from the" 
 	+"query(s) you did ヾ(•ω•`)o";
-  let datadiv = $$.query("#datadiv") as HTMLDivElement;
+  let datadiv = $$.query("#DataDiv") as HTMLDivElement;
   datadiv.appendChild(insertp);
   //#endregion
 
   //#region set in links
-  let textareadiv = $$.query("#linksarea") as HTMLDivElement;
+  let textareadiv = $$.query("#Linksarea") as HTMLDivElement;
 
   let clipcredit = new Set(); // holds credit for clips
 
@@ -369,23 +372,23 @@ async function clipsorter(clips: Response, game_id: string,
     let p = $$.make("p");
 
     // set classes
-    rowdiv.classlist.add("row", "m-2", "ps-0");
-    rowdiv.classlist.add("linkbg");
+    rowdiv.classList.add("row", "m-2", "ps-0");
+    rowdiv.classList.add("linkbg");
     // if (i % 2 == 0) {
     //   // adds a slightly darker background every other link
 
     // }
-    button.classlist.add("col-3", "p-1", "btn", "clipbtn");
-    button.setattribute("value", `btn-${i}`);
-    button.setattribute("href", "#iframeplayerlater");
-    a.classlist.add("col-6", "cliplink"); // uses cool styling
-    a.setattribute("id", `clip-${i}`);
-    a.setattribute("target", "_blank"); // opens in new tab
-    a.setattribute("href", sortcliped[i]["url"]); // sets anchor
-    p.classlist.add("col-3", "text-center");
+    button.classList.add("col-3", "p-1", "btn", "clipbtn");
+    button.setAttribute("value", `btn-${i}`);
+    button.setAttribute("href", "#iframeplayerlater");
+    a.classList.add("col-6", "cliplink"); // uses cool styling
+    a.setAttribute("id", `clip-${i}`);
+    a.setAttribute("target", "_blank"); // opens in new tab
+    a.setAttribute("href", sortcliped[i]["url"]); // sets anchor
+    p.classList.add("col-3", "text-center");
 
     // set text
-    button.textcontent = "play clip →";
+    button.textContent = "play clip →";
     a.text = ` ‣ clip ${i + 1} - '${sortcliped[i]["title"]}'`; 
     // sets text
     p.append(
@@ -441,8 +444,8 @@ async function clipsorter(clips: Response, game_id: string,
   text = text.slice(0, text.length - 1);
   text = text + "\n\n" + afterdesc;
   // finished description change
-  let desc = $$.query("#myinput0") as any;
-  desc.textcontent = text;
+  let desc = $$.query("#myInput0") as any;
+  desc.textContent = text;
   if (config.LOCALIZE_ON == true) {
     let localafterdesc = await 
     $$.txt(config.LOCAL_HIGHLIGHTER_AFTER_TIMESTAMPS) as any;
@@ -450,36 +453,36 @@ async function clipsorter(clips: Response, game_id: string,
     localetext = localetext + "\n\n" + localafterdesc;
 
     let localdesc = $$.query(
-      "#localdescription"
+      "#LocalDescription"
     ) as any;
-    localdesc.textcontent = localetext;
+    localdesc.textContent = localetext;
   }
 
   //#endregion
 
   //#region text counters set in
   let charcount = text.length;
-  let p = $$.query(`#charcount0`) as any;
+  let p = $$.query(`#CharCount0`) as any;
   // needs to be html element
-  p.textcontent = `${charcount}`;
+  p.textContent = `${charcount}`;
   if (charcount > 5000) {
     // timestamps likely wont work, and its over the maximum the youtube
 	  // description can handle
-    p.setattribute("class", "charared");
+    p.setAttribute("class", "charared");
   } else if (charcount > 3000) {
     // timestamps may stop working. thumbnails may also lose graphics at
 	  // this/a bit under size too
-    p.setattribute("class", "charayellow");
+    p.setAttribute("class", "charayellow");
   } else {
     // become green, prime timestamp range.
-    p.setattribute("class", "charagreen");
+    p.setAttribute("class", "charagreen");
   }
 
   if (config.LOCALIZE_ON == true) {
     let charcount = localetext.length;
-    let p = $$.query(`#charcount1`) as any;
+    let p = $$.query(`#CharCount1`) as any;
     // needs to be html element
-    p.textcontent = `${charcount}`;
+    p.textContent = `${charcount}`;
     if (charcount > 5000) {
       // timestamps likely wont work, and its over the maximum the
 	    // youtube description can handle

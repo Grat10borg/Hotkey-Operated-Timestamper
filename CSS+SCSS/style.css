@@ -250,52 +250,52 @@ a .imgIcon:hover {
   background-color: #293268;
 }
 
-.ClipLink {
+.cliplink {
   color: #ff6675;
 }
 
-.ClipLink:hover {
+.cliplink:hover {
   color: #b23c40;
 }
 
-.ClipLink:visited {
+.cliplink:visited {
   color: #854cbf;
 }
 
-.ClipLink:visited:hover {
+.cliplink:visited:hover {
   color: #431e66;
 }
 
-.ClipBtn {
+.clipbtn {
   background-color: #27d3cb;
   color: #f0f0f0;
 }
 
-.ClipBtn:hover {
+.clipbtn:hover {
   background-color: #009994;
   color: #f0f0f0;
 }
 
-.Linkbg:nth-child(odd) {
+.linkbg:nth-child(odd) {
   background-color: #dae0e9;
 }
-.Linkbg:nth-child(odd) .ClipLink {
+.linkbg:nth-child(odd) .cliplink {
   color: #dd3745;
 }
-.Linkbg:nth-child(odd) .ClipLink:hover {
+.linkbg:nth-child(odd) .cliplink:hover {
   color: #a52639;
 }
-.Linkbg:nth-child(odd) .ClipLink:visited {
+.linkbg:nth-child(odd) .cliplink:visited {
   color: #5d2f8c;
 }
-.Linkbg:nth-child(odd) .ClipLink:visited:hover {
+.linkbg:nth-child(odd) .cliplink:visited:hover {
   color: #431e66;
 }
-.Linkbg:nth-child(odd) .ClipBtn {
+.linkbg:nth-child(odd) .clipbtn {
   background-color: #00aaa5;
   color: #f0f0f0;
 }
-.Linkbg:nth-child(odd) .ClipBtn:hover {
+.linkbg:nth-child(odd) .clipbtn:hover {
   background-color: #007672;
   color: #f0f0f0;
 }
