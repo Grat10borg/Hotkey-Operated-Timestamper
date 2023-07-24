@@ -159,6 +159,7 @@ async function ApiCall(HttpCall, Twitch) {
             $$.log(err);
             return err;
         });
+        console.log(respon);
         return respon;
     }
     else {

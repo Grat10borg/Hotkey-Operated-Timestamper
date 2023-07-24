@@ -1,6 +1,7 @@
 "use strict";
-let userid = "";
-let client_id = "";
+const twitch = {
+    userid: "",
+};
 $$.api_valid();
 $$.btnchar();
 let selectchannel = $$.id("SelectChannel");
@@ -67,7 +68,7 @@ form.addEventListener("submit", async function (event) {
         enddate = enddate.toISOString();
     }
     let clipresp = await $$.api(`https://api.twitch.tv/helix/clips?broadcaster_id=`
-        + `${userid}&first=100&started_at=${startdate}&ended_at=${enddate}`, true);
+        + `${twitch.userid}&first=100&started_at=${startdate}&ended_at=${enddate}`, true);
     $$.log(clipresp);
     clipsorter(clipresp, game_id, viewcount);
 }, true);
@@ -94,12 +95,12 @@ async function userfind(twitchlogin) {
             return;
         }
         else {
-            userid = userresp["data"][0]["id"];
+            twitch.userid = userresp["data"][0]["id"];
             let d = new Date();
             let rfcdato = new Date();
             rfcdato.setDate(rfcdato.getDate() - 90);
             let gameresp = await $$.api(`https://api.twitch.tv/helix/clips?broadcaster_id=` +
-                `${userid}&first=100&started_at=${rfcdato.toISOString()}` +
+                `${twitch.userid}&first=100&started_at=${rfcdato.toISOString()}` +
                 `&ended_at=${d.toISOString()}`, true);
             if (gameresp["data"].length != 0) {
                 $$.log(twitchlogin + " is searchable!");
@@ -111,6 +112,7 @@ async function userfind(twitchlogin) {
                 let index = 0;
                 gameids.forEach((gameid) => {
                     if (index == 0) {
+                        selectchannel;
                         httpcall = httpcall + "id=" + gameid;
                     }
                     else {

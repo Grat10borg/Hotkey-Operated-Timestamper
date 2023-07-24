@@ -1,7 +1,9 @@
 // settings
 // asigned later
-let userid = "";
-let client_id = "";
+const twitch = {
+	userid : "" as string,
+	//client_id : "" as string,
+}
 //validatettoken();
 $$.api_valid(); // validates twitch api
 $$.btnchar(); // set up buttons on page
@@ -36,7 +38,6 @@ searchhistory.addEventListener("click", function () {
   //$$.id("SelectChannel").selectedindex].value);
   let channelselect = $$.id("SelectChannel") as HTMLSelectElement;
   userfind (channelselect.options[channelselect.selectedIndex].value);
-
 },true);
 
 searchbar.addEventListener("click", function () {
@@ -105,7 +106,7 @@ form.addEventListener(
     //#region httpcalling fitting clips, then calls clip sorter
     let clipresp = await $$.api(
       `https://api.twitch.tv/helix/clips?broadcaster_id=`
-    +`${userid}&first=100&started_at=${startdate}&ended_at=${enddate}`
+    +`${twitch.userid}&first=100&started_at=${startdate}&ended_at=${enddate}`
     ,true);
     $$.log(clipresp);
     clipsorter(clipresp, game_id, viewcount);
@@ -153,7 +154,7 @@ async function userfind(twitchlogin:string) {
       return;
      }
      else  {
-      userid = userresp["data"][0]["id"];
+      twitch.userid = userresp["data"][0]["id"];
       //#endregion
   
       //#region getting gamenames from clips
@@ -163,7 +164,7 @@ async function userfind(twitchlogin:string) {
       // takes a month worth of clips
       let gameresp = await $$.api(
         `https://api.twitch.tv/helix/clips?broadcaster_id=`+
-	`${userid}&first=100&started_at=${rfcdato.toISOString()}`+
+	`${twitch.userid}&first=100&started_at=${rfcdato.toISOString()}`+
 	`&ended_at=${d.toISOString()}`,true
       );
       if (gameresp["data"].length != 0) {
@@ -181,7 +182,7 @@ async function userfind(twitchlogin:string) {
         let index = 0;
         gameids.forEach((gameid) => {
           //$$.log(gameid);
-          if (index == 0) {
+          if (index == 0) {selectchannel
             httpcall = httpcall + "id=" + gameid;
           } else {
             httpcall = httpcall + "&id=" + gameid;
