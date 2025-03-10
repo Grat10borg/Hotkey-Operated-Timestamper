@@ -35,25 +35,16 @@ if (config.TIMESTAMP_PATH !== null && config.TIMESTAMP_PATH !== "") {
     let clearpath = $$.id("Filepath");
     clearpath.value = config.TIMESTAMP_PATH;
 }
-let skeleton = {
-    stream: [],
-    record: [],
-};
-var description_arrays = {
-    desc: { ...skeleton },
-    local: { ...skeleton },
-    dates: { ...skeleton },
-    multi_dim: { ...skeleton },
-    MultiDimStreamArr: Array(),
-    MultiDimRecordArr: Array(),
-    StreamDatesArr: Array(),
-    RecordDatesArr: Array(),
-    DescArrS: new Array(),
-    LocalDescArrS: new Array(),
-    DescArrR: new Array(),
-    LocalDescArrR: new Array(),
-    StreamDatesRaw: new Array(),
-};
+var AclientId = "";
+var MultiDimStreamArr = Array();
+var MultiDimRecordArr = Array();
+var StreamDatesArr = Array();
+var RecordDatesArr = Array();
+var DescArrS = new Array();
+var LocalDescArrS = new Array();
+var DescArrR = new Array();
+var LocalDescArrR = new Array();
+var StreamDatesRaw = new Array();
 $$.api_valid();
 if (config.INFOWRITER_ON == true) {
     InfoWriterMakeTimestamps();
@@ -65,7 +56,7 @@ TwitchClip.addEventListener("click", async function (event) {
         $$.log(UserIdResp);
         let AcorBtns = Array();
         let StreamedDate = Array();
-        for (let index = 0; index < description_arrays.dates.stream.length; index++) {
+        for (let index = 0; index < StreamDatesArr.length; index++) {
             AcorBtns.push($$.id(`AcordBtn-${index}`));
         }
         for (let index = 0; index < AcorBtns.length; index++) {
@@ -90,8 +81,8 @@ TwitchClip.addEventListener("click", async function (event) {
                 let LocalSceneShift = Array();
                 let LocalSceneTime = Array();
                 let LocalSceneShifttemp = Array();
-                for (let V = 0; V < description_arrays.multi_dim.stream[StreamsStreamed].length; V++) {
-                    let res = description_arrays.multi_dim.stream[StreamsStreamed];
+                for (let V = 0; V < MultiDimStreamArr[StreamsStreamed].length; V++) {
+                    let res = MultiDimStreamArr[StreamsStreamed];
                     if (res == undefined) {
                         continue;
                     }
@@ -188,23 +179,23 @@ async function InfoWriterMakeTimestamps() {
             if (TxtLine[index].match(/EVENT:START.*/i)) {
                 let EventStart = TxtLine[index].split(" ");
                 if (TxtLine[index].match(/.*Record.*/i))
-                    description_arrays.dates.record.push(EventStart[3] + " " + EventStart[4]);
+                    RecordDatesArr.push(EventStart[3] + " " + EventStart[4]);
                 else if (TxtLine[index].match(/.*Stream.*/i))
-                    description_arrays.dates.stream.push(EventStart[3] + " " + EventStart[4]);
+                    StreamDatesArr.push(EventStart[3] + " " + EventStart[4]);
                 continue;
             }
             if (TxtLine[index].match(/EVENT:STOP.*/i)) {
                 if (typeof StreamArr !== "undefined") {
                     if (StreamArr.length != 0) {
                         StreamArr.unshift("▸ 0:00 Start");
-                        description_arrays.multi_dim.stream[xs] = StreamArr;
+                        MultiDimStreamArr[xs] = StreamArr;
                         xs++;
                     }
                 }
                 if (typeof RecordArr !== "undefined") {
                     if (RecordArr.length != 0) {
                         RecordArr.unshift("▸ 0:00 Start");
-                        description_arrays.multi_dim.record[xr] = RecordArr;
+                        MultiDimRecordArr[xr] = RecordArr;
                         xr++;
                     }
                 }
@@ -254,18 +245,17 @@ async function InfoWriterMakeTimestamps() {
             }
         }
         let stats = $$.id("Stats");
-        stats.innerHTML = `• Found ${description_arrays.multi_dim.stream.length} Streams,` +
-            `and ${description_arrays.multi_dim.record.length} Recordings`;
+        stats.innerHTML = `• Found ${MultiDimStreamArr.length} Streams,` +
+            `and ${MultiDimRecordArr.length} Recordings`;
         let BeforeDesc = await $$.txt(config.DESCRIPTION_MAKER_BEFORE_TIMESTAMPS);
         let AfterDesc = await $$.txt(config.DESCRIPTION_MAKER_AFTER_TIMESTAMPS);
         let LocalBeforeDesc = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_BEFORE_TIMESTAMPS);
         let LocalAfterDesc = await $$.txt(config.LOCAL_DESCRIPTION_MAKER_AFTER_TIMESTAMPS);
-        if (description_arrays.multi_dim.stream.length > -1) {
-            for (let index = 0; index < description_arrays.multi_dim.stream.length; index++) {
-                alert(description_arrays.multi_dim.stream.length);
+        if (MultiDimStreamArr.length > -1) {
+            for (let index = 0; index < MultiDimStreamArr.length; index++) {
                 var Description = "";
                 var LocalDescript = "";
-                let resArray = description_arrays.multi_dim.stream[index];
+                let resArray = MultiDimStreamArr[index];
                 if (config.LOCALIZE_ON != false) {
                     LocalDescript = LocalBeforeDesc + "\n\n";
                     LocalDescript =
@@ -277,7 +267,7 @@ async function InfoWriterMakeTimestamps() {
                         LocalDescript = LocalDescript + timestamp + "\n";
                     }
                     LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
-                    description_arrays.local.stream.push(LocalDescript);
+                    LocalDescArrS.push(LocalDescript);
                     LocalDescript = "";
                 }
                 Description = BeforeDesc + "\n\n";
@@ -290,14 +280,15 @@ async function InfoWriterMakeTimestamps() {
                     Description = Description + timestamp + "\n";
                 }
                 Description = Description + "\n" + AfterDesc;
-                description_arrays.desc.stream.push(Description);
+                DescArrS.push(Description);
+                console.log(DescArrS);
             }
         }
-        if (description_arrays.multi_dim.record.length > -1) {
-            for (let index = 0; index < description_arrays.multi_dim.record.length; index++) {
+        if (MultiDimRecordArr.length > -1) {
+            for (let index = 0; index < MultiDimRecordArr.length; index++) {
                 var Description = "";
                 var LocalDescript = "";
-                let resArray = description_arrays.multi_dim.record[index];
+                let resArray = MultiDimRecordArr[index];
                 if (config.LOCALIZE_ON != false) {
                     LocalDescript = LocalBeforeDesc + "\n\n";
                     LocalDescript =
@@ -307,7 +298,7 @@ async function InfoWriterMakeTimestamps() {
                         LocalDescript = LocalDescript + timestamp + "\n";
                     }
                     LocalDescript = LocalDescript + "\n" + LocalAfterDesc;
-                    description_arrays.local.record.push(LocalDescript);
+                    LocalDescArrR.push(LocalDescript);
                     LocalDescript = "";
                 }
                 Description = BeforeDesc + "\n\n";
@@ -318,10 +309,10 @@ async function InfoWriterMakeTimestamps() {
                     Description = Description + timestamp + "\n";
                 }
                 Description = Description + "\n" + AfterDesc;
-                description_arrays.desc.record.push(Description);
+                DescArrR.push(Description);
             }
         }
-        DomSet(description_arrays.desc.stream, description_arrays.desc.record);
+        DomSet(DescArrS, DescArrR);
     }
     else
         $$.log("Your Timestamp.Txt was not found!,"
@@ -331,10 +322,10 @@ function DomSet(DescArrS, DescArrR) {
     console.log("in dom set");
     DescArrS.reverse();
     DescArrR.reverse();
-    description_arrays.local.stream.reverse();
-    description_arrays.local.record.reverse();
-    description_arrays.dates.stream.reverse();
-    description_arrays.dates.record.reverse();
+    LocalDescArrS.reverse();
+    LocalDescArrR.reverse();
+    StreamDatesArr.reverse();
+    RecordDatesArr.reverse();
     let SidebarDiv = $$.id("SideBar");
     let nav = $$.make("nav");
     let ul = $$.make("ul");
@@ -357,7 +348,7 @@ function DomSet(DescArrS, DescArrR) {
             li.append(a);
             ul.append(li);
         }
-        SetIns(DescArrS, description_arrays.dates.stream, "Stream", "StreamingNo", description_arrays.local.stream, "LocaleDesc-", "streamtextarr", 0);
+        SetIns(DescArrS, StreamDatesArr, "Stream", "StreamingNo", LocalDescArrS, "LocaleDesc-", "streamtextarr", 0);
     }
     else if (DescArrS.length < 0 || DescArrS.length == 0) {
         $$.log("No stream Timestamps found");
@@ -382,10 +373,10 @@ function DomSet(DescArrS, DescArrR) {
             ul.append(li);
         }
         if (config.LOCALIZE_ON == false) {
-            SetIns(DescArrR, description_arrays.dates.record, "Record", "RecordingNo", description_arrays.local.record, "recordLocalInput", "recordInput", DescArrS.length);
+            SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo", LocalDescArrR, "recordLocalInput", "recordInput", DescArrS.length);
         }
         else {
-            SetIns(DescArrR, description_arrays.dates.record, "Record", "RecordingNo", description_arrays.local.record, "recordLocalInput", "recordInput", DescArrS.length * 2);
+            SetIns(DescArrR, RecordDatesArr, "Record", "RecordingNo", LocalDescArrR, "recordLocalInput", "recordInput", DescArrS.length * 2);
         }
     }
     else {
@@ -679,20 +670,19 @@ function SortClips(Clips, GetClipDates) {
     }
 }
 async function ChangeAcordButtonNames(Clips, index, AcordButtonArr) {
-    $$.log(Clips);
     let gameresp = await $$.api(`https://api.twitch.tv/helix/games?id=${Clips[0]["game_id"]}`, true);
     if (index % 2) {
         AcordButtonArr[index].innerHTML =
             "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXTIcon.png'> " +
                 "| " +
-                description_arrays.dates.stream[index] +
+                StreamDatesArr[index] +
                 ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${Clips.length}` +
                 `Clips`;
     }
     else {
         AcordButtonArr[index].innerHTML =
             "<img class='imgIcon me-2' src='img\\Icons\\TimestampTXT2Icon.png'> " +
-                "| " + description_arrays.dates.stream[index] +
+                "| " + StreamDatesArr[index] +
                 ` - Playing: '${gameresp["data"][0]["name"]}'  → With: ${Clips.length}` +
                 `Clips`;
     }
